@@ -274,10 +274,23 @@ a{text-decoration:none;color:inherit}
   .sticky-col{position:static}
   .related-grid{grid-template-columns:1fr 1fr}
 }
+/* ── BURGER ── */
+.nav-burger{display:none;flex-direction:column;gap:5px;padding:8px;background:none;border:none;cursor:pointer;z-index:600}
+.nav-burger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:all .3s}
+.nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-burger.open span:nth-child(2){opacity:0}
+.nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(7,8,9,.97);z-index:500;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:var(--fd);font-size:22px;font-weight:700;color:var(--w40);padding:12px 32px;border-radius:10px;transition:color .2s,background .2s;text-align:center}
+.mobile-menu a:hover,.mobile-menu a.active{color:var(--w100);background:var(--w06)}
+.mobile-menu .m-div{width:40px;height:1px;background:var(--bdr);margin:8px 0}
+.mobile-menu .m-cta{background:var(--blue);color:#fff;font-size:14px;padding:14px 40px}
+
+@media(max-width:768px){.nlinks,.ncta{display:none}.nav-burger{display:flex}}
 @media(max-width:700px){
   .page-wrap{padding:0 20px 80px}
   #nav{padding:0 20px}
-  .nlinks{display:none}
   .meta-bar{flex-direction:column}
   .mb-item{border-right:none;border-bottom:1px solid var(--bdr)}
   .mb-item:last-child{border-bottom:none}
@@ -297,7 +310,7 @@ a{text-decoration:none;color:inherit}
 
 <!-- ── NAVBAR ── -->
 <nav id="nav">
-  <a href="power_inside_data_academy_landing.html" class="nlogo">
+  <a href="index.html" class="nlogo">
     <svg width="30" height="30" viewBox="0 0 96 96" fill="none">
       <circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/>
       <circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity=".9"/><circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity=".75"/>
@@ -318,17 +331,28 @@ a{text-decoration:none;color:inherit}
     </div>
   </a>
   <div class="nlinks">
-    <a href="power_inside_data_academy_landing.html" class="nlink">Accueil</a>
+    <a href="index.html" class="nlink">Accueil</a>
     <a href="power_inside_data_academy_catalogue.html" class="nlink">Formations</a>
-    <a href="#" class="nlink">Parcours</a>
-    <a href="#" class="nlink">Certifications</a>
-    <a href="#" class="nlink">À propos</a>
+    <a href="index.html#parcours" class="nlink">Parcours</a>
+    <a href="index.html#domaines" class="nlink">Domaines</a>
+    <a href="contact.html" class="nlink">Contact</a>
   </div>
   <div class="ncta">
-    <a href="#" class="btn btn-o btn-sm">Se connecter</a>
-    <a href="#" class="btn btn-p btn-sm">Commencer →</a>
+    <a href="contact.html" class="btn btn-o btn-sm">Contact</a>
+    <a href="power_inside_data_academy_catalogue.html" class="btn btn-p btn-sm">Catalogue →</a>
   </div>
+  <button class="nav-burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Accueil</a>
+  <a href="power_inside_data_academy_catalogue.html">Formations</a>
+  <a href="index.html#parcours">Parcours</a>
+  <a href="index.html#domaines">Domaines</a>
+  <a href="contact.html">Contact</a>
+  <div class="m-div"></div>
+  <a href="contact.html" class="m-cta">Nous contacter →</a>
+</div>
 
 <div class="page-wrap">
 
@@ -966,6 +990,10 @@ a{text-decoration:none;color:inherit}
 </div><!-- /.page-wrap -->
 
 <script>
+/* ─── BURGER ─── */
+const burger=document.getElementById('burger'),mobileMenu=document.getElementById('mobileMenu');
+burger.addEventListener('click',()=>{burger.classList.toggle('open');mobileMenu.classList.toggle('open');document.body.style.overflow=mobileMenu.classList.contains('open')?'hidden':'';});
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{burger.classList.remove('open');mobileMenu.classList.remove('open');document.body.style.overflow='';}));
 /* ─── CURSOR ─── */
 const cur=document.getElementById('cur'),ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
