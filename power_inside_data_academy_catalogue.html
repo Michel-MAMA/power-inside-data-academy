@@ -6,186 +6,266 @@
 <title>Catalogue des formations — Power Inside Data Academy</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
+/* ── RESET ── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --blue:#009BF9;--blue-l:#33AFFA;--blue-dim:rgba(0,155,249,.09);--blue-b:rgba(0,155,249,.28);
-  --bg:#070809;--s1:#0C0D0F;--s2:#111316;--s3:#171A1E;--s4:#1C1F24;
-  --w100:#fff;--w80:rgba(255,255,255,.8);--w60:rgba(255,255,255,.6);--w40:rgba(255,255,255,.4);
-  --w20:rgba(255,255,255,.2);--w10:rgba(255,255,255,.1);--w06:rgba(255,255,255,.06);--w03:rgba(255,255,255,.03);
+  --blue:#009BF9; --blue-l:#33AFFA; --blue-dim:rgba(0,155,249,0.09);
+  --blue-b:rgba(0,155,249,0.28);
+  --bg:#070809; --s1:#0C0D0F; --s2:#111316; --s3:#171A1E; --s4:#1D2025;
+  --w100:#fff; --w85:rgba(255,255,255,.85); --w65:rgba(255,255,255,.65);
+  --w40:rgba(255,255,255,.4); --w20:rgba(255,255,255,.2); --w08:rgba(255,255,255,.08); --w04:rgba(255,255,255,.04);
   --bdr:rgba(255,255,255,.07);
-  --green:#00D68F;--amber:#FFAA00;--red:#FF4D6A;--purple:#B464FF;--teal:#00C9C8;
+  --green:#00D68F; --amber:#FFAA00; --red:#FF4D6A; --purple:#B464FF;
   --ease:cubic-bezier(.22,1,.36,1);
-  --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+  --fd:'Syne',sans-serif; --fb:'DM Sans',sans-serif;
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--w100);font-family:var(--fb);line-height:1.6;overflow-x:hidden}
+body{background:var(--bg);color:var(--w100);font-family:var(--fb);font-size:14px;line-height:1.6;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
 *{cursor:none}
 
 /* ── CURSOR ── */
-#cur{position:fixed;width:10px;height:10px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .18s,height .18s}
-#ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,155,249,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
-@media(max-width:768px){*{cursor:auto}#cur,#ring{display:none}}
+#cur{position:fixed;width:10px;height:10px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s}
+#ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,155,249,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+@media(max-width:600px){*{cursor:auto}#cur,#ring{display:none}}
 
 /* ── NAVBAR ── */
-#nav{position:fixed;top:0;left:0;right:0;height:64px;z-index:500;display:flex;align-items:center;padding:0 32px;gap:24px;background:rgba(7,8,9,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr)}
-.n-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.n-logo-text{display:flex;flex-direction:column;gap:1px}
-.n-logo-name{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1}
-.n-logo-sub{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);line-height:1}
-.n-search{flex:1;max-width:400px;position:relative}
-.n-search input{width:100%;background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:9px 14px 9px 38px;font-family:var(--fb);font-size:13px;color:var(--w80);outline:none;transition:border .2s}
-.n-search input::placeholder{color:var(--w40)}
-.n-search input:focus{border-color:var(--blue-b)}
-.n-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--w40);font-size:14px;pointer-events:none}
-.n-links{display:flex;align-items:center;gap:2px}
-.n-link{font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--w40);padding:7px 12px;border-radius:6px;transition:color .2s,background .2s;white-space:nowrap}
-.n-link:hover,.n-link.active{color:var(--w100);background:var(--w06)}
-.n-spacer{flex:1}
-.n-cta{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:9px 20px;border-radius:8px;border:none;cursor:none;transition:all .22s var(--ease);white-space:nowrap}
+#nav{position:fixed;top:0;left:0;right:0;height:68px;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;transition:background .4s,border .4s}
+#nav.sc{background:rgba(7,8,9,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr)}
+.nlogo{display:flex;align-items:center;gap:11px}
+.nlogo-txt{display:flex;flex-direction:column;gap:1px}
+.nlogo-name{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1}
+.nlogo-sub{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);line-height:1}
+.nlinks{display:flex;align-items:center;gap:2px}
+.nlink{font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--w40);padding:7px 13px;border-radius:6px;transition:color .2s,background .2s}
+.nlink:hover,.nlink.active{color:var(--w100);background:var(--w04)}
+.nlink.active{color:var(--blue)}
+.ncta{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:10px 22px;border-radius:8px;border:none;cursor:none;transition:all .25s var(--ease)}
 .btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-l);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,155,249,.3)}
-.btn-o{background:transparent;color:var(--w60);border:1px solid var(--w10)}.btn-o:hover{border-color:var(--w20);color:var(--w100)}
+.btn-o{background:transparent;color:var(--w65);border:1px solid var(--w08)}.btn-o:hover{border-color:var(--w20);color:var(--w100)}
 .btn-sm{padding:8px 16px;font-size:10px;border-radius:6px}
 
 /* ── PAGE HEADER ── */
-.page-header{padding:88px 0 48px;border-bottom:1px solid var(--bdr);background:var(--s1)}
-.container{max-width:1280px;margin:0 auto;padding:0 32px}
-.ph-eyebrow{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
-.ph-title{font-family:var(--fd);font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-.025em;line-height:1.05;margin-bottom:14px}
-.ph-sub{font-size:15px;font-weight:300;color:var(--w60);line-height:1.7;margin-bottom:28px;max-width:520px}
-.ph-search{display:flex;gap:10px;max-width:560px}
-.ph-search input{flex:1;background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:13px 18px;font-family:var(--fb);font-size:14px;color:var(--w80);outline:none;transition:border .2s}
-.ph-search input::placeholder{color:var(--w40)}
-.ph-search input:focus{border-color:var(--blue-b)}
+.page-hero{padding:120px 40px 56px;max-width:1200px;margin:0 auto;position:relative}
+.page-hero::before{content:'';position:absolute;top:0;right:0;width:500px;height:400px;background:radial-gradient(ellipse at top right,rgba(0,155,249,.07) 0%,transparent 65%);pointer-events:none}
+.ph-eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
+.ph-eyebrow::before{content:'';width:18px;height:1px;background:var(--blue);opacity:.6}
+.ph-title{font-family:var(--fd);font-size:clamp(32px,4vw,52px);font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:16px}
+.ph-title span{color:var(--blue)}
+.ph-sub{font-size:16px;font-weight:300;color:var(--w40);max-width:560px;line-height:1.7}
+.ph-stats{display:flex;gap:32px;margin-top:32px;flex-wrap:wrap}
+.ph-stat{display:flex;flex-direction:column;gap:3px}
+.ph-num{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--w100);line-height:1}
+.ph-label{font-size:11px;color:var(--w40)}
 
-/* ── CATALOGUE LAYOUT ── */
-.cat-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;padding:40px 0 80px;align-items:start}
-.sidebar{position:sticky;top:88px}
+/* ── MAIN LAYOUT ── */
+.layout{display:grid;grid-template-columns:260px 1fr;gap:0;max-width:1200px;margin:0 auto;padding:0 40px 80px;align-items:start}
 
-/* ── SIDEBAR FILTERS ── */
-.filter-block{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:20px;margin-bottom:14px}
-.fb-title{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--w80);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
-.fb-clear{font-size:9px;color:var(--blue);cursor:none;transition:opacity .2s}
-.fb-clear:hover{opacity:.7}
-.filter-option{display:flex;align-items:center;justify-content:space-between;padding:7px 0;cursor:none;transition:color .2s}
-.filter-option:hover .fo-label{color:var(--w100)}
-.fo-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;background:transparent;transition:all .15s;flex-shrink:0}
-.filter-option.checked .fo-check{background:var(--blue);border-color:var(--blue);color:#fff}
-.fo-label{font-size:12px;color:var(--w60);flex:1;margin-left:10px;transition:color .2s}
-.fo-count{font-family:var(--fd);font-size:10px;color:var(--w40)}
-.fo-color{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-left:8px}
+/* ── SIDEBAR ── */
+.sidebar{position:sticky;top:88px;padding-right:28px;border-right:1px solid var(--bdr)}
+.sb-section{margin-bottom:28px}
+.sb-title{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--w40);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sb-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
 
-/* ── RESULTS HEADER ── */
-.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.rh-count{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w80)}
-.rh-count span{color:var(--blue)}
-.rh-sort{display:flex;align-items:center;gap:10px}
-.sort-label{font-size:11px;color:var(--w40)}
-.sort-select{background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:12px;color:var(--w80);outline:none;cursor:none;appearance:none;-webkit-appearance:none;min-width:160px}
+/* Search */
+.search-wrap{position:relative;margin-bottom:20px}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--w40);font-size:13px;pointer-events:none}
+.search-input{width:100%;background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:10px 12px 10px 34px;color:var(--w100);font-family:var(--fb);font-size:12px;outline:none;transition:border .2s}
+.search-input::placeholder{color:rgba(255,255,255,.18)}
+.search-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,155,249,.08)}
 
-/* ── ACTIVE FILTERS ── */
-.active-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
-.af-tag{display:inline-flex;align-items:center;gap:6px;background:var(--blue-dim);border:1px solid var(--blue-b);border-radius:100px;padding:5px 12px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--blue)}
-.af-tag button{background:none;border:none;color:var(--blue);cursor:none;font-size:12px;line-height:1;opacity:.7;transition:opacity .2s}
-.af-tag button:hover{opacity:1}
+/* Filter chips */
+.filter-list{display:flex;flex-direction:column;gap:4px}
+.filter-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:8px;border:1px solid transparent;cursor:none;transition:all .2s}
+.filter-item:hover{background:var(--w04);border-color:var(--bdr)}
+.filter-item.active{background:var(--blue-dim);border-color:var(--blue-b)}
+.fi-left{display:flex;align-items:center;gap:9px}
+.fi-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fi-label{font-family:var(--fd);font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--w65);transition:color .2s}
+.filter-item.active .fi-label{color:var(--w100)}
+.fi-count{font-family:var(--fd);font-size:10px;font-weight:600;color:var(--w40);background:var(--s3);padding:2px 7px;border-radius:100px;transition:all .2s}
+.filter-item.active .fi-count{color:var(--blue);background:rgba(0,155,249,.15)}
 
-/* ── VIEW TOGGLE ── */
-.view-toggle{display:flex;gap:4px}
-.vt-btn{width:32px;height:32px;border-radius:6px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:none;color:var(--w40);background:transparent;transition:all .2s}
-.vt-btn.active{background:var(--blue-dim);border-color:var(--blue-b);color:var(--blue)}
+/* Level filters */
+.level-list{display:flex;flex-direction:column;gap:4px}
+.level-btn{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;border:1px solid transparent;cursor:none;transition:all .2s;font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.06em;color:var(--w40)}
+.level-btn:hover{background:var(--w04);color:var(--w65)}
+.level-btn.active{background:var(--w04);border-color:var(--bdr);color:var(--w100)}
+.level-bar{width:24px;height:3px;border-radius:100px}
 
-/* ── COURSES GRID ── */
-.courses-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.courses-grid.list-view{grid-template-columns:1fr}
-.course-card{background:var(--s1);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;cursor:none;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;display:flex;flex-direction:column}
-.course-card:hover{transform:translateY(-4px);border-color:var(--w10);box-shadow:0 20px 50px rgba(0,0,0,.5)}
-.courses-grid.list-view .course-card{flex-direction:row}
-.cc-thumb{height:140px;position:relative;overflow:hidden;flex-shrink:0}
-.list-view .cc-thumb{width:200px;height:auto}
-.cc-thumb-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.cc-thumb-icon{font-size:48px;opacity:.35}
-.cc-thumb-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,var(--s1))}
-.list-view .cc-thumb-overlay{background:linear-gradient(to right,transparent 50%,var(--s1))}
-.cc-badges{position:absolute;top:10px;left:10px;display:flex;gap:5px;flex-wrap:wrap}
-.cc-badge{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px}
-.cc-body{padding:16px;flex:1;display:flex;flex-direction:column}
-.cc-tech{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--w40);margin-bottom:7px}
-.cc-title{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--w100);line-height:1.3;margin-bottom:8px;flex:1}
-.cc-desc{font-size:12px;color:var(--w60);line-height:1.6;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.cc-instructor{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.cc-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:9px;font-weight:700;flex-shrink:0}
-.cc-instructor-name{font-size:11px;color:var(--w40)}
-.cc-stats{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
-.cc-stat{font-size:10px;color:var(--w40);display:flex;align-items:center;gap:4px}
-.cc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--bdr)}
-.cc-price{font-family:var(--fd);font-size:15px;font-weight:800;color:var(--w100)}
-.cc-level{font-size:9px;font-family:var(--fd);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:100px;background:var(--w06);color:var(--w60)}
+/* Mode filters */
+.mode-row{display:flex;gap:6px;flex-wrap:wrap}
+.mode-btn{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);color:var(--w40);cursor:none;transition:all .2s}
+.mode-btn:hover{border-color:var(--w20);color:var(--w65)}
+.mode-btn.active{background:var(--w04);border-color:var(--w20);color:var(--w100)}
 
-/* ── CHIP ── */
-.chip{display:inline-flex;align-items:center;font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:100px}
-.chip-b{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-b)}
-.chip-g{background:rgba(0,214,143,.08);color:var(--green);border:1px solid rgba(0,214,143,.22)}
-.chip-a{background:rgba(255,170,0,.08);color:var(--amber);border:1px solid rgba(255,170,0,.2)}
-.chip-p{background:rgba(180,100,255,.08);color:var(--purple);border:1px solid rgba(180,100,255,.2)}
-.chip-r{background:rgba(255,77,106,.08);color:var(--red);border:1px solid rgba(255,77,106,.2)}
+/* Duration */
+.dur-row{display:flex;gap:6px;flex-wrap:wrap}
+.dur-btn{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.08em;padding:5px 9px;border-radius:6px;border:1px solid var(--bdr);color:var(--w40);cursor:none;transition:all .2s}
+.dur-btn:hover{border-color:var(--w20);color:var(--w65)}
+.dur-btn.active{background:var(--blue-dim);border-color:var(--blue-b);color:var(--blue)}
 
-/* ── PAGINATION ── */
-.pagination{display:flex;gap:6px;justify-content:center;margin-top:36px}
-.pag-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;color:var(--w40);cursor:none;transition:all .2s;background:transparent}
-.pag-btn:hover,.pag-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
-.pag-btn.dots{cursor:default;pointer-events:none}
+/* Reset */
+.reset-btn{width:100%;padding:9px;border-radius:8px;background:transparent;border:1px solid var(--bdr);font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--w40);cursor:none;transition:all .2s;margin-top:4px}
+.reset-btn:hover{border-color:var(--w20);color:var(--w65)}
+
+/* ── MAIN CONTENT ── */
+.content{padding-left:28px}
+
+/* Toolbar */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.tb-results{font-size:13px;color:var(--w40)}
+.tb-results strong{color:var(--w100);font-weight:600}
+.tb-right{display:flex;align-items:center;gap:10px}
+.sort-select{background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:8px 14px;color:var(--w65);font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.06em;outline:none;cursor:none;transition:border .2s}
+.sort-select:focus{border-color:var(--blue)}
+.view-btns{display:flex;gap:2px;background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:3px}
+.vb{width:30px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .2s;font-size:12px}
+.vb:hover{background:var(--w04)}
+.vb.active{background:var(--blue);color:#fff}
+
+/* Active filters bar */
+.active-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;min-height:0}
+.af-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:100px;background:var(--blue-dim);border:1px solid var(--blue-b);color:var(--blue);cursor:none}
+.af-tag .remove{opacity:.6;transition:opacity .2s;font-size:10px}
+.af-tag:hover .remove{opacity:1}
+
+/* ── CATALOGUE GRID ── */
+.cat-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.cat-grid.list-view{grid-template-columns:1fr}
+
+/* Formation card */
+.fc{background:var(--s1);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;position:relative}
+.fc:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.13);box-shadow:0 20px 56px rgba(0,0,0,.55)}
+.fc.hidden{display:none}
+
+/* Top accent */
+.fc-accent{height:3px;width:100%}
+
+/* Card body */
+.fc-body{padding:20px}
+.fc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;gap:8px}
+.fc-cat{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;line-height:1.4}
+.fc-badges{display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0}
+.bdg{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px;white-space:nowrap}
+.bdg-b{background:rgba(0,155,249,.1);color:var(--blue);border:1px solid rgba(0,155,249,.25)}
+.bdg-g{background:rgba(0,214,143,.08);color:var(--green);border:1px solid rgba(0,214,143,.22)}
+.bdg-a{background:rgba(255,170,0,.08);color:var(--amber);border:1px solid rgba(255,170,0,.2)}
+.bdg-w{background:var(--w04);color:var(--w65);border:1px solid var(--bdr)}
+.bdg-p{background:rgba(180,100,255,.08);color:var(--purple);border:1px solid rgba(180,100,255,.2)}
+.bdg-r{background:rgba(255,77,106,.08);color:var(--red);border:1px solid rgba(255,77,106,.2)}
+
+.fc-title{font-family:var(--fd);font-size:15px;font-weight:700;line-height:1.3;color:var(--w100);margin-bottom:8px}
+.fc-desc{font-size:12px;color:var(--w40);line-height:1.65;margin-bottom:14px}
+
+/* Meta row */
+.fc-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.fc-mi{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--w40)}
+.fc-mi svg{opacity:.5}
+
+/* Tools */
+.fc-tools{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.tool-tag{font-size:9px;color:var(--w40);background:var(--s3);border:1px solid var(--bdr);border-radius:4px;padding:2px 7px;font-family:var(--fd);font-weight:600;letter-spacing:.06em}
+
+/* Footer */
+.fc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--bdr)}
+.fc-price{font-family:var(--fd);font-size:16px;font-weight:800;color:var(--w100)}
+.fc-price-sub{font-size:10px;color:var(--w40);margin-top:1px;font-weight:300}
+.fc-cta{display:flex;gap:7px;align-items:center}
+
+/* Wishlist btn */
+.wish-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--bdr);background:transparent;display:flex;align-items:center;justify-content:center;cursor:none;transition:all .2s;font-size:14px;color:var(--w40)}
+.wish-btn:hover{border-color:var(--w20);color:var(--w65)}
+.wish-btn.wished{border-color:rgba(255,77,106,.3);background:rgba(255,77,106,.08);color:var(--red)}
+
+/* NEW badge */
+.fc-new-ribbon{position:absolute;top:12px;right:12px;font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;padding:3px 8px;border-radius:100px;background:var(--amber);color:#000}
+
+/* LIST VIEW variant */
+.cat-grid.list-view .fc{border-radius:12px}
+.cat-grid.list-view .fc-body{display:grid;grid-template-columns:1fr auto;gap:0 20px;align-items:start}
+.cat-grid.list-view .fc-accent{height:2px}
+.cat-grid.list-view .fc-main{grid-column:1}
+.cat-grid.list-view .fc-side{grid-column:2;display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:160px}
+.cat-grid.list-view .fc-footer{border-top:none;padding-top:0;flex-direction:column;align-items:flex-end;gap:8px}
+.cat-grid.list-view .fc-desc{max-width:none}
 
 /* ── EMPTY STATE ── */
-.empty-state{text-align:center;padding:60px 20px;color:var(--w40)}
-.es-icon{font-size:48px;margin-bottom:16px}
-.es-title{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--w60);margin-bottom:8px}
-.es-sub{font-size:13px;line-height:1.6}
+.empty{display:none;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;gap:16px;grid-column:1/-1}
+.empty.show{display:flex}
+.empty-icon{font-size:48px;opacity:.3}
+.empty-title{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--w65)}
+.empty-sub{font-size:13px;color:var(--w40);max-width:340px;line-height:1.6}
 
-/* ── FEATURED BANNER ── */
-.featured-banner{background:linear-gradient(135deg,rgba(0,155,249,.1),rgba(180,100,255,.06));border:1px solid var(--blue-b);border-radius:16px;padding:24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;cursor:none;transition:transform .2s}
-.featured-banner:hover{transform:translateY(-2px)}
-.fb-icon{width:56px;height:56px;border-radius:14px;background:var(--blue-dim);border:1px solid var(--blue-b);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
-.fb-content{flex:1}
-.fb-tag{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
-.fb-title{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--w100);margin-bottom:4px}
-.fb-sub{font-size:12px;color:var(--w60)}
-.fb-cta{flex-shrink:0}
+/* ── FEATURED SECTION ── */
+.featured-banner{background:linear-gradient(135deg,rgba(0,155,249,.08) 0%,var(--s1) 60%);border:1px solid var(--blue-b);border-radius:16px;padding:28px;margin-bottom:28px;position:relative;overflow:hidden}
+.featured-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+.fb-eyebrow{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.fb-title{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--w100);margin-bottom:6px}
+.fb-sub{font-size:12px;color:var(--w40);margin-bottom:16px}
+.fb-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.fb-meta{display:flex;gap:16px;flex-wrap:wrap}
+.fb-mi{font-size:11px;color:var(--w65);display:flex;align-items:center;gap:5px}
+.fb-mi::before{content:'·';color:var(--w20);margin-right:5px}
+.fb-mi:first-child::before{display:none}
 
-/* ── REVEAL ── */
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:40px}
+.pg-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--bdr);background:transparent;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:11px;font-weight:700;color:var(--w40);cursor:none;transition:all .2s}
+.pg-btn:hover{border-color:var(--w20);color:var(--w65)}
+.pg-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.pg-btn.disabled{opacity:.3;pointer-events:none}
+
+/* ── LOAD MORE ── */
+.load-more-wrap{text-align:center;margin-top:32px}
+
+/* ── REVEAL ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .reveal.visible{opacity:1;transform:none}
-.rd1{transition-delay:.04s}.rd2{transition-delay:.08s}.rd3{transition-delay:.12s}.rd4{transition-delay:.16s}.rd5{transition-delay:.2s}.rd6{transition-delay:.24s}
+[class*="rd-"]{transition-delay:0s}
+.rd-1{transition-delay:.08s}.rd-2{transition-delay:.16s}.rd-3{transition-delay:.24s}
+.rd-4{transition-delay:.32s}.rd-5{transition-delay:.4s}.rd-6{transition-delay:.48s}
 
-/* ── PROGRESS BAR ── */
-#progress{position:fixed;top:0;left:0;height:2px;background:var(--blue);z-index:1000}
+/* ── TOOLTIP ── */
+.tooltip{position:relative}
+.tooltip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--bdr);border-radius:6px;padding:5px 10px;font-size:10px;color:var(--w65);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s;z-index:10}
+.tooltip:hover::after{opacity:1}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;max-width:1200px;margin:0 auto}
+.ft-left{font-size:12px;color:var(--w40)}
+.ft-right{display:flex;gap:20px}
+.ft-link{font-size:12px;color:var(--w40);transition:color .2s}
+.ft-link:hover{color:var(--w65)}
 
 /* ── RESPONSIVE ── */
-@media(max-width:1100px){
-  .cat-layout{grid-template-columns:1fr}
-  .sidebar{position:static}
-  .courses-grid{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;padding:0 20px 60px}
+  .sidebar{position:static;padding-right:0;border-right:none;border-bottom:1px solid var(--bdr);padding-bottom:24px;margin-bottom:24px}
+  .content{padding-left:0}
+  .sb-section:not(.sb-section:first-child){display:none}
+  #nav{padding:0 20px}
+  .nlinks{display:none}
+  .page-hero{padding:100px 20px 40px}
 }
-@media(max-width:768px){
-  .n-search,.n-links{display:none}
-  .courses-grid,.courses-grid.list-view{grid-template-columns:1fr}
-  .list-view .cc-thumb{width:100%;height:120px}
-  .list-view .course-card{flex-direction:column}
-  .container{padding:0 20px}
-  .ph-search{flex-direction:column}
+@media(max-width:600px){
+  .cat-grid{grid-template-columns:1fr}
+  .ph-stats{gap:20px}
+  footer{padding:24px 20px;flex-direction:column;align-items:flex-start;gap:12px}
 }
 </style>
 </head>
 <body>
 
-<div id="progress"></div>
 <div id="cur"></div>
 <div id="ring"></div>
 
 <!-- ── NAVBAR ── -->
 <nav id="nav">
-  <a href="index.html" class="n-logo">
-    <svg width="28" height="28" viewBox="0 0 96 96" fill="none">
+  <a href="power_inside_data_academy_landing.html" class="nlogo">
+    <svg width="30" height="30" viewBox="0 0 96 96" fill="none">
       <circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/>
       <circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity=".9"/>
       <circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity=".75"/>
@@ -203,673 +283,818 @@ a{text-decoration:none;color:inherit}
       <circle cx="48" cy="48" r="5.5" fill="#009BF9"/>
       <circle cx="48" cy="48" r="2.5" fill="white" opacity=".9"/>
     </svg>
-    <div class="n-logo-text">
-      <span class="n-logo-name">Power Inside Data</span>
-      <span class="n-logo-sub">Academy</span>
+    <div class="nlogo-txt">
+      <span class="nlogo-name">Power Inside Data</span>
+      <span class="nlogo-sub">Academy</span>
     </div>
   </a>
-  <div class="n-search">
-    <span class="n-search-icon">🔍</span>
-    <input type="text" id="navSearch" placeholder="Rechercher une formation…" autocomplete="off">
+  <div class="nlinks">
+    <a href="power_inside_data_academy_landing.html" class="nlink">Accueil</a>
+    <a href="#" class="nlink active">Formations</a>
+    <a href="#" class="nlink">Parcours</a>
+    <a href="#" class="nlink">Certifications</a>
+    <a href="#" class="nlink">À propos</a>
   </div>
-  <div class="n-links">
-    <a href="index.html" class="n-link">Accueil</a>
-    <a href="power_inside_data_academy_catalogue.html" class="n-link active">Formations</a>
-    <a href="index.html#parcours" class="n-link">Parcours</a>
-    <a href="index.html#pricing" class="n-link">Tarifs</a>
-  </div>
-  <div class="n-spacer"></div>
-  <div class="n-cta">
+  <div class="ncta">
     <a href="#" class="btn btn-o btn-sm">Se connecter</a>
     <a href="#" class="btn btn-p btn-sm">Commencer →</a>
   </div>
 </nav>
 
-<!-- ── PAGE HEADER ── -->
-<div class="page-header">
-  <div class="container">
-    <div class="ph-eyebrow">42 formations disponibles</div>
-    <h1 class="ph-title">Catalogue des formations</h1>
-    <p class="ph-sub">Formations courtes intensives animées par des experts terrain. Distanciel live, certifiantes et finançables.</p>
-    <div class="ph-search">
-      <input type="text" id="mainSearch" placeholder="🔍  Rechercher : Python, RAG, MLOps, Power BI…" autocomplete="off">
-      <button class="btn btn-p" onclick="applySearch()">Rechercher</button>
+<!-- ── PAGE HERO ── -->
+<div class="page-hero">
+  <div class="ph-eyebrow">Catalogue complet</div>
+  <h1 class="ph-title">48 formations<br><span>Data · IA · Cloud · BI</span></h1>
+  <p class="ph-sub">Des formations certifiantes conçues par des experts terrain, pour des professionnels exigeants. Du débutant à l'expert.</p>
+  <div class="ph-stats">
+    <div class="ph-stat"><span class="ph-num">48</span><span class="ph-label">Formations actives</span></div>
+    <div class="ph-stat"><span class="ph-num">6</span><span class="ph-label">Parcours certifiants</span></div>
+    <div class="ph-stat"><span class="ph-num">97%</span><span class="ph-label">Satisfaction globale</span></div>
+    <div class="ph-stat"><span class="ph-num">CPF</span><span class="ph-label">& OPCO éligibles</span></div>
+  </div>
+</div>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input class="search-input" type="text" id="searchInput" placeholder="Rechercher une formation…" autocomplete="off">
     </div>
-  </div>
+
+    <!-- Domaines -->
+    <div class="sb-section">
+      <div class="sb-title">Domaines</div>
+      <div class="filter-list">
+        <div class="filter-item active" data-filter="domain" data-value="all">
+          <div class="fi-left"><div class="fi-dot" style="background:var(--w40)"></div><span class="fi-label">Tous les domaines</span></div>
+          <span class="fi-count">48</span>
+        </div>
+        <div class="filter-item" data-filter="domain" data-value="ai">
+          <div class="fi-left"><div class="fi-dot" style="background:var(--blue)"></div><span class="fi-label">Intelligence Artificielle</span></div>
+          <span class="fi-count">14</span>
+        </div>
+        <div class="filter-item" data-filter="domain" data-value="data">
+          <div class="fi-left"><div class="fi-dot" style="background:var(--green)"></div><span class="fi-label">Data Engineering</span></div>
+          <span class="fi-count">16</span>
+        </div>
+        <div class="filter-item" data-filter="domain" data-value="cloud">
+          <div class="fi-left"><div class="fi-dot" style="background:var(--amber)"></div><span class="fi-label">Cloud & Infrastructure</span></div>
+          <span class="fi-count">11</span>
+        </div>
+        <div class="filter-item" data-filter="domain" data-value="bi">
+          <div class="fi-left"><div class="fi-dot" style="background:var(--purple)"></div><span class="fi-label">Business Intelligence</span></div>
+          <span class="fi-count">7</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Niveau -->
+    <div class="sb-section">
+      <div class="sb-title">Niveau</div>
+      <div class="level-list">
+        <div class="level-btn active" data-filter="level" data-value="all">
+          <div class="level-bar" style="background:linear-gradient(90deg,var(--blue),var(--purple))"></div>
+          Tous les niveaux
+        </div>
+        <div class="level-btn" data-filter="level" data-value="debutant">
+          <div class="level-bar" style="background:var(--green)"></div>
+          Débutant
+        </div>
+        <div class="level-btn" data-filter="level" data-value="intermediaire">
+          <div class="level-bar" style="background:var(--blue)"></div>
+          Intermédiaire
+        </div>
+        <div class="level-btn" data-filter="level" data-value="avance">
+          <div class="level-bar" style="background:var(--amber)"></div>
+          Avancé
+        </div>
+        <div class="level-btn" data-filter="level" data-value="expert">
+          <div class="level-bar" style="background:var(--red)"></div>
+          Expert
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode -->
+    <div class="sb-section">
+      <div class="sb-title">Mode de formation</div>
+      <div class="mode-row">
+        <div class="mode-btn active" data-filter="mode" data-value="all">Tous</div>
+        <div class="mode-btn" data-filter="mode" data-value="presentiel">Présentiel</div>
+        <div class="mode-btn" data-filter="mode" data-value="distanciel">Distanciel</div>
+        <div class="mode-btn" data-filter="mode" data-value="hybride">Hybride</div>
+      </div>
+    </div>
+
+    <!-- Durée -->
+    <div class="sb-section">
+      <div class="sb-title">Durée</div>
+      <div class="dur-row">
+        <div class="dur-btn active" data-filter="dur" data-value="all">Toutes</div>
+        <div class="dur-btn" data-filter="dur" data-value="1-2">1–2 j</div>
+        <div class="dur-btn" data-filter="dur" data-value="3-4">3–4 j</div>
+        <div class="dur-btn" data-filter="dur" data-value="5+">5+ j</div>
+      </div>
+    </div>
+
+    <!-- Certification -->
+    <div class="sb-section">
+      <div class="sb-title">Certification</div>
+      <div class="mode-row">
+        <div class="mode-btn active" data-filter="cert" data-value="all">Toutes</div>
+        <div class="mode-btn" data-filter="cert" data-value="certifiant">Certifiantes</div>
+        <div class="mode-btn" data-filter="cert" data-value="cpf">CPF</div>
+      </div>
+    </div>
+
+    <button class="reset-btn" id="resetBtn">↺ Réinitialiser les filtres</button>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- Featured -->
+    <div class="featured-banner reveal">
+      <div class="fb-eyebrow">⭐ Formation de la semaine</div>
+      <div class="fb-title">LangChain & LLMs en Production</div>
+      <div class="fb-sub">Maîtrisez les architectures RAG, les agents autonomes et le déploiement de LLMs en entreprise.</div>
+      <div class="fb-row">
+        <div class="fb-meta">
+          <span class="fb-mi">5 jours</span>
+          <span class="fb-mi">Avancé</span>
+          <span class="fb-mi">Distanciel</span>
+          <span class="fb-mi">Certifiant</span>
+          <span class="fb-mi">2 400 € HT</span>
+        </div>
+        <a href="#" class="btn btn-p btn-sm">Voir la formation →</a>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar reveal">
+      <div class="tb-results">
+        <strong id="resultCount">48</strong> formations trouvées
+      </div>
+      <div class="tb-right">
+        <select class="sort-select" id="sortSelect">
+          <option value="popular">Les plus populaires</option>
+          <option value="new">Les plus récentes</option>
+          <option value="price-asc">Prix croissant</option>
+          <option value="price-desc">Prix décroissant</option>
+          <option value="duration-asc">Durée croissante</option>
+        </select>
+        <div class="view-btns">
+          <div class="vb active" id="gridViewBtn" title="Vue grille">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="0" y="0" width="5.5" height="5.5" rx="1" fill="currentColor"/><rect x="7.5" y="0" width="5.5" height="5.5" rx="1" fill="currentColor"/><rect x="0" y="7.5" width="5.5" height="5.5" rx="1" fill="currentColor"/><rect x="7.5" y="7.5" width="5.5" height="5.5" rx="1" fill="currentColor"/></svg>
+          </div>
+          <div class="vb" id="listViewBtn" title="Vue liste">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="0" y="0" width="13" height="2.5" rx="1" fill="currentColor"/><rect x="0" y="5.25" width="13" height="2.5" rx="1" fill="currentColor"/><rect x="0" y="10.5" width="13" height="2.5" rx="1" fill="currentColor"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active filters -->
+    <div class="active-filters" id="activeFiltersBar"></div>
+
+    <!-- Grid -->
+    <div class="cat-grid" id="catalogueGrid">
+
+      <!-- EMPTY STATE -->
+      <div class="empty" id="emptyState">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-title">Aucune formation trouvée</div>
+        <div class="empty-sub">Essayez d'élargir vos critères de recherche ou réinitialisez les filtres.</div>
+        <button class="btn btn-o btn-sm" onclick="resetAll()">Réinitialiser</button>
+      </div>
+
+      <!-- ─── FORMATIONS DATA ─────────────────────────────────── -->
+
+      <!-- 1 -->
+      <div class="fc reveal rd-1" data-domain="ai" data-level="avance" data-mode="distanciel" data-dur="5+" data-cert="certifiant cpf" data-price="2400" data-title="LangChain & LLMs en Production" data-new="true">
+        <div class="fc-accent" style="background:var(--blue)"></div>
+        <div class="fc-new-ribbon">Populaire</div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--blue)">IA Générative · LLM · RAG</div>
+            <div class="fc-badges"><span class="bdg bdg-g">Certifiant</span></div>
+          </div>
+          <div class="fc-title">LangChain & LLMs en Production</div>
+          <div class="fc-desc">Construisez des applications IA robustes avec LangChain, Retrieval Augmented Generation et des modèles open-source en production.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 5 jours</span>
+            <span class="fc-mi">🎯 Avancé</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">LangChain</span><span class="tool-tag">OpenAI</span><span class="tool-tag">Chroma</span><span class="tool-tag">FastAPI</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">2 400 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn tooltip" data-tip="Ajouter aux favoris">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="fc reveal rd-2" data-domain="data" data-level="intermediaire" data-mode="presentiel" data-dur="3-4" data-cert="certifiant" data-price="1950" data-title="Data Engineering Moderne Spark dbt">
+        <div class="fc-accent" style="background:var(--green)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--green)">Data Engineering · Spark · dbt</div>
+            <div class="fc-badges"><span class="bdg bdg-g">Certifiant</span><span class="bdg bdg-a">⭐</span></div>
+          </div>
+          <div class="fc-title">Data Engineering Moderne avec Spark & dbt</div>
+          <div class="fc-desc">Maîtrisez l'architecture Lakehouse, les pipelines temps réel et la transformation de données à grande échelle.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 4 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">🏢 Présentiel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Apache Spark</span><span class="tool-tag">dbt</span><span class="tool-tag">Airflow</span><span class="tool-tag">Delta Lake</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 950 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="fc reveal rd-3" data-domain="cloud" data-level="avance" data-mode="distanciel" data-dur="3-4" data-cert="certifiant cpf" data-price="1650" data-title="AWS Data Lakehouse Architecture" data-new="true">
+        <div class="fc-accent" style="background:var(--amber)"></div>
+        <div class="fc-new-ribbon" style="background:var(--green);color:#fff">Nouveau</div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--amber)">Cloud · AWS · Architecture</div>
+            <div class="fc-badges"><span class="bdg bdg-a">Nouveau</span></div>
+          </div>
+          <div class="fc-title">AWS Data Lakehouse — Architecture & Best Practices</div>
+          <div class="fc-desc">S3, Glue, Athena, Redshift Spectrum : concevez et déployez des architectures data cloud natives sur AWS.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 3 jours</span>
+            <span class="fc-mi">🎯 Avancé</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">AWS S3</span><span class="tool-tag">Glue</span><span class="tool-tag">Athena</span><span class="tool-tag">Redshift</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 650 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="fc reveal rd-4" data-domain="bi" data-level="intermediaire" data-mode="presentiel" data-dur="1-2" data-cert="certifiant" data-price="1200" data-title="Power BI Avancé DAX Modélisation">
+        <div class="fc-accent" style="background:var(--purple)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--purple)">BI · Power BI · DAX</div>
+            <div class="fc-badges"><span class="bdg bdg-g">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Power BI Avancé — DAX & Modélisation</div>
+          <div class="fc-desc">Maîtrisez DAX, la modélisation en étoile, les mesures avancées et les rapports interactifs professionnels.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 2 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">🏢 Présentiel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Power BI</span><span class="tool-tag">DAX</span><span class="tool-tag">Power Query</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 200 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="fc reveal rd-1" data-domain="ai" data-level="expert" data-mode="distanciel" data-dur="3-4" data-cert="certifiant cpf" data-price="2100" data-title="MLOps Industrialiser Modèles Machine Learning">
+        <div class="fc-accent" style="background:var(--green)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--green)">MLOps · DevOps · Production</div>
+            <div class="fc-badges"><span class="bdg bdg-r">Expert</span></div>
+          </div>
+          <div class="fc-title">MLOps — Industrialiser ses modèles ML</div>
+          <div class="fc-desc">MLflow, CI/CD pour le ML, monitoring de modèles, déploiement Kubernetes. Du notebook au système de production.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 4 jours</span>
+            <span class="fc-mi">🎯 Expert</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">MLflow</span><span class="tool-tag">Kubernetes</span><span class="tool-tag">Docker</span><span class="tool-tag">GitHub Actions</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">2 100 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="fc reveal rd-2" data-domain="data" data-level="debutant" data-mode="hybride" data-dur="5+" data-cert="certifiant cpf" data-price="1800" data-title="Python Data Science Bootcamp Intensif">
+        <div class="fc-accent" style="background:var(--blue)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--blue)">Python · Data Science · Fondamentaux</div>
+            <div class="fc-badges"><span class="bdg bdg-b">Bootcamp</span></div>
+          </div>
+          <div class="fc-title">Python pour la Data Science — Bootcamp Intensif</div>
+          <div class="fc-desc">Pandas, NumPy, scikit-learn, visualisation. Le socle technique indispensable pour tout data professional.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 5 jours</span>
+            <span class="fc-mi">🎯 Débutant+</span>
+            <span class="fc-mi">🏢 Hybride</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Python</span><span class="tool-tag">Pandas</span><span class="tool-tag">scikit-learn</span><span class="tool-tag">Matplotlib</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 800 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="fc reveal rd-3" data-domain="cloud" data-level="intermediaire" data-mode="distanciel" data-dur="3-4" data-cert="certifiant cpf" data-price="1750" data-title="Azure Synapse Analytics Data Factory">
+        <div class="fc-accent" style="background:var(--blue)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--blue)">Cloud · Azure · Synapse</div>
+            <div class="fc-badges"><span class="bdg bdg-b">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Azure Synapse & Data Factory — Orchestration</div>
+          <div class="fc-desc">Concevez des pipelines d'intégration de données avec Azure Data Factory et exploitez Synapse Analytics pour l'analytique à grande échelle.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 3 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Azure Synapse</span><span class="tool-tag">Data Factory</span><span class="tool-tag">ADLS Gen2</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 750 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="fc reveal rd-4" data-domain="bi" data-level="avance" data-mode="presentiel" data-dur="1-2" data-cert="certifiant" data-price="1350" data-title="Tableau Desktop Advanced Analytics">
+        <div class="fc-accent" style="background:var(--purple)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--purple)">BI · Tableau · Analytics</div>
+            <div class="fc-badges"><span class="bdg bdg-p">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Tableau Desktop — Advanced Analytics</div>
+          <div class="fc-desc">Visualisations complexes, calculs de table, intégration Python/R, Tableau Prep. Publiez sur Tableau Server.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 2 jours</span>
+            <span class="fc-mi">🎯 Avancé</span>
+            <span class="fc-mi">🏢 Présentiel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Tableau Desktop</span><span class="tool-tag">Tableau Prep</span><span class="tool-tag">Python</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 350 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="fc reveal rd-1" data-domain="ai" data-level="intermediaire" data-mode="hybride" data-dur="3-4" data-cert="certifiant cpf" data-price="1900" data-title="Deep Learning Vision Transformer PyTorch">
+        <div class="fc-accent" style="background:var(--blue)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--blue)">Deep Learning · Vision · NLP</div>
+            <div class="fc-badges"><span class="bdg bdg-g">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Deep Learning avec PyTorch — Vision & Transformers</div>
+          <div class="fc-desc">CNNs, Vision Transformers, fine-tuning de modèles pré-entraînés, déploiement avec TorchServe.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 4 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">🏢 Hybride</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">PyTorch</span><span class="tool-tag">HuggingFace</span><span class="tool-tag">CUDA</span><span class="tool-tag">ONNX</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 900 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="fc reveal rd-2" data-domain="data" data-level="avance" data-mode="distanciel" data-dur="5+" data-cert="certifiant cpf" data-price="2200" data-title="Databricks Lakehouse Platform Engineer">
+        <div class="fc-accent" style="background:var(--green)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--green)">Databricks · Lakehouse · Spark</div>
+            <div class="fc-badges"><span class="bdg bdg-g">Certifiant</span><span class="bdg bdg-b">Databricks</span></div>
+          </div>
+          <div class="fc-title">Databricks Lakehouse Platform — Data Engineer</div>
+          <div class="fc-desc">Architecture Medallion, Delta Live Tables, Databricks Workflows, Unity Catalog. Préparez la certification Databricks Data Engineer Associate.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 5 jours</span>
+            <span class="fc-mi">🎯 Avancé</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Databricks</span><span class="tool-tag">Delta Lake</span><span class="tool-tag">Unity Catalog</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">2 200 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 -->
+      <div class="fc reveal rd-3" data-domain="cloud" data-level="avance" data-mode="distanciel" data-dur="5+" data-cert="certifiant cpf" data-price="2300" data-title="GCP Professional Data Engineer Google Cloud">
+        <div class="fc-accent" style="background:var(--amber)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--amber)">Cloud · GCP · Data Engineering</div>
+            <div class="fc-badges"><span class="bdg bdg-a">Google Cloud</span></div>
+          </div>
+          <div class="fc-title">GCP — Professional Data Engineer Certification</div>
+          <div class="fc-desc">BigQuery, Dataflow, Pub/Sub, Vertex AI. Préparez et réussissez la certification Google Cloud Professional Data Engineer.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 5 jours</span>
+            <span class="fc-mi">🎯 Avancé</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">BigQuery</span><span class="tool-tag">Dataflow</span><span class="tool-tag">Pub/Sub</span><span class="tool-tag">Vertex AI</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">2 300 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12 -->
+      <div class="fc reveal rd-4" data-domain="bi" data-level="debutant" data-mode="presentiel" data-dur="1-2" data-cert="" data-price="990" data-title="Power BI Fondamentaux Débutant Démarrage">
+        <div class="fc-accent" style="background:var(--purple)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--purple)">BI · Power BI · Démarrage</div>
+            <div class="fc-badges"><span class="bdg bdg-w">Débutant</span></div>
+          </div>
+          <div class="fc-title">Power BI — Fondamentaux & Premiers Rapports</div>
+          <div class="fc-desc">Prise en main de Power BI Desktop, connexion aux sources de données, création de visualisations et publication.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 2 jours</span>
+            <span class="fc-mi">🎯 Débutant</span>
+            <span class="fc-mi">🏢 Présentiel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Power BI Desktop</span><span class="tool-tag">Power Query</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">990 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13 -->
+      <div class="fc reveal rd-1" data-domain="ai" data-level="avance" data-mode="distanciel" data-dur="1-2" data-cert="certifiant cpf" data-price="1450" data-title="Computer Vision OpenCV YOLO Détection Objets">
+        <div class="fc-accent" style="background:var(--blue)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--blue)">IA · Computer Vision · Détection</div>
+            <div class="fc-badges"><span class="bdg bdg-b">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Computer Vision — YOLO & Détection en Temps Réel</div>
+          <div class="fc-desc">OpenCV, YOLO v8, détection et segmentation d'objets, déploiement edge avec TensorRT.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 2 jours</span>
+            <span class="fc-mi">🎯 Avancé</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">OpenCV</span><span class="tool-tag">YOLOv8</span><span class="tool-tag">TensorRT</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 450 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14 -->
+      <div class="fc reveal rd-2" data-domain="data" data-level="intermediaire" data-mode="distanciel" data-dur="1-2" data-cert="" data-price="1100" data-title="SQL Avancé Analytique Performance Optimisation">
+        <div class="fc-accent" style="background:var(--green)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--green)">Data · SQL · Analytics</div>
+            <div class="fc-badges"><span class="bdg bdg-w">Intermédiaire</span></div>
+          </div>
+          <div class="fc-title">SQL Avancé pour l'Analytique — Fenêtres & Performance</div>
+          <div class="fc-desc">Window functions, CTEs récursifs, optimisation des requêtes, query plans, partitionnement et indexation.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 2 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">PostgreSQL</span><span class="tool-tag">Snowflake</span><span class="tool-tag">BigQuery</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 100 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15 -->
+      <div class="fc reveal rd-3" data-domain="ai" data-level="expert" data-mode="distanciel" data-dur="5+" data-cert="certifiant cpf" data-price="2600" data-title="Fine-tuning LLM Open Source Llama Mistral">
+        <div class="fc-accent" style="background:var(--blue)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--blue)">IA · LLM · Fine-tuning Open Source</div>
+            <div class="fc-badges"><span class="bdg bdg-r">Expert</span><span class="bdg bdg-g">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Fine-tuning LLM Open Source — Llama & Mistral</div>
+          <div class="fc-desc">LoRA, QLoRA, RLHF, évaluation et déploiement de modèles Llama 3 et Mistral sur infrastructure privée.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 5 jours</span>
+            <span class="fc-mi">🎯 Expert</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Llama 3</span><span class="tool-tag">Mistral</span><span class="tool-tag">LoRA</span><span class="tool-tag">vLLM</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">2 600 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16 -->
+      <div class="fc reveal rd-4" data-domain="data" data-level="intermediaire" data-mode="presentiel" data-dur="3-4" data-cert="certifiant" data-price="1600" data-title="Apache Kafka Streaming Temps Réel">
+        <div class="fc-accent" style="background:var(--green)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--green)">Data · Kafka · Streaming</div>
+            <div class="fc-badges"><span class="bdg bdg-g">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Apache Kafka — Streaming & Architecture Événementielle</div>
+          <div class="fc-desc">Kafka Streams, Kafka Connect, ksqlDB. Architectures event-driven et pipelines streaming temps réel.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 3 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">🏢 Présentiel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Apache Kafka</span><span class="tool-tag">Kafka Streams</span><span class="tool-tag">ksqlDB</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 600 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17 -->
+      <div class="fc reveal rd-1" data-domain="bi" data-level="intermediaire" data-mode="distanciel" data-dur="1-2" data-cert="certifiant" data-price="1150" data-title="Looker Studio Google Analytics Reporting">
+        <div class="fc-accent" style="background:var(--purple)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--purple)">BI · Looker Studio · Reporting</div>
+            <div class="fc-badges"><span class="bdg bdg-p">Google</span></div>
+          </div>
+          <div class="fc-title">Looker Studio & Google Analytics — Reporting Pro</div>
+          <div class="fc-desc">Créez des tableaux de bord marketing et business avec Looker Studio connecté à GA4, BigQuery et Sheets.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 2 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">💻 Distanciel</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Looker Studio</span><span class="tool-tag">GA4</span><span class="tool-tag">BigQuery</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 150 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18 -->
+      <div class="fc reveal rd-2" data-domain="cloud" data-level="intermediaire" data-mode="hybride" data-dur="3-4" data-cert="certifiant cpf" data-price="1850" data-title="Snowflake Cloud Data Warehouse Architecture">
+        <div class="fc-accent" style="background:var(--blue)"></div>
+        <div class="fc-body">
+          <div class="fc-header">
+            <div class="fc-cat" style="color:var(--blue)">Cloud · Snowflake · DWH</div>
+            <div class="fc-badges"><span class="bdg bdg-b">Certifiant</span></div>
+          </div>
+          <div class="fc-title">Snowflake — Architecture & Administration Cloud DWH</div>
+          <div class="fc-desc">Virtual warehouses, Time Travel, Data Sharing, Snowpipe, Snowpark. Préparez la certification SnowPro Core.</div>
+          <div class="fc-meta">
+            <span class="fc-mi">📅 3 jours</span>
+            <span class="fc-mi">🎯 Intermédiaire</span>
+            <span class="fc-mi">🏢 Hybride</span>
+          </div>
+          <div class="fc-tools"><span class="tool-tag">Snowflake</span><span class="tool-tag">Snowpark</span><span class="tool-tag">Snowpipe</span></div>
+          <div class="fc-footer">
+            <div><div class="fc-price">1 850 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
+            <div class="fc-cta">
+              <button class="wish-btn">♡</button>
+              <a href="#" class="btn btn-p btn-sm">S'inscrire</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.cat-grid -->
+
+    <!-- Pagination -->
+    <div class="pagination reveal" id="pagination">
+      <div class="pg-btn disabled">‹</div>
+      <div class="pg-btn active">1</div>
+      <div class="pg-btn">2</div>
+      <div class="pg-btn">3</div>
+      <div class="pg-btn">›</div>
+    </div>
+
+  </main>
 </div>
 
-<div class="container">
-  <div class="cat-layout">
-
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="sidebar">
-
-      <!-- Domaines -->
-      <div class="filter-block">
-        <div class="fb-title">Domaine <span class="fb-clear" onclick="clearFilter('cat')">Effacer</span></div>
-        <div class="filter-option" data-filter="cat" data-value="ia" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">IA Générative & LLMs</span><span class="fo-count">8</span><div class="fo-color" style="background:var(--purple)"></div>
-        </div>
-        <div class="filter-option" data-filter="cat" data-value="ml" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Machine Learning</span><span class="fo-count">10</span><div class="fo-color" style="background:var(--blue)"></div>
-        </div>
-        <div class="filter-option" data-filter="cat" data-value="mlops" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">MLOps & DevOps ML</span><span class="fo-count">6</span><div class="fo-color" style="background:var(--green)"></div>
-        </div>
-        <div class="filter-option" data-filter="cat" data-value="data" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Data & Analytics</span><span class="fo-count">9</span><div class="fo-color" style="background:var(--amber)"></div>
-        </div>
-        <div class="filter-option" data-filter="cat" data-value="python" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Python & Programmation</span><span class="fo-count">5</span><div class="fo-color" style="background:var(--teal)"></div>
-        </div>
-        <div class="filter-option" data-filter="cat" data-value="viz" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Visualisation & BI</span><span class="fo-count">4</span><div class="fo-color" style="background:var(--red)"></div>
-        </div>
-      </div>
-
-      <!-- Niveau -->
-      <div class="filter-block">
-        <div class="fb-title">Niveau <span class="fb-clear" onclick="clearFilter('level')">Effacer</span></div>
-        <div class="filter-option" data-filter="level" data-value="debutant" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Débutant</span><span class="fo-count">12</span>
-        </div>
-        <div class="filter-option" data-filter="level" data-value="intermediaire" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Intermédiaire</span><span class="fo-count">18</span>
-        </div>
-        <div class="filter-option" data-filter="level" data-value="avance" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Avancé</span><span class="fo-count">8</span>
-        </div>
-        <div class="filter-option" data-filter="level" data-value="expert" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Expert</span><span class="fo-count">4</span>
-        </div>
-      </div>
-
-      <!-- Durée -->
-      <div class="filter-block">
-        <div class="fb-title">Durée</div>
-        <div class="filter-option" data-filter="duration" data-value="1-2" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">1 à 2 jours</span><span class="fo-count">10</span>
-        </div>
-        <div class="filter-option" data-filter="duration" data-value="3-4" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">3 à 4 jours</span><span class="fo-count">20</span>
-        </div>
-        <div class="filter-option" data-filter="duration" data-value="5+" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">5 jours et plus</span><span class="fo-count">12</span>
-        </div>
-      </div>
-
-      <!-- Certification -->
-      <div class="filter-block">
-        <div class="fb-title">Certification</div>
-        <div class="filter-option" data-filter="cert" data-value="certifiant" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Certifiant</span><span class="fo-count">28</span>
-        </div>
-        <div class="filter-option" data-filter="cert" data-value="cpf" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Éligible CPF</span><span class="fo-count">18</span>
-        </div>
-        <div class="filter-option" data-filter="cert" data-value="qualiopi" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Qualiopi</span><span class="fo-count">42</span>
-        </div>
-      </div>
-
-      <!-- Mode -->
-      <div class="filter-block">
-        <div class="fb-title">Mode de formation</div>
-        <div class="filter-option" data-filter="mode" data-value="distanciel" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Distanciel live</span><span class="fo-count">34</span>
-        </div>
-        <div class="filter-option" data-filter="mode" data-value="presentiel" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Présentiel Paris</span><span class="fo-count">12</span>
-        </div>
-        <div class="filter-option" data-filter="mode" data-value="intra" onclick="toggleFilter(this)">
-          <div class="fo-check">✓</div><span class="fo-label">Intra-entreprise</span><span class="fo-count">42</span>
-        </div>
-      </div>
-
-      <button class="btn btn-o" style="width:100%;justify-content:center;margin-top:4px" onclick="clearAllFilters()">Réinitialiser tous les filtres</button>
-
-    </aside>
-
-    <!-- ══ MAIN CONTENT ══ -->
-    <main>
-
-      <!-- Featured -->
-      <a href="langchain-llms-production.html" class="featured-banner reveal">
-        <div class="fb-icon">🦜</div>
-        <div class="fb-content">
-          <div class="fb-tag">⭐ Formation vedette · Populaire</div>
-          <div class="fb-title">LangChain & LLMs en Production</div>
-          <div class="fb-sub">5 jours · Avancé · 4.9/5 · 1 248 apprenants · 2 400 €</div>
-        </div>
-        <div class="fb-cta">
-          <span class="btn btn-p btn-sm">Voir →</span>
-        </div>
-      </a>
-
-      <!-- Results header -->
-      <div class="results-header reveal">
-        <div class="rh-count"><span id="resultCount">12</span> formations trouvées</div>
-        <div style="display:flex;gap:12px;align-items:center">
-          <div class="rh-sort">
-            <span class="sort-label">Trier par :</span>
-            <select class="sort-select" id="sortSelect" onchange="sortCourses()">
-              <option value="popular">Popularité</option>
-              <option value="rating">Note</option>
-              <option value="newest">Nouveautés</option>
-              <option value="price-asc">Prix croissant</option>
-              <option value="price-desc">Prix décroissant</option>
-            </select>
-          </div>
-          <div class="view-toggle">
-            <button class="vt-btn active" id="gridViewBtn" onclick="setView('grid')" title="Vue grille">⊞</button>
-            <button class="vt-btn" id="listViewBtn" onclick="setView('list')" title="Vue liste">≡</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Active filters -->
-      <div class="active-filters" id="activeFilters"></div>
-
-      <!-- Courses Grid -->
-      <div class="courses-grid" id="coursesGrid">
-
-        <a href="langchain-llms-production.html" class="course-card reveal rd1" data-cat="ia" data-level="avance" data-duration="5+" data-price="2400" data-rating="4.9" data-students="1248" data-date="2025-03">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1B2E,#0C1F3F)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🦜</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges">
-              <span class="cc-badge chip chip-a">Populaire</span>
-              <span class="cc-badge chip chip-g">Certifiant</span>
-            </div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">IA Générative · LangChain · RAG</div>
-            <div class="cc-title">LangChain & LLMs en Production</div>
-            <div class="cc-desc">Maîtrisez LangChain, les architectures RAG, les agents autonomes et le déploiement en production.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AS</div>
-              <span class="cc-instructor-name">Alex Sow · ex-Meta</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.9</span>
-              <span class="cc-stat">🎓 1 248</span>
-              <span class="cc-stat">📅 5 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">2 400 €</span>
-              <span class="cc-level" style="color:var(--red)">Avancé</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd2" data-cat="ml" data-level="intermediaire" data-duration="3-4" data-price="1800" data-rating="4.8" data-students="892" data-date="2025-02">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D2318,#0C2B1A)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🧠</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-b">Nouveau</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">Machine Learning · Scikit-learn</div>
-            <div class="cc-title">Machine Learning Appliqué avec Python</div>
-            <div class="cc-desc">Du preprocessing aux modèles avancés, maîtrisez tout le cycle ML avec Scikit-learn et XGBoost.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,214,143,.15);color:var(--green)">MK</div>
-              <span class="cc-instructor-name">Marie Koffi · PhD NLP</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.8</span>
-              <span class="cc-stat">🎓 892</span>
-              <span class="cc-stat">📅 4 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 800 €</span>
-              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd3" data-cat="mlops" data-level="expert" data-duration="3-4" data-price="2100" data-rating="4.9" data-students="634" data-date="2025-01">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A0D2B,#200D35)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">⚙️</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-g">Certifiant</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">MLOps · Docker · Kubernetes</div>
-            <div class="cc-title">MLOps — Industrialiser ses Modèles ML</div>
-            <div class="cc-desc">Pipelines CI/CD, monitoring, Kubernetes et best practices pour mettre vos modèles en production.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(180,100,255,.15);color:var(--purple)">JD</div>
-              <span class="cc-instructor-name">Julien Dupont · ex-Google</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.9</span>
-              <span class="cc-stat">🎓 634</span>
-              <span class="cc-stat">📅 4 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">2 100 €</span>
-              <span class="cc-level" style="color:var(--red)">Expert</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd4" data-cat="ml" data-level="intermediaire" data-duration="3-4" data-price="1900" data-rating="4.7" data-students="1105" data-date="2024-12">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A1A0D,#2A2A0D)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🔥</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-p">Bestseller</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">Deep Learning · PyTorch · Transformers</div>
-            <div class="cc-title">Deep Learning avec PyTorch — Vision & Transformers</div>
-            <div class="cc-desc">CNN, Transformers, fine-tuning de modèles vision et NLP avec PyTorch.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(255,170,0,.15);color:var(--amber)">SR</div>
-              <span class="cc-instructor-name">Samir Rachid · Research Sci.</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.7</span>
-              <span class="cc-stat">🎓 1 105</span>
-              <span class="cc-stat">📅 4 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 900 €</span>
-              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd5" data-cat="data" data-level="debutant" data-duration="3-4" data-price="1400" data-rating="4.8" data-students="2130" data-date="2024-11">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1A2A,#0D2535)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🗄️</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-b">CPF</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">SQL · PostgreSQL · BigQuery</div>
-            <div class="cc-title">SQL Avancé pour Data Analysts & Engineers</div>
-            <div class="cc-desc">Requêtes complexes, fenêtres analytiques, optimisation de performance et modélisation.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AK</div>
-              <span class="cc-instructor-name">Aminata Koné · Data Arch.</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.8</span>
-              <span class="cc-stat">🎓 2 130</span>
-              <span class="cc-stat">📅 3 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 400 €</span>
-              <span class="cc-level" style="color:var(--green)">Débutant</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd6" data-cat="ia" data-level="expert" data-duration="5+" data-price="2600" data-rating="4.9" data-students="412" data-date="2025-03">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#200D35,#2A0D40)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🦙</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-r">Nouveau</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">LLM · Fine-tuning · Open Source</div>
-            <div class="cc-title">Fine-tuning LLM Open Source — Llama & Mistral</div>
-            <div class="cc-desc">LoRA, QLoRA, RLHF et déploiement de modèles open source fine-tunés.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AS</div>
-              <span class="cc-instructor-name">Alex Sow · ex-Meta</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.9</span>
-              <span class="cc-stat">🎓 412</span>
-              <span class="cc-stat">📅 5 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">2 600 €</span>
-              <span class="cc-level" style="color:var(--red)">Expert</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd1" data-cat="data" data-level="intermediaire" data-duration="3-4" data-price="1600" data-rating="4.7" data-students="980" data-date="2025-01">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A0D0D,#2B1212)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">📊</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-b">CPF</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">Power BI · DAX · Dataviz</div>
-            <div class="cc-title">Power BI Avancé — DAX, Modélisation & Dashboards</div>
-            <div class="cc-desc">Modèles de données étoilés, DAX avancé, Power Query et déploiement de rapports Power BI Service.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(255,77,106,.15);color:var(--red)">FN</div>
-              <span class="cc-instructor-name">Fatima Ndiaye · BI Expert</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.7</span>
-              <span class="cc-stat">🎓 980</span>
-              <span class="cc-stat">📅 3 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 600 €</span>
-              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd2" data-cat="python" data-level="debutant" data-duration="3-4" data-price="1200" data-rating="4.8" data-students="3200" data-date="2024-10">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1A1A,#0D2A2A)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🐍</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-g">Certifiant</span><span class="cc-badge chip chip-b">CPF</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">Python · Pandas · NumPy</div>
-            <div class="cc-title">Python pour la Data Science — De Zéro à Expert</div>
-            <div class="cc-desc">Bases de Python, Pandas, NumPy, visualisation avec Matplotlib et Seaborn. Cas pratiques data.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,201,200,.15);color:var(--teal)">LM</div>
-              <span class="cc-instructor-name">Lamine Mbaye · Lead DS</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.8</span>
-              <span class="cc-stat">🎓 3 200</span>
-              <span class="cc-stat">📅 4 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 200 €</span>
-              <span class="cc-level" style="color:var(--green)">Débutant</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd3" data-cat="ia" data-level="intermediaire" data-duration="3-4" data-price="1900" data-rating="4.8" data-students="560" data-date="2025-02">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1A28,#0D2035)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🔍</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-p">Nouveau</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">RAG · Vector DB · Embeddings</div>
-            <div class="cc-title">RAG Engineering — Architectures Avancées</div>
-            <div class="cc-desc">Advanced RAG, re-ranking, hybrid search, évaluation avec RAGAS et optimisation de pipelines.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,214,143,.15);color:var(--green)">MK</div>
-              <span class="cc-instructor-name">Marie Koffi · PhD NLP</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.8</span>
-              <span class="cc-stat">🎓 560</span>
-              <span class="cc-stat">📅 3 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 900 €</span>
-              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd4" data-cat="data" data-level="intermediaire" data-duration="3-4" data-price="1700" data-rating="4.6" data-students="745" data-date="2024-12">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1828,#0A1E32)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🏗️</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-g">Certifiant</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">Airflow · dbt · Data Pipelines</div>
-            <div class="cc-title">Data Engineering avec Airflow & dbt</div>
-            <div class="cc-desc">Orchestration de pipelines, transformation de données avec dbt, architecture data lake moderne.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AK</div>
-              <span class="cc-instructor-name">Aminata Koné · Data Arch.</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.6</span>
-              <span class="cc-stat">🎓 745</span>
-              <span class="cc-stat">📅 4 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 700 €</span>
-              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd5" data-cat="mlops" data-level="avance" data-duration="1-2" data-price="900" data-rating="4.7" data-students="420" data-date="2025-01">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A1228,#221532)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🔭</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-b">Intensif</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">LangSmith · Monitoring · Observabilité</div>
-            <div class="cc-title">Monitoring & Observabilité LLM en Production</div>
-            <div class="cc-desc">LangSmith, métriques de qualité, détection d'hallucinations et alertes pour vos applications LLM.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(180,100,255,.15);color:var(--purple)">JD</div>
-              <span class="cc-instructor-name">Julien Dupont · ex-Google</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.7</span>
-              <span class="cc-stat">🎓 420</span>
-              <span class="cc-stat">📅 2 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">900 €</span>
-              <span class="cc-level" style="color:var(--red)">Avancé</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="course-card reveal rd6" data-cat="python" data-level="intermediaire" data-duration="3-4" data-price="1500" data-rating="4.7" data-students="660" data-date="2024-11">
-          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D200D,#0D2A0D)">
-            <div class="cc-thumb-bg"><span class="cc-thumb-icon">⚡</span></div>
-            <div class="cc-thumb-overlay"></div>
-            <div class="cc-badges"><span class="cc-badge chip chip-b">CPF</span></div>
-          </div>
-          <div class="cc-body">
-            <div class="cc-tech">FastAPI · Pydantic · REST APIs</div>
-            <div class="cc-title">APIs Python avec FastAPI — Du Dev au Déploiement</div>
-            <div class="cc-desc">Construisez des APIs REST performantes avec FastAPI, authentification, tests et déploiement cloud.</div>
-            <div class="cc-instructor">
-              <div class="cc-av" style="background:rgba(0,201,200,.15);color:var(--teal)">LM</div>
-              <span class="cc-instructor-name">Lamine Mbaye · Lead DS</span>
-            </div>
-            <div class="cc-stats">
-              <span class="cc-stat">⭐ 4.7</span>
-              <span class="cc-stat">🎓 660</span>
-              <span class="cc-stat">📅 3 jours</span>
-            </div>
-            <div class="cc-footer">
-              <span class="cc-price">1 500 €</span>
-              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
-            </div>
-          </div>
-        </a>
-
-      </div>
-
-      <!-- Empty state (hidden by default) -->
-      <div class="empty-state" id="emptyState" style="display:none">
-        <div class="es-icon">🔍</div>
-        <div class="es-title">Aucune formation trouvée</div>
-        <div class="es-sub">Essayez d'autres filtres ou une autre recherche.</div>
-        <button class="btn btn-o" style="margin-top:16px" onclick="clearAllFilters()">Réinitialiser les filtres</button>
-      </div>
-
-      <!-- Pagination -->
-      <div class="pagination" id="pagination">
-        <button class="pag-btn active">1</button>
-        <button class="pag-btn">2</button>
-        <button class="pag-btn">3</button>
-        <button class="pag-btn dots">…</button>
-        <button class="pag-btn">5</button>
-      </div>
-
-    </main>
-
+<!-- ── FOOTER ── -->
+<footer>
+  <span class="ft-left">© 2025 Power Inside Data Academy · Groupe Power Inside Data</span>
+  <div class="ft-right">
+    <a href="#" class="ft-link">CGU</a>
+    <a href="#" class="ft-link">RGPD</a>
+    <a href="#" class="ft-link">Financement CPF</a>
+    <a href="#" class="ft-link">Contact</a>
   </div>
-</div>
+</footer>
 
 <script>
-/* ── CURSOR ── */
+/* ─── CURSOR ─── */
 const cur=document.getElementById('cur'),ring=document.getElementById('ring');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
-(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
-document.querySelectorAll('a,button,.filter-option,.vt-btn,.pag-btn,.course-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.width='6px';cur.style.height='6px';ring.style.width='50px';ring.style.height='50px'});
+(function anim(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim)})();
+document.querySelectorAll('a,button,.filter-item,.level-btn,.mode-btn,.dur-btn,.fc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='6px';cur.style.height='6px';ring.style.width='48px';ring.style.height='48px'});
   el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px'});
 });
 
-/* ── SCROLL PROGRESS ── */
-window.addEventListener('scroll',()=>{
-  const p=scrollY/(document.documentElement.scrollHeight-innerHeight)*100;
-  document.getElementById('progress').style.width=p+'%';
-});
+/* ─── NAVBAR SCROLL ─── */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>30));
 
-/* ── REVEAL ── */
-const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target)}}),{threshold:.06,rootMargin:'0px 0px -20px 0px'});
+/* ─── REVEAL ─── */
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -30px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-/* ── FILTER STATE ── */
-const activeFiltersState={};
-
-function toggleFilter(el){
-  el.classList.toggle('checked');
-  const type=el.dataset.filter;
-  const val=el.dataset.value;
-  if(!activeFiltersState[type]) activeFiltersState[type]=new Set();
-  if(el.classList.contains('checked')){
-    activeFiltersState[type].add(val);
-  } else {
-    activeFiltersState[type].delete(val);
-    if(activeFiltersState[type].size===0) delete activeFiltersState[type];
-  }
-  renderActiveFilters();
-  applyFilters();
-}
-
-function clearFilter(type){
-  document.querySelectorAll(`[data-filter="${type}"]`).forEach(el=>el.classList.remove('checked'));
-  delete activeFiltersState[type];
-  renderActiveFilters();
-  applyFilters();
-}
-
-function clearAllFilters(){
-  document.querySelectorAll('.filter-option').forEach(el=>el.classList.remove('checked'));
-  Object.keys(activeFiltersState).forEach(k=>delete activeFiltersState[k]);
-  document.getElementById('mainSearch').value='';
-  renderActiveFilters();
-  applyFilters();
-}
-
-function renderActiveFilters(){
-  const cont=document.getElementById('activeFilters');
-  cont.innerHTML='';
-  Object.entries(activeFiltersState).forEach(([type,vals])=>{
-    vals.forEach(val=>{
-      const tag=document.createElement('div');
-      tag.className='af-tag';
-      tag.innerHTML=`${val} <button onclick="removeFilter('${type}','${val}')">×</button>`;
-      cont.appendChild(tag);
-    });
-  });
-}
-
-function removeFilter(type,val){
-  const el=document.querySelector(`[data-filter="${type}"][data-value="${val}"]`);
-  if(el) el.classList.remove('checked');
-  if(activeFiltersState[type]){
-    activeFiltersState[type].delete(val);
-    if(activeFiltersState[type].size===0) delete activeFiltersState[type];
-  }
-  renderActiveFilters();
-  applyFilters();
-}
-
-/* ── SEARCH ── */
-let searchQuery='';
-function applySearch(){
-  searchQuery=document.getElementById('mainSearch').value.toLowerCase().trim();
-  applyFilters();
-}
-document.getElementById('mainSearch').addEventListener('keydown',e=>{if(e.key==='Enter')applySearch()});
-document.getElementById('navSearch').addEventListener('keydown',e=>{if(e.key==='Enter'){document.getElementById('mainSearch').value=e.target.value;applySearch()}});
-
-/* ── APPLY FILTERS ── */
-function applyFilters(){
-  const cards=document.querySelectorAll('.course-card');
-  let visible=0;
-  cards.forEach(card=>{
-    let show=true;
-    // Category filter
-    if(activeFiltersState.cat&&activeFiltersState.cat.size>0){
-      if(!activeFiltersState.cat.has(card.dataset.cat)) show=false;
-    }
-    // Level filter
-    if(activeFiltersState.level&&activeFiltersState.level.size>0){
-      if(!activeFiltersState.level.has(card.dataset.level)) show=false;
-    }
-    // Duration filter
-    if(activeFiltersState.duration&&activeFiltersState.duration.size>0){
-      if(!activeFiltersState.duration.has(card.dataset.duration)) show=false;
-    }
-    // Search filter
-    if(searchQuery){
-      const text=card.textContent.toLowerCase();
-      if(!text.includes(searchQuery)) show=false;
-    }
-    card.style.display=show?'flex':'none';
-    if(show) visible++;
-  });
-  document.getElementById('resultCount').textContent=visible;
-  document.getElementById('emptyState').style.display=visible===0?'block':'none';
-  document.getElementById('pagination').style.display=visible===0?'none':'flex';
-}
-
-/* ── SORT ── */
-function sortCourses(){
-  const sort=document.getElementById('sortSelect').value;
-  const grid=document.getElementById('coursesGrid');
-  const cards=[...grid.querySelectorAll('.course-card')];
-  cards.sort((a,b)=>{
-    if(sort==='rating') return parseFloat(b.dataset.rating)-parseFloat(a.dataset.rating);
-    if(sort==='price-asc') return parseInt(a.dataset.price)-parseInt(b.dataset.price);
-    if(sort==='price-desc') return parseInt(b.dataset.price)-parseInt(a.dataset.price);
-    if(sort==='newest') return b.dataset.date.localeCompare(a.dataset.date);
-    return parseInt(b.dataset.students)-parseInt(a.dataset.students); // popular
-  });
-  cards.forEach(c=>grid.appendChild(c));
-}
-
-/* ── VIEW TOGGLE ── */
-function setView(type){
-  const grid=document.getElementById('coursesGrid');
-  document.getElementById('gridViewBtn').classList.toggle('active',type==='grid');
-  document.getElementById('listViewBtn').classList.toggle('active',type==='list');
-  grid.classList.toggle('list-view',type==='list');
-}
-
-/* ── URL PARAMS (search from homepage) ── */
-const urlParams=new URLSearchParams(window.location.search);
-const q=urlParams.get('q');
-if(q){
-  document.getElementById('mainSearch').value=q;
-  searchQuery=q.toLowerCase();
-  applyFilters();
-}
-
-/* ── PAGINATION ── */
-document.querySelectorAll('.pag-btn:not(.dots)').forEach(btn=>{
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.pag-btn').forEach(b=>b.classList.remove('active'));
-    this.classList.add('active');
-    window.scrollTo({top:0,behavior:'smooth'});
+/* ─── WISHLIST ─── */
+document.querySelectorAll('.wish-btn').forEach(btn=>{
+  btn.addEventListener('click',e=>{
+    e.preventDefault();
+    btn.classList.toggle('wished');
+    btn.textContent=btn.classList.contains('wished')?'♥':'♡';
   });
 });
+
+/* ─── VIEW TOGGLE ─── */
+const grid=document.getElementById('catalogueGrid');
+document.getElementById('gridViewBtn').addEventListener('click',function(){
+  grid.classList.remove('list-view');
+  this.classList.add('active');
+  document.getElementById('listViewBtn').classList.remove('active');
+});
+document.getElementById('listViewBtn').addEventListener('click',function(){
+  grid.classList.add('list-view');
+  this.classList.add('active');
+  document.getElementById('gridViewBtn').classList.remove('active');
+});
+
+/* ─── FILTER STATE ─── */
+const state={domain:'all',level:'all',mode:'all',dur:'all',cert:'all',search:''};
+
+/* ─── FILTER CLICK ─── */
+document.querySelectorAll('[data-filter]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const f=el.dataset.filter,v=el.dataset.value;
+    state[f]=v;
+    document.querySelectorAll(`[data-filter="${f}"]`).forEach(x=>x.classList.remove('active'));
+    el.classList.add('active');
+    applyFilters();
+  });
+});
+
+/* ─── SEARCH ─── */
+document.getElementById('searchInput').addEventListener('input',function(){
+  state.search=this.value.toLowerCase().trim();
+  applyFilters();
+});
+
+/* ─── RESET ─── */
+function resetAll(){
+  Object.keys(state).forEach(k=>state[k]=k==='search'?'':'all');
+  document.getElementById('searchInput').value='';
+  document.querySelectorAll('[data-filter]').forEach(el=>{
+    el.classList.toggle('active',el.dataset.value==='all');
+  });
+  applyFilters();
+}
+document.getElementById('resetBtn').addEventListener('click',resetAll);
+
+/* ─── APPLY FILTERS ─── */
+function applyFilters(){
+  const cards=[...document.querySelectorAll('.fc')];
+  let visible=0;
+  cards.forEach(card=>{
+    const dm=card.dataset.domain,lv=card.dataset.level,mo=card.dataset.mode,
+          du=card.dataset.dur,ct=card.dataset.cert||'',ti=(card.dataset.title||'').toLowerCase();
+    const ok=(state.domain==='all'||dm===state.domain)
+      &&(state.level==='all'||lv===state.level)
+      &&(state.mode==='all'||mo===state.mode||mo==='hybride')
+      &&(state.dur==='all'||du===state.dur)
+      &&(state.cert==='all'||ct.includes(state.cert))
+      &&(state.search===''||ti.includes(state.search));
+    card.classList.toggle('hidden',!ok);
+    if(ok)visible++;
+  });
+  document.getElementById('resultCount').textContent=visible;
+  document.getElementById('emptyState').classList.toggle('show',visible===0);
+  updateActiveTags();
+}
+
+/* ─── ACTIVE FILTER TAGS ─── */
+const filterLabels={
+  domain:{ai:'IA Générative',data:'Data Engineering',cloud:'Cloud',bi:'Business Intelligence'},
+  level:{debutant:'Débutant',intermediaire:'Intermédiaire',avance:'Avancé',expert:'Expert'},
+  mode:{presentiel:'Présentiel',distanciel:'Distanciel',hybride:'Hybride'},
+  dur:{'1-2':'1–2 jours','3-4':'3–4 jours','5+':'5+ jours'},
+  cert:{certifiant:'Certifiantes',cpf:'CPF'},
+};
+function updateActiveTags(){
+  const bar=document.getElementById('activeFiltersBar');
+  bar.innerHTML='';
+  Object.entries(state).forEach(([k,v])=>{
+    if(v&&v!=='all'&&k!=='search'&&filterLabels[k]&&filterLabels[k][v]){
+      const tag=document.createElement('div');
+      tag.className='af-tag';
+      tag.innerHTML=`${filterLabels[k][v]} <span class="remove" onclick="clearFilter('${k}')">✕</span>`;
+      bar.appendChild(tag);
+    }
+  });
+  if(state.search){
+    const tag=document.createElement('div');
+    tag.className='af-tag';
+    tag.innerHTML=`"${state.search}" <span class="remove" onclick="clearFilter('search')">✕</span>`;
+    bar.appendChild(tag);
+  }
+}
+function clearFilter(k){
+  if(k==='search'){state.search='';document.getElementById('searchInput').value=''}
+  else{state[k]='all';document.querySelectorAll(`[data-filter="${k}"]`).forEach(x=>x.classList.toggle('active',x.dataset.value==='all'))}
+  applyFilters();
+}
 </script>
 </body>
 </html>
+
+https://claude.ai/api/4168ae0b-23c0-46ad-9d92-dfcbc505b10e/files/019d06fd-f064-706a-94ec-99cb62eca0d0/document_pdf?open_in_browser=1
