@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LangChain & LLMs en Production — Power Inside Data Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#009BF9;--blue-l:#33AFFA;--blue-dim:rgba(0,155,249,.09);--blue-b:rgba(0,155,249,.28);
+  --bg:#070809;--s1:#0C0D0F;--s2:#111316;--s3:#171A1E;--s4:#1C1F24;
+  --w100:#fff;--w80:rgba(255,255,255,.8);--w60:rgba(255,255,255,.6);--w40:rgba(255,255,255,.4);
+  --w20:rgba(255,255,255,.2);--w10:rgba(255,255,255,.1);--w06:rgba(255,255,255,.06);--w03:rgba(255,255,255,.03);
+  --bdr:rgba(255,255,255,.07);
+  --green:#00D68F;--amber:#FFAA00;--red:#FF4D6A;--purple:#B464FF;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--w100);font-family:var(--fb);line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+*{cursor:none}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:10px;height:10px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#ring{position:fixed;width:36px;height:36px;border:1px solid rgba(0,155,249,.45);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+@media(max-width:600px){*{cursor:auto}#cur,#ring{display:none}}
+
+/* ── NAVBAR ── */
+#nav{position:fixed;top:0;left:0;right:0;height:68px;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 40px;transition:background .4s,border .4s}
+#nav.sc{background:rgba(7,8,9,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--bdr)}
+.nlogo{display:flex;align-items:center;gap:11px}
+.nlogo-txt{display:flex;flex-direction:column;gap:1px}
+.nlogo-name{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1}
+.nlogo-sub{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);line-height:1}
+.nlinks{display:flex;align-items:center;gap:2px}
+.nlink{font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--w40);padding:7px 13px;border-radius:6px;transition:color .2s,background .2s}
+.nlink:hover{color:var(--w100);background:var(--w06)}
+.ncta{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.10em;text-transform:uppercase;padding:10px 22px;border-radius:8px;border:none;cursor:none;transition:all .25s var(--ease);white-space:nowrap}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-l);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,155,249,.35)}
+.btn-o{background:transparent;color:var(--w60);border:1px solid var(--w10)}.btn-o:hover{border-color:var(--w20);color:var(--w100);transform:translateY(-1px)}
+.btn-sm{padding:8px 16px;font-size:10px;border-radius:6px}
+.btn-lg{padding:16px 36px;font-size:12px;border-radius:10px}
+.btn-full{width:100%;justify-content:center}
+.btn-ghost{background:transparent;color:var(--w40);border:1px solid var(--bdr)}.btn-ghost:hover{color:var(--w60);border-color:var(--w10)}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--w40);padding:88px 0 0;margin-bottom:32px}
+.breadcrumb a:hover{color:var(--blue)}
+.breadcrumb span{color:var(--w20)}
+
+/* ── LAYOUT ── */
+.page-wrap{max-width:1200px;margin:0 auto;padding:0 40px 100px}
+.main-layout{display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start}
+.content-col{min-width:0}
+.sticky-col{position:sticky;top:88px}
+
+/* ── HERO BLOCK ── */
+.formation-hero{margin-bottom:40px}
+.fh-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.eyebrow-tag{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:5px 12px;border-radius:100px}
+.et-ai{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-b)}
+.et-new{background:var(--blue);color:#fff}
+.et-pop{background:rgba(255,170,0,.12);color:var(--amber);border:1px solid rgba(255,170,0,.25)}
+.fh-title{font-family:var(--fd);font-size:clamp(28px,3.5vw,44px);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:18px}
+.fh-title .accent{color:var(--blue)}
+.fh-desc{font-size:16px;font-weight:300;color:var(--w60);line-height:1.75;margin-bottom:24px;max-width:640px}
+
+/* Rating */
+.fh-rating{display:flex;align-items:center;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.stars{color:var(--amber);letter-spacing:2px;font-size:14px}
+.rating-num{font-family:var(--fd);font-size:15px;font-weight:700}
+.rating-count{font-size:12px;color:var(--w40)}
+.rating-sep{color:var(--w20)}
+.student-count{font-size:12px;color:var(--w60)}
+
+/* Quick meta bar */
+.meta-bar{display:flex;gap:0;flex-wrap:wrap;margin-bottom:32px;background:var(--s1);border:1px solid var(--bdr);border-radius:14px;overflow:hidden}
+.mb-item{display:flex;align-items:center;gap:10px;padding:16px 22px;flex:1;min-width:120px;border-right:1px solid var(--bdr);transition:background .2s}
+.mb-item:last-child{border-right:none}
+.mb-item:hover{background:var(--s2)}
+.mb-icon{font-size:18px;flex-shrink:0}
+.mb-info{}
+.mb-label{font-size:10px;color:var(--w40);font-family:var(--fd);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.mb-value{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w100)}
+
+/* Instructor mini */
+.instructor-mini{display:flex;align-items:center;gap:12px}
+.im-avatar{width:40px;height:40px;border-radius:50%;background:var(--blue-dim);border:2px solid var(--blue-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:13px;font-weight:700;color:var(--blue);flex-shrink:0}
+.im-name{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w100)}
+.im-role{font-size:11px;color:var(--w40)}
+
+/* ── TABS ── */
+.tabs-bar{display:flex;gap:0;border-bottom:1px solid var(--bdr);margin-bottom:36px;overflow-x:auto}
+.tab{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:14px 22px;color:var(--w40);cursor:none;transition:color .2s;border-bottom:2px solid transparent;white-space:nowrap;flex-shrink:0}
+.tab:hover{color:var(--w80)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── SECTION HEADERS inside content ── */
+.sec-head{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--w100);margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.sec-head::before{content:'';width:3px;height:18px;background:var(--blue);border-radius:100px;flex-shrink:0}
+
+/* ── OBJECTIFS GRID ── */
+.obj-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px}
+.obj-item{display:flex;align-items:flex-start;gap:10px;background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;transition:border-color .2s}
+.obj-item:hover{border-color:rgba(0,155,249,.2)}
+.obj-check{width:20px;height:20px;border-radius:50%;background:rgba(0,214,143,.1);border:1px solid rgba(0,214,143,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--green);margin-top:1px}
+.obj-text{font-size:13px;color:var(--w60);line-height:1.55}
+
+/* ── PROGRAMME ── */
+.programme{display:flex;flex-direction:column;gap:10px;margin-bottom:36px}
+.prog-module{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;overflow:hidden;transition:border-color .2s}
+.prog-module:hover{border-color:var(--w10)}
+.pm-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;cursor:none;user-select:none}
+.pm-left{display:flex;align-items:center;gap:14px}
+.pm-num{width:28px;height:28px;border-radius:8px;background:var(--blue-dim);border:1px solid var(--blue-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:11px;font-weight:700;color:var(--blue);flex-shrink:0}
+.pm-title{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w100)}
+.pm-dur{font-size:11px;color:var(--w40)}
+.pm-right{display:flex;align-items:center;gap:10px}
+.pm-toggle{width:24px;height:24px;border-radius:6px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;color:var(--w40);font-size:12px;transition:all .2s;flex-shrink:0}
+.prog-module.open .pm-toggle{background:var(--blue-dim);border-color:var(--blue-b);color:var(--blue);transform:rotate(180deg)}
+.pm-body{display:none;padding:0 20px 16px;border-top:1px solid var(--bdr)}
+.prog-module.open .pm-body{display:block}
+.pm-lessons{display:flex;flex-direction:column;gap:0}
+.pm-lesson{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--bdr)}
+.pm-lesson:last-child{border-bottom:none}
+.pl-icon{font-size:12px;width:20px;text-align:center;flex-shrink:0}
+.pl-name{font-size:12px;color:var(--w60);flex:1}
+.pl-dur{font-size:10px;color:var(--w40);font-family:var(--fd);flex-shrink:0}
+.pl-free{font-size:9px;font-family:var(--fd);font-weight:700;letter-spacing:.1em;color:var(--blue);background:var(--blue-dim);border:1px solid var(--blue-b);border-radius:100px;padding:2px 7px;flex-shrink:0}
+
+/* ── PRÉREQUIS ── */
+.prereq-list{display:flex;flex-direction:column;gap:8px;margin-bottom:36px}
+.prereq-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--w60)}
+.prereq-item::before{content:'→';color:var(--blue);font-family:var(--fd);font-weight:700;font-size:12px;flex-shrink:0}
+
+/* ── OUTILS ── */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-bottom:36px}
+.tool-card{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 12px;text-align:center;transition:border-color .3s,transform .3s var(--ease)}
+.tool-card:hover{border-color:var(--w10);transform:translateY(-2px)}
+.tc-icon{font-size:24px;margin-bottom:8px}
+.tc-name{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--w80)}
+.tc-type{font-size:9px;color:var(--w40);margin-top:2px}
+
+/* ── FORMATEUR ── */
+.instructor-card{background:var(--s1);border:1px solid var(--bdr);border-radius:16px;padding:28px;margin-bottom:36px}
+.ic-top{display:flex;align-items:flex-start;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+.ic-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--blue-dim),var(--s3));border:2px solid var(--blue-b);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:22px;font-weight:800;color:var(--blue);flex-shrink:0}
+.ic-info{}
+.ic-name{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--w100);margin-bottom:4px}
+.ic-role{font-size:13px;color:var(--blue);margin-bottom:8px}
+.ic-stats{display:flex;gap:16px;flex-wrap:wrap}
+.ic-stat{font-size:11px;color:var(--w40);display:flex;align-items:center;gap:5px}
+.ic-stat strong{color:var(--w80)}
+.ic-bio{font-size:13px;color:var(--w60);line-height:1.75;margin-bottom:16px}
+.ic-tags{display:flex;gap:6px;flex-wrap:wrap}
+.ic-tag{font-size:9px;font-family:var(--fd);font-weight:700;letter-spacing:.08em;color:var(--w60);background:var(--s3);border:1px solid var(--bdr);border-radius:4px;padding:3px 9px}
+
+/* ── AVIS ── */
+.reviews-summary{display:grid;grid-template-columns:120px 1fr;gap:24px;background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:24px;margin-bottom:24px;align-items:center}
+.rs-big{text-align:center}
+.rs-num{font-family:var(--fd);font-size:52px;font-weight:800;color:var(--w100);line-height:1}
+.rs-stars{color:var(--amber);font-size:16px;letter-spacing:3px;margin:6px 0}
+.rs-count{font-size:11px;color:var(--w40)}
+.rs-bars{display:flex;flex-direction:column;gap:6px}
+.rb-row{display:flex;align-items:center;gap:8px}
+.rb-label{font-size:11px;color:var(--w40);width:44px;text-align:right;flex-shrink:0}
+.rb-track{flex:1;height:5px;background:var(--s3);border-radius:100px;overflow:hidden}
+.rb-fill{height:100%;border-radius:100px;background:var(--amber)}
+.rb-pct{font-size:10px;color:var(--w40);width:30px;flex-shrink:0}
+
+.reviews-list{display:flex;flex-direction:column;gap:14px}
+.review-card{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:20px}
+.rc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;gap:12px}
+.rc-author{display:flex;align-items:center;gap:10px}
+.rc-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;flex-shrink:0}
+.rc-name{font-family:var(--fd);font-size:12px;font-weight:700;color:var(--w100)}
+.rc-role{font-size:11px;color:var(--w40);margin-top:1px}
+.rc-meta{text-align:right;flex-shrink:0}
+.rc-stars{color:var(--amber);font-size:12px;letter-spacing:1px}
+.rc-date{font-size:10px;color:var(--w40);margin-top:2px}
+.rc-text{font-size:13px;color:var(--w60);line-height:1.7}
+.rc-tag{display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:10px;color:var(--green);background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.2);border-radius:100px;padding:3px 9px;font-family:var(--fd);font-weight:700;letter-spacing:.08em}
+
+/* ── STICKY CARD ── */
+.sticky-card{background:var(--s1);border:1px solid var(--blue-b);border-radius:20px;overflow:hidden;box-shadow:0 0 80px rgba(0,155,249,.06)}
+.sc-top-line{height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+.sc-body{padding:28px}
+.sc-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.sc-price{font-family:var(--fd);font-size:36px;font-weight:800;color:var(--w100)}
+.sc-price-unit{font-size:14px;color:var(--w40);font-weight:300}
+.sc-price-sub{font-size:11px;color:var(--w40);margin-bottom:20px}
+.sc-cta-stack{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.sc-divider{height:1px;background:var(--bdr);margin:16px 0}
+.sc-info-list{display:flex;flex-direction:column;gap:10px}
+.sc-info-item{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--w60)}
+.sc-info-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.sc-info-label{flex:1}
+.sc-info-val{font-family:var(--fd);font-size:11px;font-weight:700;color:var(--w100);text-align:right}
+.sc-guarantee{background:rgba(0,214,143,.05);border:1px solid rgba(0,214,143,.15);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-top:16px}
+.sc-g-icon{font-size:16px;flex-shrink:0}
+.sc-g-text{font-size:11px;color:rgba(0,214,143,.8);line-height:1.5}
+.sc-dates{margin-top:16px}
+.sc-dates-title{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--w40);margin-bottom:10px}
+.sc-date-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bdr)}
+.sc-date-item:last-child{border-bottom:none}
+.sd-date{font-size:12px;color:var(--w80)}
+.sd-mode{font-size:10px;color:var(--w40);font-family:var(--fd)}
+.sd-spots{font-size:10px;font-family:var(--fd);font-weight:700;letter-spacing:.06em}
+.sd-spots.few{color:var(--red)}
+.sd-spots.ok{color:var(--green)}
+
+/* Share / wish row */
+.sc-actions-row{display:flex;gap:8px;margin-top:16px}
+.sc-icon-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:8px;border:1px solid var(--bdr);background:transparent;font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--w40);cursor:none;transition:all .2s}
+.sc-icon-btn:hover{border-color:var(--w20);color:var(--w60)}
+.sc-icon-btn.active{background:rgba(255,77,106,.07);border-color:rgba(255,77,106,.25);color:var(--red)}
+
+/* ── RELATED ── */
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px}
+.rel-card{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s}
+.rel-card:hover{transform:translateY(-3px);border-color:var(--w10);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.rc-accent{height:3px}
+.rc-body{padding:16px}
+.rc-cat{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px}
+.rc-title{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w100);line-height:1.3;margin-bottom:8px}
+.rc-meta{display:flex;gap:10px;margin-bottom:12px}
+.rc-mi{font-size:10px;color:var(--w40)}
+.rc-footer{display:flex;align-items:center;justify-content:space-between}
+.rc-price{font-family:var(--fd);font-size:13px;font-weight:700}
+
+/* ── BADGE CHIP ── */
+.chip{display:inline-flex;align-items:center;gap:5px;font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:100px}
+.chip-b{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-b)}
+.chip-g{background:rgba(0,214,143,.08);color:var(--green);border:1px solid rgba(0,214,143,.22)}
+.chip-a{background:rgba(255,170,0,.08);color:var(--amber);border:1px solid rgba(255,170,0,.2)}
+.chip-w{background:var(--w06);color:var(--w60);border:1px solid var(--bdr)}
+.chip-r{background:rgba(255,77,106,.08);color:var(--red);border:1px solid rgba(255,77,106,.2)}
+
+/* ── PROGRESS MODULES ── */
+.prog-overview{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.po-item{background:var(--s1);border:1px solid var(--bdr);border-radius:10px;padding:14px 16px;text-align:center}
+.po-num{font-family:var(--fd);font-size:22px;font-weight:800;color:var(--blue)}
+.po-label{font-size:10px;color:var(--w40);margin-top:4px}
+
+/* ── CERTIF BLOCK ── */
+.certif-block{background:linear-gradient(135deg,rgba(0,155,249,.07) 0%,var(--s1) 70%);border:1px solid var(--blue-b);border-radius:16px;padding:28px;display:flex;gap:24px;align-items:center;margin-bottom:36px;flex-wrap:wrap}
+.cb-icon{width:64px;height:64px;background:var(--blue-dim);border:1px solid var(--blue-b);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.cb-content{}
+.cb-title{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--w100);margin-bottom:6px}
+.cb-desc{font-size:12px;color:var(--w60);line-height:1.65}
+.cb-tags{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+
+/* ── FINANCEMENT ── */
+.finance-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:36px}
+.fin-card{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;padding:18px}
+.fin-logo{font-size:20px;margin-bottom:10px}
+.fin-title{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w100);margin-bottom:6px}
+.fin-desc{font-size:11px;color:var(--w40);line-height:1.6}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+.rd1{transition-delay:.08s}.rd2{transition-delay:.16s}.rd3{transition-delay:.24s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .main-layout{grid-template-columns:1fr}
+  .sticky-col{position:static}
+  .related-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .page-wrap{padding:0 20px 80px}
+  #nav{padding:0 20px}
+  .nlinks{display:none}
+  .meta-bar{flex-direction:column}
+  .mb-item{border-right:none;border-bottom:1px solid var(--bdr)}
+  .mb-item:last-child{border-bottom:none}
+  .obj-grid{grid-template-columns:1fr}
+  .prog-overview{grid-template-columns:repeat(2,1fr)}
+  .related-grid{grid-template-columns:1fr}
+  .reviews-summary{grid-template-columns:1fr}
+  .finance-grid{grid-template-columns:1fr}
+  .tabs-bar{-webkit-overflow-scrolling:touch}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="ring"></div>
+
+<!-- ── NAVBAR ── -->
+<nav id="nav">
+  <a href="power_inside_data_academy_landing.html" class="nlogo">
+    <svg width="30" height="30" viewBox="0 0 96 96" fill="none">
+      <circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/>
+      <circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity=".9"/><circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity=".75"/>
+      <circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity=".85"/><circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity=".68"/>
+      <circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity=".8"/><circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity=".7"/>
+      <line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.14)"/><circle cx="48" cy="48" r="5.5" fill="#009BF9"/>
+      <circle cx="48" cy="48" r="2.5" fill="white" opacity=".9"/>
+    </svg>
+    <div class="nlogo-txt">
+      <span class="nlogo-name">Power Inside Data</span>
+      <span class="nlogo-sub">Academy</span>
+    </div>
+  </a>
+  <div class="nlinks">
+    <a href="power_inside_data_academy_landing.html" class="nlink">Accueil</a>
+    <a href="power_inside_data_academy_catalogue.html" class="nlink">Formations</a>
+    <a href="#" class="nlink">Parcours</a>
+    <a href="#" class="nlink">Certifications</a>
+    <a href="#" class="nlink">À propos</a>
+  </div>
+  <div class="ncta">
+    <a href="#" class="btn btn-o btn-sm">Se connecter</a>
+    <a href="#" class="btn btn-p btn-sm">Commencer →</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- BREADCRUMB -->
+  <nav class="breadcrumb">
+    <a href="power_inside_data_academy_landing.html">Accueil</a>
+    <span>›</span>
+    <a href="power_inside_data_academy_catalogue.html">Formations</a>
+    <span>›</span>
+    <a href="#">IA Générative</a>
+    <span>›</span>
+    <span style="color:var(--w60)">LangChain & LLMs en Production</span>
+  </nav>
+
+  <div class="main-layout">
+
+    <!-- ══════════════════════════════════
+         CONTENT COLUMN
+    ══════════════════════════════════ -->
+    <div class="content-col">
+
+      <!-- HERO -->
+      <div class="formation-hero reveal">
+        <div class="fh-eyebrow">
+          <span class="eyebrow-tag et-ai">IA Générative · LLM · RAG</span>
+          <span class="eyebrow-tag et-pop">⭐ Populaire</span>
+          <span class="chip chip-g">Certifiant</span>
+        </div>
+
+        <h1 class="fh-title">
+          LangChain & LLMs<br>
+          <span class="accent">en Production</span>
+        </h1>
+
+        <p class="fh-desc">
+          Maîtrisez la conception d'applications IA robustes avec LangChain, les architectures Retrieval Augmented Generation (RAG), les agents autonomes et le déploiement de modèles en environnement d'entreprise. Une formation par des experts qui ont mis des LLMs en prod.
+        </p>
+
+        <!-- Rating -->
+        <div class="fh-rating">
+          <span class="stars">★★★★★</span>
+          <span class="rating-num">4.9</span>
+          <span class="rating-count">(186 avis)</span>
+          <span class="rating-sep">·</span>
+          <span class="student-count">🎓 1 248 apprenants</span>
+          <span class="rating-sep">·</span>
+          <span style="font-size:12px;color:var(--w40)">Mis à jour : Mars 2025</span>
+        </div>
+
+        <!-- Meta bar -->
+        <div class="meta-bar">
+          <div class="mb-item">
+            <span class="mb-icon">📅</span>
+            <div class="mb-info">
+              <div class="mb-label">Durée</div>
+              <div class="mb-value">5 jours</div>
+            </div>
+          </div>
+          <div class="mb-item">
+            <span class="mb-icon">🎯</span>
+            <div class="mb-info">
+              <div class="mb-label">Niveau</div>
+              <div class="mb-value">Avancé</div>
+            </div>
+          </div>
+          <div class="mb-item">
+            <span class="mb-icon">💻</span>
+            <div class="mb-info">
+              <div class="mb-label">Mode</div>
+              <div class="mb-value">Distanciel</div>
+            </div>
+          </div>
+          <div class="mb-item">
+            <span class="mb-icon">🏅</span>
+            <div class="mb-info">
+              <div class="mb-label">Certification</div>
+              <div class="mb-value">PID-LLM-01</div>
+            </div>
+          </div>
+          <div class="mb-item">
+            <span class="mb-icon">👤</span>
+            <div class="mb-info">
+              <div class="mb-label">Formateur</div>
+              <div class="instructor-mini" style="margin-top:2px">
+                <div class="im-avatar" style="width:28px;height:28px;font-size:10px">AS</div>
+                <div>
+                  <div class="im-name" style="font-size:12px">Alex Sow</div>
+                  <div class="im-role" style="font-size:10px">ML Engineer · ex-Meta</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tabs-bar reveal">
+        <div class="tab active" data-tab="programme">Programme</div>
+        <div class="tab" data-tab="objectifs">Objectifs</div>
+        <div class="tab" data-tab="outils">Outils & Techno</div>
+        <div class="tab" data-tab="formateur">Formateur</div>
+        <div class="tab" data-tab="avis">Avis (186)</div>
+        <div class="tab" data-tab="financement">Financement</div>
+      </div>
+
+      <!-- ─── TAB: PROGRAMME ─── -->
+      <div class="tab-panel active" id="tab-programme">
+
+        <div class="prog-overview reveal">
+          <div class="po-item"><div class="po-num">5</div><div class="po-label">Jours de formation</div></div>
+          <div class="po-item"><div class="po-num">6</div><div class="po-label">Modules thématiques</div></div>
+          <div class="po-item"><div class="po-num">42h</div><div class="po-label">Contenu total</div></div>
+          <div class="po-item"><div class="po-num">8</div><div class="po-label">Projets pratiques</div></div>
+        </div>
+
+        <div class="sec-head reveal">Programme détaillé</div>
+        <div class="programme reveal">
+
+          <div class="prog-module open">
+            <div class="pm-header" onclick="toggleModule(this)">
+              <div class="pm-left">
+                <div class="pm-num">01</div>
+                <div>
+                  <div class="pm-title">Fondamentaux des LLMs & Écosystème</div>
+                  <div class="pm-dur">Jour 1 — 7h</div>
+                </div>
+              </div>
+              <div class="pm-right">
+                <span class="chip chip-b">Jour 1</span>
+                <div class="pm-toggle">▾</div>
+              </div>
+            </div>
+            <div class="pm-body">
+              <div class="pm-lessons">
+                <div class="pm-lesson"><span class="pl-icon">▶</span><span class="pl-name">Architecture des Transformers et mécanisme d'attention</span><span class="pl-dur">90 min</span><span class="pl-free">Aperçu</span></div>
+                <div class="pm-lesson"><span class="pl-icon">▶</span><span class="pl-name">Tour d'horizon des LLMs : GPT-4, Claude, Llama, Mistral</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Tokenisation, embeddings et espaces sémantiques</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">🔧</span><span class="pl-name">Atelier : Premier appel API OpenAI & Anthropic</span><span class="pl-dur">90 min</span><span class="pl-free">Aperçu</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Introduction à LangChain — Concepts et architecture</span><span class="pl-dur">60 min</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog-module">
+            <div class="pm-header" onclick="toggleModule(this)">
+              <div class="pm-left">
+                <div class="pm-num">02</div>
+                <div>
+                  <div class="pm-title">LangChain — Chaînes, Prompts & Mémoire</div>
+                  <div class="pm-dur">Jour 2 — 7h</div>
+                </div>
+              </div>
+              <div class="pm-right">
+                <span class="chip chip-b">Jour 2</span>
+                <div class="pm-toggle">▾</div>
+              </div>
+            </div>
+            <div class="pm-body">
+              <div class="pm-lessons">
+                <div class="pm-lesson"><span class="pl-icon">▶</span><span class="pl-name">LLMChain, SequentialChain, RouterChain</span><span class="pl-dur">90 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Prompt Engineering avancé & PromptTemplate</span><span class="pl-dur">75 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Gestion de la mémoire : Buffer, Summary, Entity</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">🔧</span><span class="pl-name">Atelier : Chatbot avec mémoire persistante</span><span class="pl-dur">105 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Output Parsers & structured outputs</span><span class="pl-dur">45 min</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog-module">
+            <div class="pm-header" onclick="toggleModule(this)">
+              <div class="pm-left">
+                <div class="pm-num">03</div>
+                <div>
+                  <div class="pm-title">Architecture RAG — Retrieval Augmented Generation</div>
+                  <div class="pm-dur">Jour 3 — 8h</div>
+                </div>
+              </div>
+              <div class="pm-right">
+                <span class="chip chip-a">Intensif</span>
+                <div class="pm-toggle">▾</div>
+              </div>
+            </div>
+            <div class="pm-body">
+              <div class="pm-lessons">
+                <div class="pm-lesson"><span class="pl-icon">▶</span><span class="pl-name">Principe RAG : indexation, retrieval, generation</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Vector stores : Chroma, Pinecone, Weaviate, FAISS</span><span class="pl-dur">75 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Document loaders, text splitters, embedding models</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">🔧</span><span class="pl-name">Atelier : RAG pipeline sur vos propres documents PDF</span><span class="pl-dur">120 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Advanced RAG : re-ranking, hybrid search, HyDE</span><span class="pl-dur">90 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">🔧</span><span class="pl-name">Atelier : Évaluation RAG avec RAGAS</span><span class="pl-dur">75 min</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog-module">
+            <div class="pm-header" onclick="toggleModule(this)">
+              <div class="pm-left">
+                <div class="pm-num">04</div>
+                <div>
+                  <div class="pm-title">Agents & Tools — LLMs Autonomes</div>
+                  <div class="pm-dur">Jour 4 matin — 4h</div>
+                </div>
+              </div>
+              <div class="pm-right">
+                <span class="chip chip-b">Jour 4</span>
+                <div class="pm-toggle">▾</div>
+              </div>
+            </div>
+            <div class="pm-body">
+              <div class="pm-lessons">
+                <div class="pm-lesson"><span class="pl-icon">▶</span><span class="pl-name">Agents ReAct, OpenAI Functions, Toolkits</span><span class="pl-dur">75 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Custom Tools : APIs, bases de données, code</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">🔧</span><span class="pl-name">Atelier : Agent SQL qui interroge une base de données</span><span class="pl-dur">105 min</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog-module">
+            <div class="pm-header" onclick="toggleModule(this)">
+              <div class="pm-left">
+                <div class="pm-num">05</div>
+                <div>
+                  <div class="pm-title">Déploiement Production & MLOps LLM</div>
+                  <div class="pm-dur">Jour 4 après-midi + Jour 5 matin — 6h</div>
+                </div>
+              </div>
+              <div class="pm-right">
+                <span class="chip chip-r">Prod</span>
+                <div class="pm-toggle">▾</div>
+              </div>
+            </div>
+            <div class="pm-body">
+              <div class="pm-lessons">
+                <div class="pm-lesson"><span class="pl-icon">▶</span><span class="pl-name">API REST avec FastAPI — Packaging LLM app</span><span class="pl-dur">75 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Containerisation Docker & déploiement Kubernetes</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Monitoring LLM : latence, coût, hallucinations</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">🔧</span><span class="pl-name">Atelier : Pipeline CI/CD pour une app LangChain</span><span class="pl-dur">90 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Sécurité : prompt injection, guardrails, LlamaGuard</span><span class="pl-dur">75 min</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prog-module">
+            <div class="pm-header" onclick="toggleModule(this)">
+              <div class="pm-left">
+                <div class="pm-num">06</div>
+                <div>
+                  <div class="pm-title">Projet de Certification & Soutenance</div>
+                  <div class="pm-dur">Jour 5 après-midi — 4h</div>
+                </div>
+              </div>
+              <div class="pm-right">
+                <span class="chip chip-g">Certif</span>
+                <div class="pm-toggle">▾</div>
+              </div>
+            </div>
+            <div class="pm-body">
+              <div class="pm-lessons">
+                <div class="pm-lesson"><span class="pl-icon">🔧</span><span class="pl-name">Développement du projet de certification en binôme</span><span class="pl-dur">120 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">📄</span><span class="pl-name">Présentation & soutenance devant le formateur</span><span class="pl-dur">60 min</span></div>
+                <div class="pm-lesson"><span class="pl-icon">🏅</span><span class="pl-name">Remise de la certification PID-LLM-01</span><span class="pl-dur">30 min</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Certification block -->
+        <div class="certif-block reveal">
+          <div class="cb-icon">🏆</div>
+          <div class="cb-content">
+            <div class="cb-title">Certification Power Inside Data — PID-LLM-01</div>
+            <div class="cb-desc">À l'issue de la formation, les participants ayant validé le projet de certification reçoivent la certification PID-LLM-01, reconnue par les entreprises partenaires de Power Inside Data.</div>
+            <div class="cb-tags">
+              <span class="chip chip-g">Reconnue industrie</span>
+              <span class="chip chip-b">CPF éligible</span>
+              <span class="chip chip-w">Badge numérique</span>
+              <span class="chip chip-w">Linkedin ready</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ─── TAB: OBJECTIFS ─── -->
+      <div class="tab-panel" id="tab-objectifs">
+        <div class="sec-head" style="margin-bottom:20px">Ce que vous saurez faire</div>
+        <div class="obj-grid">
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Construire des applications LLM robustes avec LangChain de bout en bout</div></div>
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Concevoir et déployer des pipelines RAG sur vos propres données d'entreprise</div></div>
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Créer des agents autonomes capables d'utiliser des outils externes (APIs, BDD)</div></div>
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Déployer des applications LLM en production avec Docker, FastAPI et Kubernetes</div></div>
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Monitorer et évaluer la qualité des sorties LLM en production (RAGAS, LangSmith)</div></div>
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Sécuriser vos apps contre le prompt injection et les risques de sécurité</div></div>
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Optimiser les coûts et la latence d'un système LLM à grande échelle</div></div>
+          <div class="obj-item"><div class="obj-check">✓</div><div class="obj-text">Présenter et défendre une architecture LLM devant des parties prenantes techniques</div></div>
+        </div>
+
+        <div class="sec-head" style="margin:28px 0 16px">Prérequis</div>
+        <div class="prereq-list">
+          <div class="prereq-item">Bonne maîtrise de Python (fonctions, classes, gestion d'exceptions)</div>
+          <div class="prereq-item">Notions de base en Machine Learning (supervisé, non-supervisé)</div>
+          <div class="prereq-item">Connaissance de REST APIs et requêtes HTTP</div>
+          <div class="prereq-item">Confort avec la ligne de commande Linux et Docker de base</div>
+          <div class="prereq-item">Niveau B2 minimum en anglais technique (documentation officielle en anglais)</div>
+        </div>
+
+        <div class="sec-head" style="margin:28px 0 16px">À qui s'adresse cette formation ?</div>
+        <div class="obj-grid">
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">→</div><div class="obj-text">Data Scientists voulant passer à la mise en production de LLMs</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">→</div><div class="obj-text">Développeurs backend cherchant à intégrer l'IA dans leurs applications</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">→</div><div class="obj-text">ML Engineers souhaitant maîtriser l'écosystème LangChain complet</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">→</div><div class="obj-text">Tech Leads voulant comprendre les enjeux techniques des projets LLM</div></div>
+        </div>
+      </div>
+
+      <!-- ─── TAB: OUTILS ─── -->
+      <div class="tab-panel" id="tab-outils">
+        <div class="sec-head" style="margin-bottom:20px">Technologies & Outils couverts</div>
+        <div class="tools-grid">
+          <div class="tool-card"><div class="tc-icon">🦜</div><div class="tc-name">LangChain</div><div class="tc-type">Framework principal</div></div>
+          <div class="tool-card"><div class="tc-icon">🤖</div><div class="tc-name">OpenAI API</div><div class="tc-type">LLM Provider</div></div>
+          <div class="tool-card"><div class="tc-icon">🦙</div><div class="tc-name">LlamaIndex</div><div class="tc-type">RAG Framework</div></div>
+          <div class="tool-card"><div class="tc-icon">🗄️</div><div class="tc-name">Chroma DB</div><div class="tc-type">Vector Store</div></div>
+          <div class="tool-card"><div class="tc-icon">📌</div><div class="tc-name">Pinecone</div><div class="tc-type">Vector Store Cloud</div></div>
+          <div class="tool-card"><div class="tc-icon">🤗</div><div class="tc-name">HuggingFace</div><div class="tc-type">Modèles Open Source</div></div>
+          <div class="tool-card"><div class="tc-icon">⚡</div><div class="tc-name">FastAPI</div><div class="tc-type">API Serving</div></div>
+          <div class="tool-card"><div class="tc-icon">🐳</div><div class="tc-name">Docker</div><div class="tc-type">Conteneurisation</div></div>
+          <div class="tool-card"><div class="tc-icon">☸️</div><div class="tc-name">Kubernetes</div><div class="tc-type">Orchestration</div></div>
+          <div class="tool-card"><div class="tc-icon">🔭</div><div class="tc-name">LangSmith</div><div class="tc-type">Observabilité LLM</div></div>
+          <div class="tool-card"><div class="tc-icon">📊</div><div class="tc-name">RAGAS</div><div class="tc-type">Évaluation RAG</div></div>
+          <div class="tool-card"><div class="tc-icon">🐍</div><div class="tc-name">Python 3.11</div><div class="tc-type">Langage</div></div>
+        </div>
+
+        <div class="sec-head" style="margin:32px 0 16px">Environnement technique fourni</div>
+        <div class="obj-grid">
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">✓</div><div class="obj-text">Accès à un environnement cloud GPU dédié pendant 5 jours</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">✓</div><div class="obj-text">Crédits OpenAI API inclus (50$ offerts)</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">✓</div><div class="obj-text">Accès Pinecone Starter Plan pendant 30 jours</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">✓</div><div class="obj-text">Repository GitHub privé avec tous les notebooks & solutions</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">✓</div><div class="obj-text">Support Slack pendant 30 jours post-formation</div></div>
+          <div class="obj-item"><div class="obj-check" style="background:rgba(0,155,249,.1);border-color:var(--blue-b);color:var(--blue)">✓</div><div class="obj-text">Accès à vie aux supports de cours mis à jour</div></div>
+        </div>
+      </div>
+
+      <!-- ─── TAB: FORMATEUR ─── -->
+      <div class="tab-panel" id="tab-formateur">
+        <div class="instructor-card">
+          <div class="ic-top">
+            <div class="ic-avatar">AS</div>
+            <div class="ic-info">
+              <div class="ic-name">Alex Sow</div>
+              <div class="ic-role">Senior ML Engineer · Consultant IA Générative</div>
+              <div class="ic-stats">
+                <span class="ic-stat">⭐ <strong>4.9</strong> note moyenne</span>
+                <span class="ic-stat">🎓 <strong>2 400+</strong> apprenants</span>
+                <span class="ic-stat">📋 <strong>6</strong> formations</span>
+                <span class="ic-stat">🏢 <strong>ex-Meta, BNP Paribas</strong></span>
+              </div>
+            </div>
+          </div>
+          <div class="ic-bio">
+            Alex Sow est ML Engineer Senior avec 9 ans d'expérience dans la mise en production de systèmes d'IA à grande échelle. Ancien de Meta (Paris) où il a contribué à des systèmes de recommandation servant des centaines de millions d'utilisateurs, il a rejoint BNP Paribas pour piloter la transition IA du département data & analytics. Il dirige aujourd'hui un cabinet de conseil spécialisé dans les architectures LLM pour grands comptes.
+            <br><br>
+            Contributeur actif à LangChain et HuggingFace, Alex est reconnu pour sa pédagogie orientée terrain : chaque concept est illustré par un cas d'usage réel, chaque atelier reproduit les conditions de production.
+          </div>
+          <div class="ic-tags">
+            <span class="ic-tag">LangChain Core Contributor</span>
+            <span class="ic-tag">RAG Architecture</span>
+            <span class="ic-tag">MLOps</span>
+            <span class="ic-tag">Kubernetes</span>
+            <span class="ic-tag">Python Expert</span>
+            <span class="ic-tag">ex-Meta</span>
+            <span class="ic-tag">ex-BNP Paribas</span>
+          </div>
+        </div>
+
+        <!-- Second instructor -->
+        <div class="instructor-card" style="margin-top:0">
+          <div class="ic-top">
+            <div class="ic-avatar" style="background:rgba(0,214,143,.1);border-color:rgba(0,214,143,.25);color:var(--green)">MK</div>
+            <div class="ic-info">
+              <div class="ic-name">Marie Koffi</div>
+              <div class="ic-role">Data Scientist · Spécialiste NLP & Évaluation LLM</div>
+              <div class="ic-stats">
+                <span class="ic-stat">⭐ <strong>4.8</strong> note moyenne</span>
+                <span class="ic-stat">🎓 <strong>1 100+</strong> apprenants</span>
+                <span class="ic-stat">🏢 <strong>ex-Criteo, Doctolib</strong></span>
+              </div>
+            </div>
+          </div>
+          <div class="ic-bio">
+            Marie Koffi intervient sur les modules RAG, évaluation et sécurité. PhD en NLP (ENS Paris), elle a développé chez Criteo les systèmes d'évaluation des modèles de language et chez Doctolib les premières applications médicales basées sur des LLMs. Elle anime les ateliers pratiques des jours 3 à 5.
+          </div>
+          <div class="ic-tags">
+            <span class="ic-tag">NLP / Transformers</span>
+            <span class="ic-tag">RAGAS</span>
+            <span class="ic-tag">LLM Evaluation</span>
+            <span class="ic-tag">PhD ENS Paris</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── TAB: AVIS ─── -->
+      <div class="tab-panel" id="tab-avis">
+        <div class="reviews-summary">
+          <div class="rs-big">
+            <div class="rs-num">4.9</div>
+            <div class="rs-stars">★★★★★</div>
+            <div class="rs-count">186 avis</div>
+          </div>
+          <div class="rs-bars">
+            <div class="rb-row"><span class="rb-label">5 ★</span><div class="rb-track"><div class="rb-fill" style="width:89%"></div></div><span class="rb-pct">89%</span></div>
+            <div class="rb-row"><span class="rb-label">4 ★</span><div class="rb-track"><div class="rb-fill" style="width:8%"></div></div><span class="rb-pct">8%</span></div>
+            <div class="rb-row"><span class="rb-label">3 ★</span><div class="rb-track"><div class="rb-fill" style="width:3%"></div></div><span class="rb-pct">3%</span></div>
+            <div class="rb-row"><span class="rb-label">2 ★</span><div class="rb-track"><div class="rb-fill" style="width:0%"></div></div><span class="rb-pct">0%</span></div>
+            <div class="rb-row"><span class="rb-label">1 ★</span><div class="rb-track"><div class="rb-fill" style="width:0%"></div></div><span class="rb-pct">0%</span></div>
+          </div>
+        </div>
+
+        <div class="reviews-list">
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-author">
+                <div class="rc-avatar" style="background:var(--blue-dim);color:var(--blue)">TM</div>
+                <div><div class="rc-name">Thomas M.</div><div class="rc-role">Lead ML Engineer · Société Générale</div></div>
+              </div>
+              <div class="rc-meta"><div class="rc-stars">★★★★★</div><div class="rc-date">Février 2025</div></div>
+            </div>
+            <div class="rc-text">Formation absolument remarquable. Alex sait exactement comment expliquer des concepts complexes avec des exemples concrets tirés de sa propre expérience en prod. Le module RAG du jour 3 vaut à lui seul le prix de la formation. En deux semaines j'ai mis en prod mon premier pipeline RAG sur nos documents internes.</div>
+            <span class="rc-tag">✓ Avis vérifié</span>
+          </div>
+
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-author">
+                <div class="rc-avatar" style="background:rgba(0,214,143,.1);color:var(--green)">SL</div>
+                <div><div class="rc-name">Sophie L.</div><div class="rc-role">Data Scientist · Airbus</div></div>
+              </div>
+              <div class="rc-meta"><div class="rc-stars">★★★★★</div><div class="rc-date">Janvier 2025</div></div>
+            </div>
+            <div class="rc-text">Ce qui m'a le plus impressionné c'est la densité du contenu sans jamais être noyée sous la théorie. Les ateliers pratiques occupent vraiment 40% du temps et c'est ça qui fait la différence. Marie Koffi sur l'évaluation RAG avec RAGAS était une vraie révélation. Je recommande sans hésiter à mon équipe.</div>
+            <span class="rc-tag">✓ Avis vérifié</span>
+          </div>
+
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-author">
+                <div class="rc-avatar" style="background:rgba(255,170,0,.1);color:var(--amber)">RD</div>
+                <div><div class="rc-name">Romain D.</div><div class="rc-role">Senior Backend Engineer · Qonto</div></div>
+              </div>
+              <div class="rc-meta"><div class="rc-stars">★★★★★</div><div class="rc-date">Décembre 2024</div></div>
+            </div>
+            <div class="rc-text">Venant d'un background backend, j'avais peur que la partie ML me perde. Le formateur a parfaitement calibré le niveau — on reste dans la pratique tout le temps. Le module déploiement Kubernetes + FastAPI était exactement ce dont j'avais besoin. Support Slack post-formation vraiment réactif aussi.</div>
+            <span class="rc-tag">✓ Avis vérifié</span>
+          </div>
+
+          <div class="review-card">
+            <div class="rc-header">
+              <div class="rc-author">
+                <div class="rc-avatar" style="background:rgba(180,100,255,.1);color:var(--purple)">CM</div>
+                <div><div class="rc-name">Chiara M.</div><div class="rc-role">ML Engineer · BNP Paribas CIB</div></div>
+              </div>
+              <div class="rc-meta"><div class="rc-stars">★★★★☆</div><div class="rc-date">Novembre 2024</div></div>
+            </div>
+            <div class="rc-text">Très bonne formation dans l'ensemble. J'aurais aimé un peu plus de temps sur le fine-tuning et les modèles open source (Llama, Mistral) mais je comprends que ce soit couvert dans une autre formation. Le contenu sur LangSmith et le monitoring était excellent et très peu documenté ailleurs.</div>
+            <span class="rc-tag">✓ Avis vérifié</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-top:20px">
+          <button class="btn btn-ghost btn-sm" style="font-size:10px">Voir les 182 avis restants →</button>
+        </div>
+      </div>
+
+      <!-- ─── TAB: FINANCEMENT ─── -->
+      <div class="tab-panel" id="tab-financement">
+        <div class="sec-head" style="margin-bottom:20px">Options de financement</div>
+        <div class="finance-grid">
+          <div class="fin-card">
+            <div class="fin-logo">💼</div>
+            <div class="fin-title">CPF — Compte Personnel de Formation</div>
+            <div class="fin-desc">Cette formation est éligible CPF (code RS 6789). Financement jusqu'à 100% selon votre solde CPF. Démarche via Mon Compte Formation.</div>
+          </div>
+          <div class="fin-card">
+            <div class="fin-logo">🏢</div>
+            <div class="fin-title">OPCO — Financement entreprise</div>
+            <div class="fin-desc">Votre entreprise peut financer via son OPCO. Nous gérons toute la partie administrative et la demande de prise en charge pour vous.</div>
+          </div>
+          <div class="fin-card">
+            <div class="fin-logo">📋</div>
+            <div class="fin-title">Plan de développement des compétences</div>
+            <div class="fin-desc">Intégrez cette formation dans le PDC de votre entreprise. Devis et conventions de formation disponibles sur demande sous 24h.</div>
+          </div>
+          <div class="fin-card">
+            <div class="fin-logo">💳</div>
+            <div class="fin-title">Paiement individuel en plusieurs fois</div>
+            <div class="fin-desc">Paiement en 3× sans frais possible pour les participants individuels. Contactez-nous pour un échelonnement adapté à votre situation.</div>
+          </div>
+        </div>
+
+        <div style="background:var(--s1);border:1px solid var(--blue-b);border-radius:14px;padding:24px;margin-top:8px">
+          <div style="font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w100);margin-bottom:10px">💬 Besoin d'aide pour le financement ?</div>
+          <div style="font-size:13px;color:var(--w60);line-height:1.7;margin-bottom:16px">Notre équipe vous accompagne dans le montage du dossier de financement. Réponse garantie sous 24h ouvrées.</div>
+          <a href="#" class="btn btn-p btn-sm">Parler à un conseiller financement →</a>
+        </div>
+      </div>
+
+      <!-- RELATED -->
+      <div style="margin-top:56px">
+        <div class="sec-head reveal">Formations complémentaires</div>
+        <div class="related-grid reveal">
+          <a href="#" class="rel-card">
+            <div class="rc-accent" style="background:var(--green)"></div>
+            <div class="rc-body">
+              <div class="rc-cat" style="color:var(--green)">MLOps · DevOps</div>
+              <div class="rc-title">MLOps — Industrialiser ses modèles ML</div>
+              <div class="rc-meta"><span class="rc-mi">📅 4j</span><span class="rc-mi">🎯 Expert</span></div>
+              <div class="rc-footer"><div class="rc-price" style="color:var(--w100)">2 100 €</div><span class="btn btn-o btn-sm">Voir →</span></div>
+            </div>
+          </a>
+          <a href="#" class="rel-card">
+            <div class="rc-accent" style="background:var(--blue)"></div>
+            <div class="rc-body">
+              <div class="rc-cat" style="color:var(--blue)">Deep Learning · NLP</div>
+              <div class="rc-title">Deep Learning avec PyTorch — Vision & Transformers</div>
+              <div class="rc-meta"><span class="rc-mi">📅 4j</span><span class="rc-mi">🎯 Interméd.</span></div>
+              <div class="rc-footer"><div class="rc-price" style="color:var(--w100)">1 900 €</div><span class="btn btn-o btn-sm">Voir →</span></div>
+            </div>
+          </a>
+          <a href="#" class="rel-card">
+            <div class="rc-accent" style="background:var(--blue)"></div>
+            <div class="rc-body">
+              <div class="rc-cat" style="color:var(--blue)">LLM · Open Source</div>
+              <div class="rc-title">Fine-tuning LLM Open Source — Llama & Mistral</div>
+              <div class="rc-meta"><span class="rc-mi">📅 5j</span><span class="rc-mi">🎯 Expert</span></div>
+              <div class="rc-footer"><div class="rc-price" style="color:var(--w100)">2 600 €</div><span class="btn btn-o btn-sm">Voir →</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /.content-col -->
+
+    <!-- ══════════════════════════════════
+         STICKY CARD
+    ══════════════════════════════════ -->
+    <div class="sticky-col">
+      <div class="sticky-card reveal">
+        <div class="sc-top-line"></div>
+        <div class="sc-body">
+
+          <div class="sc-price-row">
+            <div class="sc-price">2 400 €</div>
+            <div class="sc-price-unit">HT / pers.</div>
+          </div>
+          <div class="sc-price-sub">Finançable CPF · OPCO · Plan de formation</div>
+
+          <div class="sc-cta-stack">
+            <a href="#" class="btn btn-p btn-full btn-lg">S'inscrire maintenant →</a>
+            <a href="#" class="btn btn-o btn-full">Demander un devis entreprise</a>
+          </div>
+
+          <div style="text-align:center;font-size:11px;color:var(--w40);margin:-4px 0 8px">
+            ✓ Places confirmées sous 24h
+          </div>
+
+          <div class="sc-divider"></div>
+
+          <div class="sc-info-list">
+            <div class="sc-info-item"><span class="sc-info-icon">📅</span><span class="sc-info-label">Durée</span><span class="sc-info-val">5 jours — 35h</span></div>
+            <div class="sc-info-item"><span class="sc-info-icon">💻</span><span class="sc-info-label">Mode</span><span class="sc-info-val">Distanciel live</span></div>
+            <div class="sc-info-item"><span class="sc-info-icon">👥</span><span class="sc-info-label">Taille groupe</span><span class="sc-info-val">Max. 12 participants</span></div>
+            <div class="sc-info-item"><span class="sc-info-icon">🌐</span><span class="sc-info-label">Langue</span><span class="sc-info-val">Français</span></div>
+            <div class="sc-info-item"><span class="sc-info-icon">🔄</span><span class="sc-info-label">Accès supports</span><span class="sc-info-val">À vie</span></div>
+            <div class="sc-info-item"><span class="sc-info-icon">🏅</span><span class="sc-info-label">Certification</span><span class="sc-info-val">PID-LLM-01</span></div>
+            <div class="sc-info-item"><span class="sc-info-icon">💬</span><span class="sc-info-label">Support post-form.</span><span class="sc-info-val">30 jours Slack</span></div>
+          </div>
+
+          <div class="sc-guarantee">
+            <span class="sc-g-icon">🛡️</span>
+            <div class="sc-g-text">Satisfaction garantie — Remboursement intégral si vous n'êtes pas satisfait à l'issue du 1er jour.</div>
+          </div>
+
+          <!-- Prochaines dates -->
+          <div class="sc-dates">
+            <div class="sc-dates-title">Prochaines sessions</div>
+            <div class="sc-date-item">
+              <div><div class="sd-date">14 – 18 Avril 2025</div><div class="sd-mode">Distanciel · Français</div></div>
+              <span class="sd-spots few">3 places</span>
+            </div>
+            <div class="sc-date-item">
+              <div><div class="sd-date">12 – 16 Mai 2025</div><div class="sd-mode">Distanciel · Français</div></div>
+              <span class="sd-spots ok">8 places</span>
+            </div>
+            <div class="sc-date-item">
+              <div><div class="sd-date">16 – 20 Juin 2025</div><div class="sd-mode">Distanciel · Français</div></div>
+              <span class="sd-spots ok">12 places</span>
+            </div>
+            <div class="sc-date-item">
+              <div><div class="sd-date">Session sur mesure</div><div class="sd-mode">Intra-entreprise</div></div>
+              <span class="sd-spots ok">Nous contacter</span>
+            </div>
+          </div>
+
+          <div class="sc-actions-row">
+            <button class="sc-icon-btn" id="wishBtn">♡ Favoris</button>
+            <button class="sc-icon-btn" onclick="navigator.clipboard?.writeText(location.href)">⬆ Partager</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Mini trust bloc -->
+      <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:18px;margin-top:12px">
+        <div style="font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--w40);margin-bottom:12px">Formation dispensée par</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <svg width="28" height="28" viewBox="0 0 96 96" fill="none"><circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity=".9"/><circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity=".75"/><circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity=".85"/><circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity=".68"/><circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity=".8"/><circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity=".7"/><line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/><circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.14)"/><circle cx="48" cy="48" r="5.5" fill="#009BF9"/><circle cx="48" cy="48" r="2.5" fill="white" opacity=".9"/></svg>
+          <div>
+            <div style="font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.1em">POWER INSIDE DATA</div>
+            <div style="font-size:9px;color:var(--blue);letter-spacing:.15em">ACADEMY</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--w60)"><span style="color:var(--green)">✓</span>Organisme certifié Qualiopi</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--w60)"><span style="color:var(--green)">✓</span>97% de satisfaction globale</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--w60)"><span style="color:var(--green)">✓</span>6 240 apprenants formés</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--w60)"><span style="color:var(--green)">✓</span>Formateurs experts terrain</div>
+        </div>
+      </div>
+
+    </div><!-- /.sticky-col -->
+
+  </div><!-- /.main-layout -->
+</div><!-- /.page-wrap -->
+
+<script>
+/* ─── CURSOR ─── */
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.tab,.pm-header,.tool-card,.rel-card,.filter-item,.sc-icon-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='6px';cur.style.height='6px';ring.style.width='50px';ring.style.height='50px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px'});
+});
+
+/* ─── NAVBAR ─── */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('sc',scrollY>30));
+
+/* ─── SCROLL REVEAL ─── */
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target)}}),{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ─── TABS ─── */
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('tab-'+tab.dataset.tab).classList.add('active');
+    // re-trigger reveals in new panel
+    document.querySelectorAll('#tab-'+tab.dataset.tab+' .reveal').forEach(el=>{
+      if(!el.classList.contains('visible')){obs.observe(el)}
+    });
+  });
+});
+
+/* ─── ACCORDION MODULES ─── */
+function toggleModule(header){
+  const mod=header.closest('.prog-module');
+  mod.classList.toggle('open');
+}
+
+/* ─── WISHLIST ─── */
+const wishBtn=document.getElementById('wishBtn');
+if(wishBtn)wishBtn.addEventListener('click',function(){
+  this.classList.toggle('active');
+  this.textContent=this.classList.contains('active')?'♥ Sauvegardé':'♡ Favoris';
+});
+</script>
+</body>
+</html>
