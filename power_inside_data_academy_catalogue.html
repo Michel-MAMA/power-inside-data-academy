@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue des formations — Power Inside Data Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#009BF9;--blue-l:#33AFFA;--blue-dim:rgba(0,155,249,.09);--blue-b:rgba(0,155,249,.28);
+  --bg:#070809;--s1:#0C0D0F;--s2:#111316;--s3:#171A1E;--s4:#1C1F24;
+  --w100:#fff;--w80:rgba(255,255,255,.8);--w60:rgba(255,255,255,.6);--w40:rgba(255,255,255,.4);
+  --w20:rgba(255,255,255,.2);--w10:rgba(255,255,255,.1);--w06:rgba(255,255,255,.06);--w03:rgba(255,255,255,.03);
+  --bdr:rgba(255,255,255,.07);
+  --green:#00D68F;--amber:#FFAA00;--red:#FF4D6A;--purple:#B464FF;--teal:#00C9C8;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --fd:'Syne',sans-serif;--fb:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--w100);font-family:var(--fb);line-height:1.6;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+*{cursor:none}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:10px;height:10px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .18s,height .18s}
+#ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,155,249,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s}
+@media(max-width:768px){*{cursor:auto}#cur,#ring{display:none}}
+
+/* ── NAVBAR ── */
+#nav{position:fixed;top:0;left:0;right:0;height:64px;z-index:500;display:flex;align-items:center;padding:0 32px;gap:24px;background:rgba(7,8,9,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr)}
+.n-logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.n-logo-text{display:flex;flex-direction:column;gap:1px}
+.n-logo-name{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;line-height:1}
+.n-logo-sub{font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);line-height:1}
+.n-search{flex:1;max-width:400px;position:relative}
+.n-search input{width:100%;background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:9px 14px 9px 38px;font-family:var(--fb);font-size:13px;color:var(--w80);outline:none;transition:border .2s}
+.n-search input::placeholder{color:var(--w40)}
+.n-search input:focus{border-color:var(--blue-b)}
+.n-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--w40);font-size:14px;pointer-events:none}
+.n-links{display:flex;align-items:center;gap:2px}
+.n-link{font-family:var(--fd);font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--w40);padding:7px 12px;border-radius:6px;transition:color .2s,background .2s;white-space:nowrap}
+.n-link:hover,.n-link.active{color:var(--w100);background:var(--w06)}
+.n-spacer{flex:1}
+.n-cta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:9px 20px;border-radius:8px;border:none;cursor:none;transition:all .22s var(--ease);white-space:nowrap}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-l);transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,155,249,.3)}
+.btn-o{background:transparent;color:var(--w60);border:1px solid var(--w10)}.btn-o:hover{border-color:var(--w20);color:var(--w100)}
+.btn-sm{padding:8px 16px;font-size:10px;border-radius:6px}
+
+/* ── PAGE HEADER ── */
+.page-header{padding:88px 0 48px;border-bottom:1px solid var(--bdr);background:var(--s1)}
+.container{max-width:1280px;margin:0 auto;padding:0 32px}
+.ph-eyebrow{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.ph-title{font-family:var(--fd);font-size:clamp(28px,4vw,48px);font-weight:800;letter-spacing:-.025em;line-height:1.05;margin-bottom:14px}
+.ph-sub{font-size:15px;font-weight:300;color:var(--w60);line-height:1.7;margin-bottom:28px;max-width:520px}
+.ph-search{display:flex;gap:10px;max-width:560px}
+.ph-search input{flex:1;background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:13px 18px;font-family:var(--fb);font-size:14px;color:var(--w80);outline:none;transition:border .2s}
+.ph-search input::placeholder{color:var(--w40)}
+.ph-search input:focus{border-color:var(--blue-b)}
+
+/* ── CATALOGUE LAYOUT ── */
+.cat-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;padding:40px 0 80px;align-items:start}
+.sidebar{position:sticky;top:88px}
+
+/* ── SIDEBAR FILTERS ── */
+.filter-block{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:20px;margin-bottom:14px}
+.fb-title{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--w80);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.fb-clear{font-size:9px;color:var(--blue);cursor:none;transition:opacity .2s}
+.fb-clear:hover{opacity:.7}
+.filter-option{display:flex;align-items:center;justify-content:space-between;padding:7px 0;cursor:none;transition:color .2s}
+.filter-option:hover .fo-label{color:var(--w100)}
+.fo-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;background:transparent;transition:all .15s;flex-shrink:0}
+.filter-option.checked .fo-check{background:var(--blue);border-color:var(--blue);color:#fff}
+.fo-label{font-size:12px;color:var(--w60);flex:1;margin-left:10px;transition:color .2s}
+.fo-count{font-family:var(--fd);font-size:10px;color:var(--w40)}
+.fo-color{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-left:8px}
+
+/* ── RESULTS HEADER ── */
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.rh-count{font-family:var(--fd);font-size:13px;font-weight:700;color:var(--w80)}
+.rh-count span{color:var(--blue)}
+.rh-sort{display:flex;align-items:center;gap:10px}
+.sort-label{font-size:11px;color:var(--w40)}
+.sort-select{background:var(--s2);border:1px solid var(--bdr);border-radius:8px;padding:8px 14px;font-family:var(--fb);font-size:12px;color:var(--w80);outline:none;cursor:none;appearance:none;-webkit-appearance:none;min-width:160px}
+
+/* ── ACTIVE FILTERS ── */
+.active-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.af-tag{display:inline-flex;align-items:center;gap:6px;background:var(--blue-dim);border:1px solid var(--blue-b);border-radius:100px;padding:5px 12px;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--blue)}
+.af-tag button{background:none;border:none;color:var(--blue);cursor:none;font-size:12px;line-height:1;opacity:.7;transition:opacity .2s}
+.af-tag button:hover{opacity:1}
+
+/* ── VIEW TOGGLE ── */
+.view-toggle{display:flex;gap:4px}
+.vt-btn{width:32px;height:32px;border-radius:6px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:none;color:var(--w40);background:transparent;transition:all .2s}
+.vt-btn.active{background:var(--blue-dim);border-color:var(--blue-b);color:var(--blue)}
+
+/* ── COURSES GRID ── */
+.courses-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.courses-grid.list-view{grid-template-columns:1fr}
+.course-card{background:var(--s1);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;cursor:none;transition:transform .3s var(--ease),border-color .3s,box-shadow .3s;display:flex;flex-direction:column}
+.course-card:hover{transform:translateY(-4px);border-color:var(--w10);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.courses-grid.list-view .course-card{flex-direction:row}
+.cc-thumb{height:140px;position:relative;overflow:hidden;flex-shrink:0}
+.list-view .cc-thumb{width:200px;height:auto}
+.cc-thumb-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.cc-thumb-icon{font-size:48px;opacity:.35}
+.cc-thumb-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,var(--s1))}
+.list-view .cc-thumb-overlay{background:linear-gradient(to right,transparent 50%,var(--s1))}
+.cc-badges{position:absolute;top:10px;left:10px;display:flex;gap:5px;flex-wrap:wrap}
+.cc-badge{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:100px}
+.cc-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.cc-tech{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--w40);margin-bottom:7px}
+.cc-title{font-family:var(--fd);font-size:14px;font-weight:700;color:var(--w100);line-height:1.3;margin-bottom:8px;flex:1}
+.cc-desc{font-size:12px;color:var(--w60);line-height:1.6;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cc-instructor{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.cc-av{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:9px;font-weight:700;flex-shrink:0}
+.cc-instructor-name{font-size:11px;color:var(--w40)}
+.cc-stats{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.cc-stat{font-size:10px;color:var(--w40);display:flex;align-items:center;gap:4px}
+.cc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--bdr)}
+.cc-price{font-family:var(--fd);font-size:15px;font-weight:800;color:var(--w100)}
+.cc-level{font-size:9px;font-family:var(--fd);font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:100px;background:var(--w06);color:var(--w60)}
+
+/* ── CHIP ── */
+.chip{display:inline-flex;align-items:center;font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:100px}
+.chip-b{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-b)}
+.chip-g{background:rgba(0,214,143,.08);color:var(--green);border:1px solid rgba(0,214,143,.22)}
+.chip-a{background:rgba(255,170,0,.08);color:var(--amber);border:1px solid rgba(255,170,0,.2)}
+.chip-p{background:rgba(180,100,255,.08);color:var(--purple);border:1px solid rgba(180,100,255,.2)}
+.chip-r{background:rgba(255,77,106,.08);color:var(--red);border:1px solid rgba(255,77,106,.2)}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;gap:6px;justify-content:center;margin-top:36px}
+.pag-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:12px;font-weight:700;color:var(--w40);cursor:none;transition:all .2s;background:transparent}
+.pag-btn:hover,.pag-btn.active{background:var(--blue);border-color:var(--blue);color:#fff}
+.pag-btn.dots{cursor:default;pointer-events:none}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:60px 20px;color:var(--w40)}
+.es-icon{font-size:48px;margin-bottom:16px}
+.es-title{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--w60);margin-bottom:8px}
+.es-sub{font-size:13px;line-height:1.6}
+
+/* ── FEATURED BANNER ── */
+.featured-banner{background:linear-gradient(135deg,rgba(0,155,249,.1),rgba(180,100,255,.06));border:1px solid var(--blue-b);border-radius:16px;padding:24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;cursor:none;transition:transform .2s}
+.featured-banner:hover{transform:translateY(-2px)}
+.fb-icon{width:56px;height:56px;border-radius:14px;background:var(--blue-dim);border:1px solid var(--blue-b);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.fb-content{flex:1}
+.fb-tag{font-family:var(--fd);font-size:8px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+.fb-title{font-family:var(--fd);font-size:16px;font-weight:700;color:var(--w100);margin-bottom:4px}
+.fb-sub{font-size:12px;color:var(--w60)}
+.fb-cta{flex-shrink:0}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.visible{opacity:1;transform:none}
+.rd1{transition-delay:.04s}.rd2{transition-delay:.08s}.rd3{transition-delay:.12s}.rd4{transition-delay:.16s}.rd5{transition-delay:.2s}.rd6{transition-delay:.24s}
+
+/* ── PROGRESS BAR ── */
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--blue);z-index:1000}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .cat-layout{grid-template-columns:1fr}
+  .sidebar{position:static}
+  .courses-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .n-search,.n-links{display:none}
+  .courses-grid,.courses-grid.list-view{grid-template-columns:1fr}
+  .list-view .cc-thumb{width:100%;height:120px}
+  .list-view .course-card{flex-direction:column}
+  .container{padding:0 20px}
+  .ph-search{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="cur"></div>
+<div id="ring"></div>
+
+<!-- ── NAVBAR ── -->
+<nav id="nav">
+  <a href="index.html" class="n-logo">
+    <svg width="28" height="28" viewBox="0 0 96 96" fill="none">
+      <circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/>
+      <circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity=".9"/>
+      <circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity=".75"/>
+      <circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity=".85"/>
+      <circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity=".68"/>
+      <circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity=".8"/>
+      <circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity=".7"/>
+      <line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/>
+      <circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.14)"/>
+      <circle cx="48" cy="48" r="5.5" fill="#009BF9"/>
+      <circle cx="48" cy="48" r="2.5" fill="white" opacity=".9"/>
+    </svg>
+    <div class="n-logo-text">
+      <span class="n-logo-name">Power Inside Data</span>
+      <span class="n-logo-sub">Academy</span>
+    </div>
+  </a>
+  <div class="n-search">
+    <span class="n-search-icon">🔍</span>
+    <input type="text" id="navSearch" placeholder="Rechercher une formation…" autocomplete="off">
+  </div>
+  <div class="n-links">
+    <a href="index.html" class="n-link">Accueil</a>
+    <a href="power_inside_data_academy_catalogue.html" class="n-link active">Formations</a>
+    <a href="index.html#parcours" class="n-link">Parcours</a>
+    <a href="index.html#pricing" class="n-link">Tarifs</a>
+  </div>
+  <div class="n-spacer"></div>
+  <div class="n-cta">
+    <a href="#" class="btn btn-o btn-sm">Se connecter</a>
+    <a href="#" class="btn btn-p btn-sm">Commencer →</a>
+  </div>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="container">
+    <div class="ph-eyebrow">42 formations disponibles</div>
+    <h1 class="ph-title">Catalogue des formations</h1>
+    <p class="ph-sub">Formations courtes intensives animées par des experts terrain. Distanciel live, certifiantes et finançables.</p>
+    <div class="ph-search">
+      <input type="text" id="mainSearch" placeholder="🔍  Rechercher : Python, RAG, MLOps, Power BI…" autocomplete="off">
+      <button class="btn btn-p" onclick="applySearch()">Rechercher</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="cat-layout">
+
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar">
+
+      <!-- Domaines -->
+      <div class="filter-block">
+        <div class="fb-title">Domaine <span class="fb-clear" onclick="clearFilter('cat')">Effacer</span></div>
+        <div class="filter-option" data-filter="cat" data-value="ia" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">IA Générative & LLMs</span><span class="fo-count">8</span><div class="fo-color" style="background:var(--purple)"></div>
+        </div>
+        <div class="filter-option" data-filter="cat" data-value="ml" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Machine Learning</span><span class="fo-count">10</span><div class="fo-color" style="background:var(--blue)"></div>
+        </div>
+        <div class="filter-option" data-filter="cat" data-value="mlops" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">MLOps & DevOps ML</span><span class="fo-count">6</span><div class="fo-color" style="background:var(--green)"></div>
+        </div>
+        <div class="filter-option" data-filter="cat" data-value="data" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Data & Analytics</span><span class="fo-count">9</span><div class="fo-color" style="background:var(--amber)"></div>
+        </div>
+        <div class="filter-option" data-filter="cat" data-value="python" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Python & Programmation</span><span class="fo-count">5</span><div class="fo-color" style="background:var(--teal)"></div>
+        </div>
+        <div class="filter-option" data-filter="cat" data-value="viz" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Visualisation & BI</span><span class="fo-count">4</span><div class="fo-color" style="background:var(--red)"></div>
+        </div>
+      </div>
+
+      <!-- Niveau -->
+      <div class="filter-block">
+        <div class="fb-title">Niveau <span class="fb-clear" onclick="clearFilter('level')">Effacer</span></div>
+        <div class="filter-option" data-filter="level" data-value="debutant" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Débutant</span><span class="fo-count">12</span>
+        </div>
+        <div class="filter-option" data-filter="level" data-value="intermediaire" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Intermédiaire</span><span class="fo-count">18</span>
+        </div>
+        <div class="filter-option" data-filter="level" data-value="avance" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Avancé</span><span class="fo-count">8</span>
+        </div>
+        <div class="filter-option" data-filter="level" data-value="expert" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Expert</span><span class="fo-count">4</span>
+        </div>
+      </div>
+
+      <!-- Durée -->
+      <div class="filter-block">
+        <div class="fb-title">Durée</div>
+        <div class="filter-option" data-filter="duration" data-value="1-2" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">1 à 2 jours</span><span class="fo-count">10</span>
+        </div>
+        <div class="filter-option" data-filter="duration" data-value="3-4" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">3 à 4 jours</span><span class="fo-count">20</span>
+        </div>
+        <div class="filter-option" data-filter="duration" data-value="5+" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">5 jours et plus</span><span class="fo-count">12</span>
+        </div>
+      </div>
+
+      <!-- Certification -->
+      <div class="filter-block">
+        <div class="fb-title">Certification</div>
+        <div class="filter-option" data-filter="cert" data-value="certifiant" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Certifiant</span><span class="fo-count">28</span>
+        </div>
+        <div class="filter-option" data-filter="cert" data-value="cpf" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Éligible CPF</span><span class="fo-count">18</span>
+        </div>
+        <div class="filter-option" data-filter="cert" data-value="qualiopi" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Qualiopi</span><span class="fo-count">42</span>
+        </div>
+      </div>
+
+      <!-- Mode -->
+      <div class="filter-block">
+        <div class="fb-title">Mode de formation</div>
+        <div class="filter-option" data-filter="mode" data-value="distanciel" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Distanciel live</span><span class="fo-count">34</span>
+        </div>
+        <div class="filter-option" data-filter="mode" data-value="presentiel" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Présentiel Paris</span><span class="fo-count">12</span>
+        </div>
+        <div class="filter-option" data-filter="mode" data-value="intra" onclick="toggleFilter(this)">
+          <div class="fo-check">✓</div><span class="fo-label">Intra-entreprise</span><span class="fo-count">42</span>
+        </div>
+      </div>
+
+      <button class="btn btn-o" style="width:100%;justify-content:center;margin-top:4px" onclick="clearAllFilters()">Réinitialiser tous les filtres</button>
+
+    </aside>
+
+    <!-- ══ MAIN CONTENT ══ -->
+    <main>
+
+      <!-- Featured -->
+      <a href="langchain-llms-production.html" class="featured-banner reveal">
+        <div class="fb-icon">🦜</div>
+        <div class="fb-content">
+          <div class="fb-tag">⭐ Formation vedette · Populaire</div>
+          <div class="fb-title">LangChain & LLMs en Production</div>
+          <div class="fb-sub">5 jours · Avancé · 4.9/5 · 1 248 apprenants · 2 400 €</div>
+        </div>
+        <div class="fb-cta">
+          <span class="btn btn-p btn-sm">Voir →</span>
+        </div>
+      </a>
+
+      <!-- Results header -->
+      <div class="results-header reveal">
+        <div class="rh-count"><span id="resultCount">12</span> formations trouvées</div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="rh-sort">
+            <span class="sort-label">Trier par :</span>
+            <select class="sort-select" id="sortSelect" onchange="sortCourses()">
+              <option value="popular">Popularité</option>
+              <option value="rating">Note</option>
+              <option value="newest">Nouveautés</option>
+              <option value="price-asc">Prix croissant</option>
+              <option value="price-desc">Prix décroissant</option>
+            </select>
+          </div>
+          <div class="view-toggle">
+            <button class="vt-btn active" id="gridViewBtn" onclick="setView('grid')" title="Vue grille">⊞</button>
+            <button class="vt-btn" id="listViewBtn" onclick="setView('list')" title="Vue liste">≡</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active filters -->
+      <div class="active-filters" id="activeFilters"></div>
+
+      <!-- Courses Grid -->
+      <div class="courses-grid" id="coursesGrid">
+
+        <a href="langchain-llms-production.html" class="course-card reveal rd1" data-cat="ia" data-level="avance" data-duration="5+" data-price="2400" data-rating="4.9" data-students="1248" data-date="2025-03">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1B2E,#0C1F3F)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🦜</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges">
+              <span class="cc-badge chip chip-a">Populaire</span>
+              <span class="cc-badge chip chip-g">Certifiant</span>
+            </div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">IA Générative · LangChain · RAG</div>
+            <div class="cc-title">LangChain & LLMs en Production</div>
+            <div class="cc-desc">Maîtrisez LangChain, les architectures RAG, les agents autonomes et le déploiement en production.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AS</div>
+              <span class="cc-instructor-name">Alex Sow · ex-Meta</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.9</span>
+              <span class="cc-stat">🎓 1 248</span>
+              <span class="cc-stat">📅 5 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">2 400 €</span>
+              <span class="cc-level" style="color:var(--red)">Avancé</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd2" data-cat="ml" data-level="intermediaire" data-duration="3-4" data-price="1800" data-rating="4.8" data-students="892" data-date="2025-02">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D2318,#0C2B1A)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🧠</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-b">Nouveau</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">Machine Learning · Scikit-learn</div>
+            <div class="cc-title">Machine Learning Appliqué avec Python</div>
+            <div class="cc-desc">Du preprocessing aux modèles avancés, maîtrisez tout le cycle ML avec Scikit-learn et XGBoost.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,214,143,.15);color:var(--green)">MK</div>
+              <span class="cc-instructor-name">Marie Koffi · PhD NLP</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.8</span>
+              <span class="cc-stat">🎓 892</span>
+              <span class="cc-stat">📅 4 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 800 €</span>
+              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd3" data-cat="mlops" data-level="expert" data-duration="3-4" data-price="2100" data-rating="4.9" data-students="634" data-date="2025-01">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A0D2B,#200D35)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">⚙️</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-g">Certifiant</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">MLOps · Docker · Kubernetes</div>
+            <div class="cc-title">MLOps — Industrialiser ses Modèles ML</div>
+            <div class="cc-desc">Pipelines CI/CD, monitoring, Kubernetes et best practices pour mettre vos modèles en production.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(180,100,255,.15);color:var(--purple)">JD</div>
+              <span class="cc-instructor-name">Julien Dupont · ex-Google</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.9</span>
+              <span class="cc-stat">🎓 634</span>
+              <span class="cc-stat">📅 4 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">2 100 €</span>
+              <span class="cc-level" style="color:var(--red)">Expert</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd4" data-cat="ml" data-level="intermediaire" data-duration="3-4" data-price="1900" data-rating="4.7" data-students="1105" data-date="2024-12">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A1A0D,#2A2A0D)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🔥</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-p">Bestseller</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">Deep Learning · PyTorch · Transformers</div>
+            <div class="cc-title">Deep Learning avec PyTorch — Vision & Transformers</div>
+            <div class="cc-desc">CNN, Transformers, fine-tuning de modèles vision et NLP avec PyTorch.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(255,170,0,.15);color:var(--amber)">SR</div>
+              <span class="cc-instructor-name">Samir Rachid · Research Sci.</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.7</span>
+              <span class="cc-stat">🎓 1 105</span>
+              <span class="cc-stat">📅 4 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 900 €</span>
+              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd5" data-cat="data" data-level="debutant" data-duration="3-4" data-price="1400" data-rating="4.8" data-students="2130" data-date="2024-11">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1A2A,#0D2535)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🗄️</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-b">CPF</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">SQL · PostgreSQL · BigQuery</div>
+            <div class="cc-title">SQL Avancé pour Data Analysts & Engineers</div>
+            <div class="cc-desc">Requêtes complexes, fenêtres analytiques, optimisation de performance et modélisation.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AK</div>
+              <span class="cc-instructor-name">Aminata Koné · Data Arch.</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.8</span>
+              <span class="cc-stat">🎓 2 130</span>
+              <span class="cc-stat">📅 3 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 400 €</span>
+              <span class="cc-level" style="color:var(--green)">Débutant</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd6" data-cat="ia" data-level="expert" data-duration="5+" data-price="2600" data-rating="4.9" data-students="412" data-date="2025-03">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#200D35,#2A0D40)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🦙</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-r">Nouveau</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">LLM · Fine-tuning · Open Source</div>
+            <div class="cc-title">Fine-tuning LLM Open Source — Llama & Mistral</div>
+            <div class="cc-desc">LoRA, QLoRA, RLHF et déploiement de modèles open source fine-tunés.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AS</div>
+              <span class="cc-instructor-name">Alex Sow · ex-Meta</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.9</span>
+              <span class="cc-stat">🎓 412</span>
+              <span class="cc-stat">📅 5 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">2 600 €</span>
+              <span class="cc-level" style="color:var(--red)">Expert</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd1" data-cat="data" data-level="intermediaire" data-duration="3-4" data-price="1600" data-rating="4.7" data-students="980" data-date="2025-01">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A0D0D,#2B1212)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">📊</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-b">CPF</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">Power BI · DAX · Dataviz</div>
+            <div class="cc-title">Power BI Avancé — DAX, Modélisation & Dashboards</div>
+            <div class="cc-desc">Modèles de données étoilés, DAX avancé, Power Query et déploiement de rapports Power BI Service.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(255,77,106,.15);color:var(--red)">FN</div>
+              <span class="cc-instructor-name">Fatima Ndiaye · BI Expert</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.7</span>
+              <span class="cc-stat">🎓 980</span>
+              <span class="cc-stat">📅 3 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 600 €</span>
+              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd2" data-cat="python" data-level="debutant" data-duration="3-4" data-price="1200" data-rating="4.8" data-students="3200" data-date="2024-10">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1A1A,#0D2A2A)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🐍</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-g">Certifiant</span><span class="cc-badge chip chip-b">CPF</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">Python · Pandas · NumPy</div>
+            <div class="cc-title">Python pour la Data Science — De Zéro à Expert</div>
+            <div class="cc-desc">Bases de Python, Pandas, NumPy, visualisation avec Matplotlib et Seaborn. Cas pratiques data.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,201,200,.15);color:var(--teal)">LM</div>
+              <span class="cc-instructor-name">Lamine Mbaye · Lead DS</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.8</span>
+              <span class="cc-stat">🎓 3 200</span>
+              <span class="cc-stat">📅 4 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 200 €</span>
+              <span class="cc-level" style="color:var(--green)">Débutant</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd3" data-cat="ia" data-level="intermediaire" data-duration="3-4" data-price="1900" data-rating="4.8" data-students="560" data-date="2025-02">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1A28,#0D2035)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🔍</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-p">Nouveau</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">RAG · Vector DB · Embeddings</div>
+            <div class="cc-title">RAG Engineering — Architectures Avancées</div>
+            <div class="cc-desc">Advanced RAG, re-ranking, hybrid search, évaluation avec RAGAS et optimisation de pipelines.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,214,143,.15);color:var(--green)">MK</div>
+              <span class="cc-instructor-name">Marie Koffi · PhD NLP</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.8</span>
+              <span class="cc-stat">🎓 560</span>
+              <span class="cc-stat">📅 3 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 900 €</span>
+              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd4" data-cat="data" data-level="intermediaire" data-duration="3-4" data-price="1700" data-rating="4.6" data-students="745" data-date="2024-12">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D1828,#0A1E32)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🏗️</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-g">Certifiant</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">Airflow · dbt · Data Pipelines</div>
+            <div class="cc-title">Data Engineering avec Airflow & dbt</div>
+            <div class="cc-desc">Orchestration de pipelines, transformation de données avec dbt, architecture data lake moderne.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,155,249,.15);color:var(--blue)">AK</div>
+              <span class="cc-instructor-name">Aminata Koné · Data Arch.</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.6</span>
+              <span class="cc-stat">🎓 745</span>
+              <span class="cc-stat">📅 4 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 700 €</span>
+              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd5" data-cat="mlops" data-level="avance" data-duration="1-2" data-price="900" data-rating="4.7" data-students="420" data-date="2025-01">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#1A1228,#221532)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">🔭</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-b">Intensif</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">LangSmith · Monitoring · Observabilité</div>
+            <div class="cc-title">Monitoring & Observabilité LLM en Production</div>
+            <div class="cc-desc">LangSmith, métriques de qualité, détection d'hallucinations et alertes pour vos applications LLM.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(180,100,255,.15);color:var(--purple)">JD</div>
+              <span class="cc-instructor-name">Julien Dupont · ex-Google</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.7</span>
+              <span class="cc-stat">🎓 420</span>
+              <span class="cc-stat">📅 2 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">900 €</span>
+              <span class="cc-level" style="color:var(--red)">Avancé</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="#" class="course-card reveal rd6" data-cat="python" data-level="intermediaire" data-duration="3-4" data-price="1500" data-rating="4.7" data-students="660" data-date="2024-11">
+          <div class="cc-thumb" style="background:linear-gradient(135deg,#0D200D,#0D2A0D)">
+            <div class="cc-thumb-bg"><span class="cc-thumb-icon">⚡</span></div>
+            <div class="cc-thumb-overlay"></div>
+            <div class="cc-badges"><span class="cc-badge chip chip-b">CPF</span></div>
+          </div>
+          <div class="cc-body">
+            <div class="cc-tech">FastAPI · Pydantic · REST APIs</div>
+            <div class="cc-title">APIs Python avec FastAPI — Du Dev au Déploiement</div>
+            <div class="cc-desc">Construisez des APIs REST performantes avec FastAPI, authentification, tests et déploiement cloud.</div>
+            <div class="cc-instructor">
+              <div class="cc-av" style="background:rgba(0,201,200,.15);color:var(--teal)">LM</div>
+              <span class="cc-instructor-name">Lamine Mbaye · Lead DS</span>
+            </div>
+            <div class="cc-stats">
+              <span class="cc-stat">⭐ 4.7</span>
+              <span class="cc-stat">🎓 660</span>
+              <span class="cc-stat">📅 3 jours</span>
+            </div>
+            <div class="cc-footer">
+              <span class="cc-price">1 500 €</span>
+              <span class="cc-level" style="color:var(--amber)">Interméd.</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <!-- Empty state (hidden by default) -->
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="es-icon">🔍</div>
+        <div class="es-title">Aucune formation trouvée</div>
+        <div class="es-sub">Essayez d'autres filtres ou une autre recherche.</div>
+        <button class="btn btn-o" style="margin-top:16px" onclick="clearAllFilters()">Réinitialiser les filtres</button>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" id="pagination">
+        <button class="pag-btn active">1</button>
+        <button class="pag-btn">2</button>
+        <button class="pag-btn">3</button>
+        <button class="pag-btn dots">…</button>
+        <button class="pag-btn">5</button>
+      </div>
+
+    </main>
+
+  </div>
+</div>
+
+<script>
+/* ── CURSOR ── */
+const cur=document.getElementById('cur'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.filter-option,.vt-btn,.pag-btn,.course-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='6px';cur.style.height='6px';ring.style.width='50px';ring.style.height='50px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';ring.style.width='36px';ring.style.height='36px'});
+});
+
+/* ── SCROLL PROGRESS ── */
+window.addEventListener('scroll',()=>{
+  const p=scrollY/(document.documentElement.scrollHeight-innerHeight)*100;
+  document.getElementById('progress').style.width=p+'%';
+});
+
+/* ── REVEAL ── */
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target)}}),{threshold:.06,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── FILTER STATE ── */
+const activeFiltersState={};
+
+function toggleFilter(el){
+  el.classList.toggle('checked');
+  const type=el.dataset.filter;
+  const val=el.dataset.value;
+  if(!activeFiltersState[type]) activeFiltersState[type]=new Set();
+  if(el.classList.contains('checked')){
+    activeFiltersState[type].add(val);
+  } else {
+    activeFiltersState[type].delete(val);
+    if(activeFiltersState[type].size===0) delete activeFiltersState[type];
+  }
+  renderActiveFilters();
+  applyFilters();
+}
+
+function clearFilter(type){
+  document.querySelectorAll(`[data-filter="${type}"]`).forEach(el=>el.classList.remove('checked'));
+  delete activeFiltersState[type];
+  renderActiveFilters();
+  applyFilters();
+}
+
+function clearAllFilters(){
+  document.querySelectorAll('.filter-option').forEach(el=>el.classList.remove('checked'));
+  Object.keys(activeFiltersState).forEach(k=>delete activeFiltersState[k]);
+  document.getElementById('mainSearch').value='';
+  renderActiveFilters();
+  applyFilters();
+}
+
+function renderActiveFilters(){
+  const cont=document.getElementById('activeFilters');
+  cont.innerHTML='';
+  Object.entries(activeFiltersState).forEach(([type,vals])=>{
+    vals.forEach(val=>{
+      const tag=document.createElement('div');
+      tag.className='af-tag';
+      tag.innerHTML=`${val} <button onclick="removeFilter('${type}','${val}')">×</button>`;
+      cont.appendChild(tag);
+    });
+  });
+}
+
+function removeFilter(type,val){
+  const el=document.querySelector(`[data-filter="${type}"][data-value="${val}"]`);
+  if(el) el.classList.remove('checked');
+  if(activeFiltersState[type]){
+    activeFiltersState[type].delete(val);
+    if(activeFiltersState[type].size===0) delete activeFiltersState[type];
+  }
+  renderActiveFilters();
+  applyFilters();
+}
+
+/* ── SEARCH ── */
+let searchQuery='';
+function applySearch(){
+  searchQuery=document.getElementById('mainSearch').value.toLowerCase().trim();
+  applyFilters();
+}
+document.getElementById('mainSearch').addEventListener('keydown',e=>{if(e.key==='Enter')applySearch()});
+document.getElementById('navSearch').addEventListener('keydown',e=>{if(e.key==='Enter'){document.getElementById('mainSearch').value=e.target.value;applySearch()}});
+
+/* ── APPLY FILTERS ── */
+function applyFilters(){
+  const cards=document.querySelectorAll('.course-card');
+  let visible=0;
+  cards.forEach(card=>{
+    let show=true;
+    // Category filter
+    if(activeFiltersState.cat&&activeFiltersState.cat.size>0){
+      if(!activeFiltersState.cat.has(card.dataset.cat)) show=false;
+    }
+    // Level filter
+    if(activeFiltersState.level&&activeFiltersState.level.size>0){
+      if(!activeFiltersState.level.has(card.dataset.level)) show=false;
+    }
+    // Duration filter
+    if(activeFiltersState.duration&&activeFiltersState.duration.size>0){
+      if(!activeFiltersState.duration.has(card.dataset.duration)) show=false;
+    }
+    // Search filter
+    if(searchQuery){
+      const text=card.textContent.toLowerCase();
+      if(!text.includes(searchQuery)) show=false;
+    }
+    card.style.display=show?'flex':'none';
+    if(show) visible++;
+  });
+  document.getElementById('resultCount').textContent=visible;
+  document.getElementById('emptyState').style.display=visible===0?'block':'none';
+  document.getElementById('pagination').style.display=visible===0?'none':'flex';
+}
+
+/* ── SORT ── */
+function sortCourses(){
+  const sort=document.getElementById('sortSelect').value;
+  const grid=document.getElementById('coursesGrid');
+  const cards=[...grid.querySelectorAll('.course-card')];
+  cards.sort((a,b)=>{
+    if(sort==='rating') return parseFloat(b.dataset.rating)-parseFloat(a.dataset.rating);
+    if(sort==='price-asc') return parseInt(a.dataset.price)-parseInt(b.dataset.price);
+    if(sort==='price-desc') return parseInt(b.dataset.price)-parseInt(a.dataset.price);
+    if(sort==='newest') return b.dataset.date.localeCompare(a.dataset.date);
+    return parseInt(b.dataset.students)-parseInt(a.dataset.students); // popular
+  });
+  cards.forEach(c=>grid.appendChild(c));
+}
+
+/* ── VIEW TOGGLE ── */
+function setView(type){
+  const grid=document.getElementById('coursesGrid');
+  document.getElementById('gridViewBtn').classList.toggle('active',type==='grid');
+  document.getElementById('listViewBtn').classList.toggle('active',type==='list');
+  grid.classList.toggle('list-view',type==='list');
+}
+
+/* ── URL PARAMS (search from homepage) ── */
+const urlParams=new URLSearchParams(window.location.search);
+const q=urlParams.get('q');
+if(q){
+  document.getElementById('mainSearch').value=q;
+  searchQuery=q.toLowerCase();
+  applyFilters();
+}
+
+/* ── PAGINATION ── */
+document.querySelectorAll('.pag-btn:not(.dots)').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.pag-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+</script>
+</body>
+</html>
