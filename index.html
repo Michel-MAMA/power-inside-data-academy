@@ -550,6 +550,20 @@ footer {
 /* ===========================
    MOBILE
    =========================== */
+/* ── HAMBURGER ── */
+.nav-burger { display: none; flex-direction: column; gap: 5px; padding: 8px; cursor: pointer; z-index: 600; }
+.nav-burger span { display: block; width: 22px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s var(--ease); }
+.nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(7,8,9,.97); z-index: 500; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-family: var(--fd); font-size: 22px; font-weight: 700; letter-spacing: .04em; color: var(--w60); padding: 12px 32px; border-radius: 10px; transition: color .2s, background .2s; text-align: center; }
+.mobile-menu a:hover, .mobile-menu a.active { color: var(--white); background: var(--w06); }
+.mobile-menu .m-divider { width: 40px; height: 1px; background: var(--border); margin: 8px 0; }
+.mobile-menu .m-cta { background: var(--blue); color: #fff; font-size: 14px; padding: 14px 40px; }
+.mobile-menu .m-cta:hover { background: var(--blue-l); }
+
 @media (max-width: 960px) {
   .hero-content { grid-template-columns: 1fr; gap: 48px; }
   .hero-visual { display: none; }
@@ -559,11 +573,15 @@ footer {
   .parcours-wrap { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .cta-wrap { padding: 52px 32px; }
+  #navbar { padding: 0 24px; }
+}
+@media (max-width: 768px) {
+  .nav-links, .nav-cta { display: none; }
+  .nav-burger { display: flex; }
 }
 @media (max-width: 600px) {
   .container { padding: 0 20px; }
   .section { padding: 72px 0; }
-  .nav-links { display: none; }
   .grid-3, .testi-grid, .grid-2, .grid-4 { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
   .footer-grid { grid-template-columns: 1fr; }
@@ -624,10 +642,25 @@ footer {
   </div>
 
   <div class="nav-cta">
-    <a href="#" class="btn btn-outline btn-sm">Se connecter</a>
-    <a href="#" class="btn btn-primary btn-sm">Commencer →</a>
+    <a href="contact.html" class="btn btn-outline btn-sm">Contact</a>
+    <a href="power_inside_data_academy_catalogue.html" class="btn btn-primary btn-sm">Formations →</a>
   </div>
+  <button class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="active">Accueil</a>
+  <a href="power_inside_data_academy_catalogue.html">Formations</a>
+  <a href="index.html#parcours">Parcours</a>
+  <a href="index.html#domaines">Domaines</a>
+  <a href="index.html#temoignages">Témoignages</a>
+  <a href="contact.html">Contact</a>
+  <div class="m-divider"></div>
+  <a href="power_inside_data_academy_catalogue.html" class="m-cta">Voir le catalogue →</a>
+</div>
 
 <!-- ===========================
      HERO
@@ -1327,6 +1360,22 @@ footer {
      JAVASCRIPT
      =========================== -->
 <script>
+/* BURGER MENU */
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
+
 /* CURSOR */
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursor-ring');
