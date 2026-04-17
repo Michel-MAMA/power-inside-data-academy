@@ -482,6 +482,33 @@ insert into faqs (question, answer, category, order_rank) values
    'financement', 6)
 on conflict do nothing;
 
+-- ============================================================
+--  STORAGE — Bucket avatars (photos de profil)
+-- ============================================================
+insert into storage.buckets (id, name, public) values ('avatars', 'avatars', true)
+on conflict (id) do nothing;
+
+-- Politique : tout utilisateur connecté peut uploader son avatar
+create policy "avatar_upload" on storage.objects
+  for insert with check (
+    bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+-- Politique : tout le monde peut lire les avatars (public)
+create policy "avatar_read" on storage.objects
+  for select using (bucket_id = 'avatars');
+
+-- Politique : chaque user peut mettre à jour / supprimer son avatar
+create policy "avatar_update" on storage.objects
+  for update using (
+    bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+create policy "avatar_delete" on storage.objects
+  for delete using (
+    bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]
+  );
+
 -- Partenaires (logos marquee)
 insert into partners (name, category, order_rank, is_active) values
   ('Microsoft Azure', 'cloud', 1, true),

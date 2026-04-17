@@ -591,6 +591,47 @@ footer {
 }
 
 /* ===========================
+   LIGHT MODE
+   =========================== */
+html[data-theme="light"] {
+  --bg:     #F4F6F9;
+  --s1:     #FFFFFF;
+  --s2:     #F0F2F6;
+  --s3:     #E6E9EF;
+  --white:  #0A0B0D;
+  --w85:    rgba(10,11,13,0.85);
+  --w60:    rgba(10,11,13,0.60);
+  --w35:    rgba(10,11,13,0.35);
+  --w12:    rgba(10,11,13,0.12);
+  --w06:    rgba(10,11,13,0.05);
+  --border: rgba(10,11,13,0.09);
+}
+html[data-theme="light"] body { background: var(--bg); color: var(--white); }
+html[data-theme="light"] #navbar { background: rgba(244,246,249,0.85); }
+html[data-theme="light"] #navbar.scrolled { border-color: var(--border); background: rgba(255,255,255,0.92); }
+html[data-theme="light"] .nav-logo-name,
+html[data-theme="light"] .nav-logo-sub { color: var(--white); }
+html[data-theme="light"] .btn-outline { border-color: var(--w12); color: var(--w60); }
+html[data-theme="light"] .btn-outline:hover { border-color: var(--w35); color: var(--white); }
+html[data-theme="light"] .grain { display: none; }
+html[data-theme="light"] .user-avatar-btn { background: var(--w06); border-color: var(--border); }
+html[data-theme="light"] .user-dropdown { background: var(--s1); }
+
+/* ── Thème toggle ── */
+.theme-toggle {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--w06); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--w60); transition: all .2s;
+  flex-shrink: 0;
+}
+.theme-toggle:hover { background: var(--w12); color: var(--white); border-color: var(--w35); }
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+html[data-theme="light"] .theme-toggle .icon-sun  { display: block; }
+html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ===========================
    AUTH MODAL
    =========================== */
 .auth-overlay {
@@ -721,6 +762,130 @@ footer {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ===========================
+   MODAL PROFIL
+   =========================== */
+.profile-overlay {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(7,8,9,0.85); backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 20px;
+}
+.profile-overlay.open { display: flex; }
+
+.profile-modal {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 20px; width: 100%; max-width: 500px;
+  max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  animation: authIn .25s ease;
+}
+
+.profile-header {
+  padding: 24px 28px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border); padding-bottom: 20px;
+}
+.profile-header h2 { font-family: var(--fd); font-size: 17px; font-weight: 800; color: var(--white); }
+.profile-header p  { font-size: 12px; color: var(--w35); margin-top: 2px; }
+
+/* ── Photo de profil ── */
+.profile-photo-section {
+  display: flex; align-items: center; gap: 20px;
+  padding: 24px 28px; border-bottom: 1px solid var(--border);
+}
+.profile-photo-wrap { position: relative; flex-shrink: 0; }
+.profile-photo-circle {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), #7B2FFF);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fd); font-weight: 800; font-size: 26px; color: #fff;
+  overflow: hidden; border: 2px solid var(--blue-border);
+}
+.profile-photo-circle img { width: 100%; height: 100%; object-fit: cover; }
+.profile-photo-btn {
+  position: absolute; bottom: 0; right: 0;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--blue); border: 2px solid var(--s1);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .2s;
+}
+.profile-photo-btn:hover { background: var(--blue-l); }
+.profile-photo-btn svg { width: 12px; height: 12px; color: #fff; }
+.profile-photo-input { display: none; }
+
+.profile-photo-info strong { display: block; font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+.profile-photo-info span   { font-size: 12px; color: var(--w35); line-height: 1.5; }
+.profile-photo-upload-btn  {
+  margin-top: 10px; padding: 7px 14px; background: var(--w06);
+  border: 1px solid var(--border); border-radius: 8px;
+  font-size: 12px; font-weight: 600; color: var(--w60);
+  cursor: pointer; transition: all .2s; font-family: var(--fd);
+}
+.profile-photo-upload-btn:hover { border-color: var(--blue-border); color: var(--blue); background: var(--blue-dim); }
+
+/* ── Champs profil ── */
+.profile-body { padding: 24px 28px; }
+.profile-section-title {
+  font-size: 10px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--w35); margin-bottom: 14px;
+}
+.profile-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.profile-field { margin-bottom: 12px; }
+.profile-field label {
+  display: block; font-size: 10px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--w35); margin-bottom: 7px;
+}
+.profile-field input, .profile-field select {
+  width: 100%; background: var(--s2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 11px 14px; font-size: 13px;
+  color: var(--white); font-family: var(--fb); outline: none;
+  transition: border-color .2s, background .2s;
+}
+.profile-field input:focus, .profile-field select:focus { border-color: var(--blue-border); background: var(--s3); }
+.profile-field input[readonly] { opacity: .5; cursor: not-allowed; }
+
+.profile-footer {
+  padding: 16px 28px 24px; display: flex; gap: 10px; justify-content: flex-end;
+  border-top: 1px solid var(--border);
+}
+.profile-cancel {
+  padding: 11px 20px; background: var(--w06); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--w60);
+  cursor: pointer; font-family: var(--fd); letter-spacing: .06em; transition: all .2s;
+}
+.profile-cancel:hover { color: var(--white); border-color: var(--w35); }
+.profile-save {
+  padding: 11px 24px; background: var(--blue); border: none;
+  border-radius: 10px; font-size: 12px; font-weight: 700; color: #fff;
+  cursor: pointer; font-family: var(--fd); letter-spacing: .06em;
+  display: flex; align-items: center; gap: 8px; transition: background .2s;
+}
+.profile-save:hover { background: var(--blue-l); }
+.profile-save:disabled { opacity: .5; cursor: not-allowed; }
+
+.profile-msg {
+  margin: 0 28px 16px; padding: 10px 14px; border-radius: 8px;
+  font-size: 13px; display: none;
+}
+.profile-msg.success { background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.2); color: #00D68F; display: block; }
+.profile-msg.error   { background: rgba(255,80,80,0.1);  border: 1px solid rgba(255,80,80,0.2);  color: #ff7070; display: block; }
+
+/* ── Upload progress ── */
+.photo-upload-progress {
+  display: none; margin-top: 8px; height: 3px; background: var(--w06);
+  border-radius: 2px; overflow: hidden;
+}
+.photo-upload-progress.active { display: block; }
+.photo-upload-bar {
+  height: 100%; background: var(--blue); border-radius: 2px;
+  animation: uploadProgress 1.5s ease-in-out infinite;
+}
+@keyframes uploadProgress {
+  0%   { width: 0%; }
+  50%  { width: 70%; }
+  100% { width: 95%; }
+}
+
+/* ===========================
    USER AVATAR (navbar)
    =========================== */
 .user-avatar-btn {
@@ -815,6 +980,12 @@ footer {
   <div class="nav-cta">
     <a href="contact.html" class="btn btn-outline btn-sm">Contact</a>
 
+    <!-- Toggle Dark / Light -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
+      <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="icon-sun"  width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+
     <!-- Bouton Connexion (visible si non connecté) -->
     <button id="btnConnexion" onclick="openAuth('login')" class="btn btn-outline btn-sm" style="display:flex;align-items:center;gap:6px;">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -835,7 +1006,7 @@ footer {
           <span id="dropdownEmail">—</span>
         </div>
         <div class="user-dropdown-divider"></div>
-        <a href="#">Mon profil</a>
+        <a href="#" onclick="openProfile(); return false;">Mon profil</a>
         <a href="#">Mes formations</a>
         <div class="user-dropdown-divider"></div>
         <button class="signout" onclick="handleSignOut()">Se déconnecter</button>
@@ -979,6 +1150,93 @@ footer {
       </div>
 
     </div>
+  </div>
+</div>
+
+<!-- ===========================
+     MODAL PROFIL
+     =========================== -->
+<div class="profile-overlay" id="profileOverlay" onclick="closeProfileOnBackdrop(event)">
+  <div class="profile-modal">
+
+    <!-- Header -->
+    <div class="profile-header">
+      <div>
+        <h2>Mon profil</h2>
+        <p>Gérez vos informations personnelles</p>
+      </div>
+      <button class="auth-close" onclick="closeProfile()">×</button>
+    </div>
+
+    <!-- Photo -->
+    <div class="profile-photo-section">
+      <div class="profile-photo-wrap">
+        <div class="profile-photo-circle" id="profilePhotoCircle">
+          <span id="profilePhotoInitials">?</span>
+        </div>
+        <label class="profile-photo-btn" for="photoFileInput" title="Changer la photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </label>
+        <input type="file" id="photoFileInput" class="profile-photo-input" accept="image/*" onchange="handlePhotoUpload(event)">
+      </div>
+      <div class="profile-photo-info">
+        <strong id="profilePhotoName">—</strong>
+        <span>JPG, PNG ou WebP · 5 Mo max<br>La photo sera visible sur votre profil.</span>
+        <label for="photoFileInput" class="profile-photo-upload-btn">Changer la photo</label>
+        <div class="photo-upload-progress" id="photoProgress"><div class="photo-upload-bar"></div></div>
+      </div>
+    </div>
+
+    <!-- Message retour -->
+    <div class="profile-msg" id="profileMsg"></div>
+
+    <!-- Champs -->
+    <div class="profile-body">
+
+      <div class="profile-section-title">Informations personnelles</div>
+      <div class="profile-row">
+        <div class="profile-field">
+          <label>Prénom</label>
+          <input type="text" id="pPrenom" placeholder="Marie">
+        </div>
+        <div class="profile-field">
+          <label>Nom</label>
+          <input type="text" id="pNom" placeholder="Dupont">
+        </div>
+      </div>
+      <div class="profile-field">
+        <label>Email</label>
+        <input type="email" id="pEmail" placeholder="vous@exemple.com" readonly>
+      </div>
+      <div class="profile-field">
+        <label>Téléphone</label>
+        <input type="tel" id="pPhone" placeholder="+33 6 00 00 00 00">
+      </div>
+
+      <div class="profile-section-title" style="margin-top:20px;">Informations professionnelles</div>
+      <div class="profile-field">
+        <label>Entreprise</label>
+        <input type="text" id="pCompany" placeholder="Nom de votre entreprise">
+      </div>
+      <div class="profile-field">
+        <label>Poste</label>
+        <input type="text" id="pJobTitle" placeholder="Data Engineer, ML Engineer...">
+      </div>
+      <div class="profile-field">
+        <label>LinkedIn</label>
+        <input type="url" id="pLinkedin" placeholder="https://linkedin.com/in/votre-profil">
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="profile-footer">
+      <button class="profile-cancel" onclick="closeProfile()">Annuler</button>
+      <button class="profile-save" id="profileSaveBtn" onclick="handleProfileSave()">
+        Enregistrer
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -1944,21 +2202,33 @@ async function handleSignOut() {
 }
 
 /* ── NAVBAR : afficher avatar ou bouton connexion ── */
-function updateNavbar(user) {
+async function updateNavbar(user, overrides = {}) {
   const btnConnexion  = document.getElementById('btnConnexion');
   const userAvatarBtn = document.getElementById('userAvatarBtn');
 
   if (user) {
-    const meta     = user.user_metadata || {};
-    const prenom   = meta.prenom || meta.full_name?.split(' ')[0] || '';
-    const nom      = meta.nom    || meta.full_name?.split(' ')[1] || '';
-    const initials = ((prenom[0] || '') + (nom[0] || '')).toUpperCase() || user.email[0].toUpperCase();
-    const displayName = (prenom + ' ' + nom).trim() || user.email;
+    // Charger le profil Supabase pour avoir photo + nom à jour
+    const { data: profile } = await _supabase
+      .from('profiles').select('*').eq('id', user.id).single();
 
-    document.getElementById('userInitials').textContent   = initials;
+    const p       = { ...profile, ...overrides };
+    const meta    = user.user_metadata || {};
+    const prenom  = p.prenom   || meta.prenom || meta.full_name?.split(' ')[0] || '';
+    const nom     = p.nom      || meta.nom    || meta.full_name?.split(' ')[1] || '';
+    const ini     = ((prenom[0] || '') + (nom[0] || '')).toUpperCase() || user.email[0].toUpperCase();
+    const display = (prenom + ' ' + nom).trim() || user.email.split('@')[0];
+
+    // Photo ou initiales dans le cercle navbar
+    const navCircle = document.getElementById('userInitials');
+    if (p.avatar_url) {
+      navCircle.innerHTML = `<img src="${p.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+    } else {
+      navCircle.textContent = ini;
+    }
+
     document.getElementById('userDisplayName').textContent = prenom || user.email.split('@')[0];
-    document.getElementById('dropdownName').textContent   = displayName;
-    document.getElementById('dropdownEmail').textContent  = user.email;
+    document.getElementById('dropdownName').textContent    = display;
+    document.getElementById('dropdownEmail').textContent   = user.email;
 
     btnConnexion.style.display  = 'none';
     userAvatarBtn.style.display = 'flex';
@@ -1966,6 +2236,171 @@ function updateNavbar(user) {
     btnConnexion.style.display  = '';
     userAvatarBtn.style.display = 'none';
   }
+}
+
+/* ── THEME DARK / LIGHT ── */
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('pida-theme', theme);
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+// Appliquer le thème sauvegardé dès le chargement
+applyTheme(localStorage.getItem('pida-theme') || 'dark');
+
+/* ── MODAL PROFIL ── */
+function openProfile() {
+  // Fermer le dropdown
+  document.getElementById('userAvatarBtn').blur();
+  loadProfileData();
+  document.getElementById('profileOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeProfile() {
+  document.getElementById('profileOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  clearProfileMsg();
+}
+function closeProfileOnBackdrop(e) {
+  if (e.target === document.getElementById('profileOverlay')) closeProfile();
+}
+function clearProfileMsg() {
+  const el = document.getElementById('profileMsg');
+  el.className = 'profile-msg'; el.textContent = '';
+}
+function showProfileMsg(text, type = 'success') {
+  const el = document.getElementById('profileMsg');
+  el.textContent = text; el.className = 'profile-msg ' + type;
+}
+
+/* ── CHARGER LES DONNÉES PROFIL ── */
+async function loadProfileData() {
+  clearProfileMsg();
+  const { data: { user } } = await _supabase.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await _supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
+
+  const p = profile || {};
+  const meta = user.user_metadata || {};
+
+  document.getElementById('pPrenom').value   = p.prenom    || meta.prenom    || '';
+  document.getElementById('pNom').value      = p.nom       || meta.nom       || '';
+  document.getElementById('pEmail').value    = user.email  || '';
+  document.getElementById('pPhone').value    = p.phone     || '';
+  document.getElementById('pCompany').value  = p.company   || '';
+  document.getElementById('pJobTitle').value = p.job_title || '';
+  document.getElementById('pLinkedin').value = p.linkedin  || '';
+
+  // Photo de profil
+  const circle   = document.getElementById('profilePhotoCircle');
+  const initials = document.getElementById('profilePhotoInitials');
+  const prenom   = p.prenom || meta.prenom || '';
+  const nom      = p.nom    || meta.nom    || '';
+  const ini      = ((prenom[0] || '') + (nom[0] || '')).toUpperCase() || user.email[0].toUpperCase();
+
+  if (p.avatar_url) {
+    circle.innerHTML = `<img src="${p.avatar_url}" alt="Photo de profil">`;
+  } else {
+    circle.innerHTML = `<span id="profilePhotoInitials">${ini}</span>`;
+  }
+  document.getElementById('profilePhotoName').textContent =
+    (prenom + ' ' + nom).trim() || user.email;
+}
+
+/* ── SAUVEGARDER LE PROFIL ── */
+async function handleProfileSave() {
+  const btn = document.getElementById('profileSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="auth-spinner"></div> Enregistrement...';
+  clearProfileMsg();
+
+  const { data: { user } } = await _supabase.auth.getUser();
+  if (!user) { btn.disabled = false; btn.innerHTML = 'Enregistrer'; return; }
+
+  const updates = {
+    id:        user.id,
+    prenom:    document.getElementById('pPrenom').value.trim(),
+    nom:       document.getElementById('pNom').value.trim(),
+    phone:     document.getElementById('pPhone').value.trim(),
+    company:   document.getElementById('pCompany').value.trim(),
+    job_title: document.getElementById('pJobTitle').value.trim(),
+    linkedin:  document.getElementById('pLinkedin').value.trim(),
+    email:     user.email,
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await _supabase.from('profiles').upsert(updates);
+
+  btn.disabled = false;
+  btn.innerHTML = 'Enregistrer';
+
+  if (error) { showProfileMsg('Erreur : ' + error.message, 'error'); return; }
+
+  showProfileMsg('✓ Profil mis à jour avec succès !', 'success');
+
+  // Mettre à jour la navbar
+  updateNavbar(user, updates);
+}
+
+/* ── UPLOAD PHOTO ── */
+async function handlePhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (file.size > 5 * 1024 * 1024) {
+    showProfileMsg('La photo dépasse 5 Mo.', 'error'); return;
+  }
+
+  const { data: { user } } = await _supabase.auth.getUser();
+  if (!user) return;
+
+  // Afficher progress
+  document.getElementById('photoProgress').classList.add('active');
+  clearProfileMsg();
+
+  const ext  = file.name.split('.').pop();
+  const path = `${user.id}/avatar.${ext}`;
+
+  const { error: uploadError } = await _supabase.storage
+    .from('avatars')
+    .upload(path, file, { upsert: true, contentType: file.type });
+
+  document.getElementById('photoProgress').classList.remove('active');
+
+  if (uploadError) {
+    showProfileMsg('Erreur upload : ' + uploadError.message, 'error'); return;
+  }
+
+  // Récupérer l'URL publique
+  const { data: { publicUrl } } = _supabase.storage
+    .from('avatars')
+    .getPublicUrl(path);
+
+  // Sauvegarder dans profiles
+  await _supabase.from('profiles').upsert({
+    id: user.id, avatar_url: publicUrl, email: user.email
+  });
+
+  // Mettre à jour l'affichage
+  document.getElementById('profilePhotoCircle').innerHTML =
+    `<img src="${publicUrl}?t=${Date.now()}" alt="Photo de profil">`;
+
+  // Mettre à jour le cercle de la navbar
+  const navCircle = document.getElementById('userInitials');
+  navCircle.innerHTML = '';
+  const img = document.createElement('img');
+  img.src = publicUrl + '?t=' + Date.now();
+  img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%';
+  navCircle.appendChild(img);
+
+  showProfileMsg('✓ Photo mise à jour !', 'success');
 }
 
 /* ── SESSION AU CHARGEMENT ── */
