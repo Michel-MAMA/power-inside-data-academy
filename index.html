@@ -591,6 +591,116 @@ footer {
 }
 
 /* ===========================
+   NAV DROPDOWNS
+   =========================== */
+.nav-item { position: relative; }
+
+.nav-link-dd {
+  display: flex; align-items: center; gap: 4px; cursor: pointer;
+}
+.nav-link-dd .dd-arrow {
+  font-size: 9px; color: var(--w35);
+  transition: transform .2s; display: inline-block;
+}
+.nav-item:hover .dd-arrow { transform: rotate(180deg); color: var(--blue); }
+.nav-item:hover > .nav-link-dd { color: var(--white); }
+
+.nav-dropdown {
+  display: none; position: absolute; top: calc(100% + 14px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 16px; padding: 10px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  min-width: 260px; z-index: 300;
+  animation: ddIn .18s ease;
+}
+@keyframes ddIn {
+  from { opacity:0; transform: translateX(-50%) translateY(6px); }
+  to   { opacity:1; transform: translateX(-50%) translateY(0); }
+}
+.nav-item:hover .nav-dropdown { display: block; }
+
+/* Pont invisible pour éviter le gap hover */
+.nav-dropdown::before {
+  content:''; position:absolute; top:-14px; left:0; right:0; height:14px;
+}
+
+.dd-section-title {
+  font-size: 9px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--w35);
+  padding: 6px 10px 4px;
+}
+
+.dd-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 10px; cursor: pointer;
+  transition: background .15s, color .15s; text-decoration: none;
+  color: var(--w85);
+}
+.dd-item:hover { background: var(--w06); color: var(--white); }
+.dd-item.active { background: var(--blue-dim); color: var(--blue); }
+
+.dd-icon {
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+}
+.dd-icon.ai    { background: var(--blue-dim); }
+.dd-icon.data  { background: rgba(0,214,143,.1); }
+.dd-icon.cloud { background: rgba(255,170,0,.1); }
+.dd-icon.bi    { background: rgba(180,100,255,.1); }
+.dd-icon.level { background: var(--w06); font-size: 11px; font-weight: 700; font-family: var(--fd); color: var(--w60); }
+
+.dd-label { font-size: 13px; font-weight: 600; }
+.dd-sub   { font-size: 11px; color: var(--w35); margin-top: 1px; }
+
+.dd-divider { height: 1px; background: var(--border); margin: 6px 4px; }
+
+/* Dropdown formations : 2 colonnes */
+.dd-two-col {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0 8px; min-width: 440px;
+}
+.dd-col-head {
+  font-size: 9px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--w35); padding: 6px 10px 4px;
+}
+
+/* Filtre actif — bandeau sous le header de la section */
+.filter-bar {
+  display: none; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 28px; padding: 10px 14px; border-radius: 10px;
+  background: var(--blue-dim); border: 1px solid var(--blue-border);
+}
+.filter-bar.visible { display: flex; }
+.filter-bar-label { font-size: 12px; color: var(--blue); font-weight: 600; }
+.filter-pill {
+  display: flex; align-items: center; gap: 6px; padding: 4px 10px;
+  background: var(--blue); color: #fff; border-radius: 50px;
+  font-size: 11px; font-weight: 700; font-family: var(--fd); letter-spacing:.04em;
+}
+.filter-pill button {
+  background: none; border: none; color: rgba(255,255,255,.7);
+  cursor: pointer; font-size: 14px; line-height: 1; padding: 0;
+  transition: color .15s;
+}
+.filter-pill button:hover { color: #fff; }
+.filter-reset {
+  margin-left: auto; font-size: 11px; color: var(--w35);
+  cursor: pointer; font-weight: 600; transition: color .15s;
+  background: none; border: none; font-family: var(--fb);
+}
+.filter-reset:hover { color: var(--white); }
+
+/* Card masquée par le filtre */
+.fc.hidden-filter {
+  display: none;
+}
+.fc-empty {
+  display: none; grid-column: 1 / -1; text-align: center;
+  padding: 48px 20px; color: var(--w35); font-size: 14px;
+}
+.fc-empty.visible { display: block; }
+
+/* ===========================
    PRICING MODAL
    =========================== */
 .pricing-overlay {
@@ -1091,9 +1201,103 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   </a>
 
   <div class="nav-links">
-    <a href="#formations" class="nav-link">Formations</a>
-    <a href="#parcours" class="nav-link">Parcours</a>
-    <a href="#domaines" class="nav-link">Domaines</a>
+
+    <!-- ── Formations ── -->
+    <div class="nav-item">
+      <span class="nav-link nav-link-dd">Formations <span class="dd-arrow">▾</span></span>
+      <div class="nav-dropdown">
+        <div class="dd-two-col">
+          <div>
+            <div class="dd-col-head">Par domaine</div>
+            <div class="dd-item" onclick="filterFormations('domain','ai')">
+              <div class="dd-icon ai">🤖</div>
+              <div><div class="dd-label">Intelligence Artificielle</div><div class="dd-sub">MLOps, LLMs, Deep Learning</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('domain','data')">
+              <div class="dd-icon data">🏗️</div>
+              <div><div class="dd-label">Ingénierie des Données</div><div class="dd-sub">Fabric, Spark, dbt</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('domain','cloud')">
+              <div class="dd-icon cloud">⚡</div>
+              <div><div class="dd-label">No-Code / Low-Code</div><div class="dd-sub">Power Platform, Automate</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('domain','bi')">
+              <div class="dd-icon bi">📈</div>
+              <div><div class="dd-label">Business Intelligence</div><div class="dd-sub">Power BI, DAX</div></div>
+            </div>
+          </div>
+          <div>
+            <div class="dd-col-head">Par niveau</div>
+            <div class="dd-item" onclick="filterFormations('level','debutant')">
+              <div class="dd-icon level">D</div>
+              <div><div class="dd-label">Débutant</div><div class="dd-sub">Aucun prérequis</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('level','intermediaire')">
+              <div class="dd-icon level">I</div>
+              <div><div class="dd-label">Intermédiaire</div><div class="dd-sub">Bases requises</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('level','expert')">
+              <div class="dd-icon level">E</div>
+              <div><div class="dd-label">Expert</div><div class="dd-sub">Expérience nécessaire</div></div>
+            </div>
+            <div class="dd-divider"></div>
+            <div class="dd-item" onclick="resetFilters()">
+              <div class="dd-icon level" style="color:var(--blue);">✕</div>
+              <div><div class="dd-label" style="color:var(--blue)">Tout voir</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Parcours ── -->
+    <div class="nav-item">
+      <span class="nav-link nav-link-dd">Parcours <span class="dd-arrow">▾</span></span>
+      <div class="nav-dropdown">
+        <div class="dd-section-title">Parcours certifiants</div>
+        <div class="dd-item" onclick="goParcours('Data Engineer')">
+          <div class="dd-icon data">⚙️</div>
+          <div><div class="dd-label">Data Engineer</div><div class="dd-sub">4 formations · 16 jours</div></div>
+        </div>
+        <div class="dd-item" onclick="goParcours('Data Analyst')">
+          <div class="dd-icon bi">📊</div>
+          <div><div class="dd-label">Data Analyst</div><div class="dd-sub">3 formations · 12 jours</div></div>
+        </div>
+        <div class="dd-item" onclick="goParcours('ML Engineer')">
+          <div class="dd-icon ai">🤖</div>
+          <div><div class="dd-label">ML Engineer</div><div class="dd-sub">5 formations · 20 jours</div></div>
+        </div>
+        <div class="dd-item" onclick="goParcours('BI Developer')">
+          <div class="dd-icon cloud">📈</div>
+          <div><div class="dd-label">BI Developer</div><div class="dd-sub">3 formations · 10 jours</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Domaines ── -->
+    <div class="nav-item">
+      <span class="nav-link nav-link-dd">Domaines <span class="dd-arrow">▾</span></span>
+      <div class="nav-dropdown">
+        <div class="dd-section-title">Nos domaines d'expertise</div>
+        <div class="dd-item" onclick="filterFormations('domain','ai')">
+          <div class="dd-icon ai">🤖</div>
+          <div><div class="dd-label">Intelligence Artificielle</div><div class="dd-sub">MLOps, LLMs, Deep Learning</div></div>
+        </div>
+        <div class="dd-item" onclick="filterFormations('domain','data')">
+          <div class="dd-icon data">🏗️</div>
+          <div><div class="dd-label">Ingénierie des Données</div><div class="dd-sub">Fabric, Spark, dbt, Lakehouse</div></div>
+        </div>
+        <div class="dd-item" onclick="filterFormations('domain','cloud')">
+          <div class="dd-icon cloud">⚡</div>
+          <div><div class="dd-label">No-Code / Low-Code</div><div class="dd-sub">Power Platform, Automate, Apps</div></div>
+        </div>
+        <div class="dd-item" onclick="filterFormations('domain','bi')">
+          <div class="dd-icon bi">📈</div>
+          <div><div class="dd-label">Business Intelligence</div><div class="dd-sub">Power BI, DAX, Power Query</div></div>
+        </div>
+      </div>
+    </div>
+
     <a href="#temoignages" class="nav-link">Témoignages</a>
     <a href="#" class="nav-link" onclick="openPricing(); return false;">Abonnement</a>
   </div>
@@ -1678,9 +1882,19 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
       <a href="#" class="btn btn-outline" style="flex-shrink:0">Voir tout le catalogue →</a>
     </div>
 
-    <div class="grid-3">
+    <!-- Barre filtre actif -->
+    <div class="filter-bar" id="filterBar">
+      <span class="filter-bar-label">Filtre actif :</span>
+      <div class="filter-pill" id="filterPill">
+        <span id="filterPillText"></span>
+        <button onclick="resetFilters()" title="Supprimer le filtre">×</button>
+      </div>
+      <button class="filter-reset" onclick="resetFilters()">Tout afficher</button>
+    </div>
 
-      <div class="fc reveal reveal-delay-1">
+    <div class="grid-3" id="formationsGrid">
+
+      <div class="fc reveal reveal-delay-1" data-domain="ai" data-level="expert">
         <div class="fc-top" style="background:var(--blue)"></div>
         <div class="fc-body">
           <div class="fc-cat">MLOps · CI/CD · Kubernetes · MLflow</div>
@@ -1704,7 +1918,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         </div>
       </div>
 
-      <div class="fc card-accent reveal reveal-delay-2" style="border:1px solid var(--blue-border)">
+      <div class="fc card-accent reveal reveal-delay-2" data-domain="data" data-level="intermediaire" style="border:1px solid var(--blue-border)">
         <div class="fc-top" style="background:linear-gradient(90deg,var(--blue),#00D68F)"></div>
         <div class="fc-body">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
@@ -1731,7 +1945,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         </div>
       </div>
 
-      <div class="fc reveal reveal-delay-3">
+      <div class="fc reveal reveal-delay-3" data-domain="bi" data-level="debutant">
         <div class="fc-top" style="background:#FFAA00"></div>
         <div class="fc-body">
           <div class="fc-cat">BI · DAX · Power Query · Reporting</div>
@@ -1755,7 +1969,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         </div>
       </div>
 
-      <div class="fc reveal">
+      <div class="fc reveal" data-domain="cloud" data-level="debutant">
         <div class="fc-top" style="background:#B464FF"></div>
         <div class="fc-body">
           <div class="fc-cat">Power Platform · RPA · Automatisation</div>
@@ -1779,7 +1993,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         </div>
       </div>
 
-      <div class="fc reveal reveal-delay-1">
+      <div class="fc reveal reveal-delay-1" data-domain="cloud" data-level="debutant">
         <div class="fc-top" style="background:var(--green)"></div>
         <div class="fc-body">
           <div class="fc-cat">Power Platform · Low-Code · Applications</div>
@@ -1803,7 +2017,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         </div>
       </div>
 
-      <div class="fc reveal reveal-delay-2">
+      <div class="fc reveal reveal-delay-2" data-domain="ai" data-level="debutant">
         <div class="fc-top" style="background:rgba(0,155,249,0.4)"></div>
         <div class="fc-body">
           <div class="fc-cat">Python · Programmation · Fondamentaux</div>
@@ -2453,6 +2667,72 @@ async function updateNavbar(user, overrides = {}) {
     btnConnexion.style.display  = '';
     userAvatarBtn.style.display = 'none';
   }
+}
+
+/* ── FILTRAGE FORMATIONS ── */
+const domainLabels = {
+  ai:    '🤖 Intelligence Artificielle',
+  data:  '🏗️ Ingénierie des Données',
+  cloud: '⚡ No-Code / Low-Code',
+  bi:    '📈 Business Intelligence',
+};
+const levelLabels = {
+  debutant:     '🟢 Débutant',
+  intermediaire:'🟡 Intermédiaire',
+  expert:       '🔴 Expert',
+};
+
+function filterFormations(type, value) {
+  const cards = document.querySelectorAll('#formationsGrid .fc');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const match = card.dataset[type] === value;
+    card.classList.toggle('hidden-filter', !match);
+    if (match) visible++;
+  });
+
+  // Mettre à jour les items actifs dans le dropdown
+  document.querySelectorAll('.dd-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll(`.dd-item[onclick*="${value}"]`).forEach(el => el.classList.add('active'));
+
+  // Afficher la barre de filtre
+  const label = type === 'domain' ? domainLabels[value] : levelLabels[value];
+  document.getElementById('filterPillText').textContent = label;
+  document.getElementById('filterBar').classList.add('visible');
+
+  // Message si aucun résultat
+  let emptyEl = document.getElementById('fcEmpty');
+  if (!emptyEl) {
+    emptyEl = document.createElement('div');
+    emptyEl.id = 'fcEmpty';
+    emptyEl.className = 'fc-empty';
+    emptyEl.innerHTML = '😕 Aucune formation pour ce filtre. <a href="#" onclick="resetFilters();return false;" style="color:var(--blue)">Tout afficher</a>';
+    document.getElementById('formationsGrid').appendChild(emptyEl);
+  }
+  emptyEl.classList.toggle('visible', visible === 0);
+
+  // Scroll vers la section formations
+  document.getElementById('formations').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetFilters() {
+  document.querySelectorAll('#formationsGrid .fc').forEach(c => c.classList.remove('hidden-filter'));
+  document.getElementById('filterBar').classList.remove('visible');
+  document.querySelectorAll('.dd-item').forEach(el => el.classList.remove('active'));
+  const emptyEl = document.getElementById('fcEmpty');
+  if (emptyEl) emptyEl.classList.remove('visible');
+}
+
+function goParcours(name) {
+  // Mettre à jour le titre du parcours visuel et scroller
+  const title = document.querySelector('.pv-title');
+  if (title) title.textContent = 'Parcours ' + name;
+  document.getElementById('parcours').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Activer le step correspondant visuellement
+  document.querySelectorAll('.dd-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll(`.dd-item[onclick*="${name}"]`).forEach(el => el.classList.add('active'));
 }
 
 /* ── PRICING MODAL ── */
