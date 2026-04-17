@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Espace — PIDA Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #2563EB;
+  --blue-l: #EFF6FF;
+  --green: #16A34A;
+  --green-l: #F0FDF4;
+  --amber: #D97706;
+  --amber-l: #FFFBEB;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-400: #9CA3AF;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-900: #111827;
+  --sidebar-w: 272px;
+  --nav-h: 60px;
+  --radius: 14px;
+  --shadow: 0 2px 12px rgba(0,0,0,.07);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-900);
+  min-height: 100vh;
+}
+
+/* ── NAVBAR ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: var(--nav-h);
+  background: #fff;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: center; padding: 0 24px; gap: 20px;
+}
+
+.nav-logo {
+  font-weight: 700; font-size: 1.1rem; color: var(--gray-900);
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  letter-spacing: -.4px;
+}
+.nav-logo span { color: var(--blue); }
+
+.nav-links { display: flex; gap: 4px; margin-left: 16px; }
+.nav-links a {
+  font-size: .875rem; font-weight: 500; color: var(--gray-600);
+  text-decoration: none; padding: 6px 12px; border-radius: 8px;
+  transition: background .15s, color .15s;
+}
+.nav-links a:hover { background: var(--gray-100); color: var(--gray-900); }
+.nav-links a.active { background: var(--blue-l); color: var(--blue); }
+
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+.progress-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--gray-100); border-radius: 999px; padding: 5px 14px 5px 8px;
+  font-size: .8rem; font-weight: 600; color: var(--gray-700); cursor: default;
+}
+.progress-pill svg { width: 28px; height: 28px; flex-shrink: 0; }
+.progress-ring-track { fill: none; stroke: var(--gray-200); stroke-width: 3; }
+.progress-ring-fill {
+  fill: none; stroke: var(--blue); stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 66; stroke-dashoffset: 66;
+  transform: rotate(-90deg); transform-origin: 50% 50%;
+  transition: stroke-dashoffset .6s ease;
+}
+
+.avatar-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--blue); color: #fff;
+  font-weight: 700; font-size: .875rem;
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.avatar-dropdown {
+  display: none; position: absolute; top: calc(100% + 8px); right: 0;
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  min-width: 180px; overflow: hidden; z-index: 200;
+}
+.avatar-btn:focus .avatar-dropdown,
+.avatar-btn.open .avatar-dropdown { display: block; }
+.avatar-dropdown a, .avatar-dropdown button {
+  display: block; width: 100%; padding: 10px 16px;
+  font-family: inherit; font-size: .875rem; font-weight: 500;
+  color: var(--gray-700); text-decoration: none; text-align: left;
+  background: none; border: none; cursor: pointer;
+  transition: background .15s;
+}
+.avatar-dropdown a:hover, .avatar-dropdown button:hover { background: var(--gray-100); }
+.avatar-dropdown .signout { color: #DC2626; }
+.avatar-wrap { position: relative; }
+
+/* ── LAYOUT ── */
+.layout {
+  display: flex;
+  padding-top: var(--nav-h);
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid var(--gray-200);
+  padding: 20px 16px 40px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+
+/* scrollbar */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+
+.user-card {
+  background: linear-gradient(135deg, #1D4ED8, #2563EB);
+  border-radius: var(--radius); padding: 16px;
+  color: #fff; display: flex; align-items: center; gap: 12px;
+}
+.user-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: rgba(255,255,255,.25); font-weight: 700; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.user-name { font-weight: 600; font-size: .9rem; line-height: 1.3; }
+.user-plan {
+  display: inline-block; margin-top: 3px;
+  background: rgba(255,255,255,.2); border-radius: 999px;
+  padding: 1px 8px; font-size: .7rem; font-weight: 600; letter-spacing: .3px;
+}
+
+.progress-card {
+  background: var(--gray-100); border-radius: var(--radius); padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px;
+}
+.big-ring { width: 64px; height: 64px; flex-shrink: 0; }
+.big-ring-track { fill: none; stroke: var(--gray-200); stroke-width: 5; }
+.big-ring-fill {
+  fill: none; stroke: var(--blue); stroke-width: 5;
+  stroke-linecap: round; stroke-dasharray: 163; stroke-dashoffset: 163;
+  transform: rotate(-90deg); transform-origin: 50% 50%;
+  transition: stroke-dashoffset .8s ease;
+}
+.big-ring-pct {
+  font-family: 'DM Mono', monospace; font-size: .95rem; font-weight: 500;
+  fill: var(--gray-900); text-anchor: middle; dominant-baseline: central;
+}
+.progress-meta { flex: 1; }
+.progress-meta p { font-size: .78rem; color: var(--gray-600); margin-bottom: 4px; }
+.progress-counts { display: flex; flex-direction: column; gap: 3px; }
+.pc-row { display: flex; align-items: center; gap: 6px; font-size: .78rem; }
+.pc-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* filter section */
+.flt-section { display: flex; flex-direction: column; gap: 8px; }
+.flt-title {
+  font-size: .72rem; font-weight: 600; letter-spacing: .6px;
+  text-transform: uppercase; color: var(--gray-400);
+}
+
+.status-tabs { display: flex; flex-wrap: wrap; gap: 5px; }
+.stab {
+  font-family: inherit; font-size: .78rem; font-weight: 500;
+  border: 1px solid var(--gray-200); border-radius: 999px;
+  padding: 4px 10px; background: #fff; color: var(--gray-600);
+  cursor: pointer; transition: all .15s;
+}
+.stab.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+.flt-items { display: flex; flex-direction: column; gap: 6px; }
+.flt-item { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.flt-item input[type=checkbox],
+.flt-item input[type=radio] { display: none; }
+.flt-box {
+  width: 16px; height: 16px; border-radius: 5px; flex-shrink: 0;
+  border: 1.5px solid var(--gray-300, #D1D5DB);
+  background: #fff; display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.flt-item input[type=radio] ~ .flt-box { border-radius: 50%; }
+.flt-item input:checked ~ .flt-box {
+  background: var(--blue); border-color: var(--blue);
+}
+.flt-item input:checked ~ .flt-box::after {
+  content: ''; display: block;
+  width: 5px; height: 8px;
+  border: 2px solid #fff; border-top: none; border-left: none;
+  transform: rotate(45deg) translateY(-1px);
+}
+.flt-item input[type=radio]:checked ~ .flt-box::after {
+  width: 6px; height: 6px; border: none;
+  background: #fff; border-radius: 50%; transform: none; translateY: 0;
+}
+.flt-label { font-size: .82rem; color: var(--gray-700); }
+
+.topic-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.tpill {
+  font-family: inherit; font-size: .75rem; font-weight: 500;
+  border: 1px solid var(--gray-200); border-radius: 999px;
+  padding: 3px 10px; background: #fff; color: var(--gray-600);
+  cursor: pointer; transition: all .15s;
+}
+.tpill.active { background: var(--gray-900); border-color: var(--gray-900); color: #fff; }
+
+.flt-reset {
+  font-family: inherit; font-size: .78rem; color: var(--blue);
+  background: none; border: none; cursor: pointer; padding: 0;
+  text-align: left; font-weight: 500; margin-top: 4px;
+}
+.flt-reset:hover { text-decoration: underline; }
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 32px 28px 60px;
+  max-width: 1200px;
+}
+
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+}
+.page-title { font-size: 1.5rem; font-weight: 700; letter-spacing: -.4px; }
+.page-sub { color: var(--gray-600); font-size: .9rem; margin-top: 3px; }
+
+.search-wrap { position: relative; flex-shrink: 0; }
+.search-wrap input {
+  font-family: inherit; font-size: .875rem;
+  padding: 9px 14px 9px 38px;
+  border: 1.5px solid var(--gray-200); border-radius: 10px;
+  background: #fff; color: var(--gray-900); outline: none;
+  width: 220px; transition: border-color .15s;
+}
+.search-wrap input:focus { border-color: var(--blue); }
+.search-icon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: var(--gray-400); pointer-events: none;
+}
+
+/* stats strip */
+.stats-strip { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.stat-card {
+  background: #fff; border-radius: var(--radius);
+  border: 1px solid var(--gray-200); padding: 14px 18px;
+  flex: 1; min-width: 130px;
+  display: flex; align-items: center; gap: 12px;
+}
+.stat-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.stat-val { font-size: 1.3rem; font-weight: 700; line-height: 1; }
+.stat-lbl { font-size: .75rem; color: var(--gray-600); margin-top: 2px; }
+
+/* result header */
+.result-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.result-header h2 { font-size: 1rem; font-weight: 600; }
+.result-badge {
+  background: var(--gray-200); color: var(--gray-700);
+  border-radius: 999px; font-size: .72rem; font-weight: 700;
+  padding: 2px 9px;
+}
+
+/* cards grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+
+/* formation card */
+.fcard {
+  background: #fff; border-radius: var(--radius);
+  border: 1.5px solid var(--gray-200);
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: box-shadow .2s, transform .2s;
+}
+.fcard:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); transform: translateY(-2px); }
+
+/* progress bar top (in_progress) */
+.fcard-prog-bar {
+  height: 3px; background: var(--gray-200); display: none;
+}
+.fcard-prog-bar .fill { height: 100%; background: var(--blue); border-radius: 0 2px 2px 0; }
+.fcard[data-status=in_progress] .fcard-prog-bar { display: block; }
+.fcard[data-status=completed] { border-color: #86EFAC; }
+.fcard[data-status=in_progress] { border-color: #93C5FD; }
+.fcard[data-status=enrolled] { border-color: #A5B4FC; }
+
+.fcard-thumb {
+  height: 130px; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem;
+}
+.fcard-thumb-bg { position: absolute; inset: 0; opacity: .12; }
+
+.fcard-badge {
+  position: absolute; top: 10px; right: 10px;
+  border-radius: 999px; font-size: .68rem; font-weight: 700;
+  padding: 3px 10px; backdrop-filter: blur(4px);
+}
+.badge-completed { background: var(--green-l); color: var(--green); border: 1px solid #86EFAC; }
+.badge-in_progress { background: var(--blue-l); color: var(--blue); border: 1px solid #93C5FD; }
+.badge-enrolled { background: #EEF2FF; color: #4338CA; border: 1px solid #A5B4FC; }
+
+.fcard-body { padding: 14px 16px 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.fcard-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.fcard-tag {
+  font-size: .68rem; font-weight: 600; letter-spacing: .3px;
+  border-radius: 5px; padding: 2px 7px;
+}
+.tag-ia { background: #EDE9FE; color: #6D28D9; }
+.tag-data { background: #ECFDF5; color: #065F46; }
+.tag-software { background: #FFF7ED; color: #92400E; }
+.tag-cloud { background: #F0F9FF; color: #0369A1; }
+.fcard-level {
+  font-size: .7rem; color: var(--gray-400); margin-left: auto;
+}
+.fcard-title { font-weight: 600; font-size: .92rem; line-height: 1.4; color: var(--gray-900); }
+.fcard-desc { font-size: .8rem; color: var(--gray-600); line-height: 1.5; }
+.fcard-info { display: flex; gap: 12px; font-size: .75rem; color: var(--gray-400); }
+
+/* in-progress fill bar */
+.fcard-fill-wrap { display: none; flex-direction: column; gap: 4px; }
+.fcard[data-status=in_progress] .fcard-fill-wrap { display: flex; }
+.fcard-fill-bar { height: 5px; background: var(--gray-200); border-radius: 999px; overflow: hidden; }
+.fcard-fill-bar .fill { height: 100%; background: var(--blue); border-radius: 999px; }
+.fcard-fill-label { font-size: .72rem; color: var(--gray-600); font-weight: 500; }
+
+.fcard-foot { margin-top: auto; }
+.btn-enroll {
+  font-family: inherit; font-size: .82rem; font-weight: 600;
+  width: 100%; padding: 9px; border-radius: 9px; cursor: pointer;
+  transition: all .15s; border: 1.5px solid var(--gray-200);
+  background: #fff; color: var(--gray-700);
+}
+.btn-enroll:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-l); }
+.btn-start {
+  font-family: inherit; font-size: .82rem; font-weight: 600;
+  width: 100%; padding: 9px; border-radius: 9px; cursor: pointer;
+  background: var(--blue); color: #fff; border: none;
+  transition: background .15s;
+}
+.btn-start:hover { background: #1D4ED8; }
+.btn-continue {
+  font-family: inherit; font-size: .82rem; font-weight: 600;
+  width: 100%; padding: 9px; border-radius: 9px; cursor: pointer;
+  background: var(--blue); color: #fff; border: none;
+  transition: background .15s;
+}
+.btn-continue:hover { background: #1D4ED8; }
+.btn-review {
+  font-family: inherit; font-size: .82rem; font-weight: 600;
+  width: 100%; padding: 9px; border-radius: 9px; cursor: pointer;
+  background: #fff; color: var(--green); border: 1.5px solid #86EFAC;
+  transition: all .15s;
+}
+.btn-review:hover { background: var(--green-l); }
+
+.no-results {
+  grid-column: 1/-1; text-align: center;
+  padding: 60px 20px; color: var(--gray-400);
+}
+.no-results p { font-size: 1rem; margin-top: 8px; }
+
+/* ── MOBILE ── */
+.sidebar-toggle {
+  display: none; position: fixed; bottom: 20px; right: 20px; z-index: 300;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--blue); color: #fff; border: none;
+  font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 16px rgba(37,99,235,.4);
+}
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 150;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform .3s ease;
+    z-index: 160;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.open { display: block; }
+  .main { margin-left: 0; padding: 20px 16px 80px; }
+  .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+  .nav-links { display: none; }
+  .progress-pill span { display: none; }
+}
+
+@media (max-width: 600px) {
+  .stats-strip { gap: 8px; }
+  .stat-card { padding: 12px 14px; }
+  .page-title { font-size: 1.2rem; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .search-wrap input { width: 100%; }
+  .page-header { flex-direction: column; }
+  .search-wrap { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">PIDA<span>·</span>Academy</a>
+  <div class="nav-links">
+    <a href="index.html">Accueil</a>
+    <a href="#" class="active">Mon Espace</a>
+    <a href="index.html#formations">Formations</a>
+  </div>
+  <div class="nav-right">
+    <!-- Global progress pill -->
+    <div class="progress-pill" title="Progression globale">
+      <svg viewBox="0 0 28 28">
+        <circle class="progress-ring-track" cx="14" cy="14" r="10.5"/>
+        <circle class="progress-ring-fill" id="navRing" cx="14" cy="14" r="10.5"/>
+      </svg>
+      <span id="navPct">0%</span>
+    </div>
+    <!-- Avatar -->
+    <div class="avatar-wrap">
+      <button class="avatar-btn" id="avatarBtn">
+        <span id="avatarInitial">U</span>
+        <div class="avatar-dropdown" id="avatarDrop">
+          <a href="#">Mon profil</a>
+          <a href="index.html#abonnement">Abonnement</a>
+          <button class="signout" id="signoutBtn">Se déconnecter</button>
+        </div>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <!-- User card -->
+    <div class="user-card">
+      <div class="user-avatar" id="sideAvatar">U</div>
+      <div>
+        <div class="user-name" id="sideName">Chargement…</div>
+        <span class="user-plan" id="sidePlan">Gratuit</span>
+      </div>
+    </div>
+
+    <!-- Progress ring -->
+    <div class="progress-card">
+      <svg class="big-ring" viewBox="0 0 64 64">
+        <circle class="big-ring-track" cx="32" cy="32" r="26"/>
+        <circle class="big-ring-fill" id="bigRing" cx="32" cy="32" r="26"/>
+        <text class="big-ring-pct" id="bigPct" x="32" y="32">0%</text>
+      </svg>
+      <div class="progress-meta">
+        <p>Progression globale</p>
+        <div class="progress-counts" id="progCounts">
+          <div class="pc-row"><span class="pc-dot" style="background:#2563EB"></span><span id="pc-inprog">0 en cours</span></div>
+          <div class="pc-row"><span class="pc-dot" style="background:#16A34A"></span><span id="pc-done">0 terminé</span></div>
+          <div class="pc-row"><span class="pc-dot" style="background:#818CF8"></span><span id="pc-enroll">0 à débuter</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status filter -->
+    <div class="flt-section">
+      <div class="flt-title">Statut</div>
+      <div class="status-tabs">
+        <button class="stab active" data-status="">Tout</button>
+        <button class="stab" data-status="in_progress">En cours</button>
+        <button class="stab" data-status="enrolled">À débuter</button>
+        <button class="stab" data-status="completed">Terminé</button>
+      </div>
+    </div>
+
+    <!-- Domain filter -->
+    <div class="flt-section">
+      <div class="flt-title">Domaine</div>
+      <div class="flt-items" id="domainFilters">
+        <label class="flt-item"><input type="checkbox" value="ia"><span class="flt-box"></span><span class="flt-label">🤖 Intelligence Artificielle</span></label>
+        <label class="flt-item"><input type="checkbox" value="data"><span class="flt-box"></span><span class="flt-label">📊 Data &amp; BI</span></label>
+        <label class="flt-item"><input type="checkbox" value="software"><span class="flt-box"></span><span class="flt-label">💻 Software &amp; Outils</span></label>
+        <label class="flt-item"><input type="checkbox" value="cloud"><span class="flt-box"></span><span class="flt-label">☁️ Cloud &amp; Infrastructure</span></label>
+      </div>
+    </div>
+
+    <!-- Level filter -->
+    <div class="flt-section">
+      <div class="flt-title">Niveau</div>
+      <div class="flt-items" id="levelFilters">
+        <label class="flt-item"><input type="checkbox" value="debutant"><span class="flt-box"></span><span class="flt-label">🟢 Débutant</span></label>
+        <label class="flt-item"><input type="checkbox" value="intermediaire"><span class="flt-box"></span><span class="flt-label">🟡 Intermédiaire</span></label>
+        <label class="flt-item"><input type="checkbox" value="avance"><span class="flt-box"></span><span class="flt-label">🔴 Avancé</span></label>
+      </div>
+    </div>
+
+    <!-- Duration filter -->
+    <div class="flt-section">
+      <div class="flt-title">Durée</div>
+      <div class="flt-items" id="durFilters">
+        <label class="flt-item"><input type="radio" name="dur" value=""><span class="flt-box"></span><span class="flt-label">Toutes</span></label>
+        <label class="flt-item"><input type="radio" name="dur" value="short"><span class="flt-box"></span><span class="flt-label">&lt; 10 heures</span></label>
+        <label class="flt-item"><input type="radio" name="dur" value="mid"><span class="flt-box"></span><span class="flt-label">10–20 heures</span></label>
+        <label class="flt-item"><input type="radio" name="dur" value="long"><span class="flt-box"></span><span class="flt-label">&gt; 20 heures</span></label>
+      </div>
+    </div>
+
+    <!-- Topic pills -->
+    <div class="flt-section">
+      <div class="flt-title">Thématique</div>
+      <div class="topic-pills" id="topicPills"></div>
+    </div>
+
+    <button class="flt-reset" id="resetBtn">↺ Réinitialiser les filtres</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Mes Formations</h1>
+        <p class="page-sub">Retrouvez vos formations et suivez votre progression.</p>
+      </div>
+      <div class="search-wrap">
+        <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Rechercher une formation…">
+      </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="stats-strip">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#EFF6FF;">📚</div>
+        <div>
+          <div class="stat-val" id="statTotal">0</div>
+          <div class="stat-lbl">Formations</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#ECFDF5;">✅</div>
+        <div>
+          <div class="stat-val" id="statDone">0</div>
+          <div class="stat-lbl">Terminées</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:#FFF7ED;">⏱</div>
+        <div>
+          <div class="stat-val" id="statHours">0h</div>
+          <div class="stat-lbl">En formation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-header">
+      <h2>Catalogue</h2>
+      <span class="result-badge" id="resultCount">0</span>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+  </main>
+</div>
+
+<!-- Mobile sidebar toggle -->
+<button class="sidebar-toggle" id="sideToggle">☰</button>
+<div class="sidebar-overlay" id="sideOverlay"></div>
+
+<script>
+// ── CONFIG ──
+const SB_URL = 'https://qvifydoghyniyuaeqgir.supabase.co';
+const SB_KEY = 'sb_publishable__AuNbItT26Gr_PM26K-IPQ_osxQWuH6';
+
+// ── FORMATION DATA ──
+const FDATA = [
+  {
+    id: 'python',
+    title: 'Python pour la Data Science',
+    desc: 'Maîtrisez Python, pandas, NumPy et la visualisation de données pour l\'analyse.',
+    domain: 'ia', level: 'debutant', hours: 12,
+    emoji: '🐍', color: '#3B82F6',
+    topics: ['Python', 'Pandas', 'NumPy', 'Visualisation'],
+    status: 'in_progress', pct: 65
+  },
+  {
+    id: 'powerbi',
+    title: 'Power BI — Rapports & Dashboards',
+    desc: 'Créez des dashboards interactifs et maîtrisez DAX pour des analyses avancées.',
+    domain: 'data', level: 'intermediaire', hours: 18,
+    emoji: '📊', color: '#F59E0B',
+    topics: ['Power BI', 'DAX', 'Dashboard', 'ETL'],
+    status: 'in_progress', pct: 30
+  },
+  {
+    id: 'automate',
+    title: 'Automatisation Microsoft 365',
+    desc: 'Power Automate, Power Apps et SharePoint pour automatiser vos workflows.',
+    domain: 'software', level: 'debutant', hours: 8,
+    emoji: '⚡', color: '#8B5CF6',
+    topics: ['Power Automate', 'Power Apps', 'SharePoint'],
+    status: 'enrolled', pct: 0
+  },
+  {
+    id: 'ml',
+    title: 'Machine Learning Appliqué',
+    desc: 'Scikit-learn, pipelines ML et déploiement de modèles en production.',
+    domain: 'ia', level: 'avance', hours: 25,
+    emoji: '🤖', color: '#EC4899',
+    topics: ['Scikit-learn', 'ML Ops', 'Python'],
+    status: 'not_enrolled', pct: 0
+  },
+  {
+    id: 'sql',
+    title: 'SQL & Bases de données',
+    desc: 'Du SQL fondamental aux requêtes complexes, optimisation et modélisation.',
+    domain: 'data', level: 'debutant', hours: 10,
+    emoji: '🗄️', color: '#10B981',
+    topics: ['SQL', 'PostgreSQL', 'Modélisation', 'Optimisation'],
+    status: 'completed', pct: 100
+  },
+  {
+    id: 'azure',
+    title: 'Azure Data Services',
+    desc: 'Azure Synapse, Data Factory et Databricks pour la data engineering.',
+    domain: 'cloud', level: 'avance', hours: 22,
+    emoji: '☁️', color: '#0EA5E9',
+    topics: ['Azure', 'Synapse', 'Databricks', 'Data Factory'],
+    status: 'not_enrolled', pct: 0
+  }
+];
+
+// Collect all topics
+const ALL_TOPICS = [...new Set(FDATA.flatMap(f => f.topics))].sort();
+
+// ── FILTER STATE ──
+const fSt = {
+  status: '',
+  domains: new Set(),
+  levels: new Set(),
+  dur: '',
+  topics: new Set(),
+  search: ''
+};
+
+// ── HELPERS ──
+function durBucket(h) {
+  if (h < 10) return 'short';
+  if (h <= 20) return 'mid';
+  return 'long';
+}
+
+function tagClass(domain) {
+  return { ia: 'tag-ia', data: 'tag-data', software: 'tag-software', cloud: 'tag-cloud' }[domain] || 'tag-ia';
+}
+
+function tagLabel(domain) {
+  return { ia: 'IA', data: 'Data & BI', software: 'Software', cloud: 'Cloud' }[domain] || domain;
+}
+
+function levelLabel(lvl) {
+  return { debutant: 'Débutant', intermediaire: 'Intermédiaire', avance: 'Avancé' }[lvl] || lvl;
+}
+
+function statusLabel(s) {
+  return { not_enrolled: '', enrolled: 'À débuter', in_progress: 'En cours', completed: '✓ Terminé' }[s] || '';
+}
+
+function badgeClass(s) {
+  return { enrolled: 'badge-enrolled', in_progress: 'badge-in_progress', completed: 'badge-completed' }[s] || '';
+}
+
+// ── BUILD CARD HTML ──
+function buildCard(f) {
+  const badge = f.status !== 'not_enrolled'
+    ? `<div class="fcard-badge ${badgeClass(f.status)}">${statusLabel(f.status)}</div>` : '';
+
+  let cta = '';
+  if (f.status === 'not_enrolled')      cta = `<button class="btn-enroll" onclick="enroll('${f.id}')">S'inscrire</button>`;
+  else if (f.status === 'enrolled')     cta = `<button class="btn-start" onclick="startF('${f.id}')">Débuter →</button>`;
+  else if (f.status === 'in_progress')  cta = `<button class="btn-continue" onclick="continueF('${f.id}')">Continuer →</button>`;
+  else if (f.status === 'completed')    cta = `<button class="btn-review" onclick="continueF('${f.id}')">Revoir le contenu</button>`;
+
+  const fillBar = `
+    <div class="fcard-fill-wrap">
+      <div class="fcard-fill-bar"><div class="fill" style="width:${f.pct}%"></div></div>
+      <div class="fcard-fill-label">${f.pct}% complété</div>
+    </div>`;
+
+  return `
+    <div class="fcard" data-id="${f.id}" data-status="${f.status}">
+      <div class="fcard-prog-bar"><div class="fill" style="width:${f.pct}%"></div></div>
+      <div class="fcard-thumb">
+        <div class="fcard-thumb-bg" style="background:${f.color}"></div>
+        <span>${f.emoji}</span>
+        ${badge}
+      </div>
+      <div class="fcard-body">
+        <div class="fcard-meta">
+          <span class="fcard-tag ${tagClass(f.domain)}">${tagLabel(f.domain)}</span>
+          <span class="fcard-level">${levelLabel(f.level)}</span>
+        </div>
+        <div class="fcard-title">${f.title}</div>
+        <div class="fcard-desc">${f.desc}</div>
+        <div class="fcard-info">
+          <span>⏱ ${f.hours}h</span>
+          <span>· ${f.topics.slice(0,3).join(', ')}</span>
+        </div>
+        ${fillBar}
+        <div class="fcard-foot">${cta}</div>
+      </div>
+    </div>`;
+}
+
+// ── RENDER ──
+function render() {
+  const q = fSt.search.toLowerCase().trim();
+  const filtered = FDATA.filter(f => {
+    if (fSt.status && f.status !== fSt.status) return false;
+    if (fSt.domains.size && !fSt.domains.has(f.domain)) return false;
+    if (fSt.levels.size && !fSt.levels.has(f.level)) return false;
+    if (fSt.dur && durBucket(f.hours) !== fSt.dur) return false;
+    if (fSt.topics.size && !f.topics.some(t => fSt.topics.has(t))) return false;
+    if (q && !f.title.toLowerCase().includes(q) && !f.desc.toLowerCase().includes(q) && !f.topics.join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const grid = document.getElementById('cardsGrid');
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="no-results">🔍<p>Aucune formation ne correspond à vos filtres.</p></div>`;
+  } else {
+    grid.innerHTML = filtered.map(buildCard).join('');
+  }
+  document.getElementById('resultCount').textContent = filtered.length;
+}
+
+// ── STATS ──
+function updateStats() {
+  const inProg = FDATA.filter(f => f.status === 'in_progress');
+  const done   = FDATA.filter(f => f.status === 'completed');
+  const enroll = FDATA.filter(f => f.status === 'enrolled');
+
+  document.getElementById('statTotal').textContent = FDATA.length;
+  document.getElementById('statDone').textContent  = done.length;
+  const hrs = FDATA.filter(f => f.status !== 'not_enrolled').reduce((a, f) => a + Math.round(f.hours * f.pct / 100), 0);
+  document.getElementById('statHours').textContent = hrs + 'h';
+
+  document.getElementById('pc-inprog').textContent = inProg.length + ' en cours';
+  document.getElementById('pc-done').textContent   = done.length + (done.length > 1 ? ' terminés' : ' terminé');
+  document.getElementById('pc-enroll').textContent = enroll.length + ' à débuter';
+
+  // Global pct: average of in_progress pct + 100 for completed, ignore others
+  const active = FDATA.filter(f => f.status === 'in_progress' || f.status === 'completed');
+  const globalPct = active.length ? Math.round(active.reduce((a, f) => a + f.pct, 0) / active.length) : 0;
+
+  // Big ring (circumference = 2π×26 ≈ 163)
+  const bigOffset = 163 - (163 * globalPct / 100);
+  document.getElementById('bigRing').style.strokeDashoffset = bigOffset;
+  document.getElementById('bigPct').textContent = globalPct + '%';
+
+  // Nav ring (circumference = 2π×10.5 ≈ 66)
+  const navOffset = 66 - (66 * globalPct / 100);
+  document.getElementById('navRing').style.strokeDashoffset = navOffset;
+  document.getElementById('navPct').textContent = globalPct + '%';
+}
+
+// ── ACTIONS ──
+function enroll(id) {
+  const f = FDATA.find(f => f.id === id);
+  if (!f) return;
+  f.status = 'enrolled';
+  saveProgress();
+  updateStats();
+  render();
+}
+
+function startF(id) {
+  const f = FDATA.find(f => f.id === id);
+  if (!f) return;
+  f.status = 'in_progress';
+  f.pct = 5;
+  saveProgress();
+  updateStats();
+  render();
+}
+
+function continueF(id) {
+  // In a real app, navigate to formation page
+  alert('Redirection vers la formation… (à implémenter)');
+}
+
+// ── PERSISTENCE ──
+function saveProgress() {
+  const snap = {};
+  FDATA.forEach(f => { snap[f.id] = { status: f.status, pct: f.pct }; });
+  localStorage.setItem('pida_progress', JSON.stringify(snap));
+}
+
+function loadProgress() {
+  try {
+    const snap = JSON.parse(localStorage.getItem('pida_progress') || '{}');
+    FDATA.forEach(f => {
+      if (snap[f.id]) { f.status = snap[f.id].status; f.pct = snap[f.id].pct; }
+    });
+  } catch(e) {}
+}
+
+// ── FILTERS SETUP ──
+function setupFilters() {
+  // Status tabs
+  document.querySelectorAll('.stab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      fSt.status = btn.dataset.status;
+      render();
+    });
+  });
+
+  // Domain checkboxes
+  document.querySelectorAll('#domainFilters input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.checked ? fSt.domains.add(cb.value) : fSt.domains.delete(cb.value);
+      render();
+    });
+  });
+
+  // Level checkboxes
+  document.querySelectorAll('#levelFilters input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.checked ? fSt.levels.add(cb.value) : fSt.levels.delete(cb.value);
+      render();
+    });
+  });
+
+  // Duration radios
+  document.querySelectorAll('#durFilters input').forEach(r => {
+    r.addEventListener('change', () => { fSt.dur = r.value; render(); });
+  });
+  // Default: first radio checked
+  document.querySelector('#durFilters input').checked = true;
+
+  // Topic pills
+  const pillsWrap = document.getElementById('topicPills');
+  ALL_TOPICS.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'tpill';
+    btn.textContent = t;
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      btn.classList.contains('active') ? fSt.topics.add(t) : fSt.topics.delete(t);
+      render();
+    });
+    pillsWrap.appendChild(btn);
+  });
+
+  // Search
+  document.getElementById('searchInput').addEventListener('input', e => {
+    fSt.search = e.target.value;
+    render();
+  });
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    fSt.status = ''; fSt.domains.clear(); fSt.levels.clear();
+    fSt.dur = ''; fSt.topics.clear(); fSt.search = '';
+    document.querySelectorAll('.stab').forEach((b, i) => b.classList.toggle('active', i === 0));
+    document.querySelectorAll('#domainFilters input, #levelFilters input').forEach(cb => cb.checked = false);
+    document.querySelector('#durFilters input').checked = true;
+    document.querySelectorAll('.tpill').forEach(p => p.classList.remove('active'));
+    document.getElementById('searchInput').value = '';
+    render();
+  });
+}
+
+// ── AVATAR DROPDOWN ──
+function setupAvatar() {
+  const btn  = document.getElementById('avatarBtn');
+  const drop = document.getElementById('avatarDrop');
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
+    btn.classList.toggle('open');
+  });
+  document.addEventListener('click', () => btn.classList.remove('open'));
+  drop.addEventListener('click', e => e.stopPropagation());
+}
+
+// ── MOBILE SIDEBAR ──
+function setupMobileSidebar() {
+  const sidebar  = document.getElementById('sidebar');
+  const toggle   = document.getElementById('sideToggle');
+  const overlay  = document.getElementById('sideOverlay');
+  toggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+  });
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  });
+}
+
+// ── AUTH ──
+async function initAuth() {
+  try {
+    const res = await fetch(`${SB_URL}/auth/v1/user`, {
+      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
+    });
+    // Try to get stored session
+    const session = JSON.parse(localStorage.getItem('sb-session') || 'null');
+    if (session && session.access_token) {
+      const r2 = await fetch(`${SB_URL}/auth/v1/user`, {
+        headers: { apikey: SB_KEY, Authorization: `Bearer ${session.access_token}` }
+      });
+      if (r2.ok) {
+        const user = await r2.json();
+        setUser(user);
+        return;
+      }
+    }
+    // No valid session — redirect
+    window.location.href = 'index.html';
+  } catch(e) {
+    // Offline / dev mode — show demo user
+    setUser({ email: 'demo@pida.academy', user_metadata: { full_name: 'Demo User' } });
+  }
+}
+
+function setUser(user) {
+  const name  = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Utilisateur';
+  const init  = name.charAt(0).toUpperCase();
+  document.getElementById('sideAvatar').textContent    = init;
+  document.getElementById('sideName').textContent      = name;
+  document.getElementById('avatarInitial').textContent = init;
+}
+
+// ── SIGN OUT ──
+document.getElementById('signoutBtn').addEventListener('click', async () => {
+  try {
+    const session = JSON.parse(localStorage.getItem('sb-session') || 'null');
+    if (session?.access_token) {
+      await fetch(`${SB_URL}/auth/v1/logout`, {
+        method: 'POST',
+        headers: { apikey: SB_KEY, Authorization: `Bearer ${session.access_token}` }
+      });
+    }
+  } catch(e) {}
+  localStorage.removeItem('sb-session');
+  window.location.href = 'index.html';
+});
+
+// ── INIT ──
+function init() {
+  loadProgress();
+  setupFilters();
+  setupAvatar();
+  setupMobileSidebar();
+  updateStats();
+  render();
+  initAuth();
+}
+
+init();
+</script>
+</body>
+</html>
