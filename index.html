@@ -310,32 +310,30 @@ body:hover #cursor { opacity: 1; }
   text-align: center; pointer-events: none;
 }
 .orb-center-icon {
-  width: 72px; height: 72px;
-  background: linear-gradient(135deg, #0060C8, var(--blue));
-  border-radius: 22px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.9rem;
-  box-shadow: 0 0 44px rgba(0,155,249,0.6), 0 0 88px rgba(0,155,249,0.18);
   position: relative;
+  display: flex; align-items: center; justify-content: center;
+  filter: drop-shadow(0 0 18px rgba(0,155,249,0.55)) drop-shadow(0 0 40px rgba(0,155,249,0.20));
 }
 .orb-center-icon::before {
-  content: ''; position: absolute; inset: -12px; border-radius: 32px;
-  border: 1px solid rgba(0,155,249,0.25);
+  content: ''; position: absolute; inset: -14px; border-radius: 50%;
+  border: 1px solid rgba(0,155,249,0.22);
   animation: orb-ring-pulse 3.5s ease-in-out infinite;
 }
 .orb-center-icon::after {
-  content: ''; position: absolute; inset: -24px; border-radius: 40px;
-  border: 1px solid rgba(0,155,249,0.09);
+  content: ''; position: absolute; inset: -26px; border-radius: 50%;
+  border: 1px solid rgba(0,155,249,0.08);
   animation: orb-ring-pulse 3.5s ease-in-out infinite 1.2s;
 }
-.orb-center-title {
-  font-family: var(--fd); font-size: 11px; font-weight: 700;
-  letter-spacing: 0.04em; color: var(--w85);
-  line-height: 1.45; max-width: 120px;
+.orb-center-text { text-align: center; }
+.orb-center-name {
+  font-family: var(--fd); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--white); line-height: 1;
 }
-.orb-center-sub {
-  font-family: var(--fd); font-size: 8px; color: var(--w35);
-  letter-spacing: 0.16em; text-transform: uppercase;
+.orb-center-academy {
+  font-family: var(--fb); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--blue); margin-top: 3px;
 }
 
 /* ── CIRCULAR ORBIT RINGS ── */
@@ -362,13 +360,13 @@ body:hover #cursor { opacity: 1; }
 .orb-node {
   position: absolute; top: 0;
   transform: translateY(-50%);
-  display: flex; align-items: center; gap: 9px;
-  padding: 8px 14px 8px 9px;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 12px 18px;
   background: rgba(10,12,15,0.88);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  font-family: var(--fd); font-size: 11px; font-weight: 600;
-  color: var(--w85); white-space: nowrap;
+  border-radius: 14px;
+  font-family: var(--fd); font-size: 12px; font-weight: 600;
+  color: var(--w85); white-space: nowrap; text-align: center;
   backdrop-filter: blur(12px);
   pointer-events: auto;
   transition: border-color .3s, box-shadow .3s;
@@ -378,27 +376,34 @@ body:hover #cursor { opacity: 1; }
   border-color: rgba(0,155,249,0.38);
   box-shadow: 0 4px 20px rgba(0,155,249,0.18);
 }
-/* inner orbit nodes at r=138px, counter-rotate CW */
+/* inner orbit nodes at r=148px */
 .orb-ring-inner .orb-node {
-  left: 138px;
-  animation: counter-cw 24s linear infinite;
+  left: 148px;
+  animation: counter-inner 24s linear infinite;
 }
-/* outer orbit nodes at r=205px, counter-rotate CCW */
+/* outer orbit nodes at r=218px */
 .orb-ring-outer .orb-node {
-  left: 205px;
-  animation: counter-ccw 36s linear infinite;
+  left: 218px;
+  animation: counter-outer 36s linear infinite;
 }
 
 .orb-node-icon {
-  width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
 }
 
 /* Keyframes */
-@keyframes orbit-cw   { to { transform: rotate( 360deg); } }
-@keyframes orbit-ccw  { to { transform: rotate(-360deg); } }
-@keyframes counter-cw  { to { transform: translateY(-50%) rotate(-360deg); } }
-@keyframes counter-ccw { to { transform: translateY(-50%) rotate( 360deg); } }
+@keyframes orbit-cw  { to { transform: rotate( 360deg); } }
+@keyframes orbit-ccw { to { transform: rotate(-360deg); } }
+/* cancel arm pre-rotation (--a) + oppose ring spin */
+@keyframes counter-inner {
+  from { transform: translateY(-50%) rotate(calc(-1 * var(--a))); }
+  to   { transform: translateY(-50%) rotate(calc(-360deg - var(--a))); }
+}
+@keyframes counter-outer {
+  from { transform: translateY(-50%) rotate(calc(-1 * var(--a))); }
+  to   { transform: translateY(-50%) rotate(calc(360deg - var(--a))); }
+}
 @keyframes orb-ring-pulse {
   0%, 100% { transform: scale(1); opacity: 0.55; }
   50%       { transform: scale(1.18); opacity: 0.08; }
@@ -2246,10 +2251,6 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   <div class="hero-content">
     <!-- LEFT -->
     <div class="hero-left">
-      <div class="hero-eyebrow">
-        <div class="hero-eyebrow-dot"></div>
-        Formations certifiantes · Data · IA · Cloud · BI
-      </div>
 
       <div class="display hero-title">
         Donnez du<br>
@@ -2290,9 +2291,36 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
         <!-- CENTER NODE -->
         <div class="orb-center">
-          <div class="orb-center-icon">⚡</div>
-          <div class="orb-center-title">Power Inside<br>Data Academy</div>
-          <div class="orb-center-sub">Écosystème complet</div>
+          <div class="orb-center-icon">
+            <svg width="52" height="52" viewBox="0 0 96 96" fill="none">
+              <circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.2)" stroke-width="1"/>
+              <circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity="0.9"/>
+              <circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity="0.75"/>
+              <circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity="0.85"/>
+              <circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity="0.68"/>
+              <circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity="0.8"/>
+              <circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity="0.7"/>
+              <line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+              <line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+              <line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+              <line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+              <line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+              <line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+              <line x1="48" y1="18" x2="73" y2="32" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+              <line x1="73" y1="32" x2="73" y2="64" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+              <line x1="73" y1="64" x2="48" y2="78" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+              <line x1="48" y1="78" x2="23" y2="64" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+              <line x1="23" y1="64" x2="23" y2="32" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+              <line x1="23" y1="32" x2="48" y2="18" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+              <circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.15)"/>
+              <circle cx="48" cy="48" r="5.5" fill="#009BF9"/>
+              <circle cx="48" cy="48" r="2.5" fill="white" opacity="0.9"/>
+            </svg>
+          </div>
+          <div class="orb-center-text">
+            <div class="orb-center-name">Power Inside Data</div>
+            <div class="orb-center-academy">Academy</div>
+          </div>
         </div>
 
         <!-- INNER RING — sens horaire, r=138px, 24s -->
