@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/validations";
 import { sendContactEmail } from "@/lib/mail";
+import { insertContact } from "@/lib/supabase/queries";
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +16,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // Envoi email
+    // Sauvegarde dans Supabase (table contacts)
+    await insertContact({
+      prenom:    parsed.data.prenom,
+      nom:       parsed.data.nom,
+      email:     parsed.data.email,
+      telephone: parsed.data.telephone,
+      sujet:     parsed.data.sujet,
+      message:   parsed.data.message,
+    });
+
+    // Envoi email via Resend
     await sendContactEmail(parsed.data);
 
     return NextResponse.json({ success: true, message: "Message envoyé avec succès" });
