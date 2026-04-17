@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Inside Data Academy — Charte Graphique</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#009BF9;
+  --blue-light:#33AFFA;
+  --blue-dim:rgba(0,155,249,0.10);
+  --blue-glow:rgba(0,155,249,0.25);
+  --blue-border:rgba(0,155,249,0.30);
+  --bg:#070809;
+  --s1:#0E0F11;
+  --s2:#141518;
+  --s3:#1A1B1F;
+  --white:#FFFFFF;
+  --w70:rgba(255,255,255,0.70);
+  --w40:rgba(255,255,255,0.40);
+  --w15:rgba(255,255,255,0.15);
+  --w07:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.07);
+  --green:#00D68F;
+  --amber:#FFAA00;
+  --red:#FF4D6A;
+  --fd:'Syne',sans-serif;
+  --fb:'DM Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--white);font-family:var(--fb);font-size:14px;line-height:1.6;padding:0;max-width:900px;margin:0 auto}
+
+.section{padding:52px 44px;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+.chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue);margin-bottom:28px;width:100%}
+.chip::before{content:'';width:20px;height:1px;background:var(--blue);opacity:0.5}
+.chip::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* HERO */
+.hero{background:var(--bg);padding:72px 44px 60px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:center}
+.logo-main{display:flex;flex-direction:column;align-items:center}
+.logo-name{font-family:var(--fd);font-size:13px;font-weight:700;letter-spacing:0.32em;text-transform:uppercase;color:var(--white);margin-top:18px;text-align:center}
+.logo-name-sub{font-family:var(--fb);font-size:11px;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(--blue);margin-top:5px;text-align:center}
+.logo-group{font-family:var(--fb);font-size:10px;letter-spacing:0.1em;color:var(--w40);margin-top:10px;text-align:center}
+.variants-row{display:flex;gap:14px;margin-top:44px;flex-wrap:wrap;justify-content:center}
+.v-tile{border-radius:12px;padding:22px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:130px}
+.v-dark{background:var(--s1);border:1px solid var(--border)}
+.v-blue{background:var(--blue)}
+.v-white{background:#ffffff}
+.v-label{font-size:10px;letter-spacing:0.08em;font-family:var(--fd)}
+
+/* PALETTE */
+.pal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.sw{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sw-fill{height:72px;display:flex;align-items:flex-end;padding:8px 10px}
+.sw-role-in{font-size:9px;font-family:var(--fd);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;opacity:0.7}
+.sw-body{background:var(--s2);padding:9px 11px}
+.sw-name{font-family:var(--fd);font-size:12px;font-weight:600}
+.sw-hex{font-family:monospace;font-size:10px;color:var(--w40);margin-top:2px}
+.sw-use{font-size:10px;color:var(--w40);margin-top:3px}
+
+/* TYPO */
+.tr{display:grid;grid-template-columns:110px 1fr 90px;gap:20px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--border)}
+.tr:last-child{border-bottom:none}
+.tr-meta{font-size:11px;color:var(--w40);line-height:1.9}
+.t-disp{font-family:var(--fd);font-size:52px;font-weight:800;letter-spacing:-0.01em;line-height:1;color:var(--white)}
+.t-h1{font-family:var(--fd);font-size:32px;font-weight:700;line-height:1.15}
+.t-h2{font-family:var(--fd);font-size:20px;font-weight:600}
+.t-label{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--blue)}
+.t-body{font-family:var(--fb);font-size:15px;font-weight:400;color:var(--w70);line-height:1.75}
+.t-caption{font-family:var(--fb);font-size:12px;font-weight:300;color:var(--w40);letter-spacing:0.02em}
+
+/* BUTTONS */
+.btn{font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:0.10em;text-transform:uppercase;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;transition:all .2s}
+.btn-p{background:var(--blue);color:#fff}
+.btn-p:hover{background:var(--blue-light);box-shadow:0 4px 24px rgba(0,155,249,0.3)}
+.btn-o{background:transparent;color:var(--blue);border:1px solid var(--blue-border)}
+.btn-o:hover{background:var(--blue-dim)}
+.btn-g{background:transparent;color:var(--w70);border:1px solid var(--w15)}
+.btn-g:hover{color:var(--white);border-color:var(--w40)}
+.btn-sm{padding:7px 16px;font-size:10px;border-radius:6px}
+.btn-lg{padding:14px 36px;font-size:12px;border-radius:10px}
+
+/* BADGES */
+.bdg{font-family:var(--fd);font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:4px 10px;border-radius:20px;display:inline-block}
+.bdg-b{background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-border)}
+.bdg-g{background:rgba(0,214,143,0.08);color:var(--green);border:1px solid rgba(0,214,143,0.22)}
+.bdg-a{background:rgba(255,170,0,0.08);color:var(--amber);border:1px solid rgba(255,170,0,0.22)}
+.bdg-w{background:var(--w07);color:var(--w70);border:1px solid var(--border)}
+
+/* CARDS */
+.card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:20px 22px}
+.card-accent{border-color:var(--blue-border);background:linear-gradient(140deg,rgba(0,155,249,0.06) 0%,var(--s1) 55%)}
+
+/* INPUT */
+.input{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-family:var(--fb);font-size:13px;width:100%;outline:none;transition:border .2s}
+.input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,155,249,0.08)}
+.input::placeholder{color:rgba(255,255,255,0.18)}
+
+/* NAV */
+.nav{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:4px;display:inline-flex;gap:2px}
+.ni{font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:8px 16px;border-radius:7px;color:var(--w40);cursor:pointer}
+.ni.on{background:var(--blue);color:#fff}
+
+/* PROGRESS */
+.prog-bg{background:rgba(255,255,255,0.06);border-radius:100px;height:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:100px;background:var(--blue)}
+
+/* COURSE CARD */
+.cc{background:var(--s1);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.cc-top{height:5px;background:var(--blue)}
+.cc-body{padding:20px 22px}
+.cc-cat{font-size:9px;font-family:var(--fd);font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--blue);margin-bottom:10px}
+.cc-title{font-family:var(--fd);font-size:15px;font-weight:700;line-height:1.35;color:var(--white);margin-bottom:8px}
+.cc-meta{font-size:11px;color:var(--w40);margin-bottom:16px}
+.cc-footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+
+/* STAT */
+.stat-num{font-family:var(--fd);font-size:34px;font-weight:800;color:var(--white);line-height:1}
+.stat-label{font-size:11px;color:var(--w40);margin-top:5px}
+.stat-trend{font-size:11px;color:var(--green);margin-top:8px}
+
+/* DO/DONT */
+.dd-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dd-card{border-radius:10px;padding:18px;border:1px solid}
+.dd-do{background:rgba(0,214,143,0.03);border-color:rgba(0,214,143,0.15)}
+.dd-no{background:rgba(255,77,106,0.03);border-color:rgba(255,77,106,0.15)}
+.dd-head{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:12px}
+.dd-do .dd-head{color:var(--green)}
+.dd-no .dd-head{color:var(--red)}
+.dd-item{font-size:12px;color:var(--w70);line-height:1.9;padding-left:16px;position:relative}
+.dd-item::before{content:'';position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%}
+.dd-do .dd-item::before{background:var(--green)}
+.dd-no .dd-item::before{background:var(--red)}
+
+/* TONE */
+.tone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.tone-card{background:var(--s1);border:1px solid var(--border);border-radius:12px;padding:18px 16px;text-align:center}
+.tone-word{font-family:var(--fd);font-size:20px;font-weight:800;color:var(--blue);margin-bottom:8px}
+.tone-desc{font-size:11px;color:var(--w40);line-height:1.6}
+
+/* SPACING */
+.sp-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.sp-box{background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:3px;height:18px}
+.sp-val{font-family:monospace;font-size:11px;color:var(--blue);min-width:38px}
+.sp-desc{font-size:11px;color:var(--w40)}
+
+@media(max-width:600px){
+  .section{padding:36px 20px}.hero{padding:52px 20px 44px}
+  .tr{grid-template-columns:1fr;gap:6px}
+  .dd-grid{grid-template-columns:1fr}.pal-grid{grid-template-columns:repeat(2,1fr)}
+  .t-disp{font-size:38px}
+  .variants-row{gap:10px}
+  .v-tile{min-width:110px;padding:16px 14px}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== HERO ====== -->
+<div class="hero">
+  <div class="chip" style="margin-bottom:36px">Identité de marque officielle · Power Inside Data Group</div>
+
+  <div class="logo-main">
+    <svg width="100" height="100" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="48" cy="48" r="42" fill="rgba(0,155,249,0.04)"/>
+      <circle cx="48" cy="48" r="42" stroke="rgba(0,155,249,0.12)" stroke-width="0.8"/>
+      <circle cx="48" cy="14" r="5" fill="#009BF9" opacity="0.92"/>
+      <circle cx="77" cy="30" r="4" fill="#009BF9" opacity="0.75"/>
+      <circle cx="77" cy="66" r="5" fill="#009BF9" opacity="0.85"/>
+      <circle cx="48" cy="82" r="4" fill="#009BF9" opacity="0.68"/>
+      <circle cx="19" cy="66" r="5" fill="#009BF9" opacity="0.80"/>
+      <circle cx="19" cy="30" r="4" fill="#009BF9" opacity="0.70"/>
+      <line x1="48" y1="19" x2="48" y2="42" stroke="#009BF9" stroke-width="0.9" opacity="0.55"/>
+      <line x1="73.5" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width="0.9" opacity="0.55"/>
+      <line x1="73.5" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width="0.9" opacity="0.55"/>
+      <line x1="48" y1="77" x2="48" y2="54" stroke="#009BF9" stroke-width="0.9" opacity="0.55"/>
+      <line x1="22.5" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width="0.9" opacity="0.55"/>
+      <line x1="22.5" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width="0.9" opacity="0.55"/>
+      <line x1="48" y1="19" x2="73.5" y2="32" stroke="#009BF9" stroke-width="0.5" opacity="0.22"/>
+      <line x1="73.5" y1="32" x2="73.5" y2="64" stroke="#009BF9" stroke-width="0.5" opacity="0.22"/>
+      <line x1="73.5" y1="64" x2="48" y2="77" stroke="#009BF9" stroke-width="0.5" opacity="0.22"/>
+      <line x1="48" y1="77" x2="22.5" y2="64" stroke="#009BF9" stroke-width="0.5" opacity="0.22"/>
+      <line x1="22.5" y1="64" x2="22.5" y2="32" stroke="#009BF9" stroke-width="0.5" opacity="0.22"/>
+      <line x1="22.5" y1="32" x2="48" y2="19" stroke="#009BF9" stroke-width="0.5" opacity="0.22"/>
+      <circle cx="48" cy="48" r="10" fill="rgba(0,155,249,0.14)"/>
+      <circle cx="48" cy="48" r="6.5" fill="#009BF9"/>
+      <circle cx="48" cy="48" r="3" fill="white" opacity="0.9"/>
+    </svg>
+    <div class="logo-name">POWER INSIDE DATA</div>
+    <div class="logo-name-sub">ACADEMY</div>
+    <div class="logo-group">une entité de Power Inside Data Group</div>
+  </div>
+
+  <div class="variants-row">
+    <!-- Dark -->
+    <div class="v-tile v-dark">
+      <svg width="40" height="40" viewBox="0 0 96 96" fill="none">
+        <circle cx="48" cy="48" r="42" stroke="rgba(0,155,249,0.12)" stroke-width="0.8"/>
+        <circle cx="48" cy="14" r="5" fill="#009BF9" opacity="0.92"/><circle cx="77" cy="30" r="4" fill="#009BF9" opacity="0.75"/>
+        <circle cx="77" cy="66" r="5" fill="#009BF9" opacity="0.85"/><circle cx="48" cy="82" r="4" fill="#009BF9" opacity="0.68"/>
+        <circle cx="19" cy="66" r="5" fill="#009BF9" opacity="0.80"/><circle cx="19" cy="30" r="4" fill="#009BF9" opacity="0.70"/>
+        <line x1="48" y1="19" x2="48" y2="42" stroke="#009BF9" stroke-width="0.9" opacity="0.5"/>
+        <line x1="73.5" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width="0.9" opacity="0.5"/>
+        <line x1="73.5" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width="0.9" opacity="0.5"/>
+        <line x1="48" y1="77" x2="48" y2="54" stroke="#009BF9" stroke-width="0.9" opacity="0.5"/>
+        <line x1="22.5" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width="0.9" opacity="0.5"/>
+        <line x1="22.5" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width="0.9" opacity="0.5"/>
+        <line x1="48" y1="19" x2="73.5" y2="32" stroke="#009BF9" stroke-width="0.5" opacity="0.2"/>
+        <line x1="73.5" y1="32" x2="73.5" y2="64" stroke="#009BF9" stroke-width="0.5" opacity="0.2"/>
+        <line x1="73.5" y1="64" x2="48" y2="77" stroke="#009BF9" stroke-width="0.5" opacity="0.2"/>
+        <line x1="48" y1="77" x2="22.5" y2="64" stroke="#009BF9" stroke-width="0.5" opacity="0.2"/>
+        <line x1="22.5" y1="64" x2="22.5" y2="32" stroke="#009BF9" stroke-width="0.5" opacity="0.2"/>
+        <line x1="22.5" y1="32" x2="48" y2="19" stroke="#009BF9" stroke-width="0.5" opacity="0.2"/>
+        <circle cx="48" cy="48" r="10" fill="rgba(0,155,249,0.14)"/>
+        <circle cx="48" cy="48" r="6.5" fill="#009BF9"/>
+        <circle cx="48" cy="48" r="3" fill="white" opacity="0.9"/>
+      </svg>
+      <span class="v-label" style="color:rgba(255,255,255,0.45);font-size:10px">Dark</span>
+    </div>
+    <!-- Horizontal -->
+    <div class="v-tile v-dark" style="flex-direction:row;min-width:240px;gap:12px">
+      <svg width="32" height="32" viewBox="0 0 96 96" fill="none" style="flex-shrink:0">
+        <circle cx="48" cy="14" r="5" fill="#009BF9" opacity="0.92"/><circle cx="77" cy="30" r="4" fill="#009BF9" opacity="0.75"/>
+        <circle cx="77" cy="66" r="5" fill="#009BF9" opacity="0.85"/><circle cx="48" cy="82" r="4" fill="#009BF9" opacity="0.68"/>
+        <circle cx="19" cy="66" r="5" fill="#009BF9" opacity="0.80"/><circle cx="19" cy="30" r="4" fill="#009BF9" opacity="0.70"/>
+        <line x1="48" y1="19" x2="48" y2="42" stroke="#009BF9" stroke-width="1" opacity="0.5"/>
+        <line x1="73.5" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width="1" opacity="0.5"/>
+        <line x1="73.5" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width="1" opacity="0.5"/>
+        <line x1="48" y1="77" x2="48" y2="54" stroke="#009BF9" stroke-width="1" opacity="0.5"/>
+        <line x1="22.5" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width="1" opacity="0.5"/>
+        <line x1="22.5" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width="1" opacity="0.5"/>
+        <circle cx="48" cy="48" r="10" fill="rgba(0,155,249,0.14)"/>
+        <circle cx="48" cy="48" r="6.5" fill="#009BF9"/>
+        <circle cx="48" cy="48" r="3" fill="white" opacity="0.9"/>
+      </svg>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#fff">POWER INSIDE DATA</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#009BF9">ACADEMY</div>
+      </div>
+      <span style="font-size:10px;color:rgba(255,255,255,0.35);font-family:'Syne';margin-left:4px">Horizontal</span>
+    </div>
+    <!-- Sur bleu -->
+    <div class="v-tile v-blue">
+      <svg width="40" height="40" viewBox="0 0 96 96" fill="none">
+        <circle cx="48" cy="14" r="5" fill="white" opacity="0.92"/><circle cx="77" cy="30" r="4" fill="white" opacity="0.75"/>
+        <circle cx="77" cy="66" r="5" fill="white" opacity="0.85"/><circle cx="48" cy="82" r="4" fill="white" opacity="0.68"/>
+        <circle cx="19" cy="66" r="5" fill="white" opacity="0.80"/><circle cx="19" cy="30" r="4" fill="white" opacity="0.70"/>
+        <line x1="48" y1="19" x2="48" y2="42" stroke="white" stroke-width="0.9" opacity="0.45"/>
+        <line x1="73.5" y1="32" x2="53" y2="45" stroke="white" stroke-width="0.9" opacity="0.45"/>
+        <line x1="73.5" y1="64" x2="53" y2="51" stroke="white" stroke-width="0.9" opacity="0.45"/>
+        <line x1="48" y1="77" x2="48" y2="54" stroke="white" stroke-width="0.9" opacity="0.45"/>
+        <line x1="22.5" y1="64" x2="43" y2="51" stroke="white" stroke-width="0.9" opacity="0.45"/>
+        <line x1="22.5" y1="32" x2="43" y2="45" stroke="white" stroke-width="0.9" opacity="0.45"/>
+        <circle cx="48" cy="48" r="10" fill="rgba(255,255,255,0.2)"/>
+        <circle cx="48" cy="48" r="6.5" fill="white"/>
+        <circle cx="48" cy="48" r="3" fill="#009BF9" opacity="0.9"/>
+      </svg>
+      <span class="v-label" style="color:rgba(255,255,255,0.8);font-size:10px">Sur bleu</span>
+    </div>
+    <!-- Sur blanc -->
+    <div class="v-tile v-white">
+      <svg width="40" height="40" viewBox="0 0 96 96" fill="none">
+        <circle cx="48" cy="14" r="5" fill="#009BF9" opacity="0.92"/><circle cx="77" cy="30" r="4" fill="#009BF9" opacity="0.75"/>
+        <circle cx="77" cy="66" r="5" fill="#009BF9" opacity="0.85"/><circle cx="48" cy="82" r="4" fill="#009BF9" opacity="0.68"/>
+        <circle cx="19" cy="66" r="5" fill="#009BF9" opacity="0.80"/><circle cx="19" cy="30" r="4" fill="#009BF9" opacity="0.70"/>
+        <line x1="48" y1="19" x2="48" y2="42" stroke="#009BF9" stroke-width="0.9" opacity="0.4"/>
+        <line x1="73.5" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width="0.9" opacity="0.4"/>
+        <line x1="73.5" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width="0.9" opacity="0.4"/>
+        <line x1="48" y1="77" x2="48" y2="54" stroke="#009BF9" stroke-width="0.9" opacity="0.4"/>
+        <line x1="22.5" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width="0.9" opacity="0.4"/>
+        <line x1="22.5" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width="0.9" opacity="0.4"/>
+        <line x1="48" y1="19" x2="73.5" y2="32" stroke="#009BF9" stroke-width="0.5" opacity="0.15"/>
+        <line x1="73.5" y1="32" x2="73.5" y2="64" stroke="#009BF9" stroke-width="0.5" opacity="0.15"/>
+        <line x1="73.5" y1="64" x2="48" y2="77" stroke="#009BF9" stroke-width="0.5" opacity="0.15"/>
+        <line x1="48" y1="77" x2="22.5" y2="64" stroke="#009BF9" stroke-width="0.5" opacity="0.15"/>
+        <line x1="22.5" y1="64" x2="22.5" y2="32" stroke="#009BF9" stroke-width="0.5" opacity="0.15"/>
+        <line x1="22.5" y1="32" x2="48" y2="19" stroke="#009BF9" stroke-width="0.5" opacity="0.15"/>
+        <circle cx="48" cy="48" r="10" fill="rgba(0,155,249,0.10)"/>
+        <circle cx="48" cy="48" r="6.5" fill="#009BF9"/>
+        <circle cx="48" cy="48" r="3" fill="white" opacity="0.95"/>
+      </svg>
+      <span class="v-label" style="color:#888;font-size:10px">Sur blanc</span>
+    </div>
+  </div>
+</div>
+
+<!-- ARCHITECTURE DE MARQUE -->
+<div class="section">
+  <div class="chip">Architecture de marque</div>
+  <div style="background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:28px">
+    <div style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--w40);margin-bottom:16px;text-align:center">Power Inside Data — Groupe</div>
+    <div style="display:flex;justify-content:center;margin-bottom:8px">
+      <div style="background:var(--s3);border:1px solid var(--blue-border);border-radius:10px;padding:12px 32px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.1em;color:var(--blue)">POWER INSIDE DATA</div>
+    </div>
+    <div style="text-align:center;color:var(--w15);font-size:18px;margin:6px 0">│</div>
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap">
+      <div style="background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:8px;padding:14px 20px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--white);text-align:center;flex:1;min-width:150px">
+        <div style="color:var(--blue);font-size:9px;letter-spacing:0.15em;margin-bottom:5px">ENTITÉ 01</div>
+        POWER INSIDE DATA<br><span style="color:var(--blue)">ACADEMY</span>
+      </div>
+      <div style="background:var(--s3);border:1px solid var(--border);border-radius:8px;padding:14px 20px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--w70);text-align:center;flex:1;min-width:150px">
+        <div style="color:var(--w40);font-size:9px;letter-spacing:0.15em;margin-bottom:5px">ENTITÉ 02</div>
+        POWER INSIDE DATA<br><span style="color:var(--w40)">CONSULTING</span>
+      </div>
+    </div>
+    <div style="margin-top:16px;text-align:center;font-size:11px;color:var(--w40)">Logo parent partagé · Distinction par le suffixe coloré · Cohérence groupe assurée</div>
+  </div>
+</div>
+
+<!-- PALETTE -->
+<div class="section">
+  <div class="chip">Palette de couleurs</div>
+  <div class="pal-grid">
+    <div class="sw">
+      <div class="sw-fill" style="background:#009BF9"><span class="sw-role-in" style="color:white">Primaire</span></div>
+      <div class="sw-body"><div class="sw-name">Electric Blue</div><div class="sw-hex">#009BF9</div><div class="sw-use">CTA · Liens · Éléments actifs</div></div>
+    </div>
+    <div class="sw">
+      <div class="sw-fill" style="background:#070809;border-bottom:1px solid rgba(255,255,255,0.05)"><span class="sw-role-in" style="color:rgba(255,255,255,0.3)">Fond</span></div>
+      <div class="sw-body"><div class="sw-name">Void</div><div class="sw-hex">#070809</div><div class="sw-use">Fond principal</div></div>
+    </div>
+    <div class="sw">
+      <div class="sw-fill" style="background:#0E0F11"></div>
+      <div class="sw-body"><div class="sw-name">Carbon</div><div class="sw-hex">#0E0F11</div><div class="sw-use">Cartes · Surfaces</div></div>
+    </div>
+    <div class="sw">
+      <div class="sw-fill" style="background:#141518"></div>
+      <div class="sw-body"><div class="sw-name">Graphite</div><div class="sw-hex">#141518</div><div class="sw-use">Inputs · Hover</div></div>
+    </div>
+    <div class="sw">
+      <div class="sw-fill" style="background:#FFFFFF"></div>
+      <div class="sw-body" style="background:#1A1B1F"><div class="sw-name">Pure White</div><div class="sw-hex">#FFFFFF</div><div class="sw-use">Texte principal · Titres</div></div>
+    </div>
+    <div class="sw">
+      <div class="sw-fill" style="background:rgba(255,255,255,0.4)"></div>
+      <div class="sw-body"><div class="sw-name">Mist</div><div class="sw-hex">rgba(255,255,255,0.4)</div><div class="sw-use">Texte secondaire</div></div>
+    </div>
+    <div class="sw">
+      <div class="sw-fill" style="background:#00D68F"><span class="sw-role-in" style="color:rgba(0,60,30,0.8)">Succès</span></div>
+      <div class="sw-body"><div class="sw-name">Emerald</div><div class="sw-hex">#00D68F</div><div class="sw-use">Succès · Certifié · Complété</div></div>
+    </div>
+    <div class="sw">
+      <div class="sw-fill" style="background:#FFAA00"><span class="sw-role-in" style="color:rgba(80,40,0,0.7)">Alerte</span></div>
+      <div class="sw-body"><div class="sw-name">Amber</div><div class="sw-hex">#FFAA00</div><div class="sw-use">Nouveau · Avertissement</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TYPOGRAPHIE -->
+<div class="section">
+  <div class="chip">Typographie</div>
+  <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap">
+    <div style="background:var(--s1);border:1px solid var(--blue-border);border-radius:8px;padding:12px 16px;flex:1;min-width:160px">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--blue);margin-bottom:6px">Syne — Display & UI</div>
+      <div style="font-size:11px;color:var(--w40)">Titres · Logos · Labels · Navigation</div>
+    </div>
+    <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:12px 16px;flex:1;min-width:160px">
+      <div style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--w70);margin-bottom:6px">DM Sans — Corps & Méta</div>
+      <div style="font-size:11px;color:var(--w40)">Descriptions · Contenu · Métadonnées</div>
+    </div>
+  </div>
+  <div class="tr">
+    <div class="tr-meta">Display<br>Syne 800<br>52px · lh 1.0</div>
+    <div class="t-disp">Data<span style="color:var(--blue)">.</span></div>
+    <div style="font-size:10px;color:var(--w40)">Hero / Splash</div>
+  </div>
+  <div class="tr">
+    <div class="tr-meta">H1<br>Syne 700<br>32px · lh 1.15</div>
+    <div class="t-h1">Formations Data & IA</div>
+    <div style="font-size:10px;color:var(--w40)">Titres page</div>
+  </div>
+  <div class="tr">
+    <div class="tr-meta">H2<br>Syne 600<br>20px · lh 1.3</div>
+    <div class="t-h2">Machine Learning & Cloud</div>
+    <div style="font-size:10px;color:var(--w40)">Sous-titres</div>
+  </div>
+  <div class="tr">
+    <div class="tr-meta">Label UI<br>Syne 700<br>9px · ls 0.22</div>
+    <div class="t-label">Catégorie · Section · Fil d'ariane</div>
+    <div style="font-size:10px;color:var(--w40)">Labels</div>
+  </div>
+  <div class="tr">
+    <div class="tr-meta">Body<br>DM Sans 400<br>15px · lh 1.75</div>
+    <div class="t-body">Développez vos compétences en Data Science, Intelligence Artificielle, Cloud Architecture et Business Intelligence avec nos formations certifiantes et nos experts terrain.</div>
+    <div style="font-size:10px;color:var(--w40)">Contenu</div>
+  </div>
+  <div class="tr">
+    <div class="tr-meta">Caption<br>DM Sans 300<br>12px · lh 1.5</div>
+    <div class="t-caption">Durée : 3 jours · Niveau : Intermédiaire · Certification incluse · En ligne ou présentiel</div>
+    <div style="font-size:10px;color:var(--w40)">Méta-info</div>
+  </div>
+</div>
+
+<!-- COMPOSANTS -->
+<div class="section">
+  <div class="chip">Composants UI</div>
+  <div style="display:flex;flex-direction:column;gap:32px">
+
+    <div>
+      <div style="font-size:10px;color:var(--w40);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">Boutons</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+        <button class="btn btn-p">Démarrer la formation</button>
+        <button class="btn btn-o">En savoir plus</button>
+        <button class="btn btn-g">Explorer</button>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-p btn-sm">S'inscrire</button>
+        <button class="btn btn-o btn-sm">Aperçu</button>
+        <button class="btn btn-p btn-lg">Commencer →</button>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:var(--w40);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">Badges & Tags</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span class="bdg bdg-b">IA Générative</span>
+        <span class="bdg bdg-b">Cloud AWS</span>
+        <span class="bdg bdg-b">Power BI</span>
+        <span class="bdg bdg-b">MLOps</span>
+        <span class="bdg bdg-b">Databricks</span>
+        <span class="bdg bdg-g">Certifiant</span>
+        <span class="bdg bdg-a">Nouveau</span>
+        <span class="bdg bdg-w">Avancé</span>
+        <span class="bdg bdg-w">À distance</span>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:var(--w40);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">Navigation principale</div>
+      <div class="nav">
+        <div class="ni on">Formations</div>
+        <div class="ni">Parcours</div>
+        <div class="ni">Certifications</div>
+        <div class="ni">Academy</div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:var(--w40);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">Champ de recherche</div>
+      <div style="max-width:360px">
+        <div style="font-size:11px;color:var(--w40);margin-bottom:6px">Rechercher une formation</div>
+        <input class="input" placeholder="Python, Azure, Spark, Power BI, LangChain…">
+      </div>
+    </div>
+
+    <div>
+      <div style="font-size:10px;color:var(--w40);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px">Progression d'apprentissage</div>
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:400px">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:11px;color:var(--w40);width:100px">Python for ML</span>
+          <div class="prog-bg" style="flex:1"><div class="prog-fill" style="width:78%"></div></div>
+          <span style="font-size:11px;color:var(--blue);width:32px">78%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:11px;color:var(--w40);width:100px">Power BI Pro</span>
+          <div class="prog-bg" style="flex:1"><div class="prog-fill" style="width:100%;background:var(--green)"></div></div>
+          <span style="font-size:11px;color:var(--green);width:32px">100%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:11px;color:var(--w40);width:100px">AWS Data Lake</span>
+          <div class="prog-bg" style="flex:1"><div class="prog-fill" style="width:32%;background:rgba(255,255,255,0.3)"></div></div>
+          <span style="font-size:11px;color:var(--w40);width:32px">32%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CARTES FORMATION -->
+<div class="section">
+  <div class="chip">Cartes de formation & Métriques</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:14px">
+    <div class="cc">
+      <div class="cc-top"></div>
+      <div class="cc-body">
+        <div class="cc-cat">IA Générative · LLM · RAG</div>
+        <div class="cc-title">Maîtrisez les LLMs avec LangChain & RAG</div>
+        <div class="cc-meta">5 jours · Intermédiaire · Présentiel & distanciel</div>
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--w40);margin-bottom:6px"><span>Progression</span><span style="color:var(--blue)">64%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:64%"></div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="bdg bdg-g">Certifiant</span>
+          <button class="btn btn-p btn-sm">Continuer →</button>
+        </div>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="cc-top" style="background:rgba(255,255,255,0.1)"></div>
+      <div class="cc-body">
+        <div class="cc-cat">Cloud · AWS · Data Lakehouse</div>
+        <div class="cc-title">Architecture Data Lakehouse sur AWS</div>
+        <div class="cc-meta">3 jours · Avancé · Distanciel</div>
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--w40);margin-bottom:6px"><span>Progression</span><span>0%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:0%"></div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="bdg bdg-a">Nouveau</span>
+          <button class="btn btn-o btn-sm">Démarrer</button>
+        </div>
+      </div>
+    </div>
+    <div class="cc">
+      <div class="cc-top" style="background:var(--green)"></div>
+      <div class="cc-body">
+        <div class="cc-cat">BI · Power BI · DAX</div>
+        <div class="cc-title">Power BI Avancé — DAX & Modélisation</div>
+        <div class="cc-meta">2 jours · Intermédiaire · Présentiel</div>
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--green);margin-bottom:6px"><span>Complété</span><span>100%</span></div>
+          <div class="prog-bg"><div class="prog-fill" style="width:100%;background:var(--green)"></div></div>
+        </div>
+        <div class="cc-footer">
+          <span class="bdg bdg-g">Certifié</span>
+          <button class="btn btn-g btn-sm">Revoir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px">
+    <div class="card card-accent">
+      <div class="stat-num">6 240</div>
+      <div class="stat-label">Apprenants actifs</div>
+      <div class="stat-trend">↑ +22% ce trimestre</div>
+    </div>
+    <div class="card">
+      <div class="stat-num">48</div>
+      <div class="stat-label">Formations au catalogue</div>
+      <div style="font-size:11px;color:var(--w40);margin-top:8px">Data · IA · Cloud · BI</div>
+    </div>
+    <div class="card">
+      <div class="stat-num">97%</div>
+      <div class="stat-label">Taux de satisfaction</div>
+      <div style="font-size:11px;color:var(--green);margin-top:8px">↑ +3pts vs N-1</div>
+    </div>
+    <div class="card">
+      <div class="stat-num">412</div>
+      <div class="stat-label">Certifications délivrées</div>
+      <div style="font-size:11px;color:var(--w40);margin-top:8px">Année en cours</div>
+    </div>
+  </div>
+</div>
+
+<!-- ESPACEMENT -->
+<div class="section">
+  <div class="chip">Grille d'espacement & Rayons</div>
+  <div style="margin-bottom:20px">
+    <div class="sp-row"><span class="sp-val">4px</span><div class="sp-box" style="width:4px"></div><span class="sp-desc">Micro — intérieur badge, gap icône</span></div>
+    <div class="sp-row"><span class="sp-val">8px</span><div class="sp-box" style="width:8px"></div><span class="sp-desc">XS — gaps entre badges</span></div>
+    <div class="sp-row"><span class="sp-val">12px</span><div class="sp-box" style="width:12px"></div><span class="sp-desc">S — gap composants</span></div>
+    <div class="sp-row"><span class="sp-val">16px</span><div class="sp-box" style="width:16px"></div><span class="sp-desc">M — padding interne cartes</span></div>
+    <div class="sp-row"><span class="sp-val">24px</span><div class="sp-box" style="width:24px"></div><span class="sp-desc">L — sections internes</span></div>
+    <div class="sp-row"><span class="sp-val">44px</span><div class="sp-box" style="width:44px"></div><span class="sp-desc">XL — padding de section</span></div>
+    <div class="sp-row"><span class="sp-val">72px</span><div class="sp-box" style="width:72px"></div><span class="sp-desc">XXL — espacement hero</span></div>
+  </div>
+  <div style="font-size:12px;color:var(--w40);line-height:2.2">
+    Border radius — inline : <span style="color:var(--w70)">6px</span> · champs & boutons : <span style="color:var(--w70)">8px</span> · petites cartes : <span style="color:var(--w70)">12px</span> · cartes standard : <span style="color:var(--w70)">14–16px</span> · modales : <span style="color:var(--w70)">20px</span>
+  </div>
+</div>
+
+<!-- DO / DON'T -->
+<div class="section">
+  <div class="chip">Règles d'usage</div>
+  <div class="dd-grid">
+    <div class="dd-card dd-do">
+      <div class="dd-head">✓ À faire</div>
+      <div class="dd-item">Utiliser Syne pour tous les titres, logos et labels UI</div>
+      <div class="dd-item">Écrire "Power Inside Data Academy" en entier — pas d'acronyme seul</div>
+      <div class="dd-item">Garder "ACADEMY" en bleu pour distinguer l'entité du parent</div>
+      <div class="dd-item">Réserver le bleu aux éléments interactifs et états actifs</div>
+      <div class="dd-item">Zone de protection logo = 1× sa hauteur minimum</div>
+      <div class="dd-item">Contraste minimum 4.5:1 pour tout texte fonctionnel</div>
+    </div>
+    <div class="dd-card dd-no">
+      <div class="dd-head">✗ À éviter</div>
+      <div class="dd-item">Déformer, pivoter ou recadrer le logo</div>
+      <div class="dd-item">Utiliser des couleurs hors de la palette définie</div>
+      <div class="dd-item">Mélanger Syne avec des polices génériques (Roboto, Arial)</div>
+      <div class="dd-item">Placer le logo sur fond peu contrasté</div>
+      <div class="dd-item">Surcharger les interfaces — le noir est votre luxe</div>
+      <div class="dd-item">Utiliser le bleu comme grande surface de fond</div>
+    </div>
+  </div>
+</div>
+
+<!-- VOIX DE MARQUE -->
+<div class="section">
+  <div class="chip">Voix & Personnalité</div>
+  <div class="tone-grid">
+    <div class="tone-card"><div class="tone-word">Expert</div><div class="tone-desc">Autorité technique sans jargon inaccessible — on parle vrai</div></div>
+    <div class="tone-card"><div class="tone-word">Premium</div><div class="tone-desc">Finitions impeccables, chaque détail compte</div></div>
+    <div class="tone-card"><div class="tone-word">Terrain</div><div class="tone-desc">Formateurs praticiens, cas réels, savoir immédiatement applicable</div></div>
+    <div class="tone-card"><div class="tone-word">Précis</div><div class="tone-desc">Messages courts, orientés résultats, sans fioritures</div></div>
+  </div>
+  <div style="margin-top:24px;background:var(--s1);border:1px solid var(--blue-border);border-radius:12px;padding:24px 26px">
+    <div style="font-size:9px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--blue);margin-bottom:14px">Ligne éditoriale type</div>
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px;line-height:1.3">La donnée est votre actif stratégique.<br>Nous vous donnons le pouvoir de l'exploiter.</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--w40)">Power Inside Data Academy · Formations Data · IA · Cloud · Business Intelligence</div>
+  </div>
+</div>
+
+</body>
+</html>
+
