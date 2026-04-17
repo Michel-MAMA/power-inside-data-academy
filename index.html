@@ -2319,54 +2319,92 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
           </div>
         </div>
 
-        <!-- INNER RING — sens horaire, r=138px, 24s -->
-        <!-- angles : 300° / 60° / 180° → répartition naturelle -->
+        <!-- INNER RING — sens horaire, 24s -->
         <div class="orb-ring orb-ring-inner">
 
-          <div class="orb-arm" style="--a:-60deg"> <!-- 300° = haut droite -->
+          <div class="orb-arm" style="--a:-60deg">
             <div class="orb-node">
-              <div class="orb-node-icon" style="background:rgba(0,214,143,0.12);border:1px solid rgba(0,214,143,0.25);">🗄️</div>
+              <div class="orb-node-icon" style="background:rgba(0,214,143,0.12);border:1px solid rgba(0,214,143,0.28);box-shadow:0 0 14px rgba(0,214,143,0.18);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00D68F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <ellipse cx="12" cy="5" rx="7" ry="2.5"/>
+                  <path d="M5 5v4c0 1.38 3.13 2.5 7 2.5S19 10.38 19 9V5"/>
+                  <path d="M5 9v4c0 1.38 3.13 2.5 7 2.5S19 14.38 19 13V9"/>
+                  <path d="M5 13v3c0 1.38 3.13 2.5 7 2.5S19 17.38 19 16v-3"/>
+                </svg>
+              </div>
               Data Engineering
             </div>
           </div>
 
-          <div class="orb-arm" style="--a:60deg"> <!-- 60° = bas droite -->
+          <div class="orb-arm" style="--a:60deg">
             <div class="orb-node">
-              <div class="orb-node-icon" style="background:rgba(255,170,0,0.10);border:1px solid rgba(255,170,0,0.25);">⚡</div>
+              <div class="orb-node-icon" style="background:rgba(255,170,0,0.10);border:1px solid rgba(255,170,0,0.28);box-shadow:0 0 14px rgba(255,170,0,0.15);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFAA00" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+                </svg>
+              </div>
               MLOps
             </div>
           </div>
 
-          <div class="orb-arm" style="--a:180deg"> <!-- 180° = gauche -->
+          <div class="orb-arm" style="--a:180deg">
             <div class="orb-node">
-              <div class="orb-node-icon" style="background:rgba(180,100,255,0.10);border:1px solid rgba(180,100,255,0.25);">🧠</div>
+              <div class="orb-node-icon" style="background:rgba(180,100,255,0.10);border:1px solid rgba(180,100,255,0.28);box-shadow:0 0 14px rgba(180,100,255,0.18);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B46CFF" stroke-width="1.5" stroke-linecap="round">
+                  <circle cx="4" cy="7" r="1.8"/><circle cx="4" cy="17" r="1.8"/>
+                  <circle cx="12" cy="4" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="20" r="1.8"/>
+                  <circle cx="20" cy="8" r="1.8"/><circle cx="20" cy="16" r="1.8"/>
+                  <line x1="5.8" y1="7" x2="10.2" y2="5"/><line x1="5.8" y1="8" x2="10.2" y2="11"/>
+                  <line x1="5.8" y1="16" x2="10.2" y2="13"/><line x1="5.8" y1="17" x2="10.2" y2="19"/>
+                  <line x1="13.8" y1="5" x2="18.2" y2="7.5"/><line x1="13.8" y1="12" x2="18.2" y2="9"/>
+                  <line x1="13.8" y1="12" x2="18.2" y2="15"/><line x1="13.8" y1="19" x2="18.2" y2="16.5"/>
+                </svg>
+              </div>
               Machine Learning
             </div>
           </div>
 
         </div>
 
-        <!-- OUTER RING — sens anti-horaire, r=205px, 36s -->
-        <!-- angles : 0° / 120° / 240° → décalés de 60° par rapport à l'anneau intérieur -->
+        <!-- OUTER RING — sens anti-horaire, 36s -->
         <div class="orb-ring orb-ring-outer">
 
-          <div class="orb-arm" style="--a:0deg"> <!-- 0° = droite -->
+          <div class="orb-arm" style="--a:0deg">
             <div class="orb-node">
-              <div class="orb-node-icon" style="background:var(--blue-dim);border:1px solid var(--blue-border);">🤖</div>
+              <div class="orb-node-icon" style="background:rgba(0,155,249,0.10);border:1px solid rgba(0,155,249,0.30);box-shadow:0 0 14px rgba(0,155,249,0.20);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#009BF9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="7" y="7" width="10" height="10" rx="1.5"/>
+                  <path d="M10 7V4M14 7V4M10 20v-3M14 20v-3M7 10H4M7 14H4M20 10h-3M20 14h-3"/>
+                  <circle cx="12" cy="12" r="1.5" fill="#009BF9"/>
+                </svg>
+              </div>
               Artificial Intelligence
             </div>
           </div>
 
-          <div class="orb-arm" style="--a:120deg"> <!-- 120° = bas gauche -->
+          <div class="orb-arm" style="--a:120deg">
             <div class="orb-node">
-              <div class="orb-node-icon" style="background:rgba(100,180,255,0.10);border:1px solid rgba(100,180,255,0.25);">☁️</div>
+              <div class="orb-node-icon" style="background:rgba(100,180,255,0.10);border:1px solid rgba(100,180,255,0.28);box-shadow:0 0 14px rgba(100,180,255,0.15);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64B4FF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+                </svg>
+              </div>
               Cloud
             </div>
           </div>
 
-          <div class="orb-arm" style="--a:240deg"> <!-- 240° = haut gauche -->
+          <div class="orb-arm" style="--a:240deg">
             <div class="orb-node">
-              <div class="orb-node-icon" style="background:rgba(255,80,80,0.08);border:1px solid rgba(255,80,80,0.20);">📊</div>
+              <div class="orb-node-icon" style="background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.25);box-shadow:0 0 14px rgba(255,107,107,0.12);">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FF6B6B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
+                  <line x1="3" y1="20" x2="21" y2="20"/>
+                  <polyline points="3,14 8,9 14,12 21,5"/>
+                </svg>
+              </div>
               Data Analytics
             </div>
           </div>
