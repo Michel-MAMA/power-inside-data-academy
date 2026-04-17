@@ -1039,7 +1039,7 @@ footer {
 
 .pricing-modal {
   background: var(--s1); border: 1px solid var(--border);
-  border-radius: 24px; width: 100%; max-width: 860px;
+  border-radius: 24px; width: 100%; max-width: 980px;
   box-shadow: 0 40px 80px rgba(0,0,0,0.6);
   animation: authIn .25s ease; padding: 40px 36px 36px;
 }
@@ -1146,6 +1146,77 @@ footer {
   font-size: 12px; color: var(--w35);
 }
 .pricing-footer a { color: var(--blue); }
+
+/* ── Section labels ── */
+.pricing-section-label {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 20px; margin-top: 4px;
+}
+.pricing-section-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 50px;
+  font-family: var(--fd); font-size: 10px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; white-space: nowrap;
+}
+.pricing-section-badge.student {
+  background: var(--blue-dim); border: 1px solid var(--blue-border); color: var(--blue);
+}
+.pricing-section-badge.enterprise {
+  background: rgba(0,214,143,0.08); border: 1px solid rgba(0,214,143,0.2); color: var(--green);
+}
+.pricing-section-line { flex: 1; height: 1px; background: var(--border); }
+
+/* ── "ou" divider ── */
+.pricing-or {
+  display: flex; align-items: center; gap: 14px; margin: 24px 0;
+}
+.pricing-or-line { flex: 1; height: 1px; background: var(--border); }
+.pricing-or span {
+  font-family: var(--fd); font-size: 11px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--w35);
+}
+
+/* ── Enterprise horizontal card ── */
+.pricing-enterprise-card {
+  border: 1px solid rgba(0,214,143,0.2); border-radius: 18px; padding: 24px 28px;
+  display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center;
+  background: linear-gradient(135deg, rgba(0,214,143,0.05) 0%, var(--s2) 60%);
+}
+.pricing-enterprise-left { display: flex; gap: 28px; align-items: center; }
+.pricing-enterprise-info { min-width: 150px; }
+.pricing-enterprise-name {
+  font-family: var(--fd); font-weight: 700; font-size: 11px;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--green); margin-bottom: 6px;
+}
+.pricing-enterprise-title {
+  font-family: var(--fd); font-weight: 800; font-size: 24px;
+  color: var(--white); line-height: 1.1; margin-bottom: 4px;
+}
+.pricing-enterprise-sub { font-size: 12px; color: var(--w35); }
+.pricing-enterprise-features {
+  list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 7px 20px;
+}
+.pricing-enterprise-features li {
+  display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--w85);
+}
+.pricing-enterprise-cta { flex-shrink: 0; text-align: center; }
+.pricing-enterprise-cta a {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--green), #00b87a); color: #fff;
+  font-family: var(--fd); font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: 14px 28px; border-radius: 12px; white-space: nowrap;
+  transition: opacity .2s, transform .2s; text-decoration: none;
+}
+.pricing-enterprise-cta a:hover { opacity: .9; transform: translateY(-2px); }
+.pricing-enterprise-cta p { font-size: 11px; color: var(--w35); margin-top: 8px; }
+
+@media (max-width: 720px) {
+  .pricing-enterprise-card { grid-template-columns: 1fr; gap: 20px; }
+  .pricing-enterprise-left { flex-direction: column; gap: 16px; align-items: flex-start; }
+  .pricing-enterprise-features { grid-template-columns: 1fr; }
+  .pricing-enterprise-cta a { width: 100%; }
+}
 
 /* ===========================
    LIGHT MODE
@@ -1729,17 +1800,43 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         Accès à la plateforme
       </div>
       <h2>Rejoignez PIDA Academy</h2>
-      <p>Un accès adapté à votre profil — abonnement pour les étudiants, offre sur mesure pour les entreprises.</p>
+      <p>Choisissez le plan adapté à votre profil.</p>
     </div>
 
-    <div class="pricing-grid" style="grid-template-columns: repeat(2, 1fr);">
+    <!-- ── SECTION ÉTUDIANTS ── -->
+    <div class="pricing-section-label">
+      <span class="pricing-section-badge student">🎓 Étudiants &amp; Apprenants</span>
+      <div class="pricing-section-line"></div>
+    </div>
 
-      <!-- ── ÉTUDIANTS ── -->
-      <div class="plan-card popular">
-        <div class="plan-badge">🎓 Étudiants &amp; Apprenants</div>
-        <div class="plan-name">Abonnement</div>
+    <div class="pricing-grid">
+
+      <!-- GRATUIT -->
+      <div class="plan-card">
+        <div class="plan-name">Gratuit</div>
         <div class="plan-price-wrap">
-          <div class="plan-price" style="font-size:22px;letter-spacing:-0.5px;">Accès illimité</div>
+          <div class="plan-price"><sup>€</sup>0<sub>/mois</sub></div>
+        </div>
+        <div class="plan-price-note">Pour toujours, sans carte bancaire</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="feat-icon ok">✓</span>Accès à 5 formations gratuites</li>
+          <li><span class="feat-icon ok">✓</span>Aperçu des modules premium</li>
+          <li><span class="feat-icon ok">✓</span>Communauté Discord</li>
+          <li><span class="feat-icon ok">✓</span>Newsletter &amp; ressources</li>
+          <li><span class="feat-icon lock">✗</span><span style="color:var(--w35)">Formations certifiantes</span></li>
+          <li><span class="feat-icon lock">✗</span><span style="color:var(--w35)">Projets guidés</span></li>
+          <li><span class="feat-icon lock">✗</span><span style="color:var(--w35)">Support prioritaire</span></li>
+        </ul>
+        <button class="plan-cta cta-free" onclick="handleSubscribe('free')">Commencer gratuitement</button>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card popular">
+        <div class="plan-badge">⚡ Le plus populaire</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price"><sup>€</sup>20<sub>/mois</sub></div>
         </div>
         <div class="plan-price-note">Résiliable à tout moment</div>
         <div class="plan-divider"></div>
@@ -1750,40 +1847,71 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
           <li><span class="feat-icon ok">✓</span>Sessions live mensuelles</li>
           <li><span class="feat-icon ok">✓</span>Support prioritaire 48h</li>
           <li><span class="feat-icon ok">✓</span>Accès aux replays</li>
-          <li><span class="feat-icon ok">✓</span>Communauté Discord</li>
+          <li><span class="feat-icon ok">✓</span>Communauté Discord Pro</li>
         </ul>
-        <button class="plan-cta cta-pro" onclick="handleSubscribe('student')">
-          S'abonner →
-        </button>
+        <button class="plan-cta cta-pro" onclick="handleSubscribe('pro')">Démarrer le plan Pro →</button>
       </div>
 
-      <!-- ── ENTREPRISES ── -->
+      <!-- ANNUEL -->
       <div class="plan-card">
-        <div class="plan-badge badge-green">🏢 Entreprises &amp; Organisations</div>
-        <div class="plan-name">Sur devis</div>
+        <div class="plan-badge badge-green">🎁 2 mois offerts</div>
+        <div class="plan-name">Annuel</div>
         <div class="plan-price-wrap">
-          <div class="plan-price" style="font-size:22px;letter-spacing:-0.5px;">Offre sur mesure</div>
+          <div class="plan-price"><sup>€</sup>150<sub>/an</sub></div>
         </div>
-        <div class="plan-price-note">Réponse sous 48h</div>
+        <div class="plan-price-note saving">≈ 12,50 €/mois · économisez 90 €</div>
         <div class="plan-divider"></div>
         <ul class="plan-features">
-          <li><span class="feat-icon ok">✓</span>Formation intra ou inter-entreprise</li>
-          <li><span class="feat-icon ok">✓</span>Programme personnalisé</li>
-          <li><span class="feat-icon ok">✓</span>Financement OPCO / CPF</li>
-          <li><span class="feat-icon ok">✓</span>Attestation &amp; bilan pédagogique</li>
-          <li><span class="feat-icon ok">✓</span>Formateurs experts terrain</li>
-          <li><span class="feat-icon ok">✓</span>Suivi post-formation</li>
-          <li><span class="feat-icon ok">✓</span>Accès multi-utilisateurs</li>
+          <li><span class="feat-icon ok">✓</span>Tout le plan Pro inclus</li>
+          <li><span class="feat-icon ok">✓</span>2 mois offerts vs mensuel</li>
+          <li><span class="feat-icon ok">✓</span>Nouvelles formations incluses</li>
+          <li><span class="feat-icon ok">✓</span>Mentorat individuel (1h/mois)</li>
+          <li><span class="feat-icon ok">✓</span>Attestation fiscale</li>
+          <li><span class="feat-icon ok">✓</span>Badge LinkedIn certifié</li>
+          <li><span class="feat-icon ok">✓</span>Accès anticipé nouveautés</li>
         </ul>
-        <a href="contact.html" class="plan-cta cta-annual" style="text-align:center;text-decoration:none;display:block;" onclick="closePricing()">
-          Demander un devis →
-        </a>
+        <button class="plan-cta cta-annual" onclick="handleSubscribe('annual')">Choisir l'annuel →</button>
       </div>
 
     </div>
 
+    <!-- ── DIVIDER ── -->
+    <div class="pricing-or">
+      <div class="pricing-or-line"></div>
+      <span>ou</span>
+      <div class="pricing-or-line"></div>
+    </div>
+
+    <!-- ── SECTION ENTREPRISES ── -->
+    <div class="pricing-section-label">
+      <span class="pricing-section-badge enterprise">🏢 Entreprises &amp; Organisations</span>
+      <div class="pricing-section-line"></div>
+    </div>
+
+    <div class="pricing-enterprise-card">
+      <div class="pricing-enterprise-left">
+        <div class="pricing-enterprise-info">
+          <div class="pricing-enterprise-name">Sur devis</div>
+          <div class="pricing-enterprise-title">Offre sur mesure</div>
+          <div class="pricing-enterprise-sub">Réponse sous 48h</div>
+        </div>
+        <ul class="pricing-enterprise-features">
+          <li><span class="feat-icon ok">✓</span>Formation intra / inter-entreprise</li>
+          <li><span class="feat-icon ok">✓</span>Programme personnalisé</li>
+          <li><span class="feat-icon ok">✓</span>Financement OPCO / CPF</li>
+          <li><span class="feat-icon ok">✓</span>Attestation &amp; bilan pédagogique</li>
+          <li><span class="feat-icon ok">✓</span>Formateurs experts terrain</li>
+          <li><span class="feat-icon ok">✓</span>Accès multi-utilisateurs</li>
+        </ul>
+      </div>
+      <div class="pricing-enterprise-cta">
+        <a href="contact.html" onclick="closePricing()">Demander un devis →</a>
+        <p>Prise en charge possible</p>
+      </div>
+    </div>
+
     <div class="pricing-footer">
-      Formations certifiantes · Financement possible · <a href="contact.html">Des questions ?</a>
+      Paiement sécurisé · Résiliable à tout moment · <a href="contact.html">Des questions ?</a>
     </div>
 
   </div>
@@ -3174,8 +3302,14 @@ async function handleSubscribe(plan) {
     subscription_updated_at: new Date().toISOString()
   });
 
-  // Abonnement étudiant — confirmation et suivi à venir
-  alert(`✓ Demande d'abonnement enregistrée.\n\nNous reviendrons vers vous rapidement pour finaliser votre accès.`);
+  if (plan === 'free') {
+    closePricing();
+    return;
+  }
+
+  const labels = { pro: 'Pro — 20 €/mois', annual: 'Annuel — 150 €/an' };
+  // Redirection vers paiement (intégration Stripe à venir)
+  alert(`✓ Plan "${labels[plan]}" sélectionné.\n\nIntégration Stripe à venir — vous serez notifié par email.`);
   closePricing();
 }
 
