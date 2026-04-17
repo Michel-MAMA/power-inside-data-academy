@@ -211,9 +211,11 @@ create table if not exists profiles (
   avatar_url text,
   bio        text,
   linkedin   text,
-  role       text default 'student',        -- 'student', 'instructor', 'admin'
-  created_at timestamptz default now(),
-  updated_at timestamptz default now()
+  role                    text default 'student',   -- 'student', 'instructor', 'admin'
+  subscription_plan       text default 'free',      -- 'free', 'pro', 'annual'
+  subscription_updated_at timestamptz,
+  created_at              timestamptz default now(),
+  updated_at              timestamptz default now()
 );
 
 -- ============================================================

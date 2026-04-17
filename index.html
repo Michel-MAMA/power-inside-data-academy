@@ -591,6 +591,127 @@ footer {
 }
 
 /* ===========================
+   PRICING MODAL
+   =========================== */
+.pricing-overlay {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(7,8,9,0.88); backdrop-filter: blur(10px);
+  align-items: center; justify-content: center; padding: 20px;
+  overflow-y: auto;
+}
+.pricing-overlay.open { display: flex; }
+
+.pricing-modal {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 24px; width: 100%; max-width: 860px;
+  box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  animation: authIn .25s ease; padding: 40px 36px 36px;
+}
+
+.pricing-header { text-align: center; margin-bottom: 36px; }
+.pricing-header .eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px; border-radius: 50px;
+  border: 1px solid var(--blue-border); background: var(--blue-dim);
+  color: var(--blue); font-size: 10px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px;
+}
+.pricing-header h2 {
+  font-family: var(--fd); font-weight: 800; font-size: 30px;
+  color: var(--white); margin-bottom: 8px;
+}
+.pricing-header p { font-size: 14px; color: var(--w60); max-width: 420px; margin: 0 auto; }
+
+.pricing-close-row {
+  position: absolute; top: 16px; right: 16px;
+}
+
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+@media (max-width: 700px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+/* ── Card ── */
+.plan-card {
+  position: relative; border-radius: 18px; border: 1px solid var(--border);
+  background: var(--s2); padding: 28px 24px 24px;
+  display: flex; flex-direction: column; gap: 0;
+  transition: border-color .2s, transform .2s;
+}
+.plan-card:hover { border-color: var(--blue-border); transform: translateY(-4px); }
+.plan-card.popular {
+  border-color: var(--blue-border);
+  background: linear-gradient(160deg, rgba(0,155,249,0.07) 0%, var(--s2) 60%);
+}
+
+.plan-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--blue); color: #fff;
+  font-family: var(--fd); font-size: 10px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 4px 14px; border-radius: 50px; white-space: nowrap;
+}
+.plan-badge.badge-green { background: var(--green); }
+
+.plan-name {
+  font-family: var(--fd); font-weight: 700; font-size: 13px;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--w60); margin-bottom: 12px;
+}
+.plan-card.popular .plan-name { color: var(--blue); }
+
+.plan-price-wrap { margin-bottom: 6px; }
+.plan-price {
+  font-family: var(--fd); font-weight: 800; font-size: 42px;
+  color: var(--white); line-height: 1;
+}
+.plan-price sup { font-size: 20px; vertical-align: super; font-weight: 700; }
+.plan-price sub { font-size: 14px; font-weight: 500; color: var(--w35); vertical-align: baseline; }
+.plan-price-note { font-size: 12px; color: var(--w35); margin-bottom: 20px; min-height: 18px; }
+.plan-price-note.saving { color: var(--green); font-weight: 600; }
+
+.plan-divider { height: 1px; background: var(--border); margin-bottom: 20px; }
+
+.plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; margin-bottom: 24px; }
+.plan-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: var(--w85); line-height: 1.4;
+}
+.plan-features li .feat-icon {
+  flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; margin-top: 1px;
+}
+.feat-icon.ok   { background: rgba(0,214,143,0.15); color: var(--green); }
+.feat-icon.lock { background: var(--w06); color: var(--w35); }
+
+.plan-cta {
+  width: 100%; padding: 13px; border-radius: 12px;
+  font-family: var(--fd); font-size: 12px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase;
+  cursor: pointer; transition: all .2s; border: none;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.plan-cta.cta-free {
+  background: var(--w06); border: 1px solid var(--border); color: var(--w60);
+}
+.plan-cta.cta-free:hover { background: var(--w12); color: var(--white); border-color: var(--w35); }
+.plan-cta.cta-pro {
+  background: var(--blue); color: #fff;
+}
+.plan-cta.cta-pro:hover { background: var(--blue-l); transform: translateY(-1px); }
+.plan-cta.cta-annual {
+  background: linear-gradient(135deg, var(--green), #00b87a); color: #fff;
+}
+.plan-cta.cta-annual:hover { opacity: .9; transform: translateY(-1px); }
+
+.pricing-footer {
+  text-align: center; margin-top: 24px;
+  font-size: 12px; color: var(--w35);
+}
+.pricing-footer a { color: var(--blue); }
+
+/* ===========================
    LIGHT MODE
    =========================== */
 html[data-theme="light"] {
@@ -974,7 +1095,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
     <a href="#parcours" class="nav-link">Parcours</a>
     <a href="#domaines" class="nav-link">Domaines</a>
     <a href="#temoignages" class="nav-link">Témoignages</a>
-    <a href="contact.html" class="nav-link">Contact</a>
+    <a href="#" class="nav-link" onclick="openPricing(); return false;">Abonnement</a>
   </div>
 
   <div class="nav-cta">
@@ -1030,6 +1151,102 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   <a href="contact.html">Contact</a>
   <div class="m-divider"></div>
   <a href="power_inside_data_academy_catalogue.html" class="m-cta">Voir le catalogue →</a>
+</div>
+
+<!-- ===========================
+     PRICING MODAL
+     =========================== -->
+<div class="pricing-overlay" id="pricingOverlay" onclick="closePricingOnBackdrop(event)">
+  <div class="pricing-modal" style="position:relative;">
+
+    <button class="auth-close" onclick="closePricing()" style="position:absolute;top:16px;right:16px;">×</button>
+
+    <div class="pricing-header">
+      <div class="eyebrow">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--blue);display:inline-block;"></span>
+        Choisissez votre plan
+      </div>
+      <h2>Investissez dans vos compétences</h2>
+      <p>Accédez aux meilleures formations Data & IA au tarif qui vous convient.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <!-- ── GRATUIT ── -->
+      <div class="plan-card">
+        <div class="plan-name">Gratuit</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price"><sup>€</sup>0<sub>/mois</sub></div>
+        </div>
+        <div class="plan-price-note">Pour toujours, sans carte bancaire</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="feat-icon ok">✓</span>Accès à 5 formations gratuites</li>
+          <li><span class="feat-icon ok">✓</span>Aperçu des modules premium</li>
+          <li><span class="feat-icon ok">✓</span>Accès à la communauté Discord</li>
+          <li><span class="feat-icon ok">✓</span>Newsletter & ressources</li>
+          <li><span class="feat-icon lock">✗</span><span style="color:var(--w35)">Formations certifiantes</span></li>
+          <li><span class="feat-icon lock">✗</span><span style="color:var(--w35)">Projets guidés & corrections</span></li>
+          <li><span class="feat-icon lock">✗</span><span style="color:var(--w35)">Support prioritaire</span></li>
+        </ul>
+        <button class="plan-cta cta-free" onclick="handleSubscribe('free')">
+          Commencer gratuitement
+        </button>
+      </div>
+
+      <!-- ── PRO ── -->
+      <div class="plan-card popular">
+        <div class="plan-badge">⚡ Le plus populaire</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price"><sup>€</sup>20<sub>/mois</sub></div>
+        </div>
+        <div class="plan-price-note">Résiliable à tout moment</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="feat-icon ok">✓</span>Toutes les formations (40+)</li>
+          <li><span class="feat-icon ok">✓</span>Certifications reconnues</li>
+          <li><span class="feat-icon ok">✓</span>Projets guidés + corrections</li>
+          <li><span class="feat-icon ok">✓</span>Sessions live mensuelles</li>
+          <li><span class="feat-icon ok">✓</span>Support prioritaire 48h</li>
+          <li><span class="feat-icon ok">✓</span>Accès aux replays</li>
+          <li><span class="feat-icon ok">✓</span>Communauté Discord Pro</li>
+        </ul>
+        <button class="plan-cta cta-pro" onclick="handleSubscribe('pro')">
+          Démarrer le plan Pro →
+        </button>
+      </div>
+
+      <!-- ── ANNUEL ── -->
+      <div class="plan-card">
+        <div class="plan-badge badge-green">🎁 Économisez 90€</div>
+        <div class="plan-name">Annuel</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price"><sup>€</sup>150<sub>/an</sub></div>
+        </div>
+        <div class="plan-price-note saving">≈ 12,50€/mois · 2 mois offerts</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li><span class="feat-icon ok">✓</span>Tout le plan Pro inclus</li>
+          <li><span class="feat-icon ok">✓</span>2 mois offerts vs mensuel</li>
+          <li><span class="feat-icon ok">✓</span>Accès aux nouvelles formations</li>
+          <li><span class="feat-icon ok">✓</span>Mentorat individuel (1h/mois)</li>
+          <li><span class="feat-icon ok">✓</span>Attestation de formation fiscale</li>
+          <li><span class="feat-icon ok">✓</span>Badge LinkedIn certifié</li>
+          <li><span class="feat-icon ok">✓</span>Accès anticipé nouveautés</li>
+        </ul>
+        <button class="plan-cta cta-annual" onclick="handleSubscribe('annual')">
+          Choisir l'offre annuelle →
+        </button>
+      </div>
+
+    </div>
+
+    <div class="pricing-footer">
+      Paiement sécurisé · Résiliable à tout moment · <a href="contact.html">Des questions ?</a>
+    </div>
+
+  </div>
 </div>
 
 <!-- ===========================
@@ -2237,6 +2454,53 @@ async function updateNavbar(user, overrides = {}) {
     userAvatarBtn.style.display = 'none';
   }
 }
+
+/* ── PRICING MODAL ── */
+function openPricing() {
+  document.getElementById('pricingOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closePricing() {
+  document.getElementById('pricingOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closePricingOnBackdrop(e) {
+  if (e.target === document.getElementById('pricingOverlay')) closePricing();
+}
+
+async function handleSubscribe(plan) {
+  const { data: { user } } = await _supabase.auth.getUser();
+
+  // Non connecté → ouvrir le modal auth
+  if (!user) {
+    closePricing();
+    openAuth('signup');
+    return;
+  }
+
+  const labels = { free: 'Gratuit', pro: 'Pro — 20€/mois', annual: 'Annuel — 150€/an' };
+
+  // Sauvegarder le plan choisi dans Supabase
+  await _supabase.from('profiles').upsert({
+    id: user.id,
+    email: user.email,
+    subscription_plan: plan,
+    subscription_updated_at: new Date().toISOString()
+  });
+
+  if (plan === 'free') {
+    closePricing();
+    return;
+  }
+
+  // Redirection vers paiement (à brancher sur Stripe)
+  alert(`✓ Plan "${labels[plan]}" sélectionné.\n\nIntégration Stripe à venir — vous serez notifié par email.`);
+  closePricing();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closePricing(); closeProfile(); }
+});
 
 /* ── THEME DARK / LIGHT ── */
 function applyTheme(theme) {
