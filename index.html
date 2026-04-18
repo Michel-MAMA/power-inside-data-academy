@@ -63,7 +63,7 @@ body:hover #cursor { opacity: 1; }
 /* ===========================
    TYPOGRAPHY
    =========================== */
-.display { font-family: var(--fd); font-size: clamp(22px, 2.7vw, 38px); font-weight: 700; line-height: 1.1; letter-spacing: -0.022em; }
+.display { font-family: var(--fd); font-size: clamp(38px, 4.8vw, 68px); font-weight: 700; line-height: 1.06; letter-spacing: -0.03em; }
 .h1 { font-family: var(--fd); font-size: clamp(32px, 4vw, 56px); font-weight: 700; line-height: 1.05; letter-spacing: -0.01em; }
 .h2 { font-family: var(--fd); font-size: clamp(24px, 2.8vw, 38px); font-weight: 700; line-height: 1.15; }
 .h3 { font-family: var(--fd); font-size: 18px; font-weight: 600; line-height: 1.3; }
@@ -333,8 +333,26 @@ body:hover #cursor { opacity: 1; }
   margin-bottom: 28px;
   line-height: 1.04;
 }
-/* Line 1 : poids normal, blanc légèrement atténué, une seule ligne */
-.hero-line-1 { color: var(--w85); font-weight: 700; display: block; white-space: nowrap; }
+/* Line 1 : "Maîtrisez [mot cyclique]" */
+.hero-line-1 { color: var(--w85); font-weight: 700; display: block; }
+
+/* Mot cyclique bleu avec transition slide+fade */
+.hero-cycle {
+  color: var(--blue);
+  display: inline-block;
+  transition: opacity .32s ease, transform .32s ease;
+  min-width: 2ch;
+}
+.hero-cycle.cy-exit {
+  opacity: 0;
+  transform: translateY(-14px);
+  transition: opacity .28s ease, transform .28s ease;
+}
+.hero-cycle.cy-enter {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: none;
+}
 /* Line 2 : bleu vif, gras */
 .hero-line-2 {
   color: var(--blue); font-weight: 800; display: block;
@@ -2443,7 +2461,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
       <!-- Title — 3 lignes escaladées -->
       <div class="display hero-title">
-        <span class="hero-line-1">Maîtrisez Data, IA &amp; Cloud.</span>
+        <span class="hero-line-1">Maîtrisez <span class="hero-cycle" id="heroCycle">Data,</span></span>
         <span class="hero-line-2">Appliquez-les.</span>
         <span class="hero-line-3">Dominez votre marché.</span>
       </div>
@@ -3942,6 +3960,36 @@ async function handlePhotoUpload(event) {
 
   showProfileMsg('✓ Photo mise à jour !', 'success');
 }
+
+/* ── HERO CYCLE ── */
+(function() {
+  const WORDS = ['Data,', 'IA,', 'Cloud.'];
+  let idx = 0;
+  const el = document.getElementById('heroCycle');
+  if (!el) return;
+
+  function next() {
+    // Sortie : slide vers le haut + fade
+    el.classList.add('cy-exit');
+
+    setTimeout(() => {
+      idx = (idx + 1) % WORDS.length;
+      el.textContent = WORDS[idx];
+
+      // Entrée : apparaît depuis le bas
+      el.classList.remove('cy-exit');
+      el.classList.add('cy-enter');
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.classList.remove('cy-enter');
+        });
+      });
+    }, 300);
+  }
+
+  setInterval(next, 2400);
+})();
 
 /* ── SESSION AU CHARGEMENT ── */
 (async () => {
