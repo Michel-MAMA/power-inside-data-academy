@@ -236,6 +236,18 @@ body:hover #cursor { opacity: 1; }
 }
 .btn-nav-primary:hover { background: var(--blue-l); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,155,249,0.28); }
 
+/* Devenir formateur */
+.btn-formateur {
+  font-family: var(--fd); font-size: 11px; font-weight: 700;
+  padding: 6px 14px; border-radius: 7px;
+  background: rgba(255,170,0,0.12); color: #FFAA00;
+  border: 1px solid rgba(255,170,0,0.28);
+  display: inline-flex; align-items: center; gap: 6px;
+  white-space: nowrap; text-decoration: none;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.btn-formateur:hover { background: rgba(255,170,0,0.2); border-color: rgba(255,170,0,0.5); transform: translateY(-1px); }
+
 /* ===========================
    HERO
    =========================== */
@@ -1981,6 +1993,11 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
       <a href="dashboard.html" class="nav-cat-link" style="color:var(--blue);">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         Ma Progression
+      </a>
+      <div class="nav-cat-sep"></div>
+      <a href="contact.html" class="btn-formateur">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Devenir formateur
       </a>
     </div>
   </div>
