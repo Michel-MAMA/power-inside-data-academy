@@ -22,10 +22,36 @@
   --gray-600: #4B5563;
   --gray-700: #374151;
   --gray-900: #111827;
+  --surface: #ffffff;
+  --nav-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --card-bg: #ffffff;
   --sidebar-w: 272px;
   --nav-h: 60px;
   --radius: 14px;
   --shadow: 0 2px 12px rgba(0,0,0,.07);
+}
+
+/* ── DARK MODE ── */
+[data-theme="dark"] {
+  --blue: #3B82F6;
+  --blue-l: rgba(59,130,246,0.15);
+  --green: #22C55E;
+  --green-l: rgba(22,163,74,0.15);
+  --amber: #F59E0B;
+  --amber-l: rgba(217,119,6,0.15);
+  --gray-50: #0D1117;
+  --gray-100: #161B25;
+  --gray-200: #252B38;
+  --gray-400: #6B7280;
+  --gray-600: #9CA3AF;
+  --gray-700: #D1D5DB;
+  --gray-900: #F1F5F9;
+  --surface: #1E2433;
+  --nav-bg: #0D1117;
+  --sidebar-bg: #0D1117;
+  --card-bg: #161B25;
+  --shadow: 0 2px 16px rgba(0,0,0,.35);
 }
 
 body {
@@ -33,21 +59,24 @@ body {
   background: var(--gray-50);
   color: var(--gray-900);
   min-height: 100vh;
+  transition: background .25s, color .25s;
 }
 
 /* ── NAVBAR ── */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: var(--nav-h);
-  background: #fff;
+  background: var(--nav-bg);
   border-bottom: 1px solid var(--gray-200);
   display: flex; align-items: center; padding: 0 24px; gap: 20px;
+  transition: background .25s, border-color .25s;
 }
 
 .nav-logo {
   text-decoration: none; display: flex; align-items: center; gap: 10px;
 }
 .nav-logo span { color: var(--blue); }
+.logo-name { color: var(--gray-900); transition: color .25s; }
 
 .nav-links { display: flex; gap: 4px; margin-left: 16px; }
 .nav-links a {
@@ -84,7 +113,7 @@ body {
 }
 .avatar-dropdown {
   display: none; position: absolute; top: calc(100% + 8px); right: 0;
-  background: #fff; border: 1px solid var(--gray-200);
+  background: var(--nav-bg); border: 1px solid var(--gray-200);
   border-radius: var(--radius); box-shadow: var(--shadow);
   min-width: 180px; overflow: hidden; z-index: 200;
 }
@@ -117,10 +146,11 @@ body {
   left: 0;
   bottom: 0;
   overflow-y: auto;
-  background: #fff;
+  background: var(--sidebar-bg);
   border-right: 1px solid var(--gray-200);
   padding: 20px 16px 40px;
   display: flex; flex-direction: column; gap: 20px;
+  transition: background .25s, border-color .25s;
 }
 
 /* scrollbar */
@@ -177,7 +207,7 @@ body {
 .stab {
   font-family: inherit; font-size: .78rem; font-weight: 500;
   border: 1px solid var(--gray-200); border-radius: 999px;
-  padding: 4px 10px; background: #fff; color: var(--gray-600);
+  padding: 4px 10px; background: var(--card-bg); color: var(--gray-600);
   cursor: pointer; transition: all .15s;
 }
 .stab.active { background: var(--blue); border-color: var(--blue); color: #fff; }
@@ -188,8 +218,8 @@ body {
 .flt-item input[type=radio] { display: none; }
 .flt-box {
   width: 16px; height: 16px; border-radius: 5px; flex-shrink: 0;
-  border: 1.5px solid var(--gray-300, #D1D5DB);
-  background: #fff; display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--gray-200);
+  background: var(--card-bg); display: flex; align-items: center; justify-content: center;
   transition: all .15s;
 }
 .flt-item input[type=radio] ~ .flt-box { border-radius: 50%; }
@@ -212,7 +242,7 @@ body {
 .tpill {
   font-family: inherit; font-size: .75rem; font-weight: 500;
   border: 1px solid var(--gray-200); border-radius: 999px;
-  padding: 3px 10px; background: #fff; color: var(--gray-600);
+  padding: 3px 10px; background: var(--card-bg); color: var(--gray-600);
   cursor: pointer; transition: all .15s;
 }
 .tpill.active { background: var(--gray-900); border-color: var(--gray-900); color: #fff; }
@@ -244,8 +274,8 @@ body {
   font-family: inherit; font-size: .875rem;
   padding: 9px 14px 9px 38px;
   border: 1.5px solid var(--gray-200); border-radius: 10px;
-  background: #fff; color: var(--gray-900); outline: none;
-  width: 220px; transition: border-color .15s;
+  background: var(--card-bg); color: var(--gray-900); outline: none;
+  width: 220px; transition: border-color .15s, background .25s;
 }
 .search-wrap input:focus { border-color: var(--blue); }
 .search-icon {
@@ -256,10 +286,11 @@ body {
 /* stats strip */
 .stats-strip { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
 .stat-card {
-  background: #fff; border-radius: var(--radius);
+  background: var(--card-bg); border-radius: var(--radius);
   border: 1px solid var(--gray-200); padding: 14px 18px;
   flex: 1; min-width: 130px;
   display: flex; align-items: center; gap: 12px;
+  transition: background .25s, border-color .25s;
 }
 .stat-icon {
   width: 38px; height: 38px; border-radius: 10px;
@@ -289,10 +320,10 @@ body {
 
 /* formation card */
 .fcard {
-  background: #fff; border-radius: var(--radius);
+  background: var(--card-bg); border-radius: var(--radius);
   border: 1.5px solid var(--gray-200);
   overflow: hidden; display: flex; flex-direction: column;
-  transition: box-shadow .2s, transform .2s;
+  transition: box-shadow .2s, transform .2s, background .25s, border-color .25s;
 }
 .fcard:hover { box-shadow: 0 6px 24px rgba(0,0,0,.09); transform: translateY(-2px); }
 
@@ -351,7 +382,7 @@ body {
   font-family: inherit; font-size: .82rem; font-weight: 600;
   width: 100%; padding: 9px; border-radius: 9px; cursor: pointer;
   transition: all .15s; border: 1.5px solid var(--gray-200);
-  background: #fff; color: var(--gray-700);
+  background: var(--card-bg); color: var(--gray-700);
 }
 .btn-enroll:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-l); }
 .btn-start {
@@ -371,7 +402,7 @@ body {
 .btn-review {
   font-family: inherit; font-size: .82rem; font-weight: 600;
   width: 100%; padding: 9px; border-radius: 9px; cursor: pointer;
-  background: #fff; color: var(--green); border: 1.5px solid #86EFAC;
+  background: var(--card-bg); color: var(--green); border: 1.5px solid #86EFAC;
   transition: all .15s;
 }
 .btn-review:hover { background: var(--green-l); }
@@ -394,16 +425,17 @@ body {
 /* ── MODAL PROGRAMME ── */
 .prog-overlay {
   display: none; position: fixed; inset: 0; z-index: 500;
-  background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+  background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
   align-items: center; justify-content: center; padding: 20px;
 }
 .prog-overlay.open { display: flex; }
 .prog-modal {
-  background: #fff; border-radius: 20px;
+  background: var(--card-bg); border-radius: 20px;
   width: 100%; max-width: 640px; max-height: 88vh;
   display: flex; flex-direction: column;
-  box-shadow: 0 24px 60px rgba(0,0,0,.18);
+  box-shadow: 0 24px 60px rgba(0,0,0,.25);
   overflow: hidden;
+  border: 1px solid var(--gray-200);
 }
 .prog-header {
   padding: 22px 24px 18px; border-bottom: 1px solid var(--gray-200);
@@ -417,6 +449,7 @@ body {
 .prog-close {
   background: var(--gray-100); border: none; border-radius: 50%;
   width: 32px; height: 32px; cursor: pointer; font-size: 1.1rem;
+  color: var(--gray-700);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   transition: background .15s;
 }
@@ -429,7 +462,7 @@ body {
   display: flex; align-items: center; justify-content: space-between;
   cursor: pointer; padding: 11px 14px;
   background: var(--gray-100); border-radius: 10px;
-  font-weight: 600; font-size: .875rem;
+  font-weight: 600; font-size: .875rem; color: var(--gray-900);
   transition: background .15s;
 }
 .prog-module-head:hover { background: var(--gray-200); }
@@ -464,8 +497,27 @@ body {
   flex: 1; min-width: 120px; background: var(--gray-100);
   border-radius: 10px; padding: 10px 14px;
   font-size: .82rem; color: var(--gray-600);
+  transition: background .25s;
 }
 .prog-stat strong { display: block; font-size: 1.1rem; color: var(--gray-900); font-weight: 700; }
+
+/* ── THEME TOGGLE ── */
+.theme-btn {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  background: var(--gray-100); border: 1px solid var(--gray-200);
+  color: var(--gray-700); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s;
+}
+.theme-btn:hover { background: var(--gray-200); }
+.theme-btn svg { width: 17px; height: 17px; }
+
+/* Avatar image support */
+.avatar-btn { overflow: hidden; }
+.avatar-btn img.av-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; border-radius: 50%;
+}
 
 /* ── MOBILE ── */
 .sidebar-toggle {
@@ -527,7 +579,7 @@ body {
       <circle cx="48" cy="48" r="2.5" fill="white" opacity="0.9"/>
     </svg>
     <div style="display:flex;flex-direction:column;gap:1px;">
-      <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#111827;line-height:1;">Power Inside Data</span>
+      <span class="logo-name" style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;line-height:1;">Power Inside Data</span>
       <span style="font-family:'DM Sans',sans-serif;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:#009BF9;line-height:1;">Academy</span>
     </div>
   </a>
@@ -545,9 +597,15 @@ body {
       </svg>
       <span id="navPct">0%</span>
     </div>
+    <!-- Theme toggle -->
+    <button class="theme-btn" id="themeBtn" title="Changer de thème">
+      <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
     <!-- Avatar -->
     <div class="avatar-wrap">
       <button class="avatar-btn" id="avatarBtn">
+        <img class="av-photo" id="avatarPhoto" src="" alt="" style="display:none">
         <span id="avatarInitial">U</span>
         <div class="avatar-dropdown" id="avatarDrop">
           <a href="#">Mon profil</a>
@@ -1141,6 +1199,31 @@ function setupAvatar() {
   drop.addEventListener('click', e => e.stopPropagation());
 }
 
+// ── THEME ──
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const moonIcon = document.getElementById('themeIconMoon');
+  const sunIcon  = document.getElementById('themeIconSun');
+  if (theme === 'dark') {
+    moonIcon.style.display = 'none';
+    sunIcon.style.display  = '';
+  } else {
+    moonIcon.style.display = '';
+    sunIcon.style.display  = 'none';
+  }
+}
+
+function setupTheme() {
+  const saved = localStorage.getItem('pida-theme') || 'light';
+  applyTheme(saved);
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme') || 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem('pida-theme', next);
+  });
+}
+
 // ── MOBILE SIDEBAR ──
 function setupMobileSidebar() {
   const sidebar  = document.getElementById('sidebar');
@@ -1175,26 +1258,45 @@ function setUser(user) {
   if (user) {
     const meta  = user.user_metadata || {};
     const name  = meta.full_name || meta.name || user.email?.split('@')[0] || 'Utilisateur';
-    const email = user.email || '';
     const init  = name.charAt(0).toUpperCase();
+
     document.getElementById('sideAvatar').textContent    = init;
     document.getElementById('sideName').textContent      = name;
     document.getElementById('avatarInitial').textContent = init;
     document.getElementById('sidePlan').textContent      = meta.plan || 'Gratuit';
-    // Photo de profil si disponible
-    if (meta.avatar_url) {
-      ['sideAvatar','avatarInitial'].forEach(id => {
-        const el = document.getElementById(id);
-        el.style.backgroundImage = `url(${meta.avatar_url})`;
-        el.style.backgroundSize = 'cover';
-        el.textContent = '';
-      });
+
+    // Photo de profil — supporte Google OAuth (picture), GitHub, custom (avatar_url)
+    const photo = meta.avatar_url || meta.picture || meta.avatar || null;
+    if (photo) {
+      // Sidebar avatar — background image
+      const sideEl = document.getElementById('sideAvatar');
+      sideEl.style.cssText += `;background-image:url('${photo}');background-size:cover;background-position:center;`;
+      sideEl.textContent = '';
+
+      // Navbar avatar — img tag (évite les problèmes de span sans dimensions)
+      const photoEl = document.getElementById('avatarPhoto');
+      const initEl  = document.getElementById('avatarInitial');
+      photoEl.src = photo;
+      photoEl.onerror = () => { photoEl.style.display = 'none'; initEl.style.display = ''; };
+      photoEl.style.display = '';
+      initEl.style.display  = 'none';
+    } else {
+      // Pas de photo — affiche initiales
+      const sideEl = document.getElementById('sideAvatar');
+      sideEl.style.backgroundImage = '';
+      sideEl.textContent = init;
+      document.getElementById('avatarPhoto').style.display = 'none';
+      const initEl = document.getElementById('avatarInitial');
+      initEl.style.display = '';
+      initEl.textContent   = init;
     }
   } else {
     document.getElementById('sideAvatar').textContent    = '?';
     document.getElementById('sideName').textContent      = 'Mon Espace';
     document.getElementById('avatarInitial').textContent = '?';
     document.getElementById('sidePlan').textContent      = 'Non connecté';
+    document.getElementById('avatarPhoto').style.display = 'none';
+    document.getElementById('avatarInitial').style.display = '';
   }
 }
 
@@ -1206,6 +1308,7 @@ document.getElementById('signoutBtn').addEventListener('click', async () => {
 
 // ── INIT ──
 function init() {
+  setupTheme();
   loadProgress();
   setupFilters();
   setupAvatar();
