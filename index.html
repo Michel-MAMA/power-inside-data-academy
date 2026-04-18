@@ -153,27 +153,88 @@ body:hover #cursor { opacity: 1; }
 /* ===========================
    NAVBAR
    =========================== */
+/* ── NEW TWO-ROW NAVBAR ── */
 #navbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 0 40px; height: 72px;
-  display: flex; align-items: center; justify-content: space-between;
-  transition: background .4s, border-color .4s, backdrop-filter .4s;
-  border-bottom: 1px solid transparent;
+  display: flex; flex-direction: column;
+  transition: background .4s, backdrop-filter .4s;
 }
 #navbar.scrolled {
-  background: rgba(7,8,9,0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-color: var(--border);
+  background: rgba(7,8,9,0.92);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
 }
-.nav-logo { display: flex; align-items: center; gap: 12px; }
+
+/* Row 1 */
+.nav-top {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 32px; height: 62px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Row 2 — category strip */
+.nav-cat {
+  display: flex; align-items: center;
+  padding: 0 32px; height: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 2px;
+}
+.nav-cat-link {
+  font-family: var(--fd); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.04em; color: var(--w60);
+  padding: 5px 13px; border-radius: 6px;
+  transition: color .2s, background .2s;
+  cursor: pointer; display: flex; align-items: center; gap: 5px;
+  white-space: nowrap; border: none; background: none; text-decoration: none;
+}
+.nav-cat-link:hover, .nav-cat-link.active { color: var(--white); background: var(--w06); }
+.nav-cat-sep { width: 1px; height: 16px; background: var(--border); margin: 0 6px; flex-shrink: 0; }
+.nav-cat-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+/* Search bar */
+.nav-search { flex: 1; max-width: 400px; position: relative; }
+.nav-search input {
+  width: 100%; font-family: var(--fb); font-size: 13px;
+  background: var(--s2); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 999px; padding: 8px 16px 8px 40px;
+  color: var(--w85); outline: none;
+  transition: border-color .2s, background .2s;
+}
+.nav-search input::placeholder { color: var(--w35); font-size: 13px; }
+.nav-search input:focus { border-color: rgba(0,155,249,0.45); background: var(--s3); }
+.nav-search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--w35); pointer-events: none;
+}
+
+/* Logo */
+.nav-logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .nav-logo-text { display: flex; flex-direction: column; gap: 1px; }
 .nav-logo-name { font-family: var(--fd); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--white); line-height: 1; }
 .nav-logo-sub { font-family: var(--fb); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue); line-height: 1; }
-.nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link { font-family: var(--fd); font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--w60); padding: 8px 14px; border-radius: 6px; transition: color .2s, background .2s; }
+
+/* Nav links (inside .nav-top) */
+.nav-links { display: flex; align-items: center; gap: 2px; }
+.nav-link { font-family: var(--fd); font-size: 11px; font-weight: 500; letter-spacing: 0.02em; color: var(--w60); padding: 7px 13px; border-radius: 7px; transition: color .2s, background .2s; white-space: nowrap; }
 .nav-link:hover { color: var(--white); background: var(--w06); }
-.nav-cta { display: flex; gap: 8px; align-items: center; }
+
+/* Auth buttons */
+.nav-cta { display: flex; gap: 8px; align-items: center; margin-left: auto; flex-shrink: 0; }
+.btn-nav-outline {
+  font-family: var(--fd); font-size: 11px; font-weight: 600;
+  padding: 8px 18px; border-radius: 8px;
+  border: 1px solid var(--w12); background: transparent; color: var(--white);
+  cursor: none; transition: all .2s; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-nav-outline:hover { border-color: var(--w35); background: var(--w06); }
+.btn-nav-primary {
+  font-family: var(--fd); font-size: 11px; font-weight: 700;
+  padding: 8px 20px; border-radius: 8px;
+  background: var(--blue); color: #fff; border: none;
+  cursor: none; transition: all .2s; white-space: nowrap;
+}
+.btn-nav-primary:hover { background: var(--blue-l); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,155,249,0.28); }
 
 /* ===========================
    HERO
@@ -182,7 +243,7 @@ body:hover #cursor { opacity: 1; }
   min-height: 100vh;
   position: relative;
   display: flex; align-items: center;
-  padding-top: 72px;
+  padding-top: 102px;
   overflow: hidden;
 }
 
@@ -685,12 +746,15 @@ footer {
   .parcours-wrap { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .cta-wrap { padding: 52px 32px; }
-  #navbar { padding: 0 24px; }
+  .nav-top { padding: 0 20px; }
+  .nav-cat { display: none; }
+  .nav-search { max-width: 200px; }
 }
 
 /* ── NAVIGATION BREAK (768px) ── */
 @media (max-width: 768px) {
   .nav-links, .nav-cta { display: none; }
+  .nav-search { display: none; }
   .nav-burger { display: flex; }
   .hero-sub { font-size: 16px; }
   .section-header .body-l { font-size: 15px; }
@@ -1677,36 +1741,46 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
      NAVBAR
      =========================== -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">
-    <svg width="32" height="32" viewBox="0 0 96 96" fill="none">
-      <circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/>
-      <circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity="0.9"/>
-      <circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity="0.75"/>
-      <circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity="0.85"/>
-      <circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity="0.68"/>
-      <circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity="0.8"/>
-      <circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity="0.7"/>
-      <line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
-      <line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
-      <line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
-      <line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
-      <line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
-      <line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
-      <line x1="48" y1="18" x2="73" y2="32" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
-      <line x1="73" y1="32" x2="73" y2="64" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
-      <line x1="73" y1="64" x2="48" y2="78" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
-      <line x1="48" y1="78" x2="23" y2="64" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
-      <line x1="23" y1="64" x2="23" y2="32" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
-      <line x1="23" y1="32" x2="48" y2="18" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
-      <circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.15)"/>
-      <circle cx="48" cy="48" r="5.5" fill="#009BF9"/>
-      <circle cx="48" cy="48" r="2.5" fill="white" opacity="0.9"/>
-    </svg>
-    <div class="nav-logo-text">
-      <span class="nav-logo-name">Power Inside Data</span>
-      <span class="nav-logo-sub">Academy</span>
+
+  <!-- ── ROW 1 : Logo · Search · Links · Auth ── -->
+  <div class="nav-top">
+
+    <a href="#" class="nav-logo">
+      <svg width="30" height="30" viewBox="0 0 96 96" fill="none">
+        <circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/>
+        <circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity="0.9"/>
+        <circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity="0.75"/>
+        <circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity="0.85"/>
+        <circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity="0.68"/>
+        <circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity="0.8"/>
+        <circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity="0.7"/>
+        <line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+        <line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+        <line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+        <line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+        <line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+        <line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width="0.8" opacity="0.5"/>
+        <line x1="48" y1="18" x2="73" y2="32" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+        <line x1="73" y1="32" x2="73" y2="64" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+        <line x1="73" y1="64" x2="48" y2="78" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+        <line x1="48" y1="78" x2="23" y2="64" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+        <line x1="23" y1="64" x2="23" y2="32" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+        <line x1="23" y1="32" x2="48" y2="18" stroke="#009BF9" stroke-width="0.4" opacity="0.2"/>
+        <circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.15)"/>
+        <circle cx="48" cy="48" r="5.5" fill="#009BF9"/>
+        <circle cx="48" cy="48" r="2.5" fill="white" opacity="0.9"/>
+      </svg>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Power Inside Data</span>
+        <span class="nav-logo-sub">Academy</span>
+      </div>
+    </a>
+
+    <!-- Search bar -->
+    <div class="nav-search">
+      <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="navSearch" placeholder="Rechercher une formation…" oninput="liveSearch(this.value)">
     </div>
-  </a>
 
   <div class="nav-links">
 
@@ -1788,53 +1862,48 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
             <div class="dd-sub">Toutes les formations disponibles</div>
           </div>
         </a>
-      </div>
-    </div>
 
-    <!-- ── Parcours ── -->
-    <div class="nav-item">
-      <span class="nav-link nav-link-dd">Parcours <span class="dd-arrow">▾</span></span>
-      <div class="nav-dropdown">
-        <div class="dd-section-title">Parcours certifiants</div>
-        <div class="dd-item" onclick="goParcours('Data Engineer')">
-          <div class="dd-icon data">⚙️</div>
-          <div><div class="dd-label">Data Engineer</div><div class="dd-sub">4 formations · 16 jours</div></div>
-        </div>
-        <div class="dd-item" onclick="goParcours('Data Analyst')">
-          <div class="dd-icon bi">📊</div>
-          <div><div class="dd-label">Data Analyst</div><div class="dd-sub">3 formations · 12 jours</div></div>
-        </div>
-        <div class="dd-item" onclick="goParcours('ML Engineer')">
-          <div class="dd-icon ai">🤖</div>
-          <div><div class="dd-label">ML Engineer</div><div class="dd-sub">5 formations · 20 jours</div></div>
-        </div>
-        <div class="dd-item" onclick="goParcours('BI Developer')">
-          <div class="dd-icon cloud">📈</div>
-          <div><div class="dd-label">BI Developer</div><div class="dd-sub">3 formations · 10 jours</div></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Domaines ── -->
-    <div class="nav-item">
-      <span class="nav-link nav-link-dd">Domaines <span class="dd-arrow">▾</span></span>
-      <div class="nav-dropdown">
-        <div class="dd-section-title">Nos domaines d'expertise</div>
-        <div class="dd-item" onclick="filterFormations('domain','ai')">
-          <div class="dd-icon ai">🤖</div>
-          <div><div class="dd-label">Intelligence Artificielle</div><div class="dd-sub">MLOps, LLMs, Deep Learning</div></div>
-        </div>
-        <div class="dd-item" onclick="filterFormations('domain','data')">
-          <div class="dd-icon data">🏗️</div>
-          <div><div class="dd-label">Ingénierie des Données</div><div class="dd-sub">Fabric, Spark, dbt, Lakehouse</div></div>
-        </div>
-        <div class="dd-item" onclick="filterFormations('domain','cloud')">
-          <div class="dd-icon cloud">⚡</div>
-          <div><div class="dd-label">No-Code / Low-Code</div><div class="dd-sub">Power Platform, Automate, Apps</div></div>
-        </div>
-        <div class="dd-item" onclick="filterFormations('domain','bi')">
-          <div class="dd-icon bi">📈</div>
-          <div><div class="dd-label">Business Intelligence</div><div class="dd-sub">Power BI, DAX, Power Query</div></div>
+        <!-- Parcours & Domaines intégrés -->
+        <div class="dd-divider"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+          <div style="padding-right:16px;border-right:1px solid var(--border)">
+            <div class="dd-col-head">🎓 Parcours certifiants</div>
+            <div class="dd-item" onclick="goParcours('Data Engineer')">
+              <div class="dd-icon data" style="font-size:13px">⚙️</div>
+              <div><div class="dd-label">Data Engineer</div><div class="dd-sub">4 formations · 16 jours</div></div>
+            </div>
+            <div class="dd-item" onclick="goParcours('Data Analyst')">
+              <div class="dd-icon bi" style="font-size:13px">📊</div>
+              <div><div class="dd-label">Data Analyst</div><div class="dd-sub">3 formations · 12 jours</div></div>
+            </div>
+            <div class="dd-item" onclick="goParcours('ML Engineer')">
+              <div class="dd-icon ai" style="font-size:13px">🤖</div>
+              <div><div class="dd-label">ML Engineer</div><div class="dd-sub">5 formations · 20 jours</div></div>
+            </div>
+            <div class="dd-item" onclick="goParcours('BI Developer')">
+              <div class="dd-icon cloud" style="font-size:13px">📈</div>
+              <div><div class="dd-label">BI Developer</div><div class="dd-sub">3 formations · 10 jours</div></div>
+            </div>
+          </div>
+          <div style="padding-left:16px">
+            <div class="dd-col-head">🌐 Domaines d'expertise</div>
+            <div class="dd-item" onclick="filterFormations('domain','ai')">
+              <div class="dd-icon ai" style="font-size:13px">🤖</div>
+              <div><div class="dd-label">Intelligence Artificielle</div><div class="dd-sub">MLOps, LLMs, Deep Learning</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('domain','data')">
+              <div class="dd-icon data" style="font-size:13px">🏗️</div>
+              <div><div class="dd-label">Ingénierie des Données</div><div class="dd-sub">Fabric, Spark, dbt, Lakehouse</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('domain','cloud')">
+              <div class="dd-icon cloud" style="font-size:13px">⚡</div>
+              <div><div class="dd-label">No-Code / Low-Code</div><div class="dd-sub">Power Platform, Automate, Apps</div></div>
+            </div>
+            <div class="dd-item" onclick="filterFormations('domain','bi')">
+              <div class="dd-icon bi" style="font-size:13px">📈</div>
+              <div><div class="dd-label">Business Intelligence</div><div class="dd-sub">Power BI, DAX, Power Query</div></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1844,23 +1913,20 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   </div>
 
   <div class="nav-cta">
-    <a href="contact.html" class="btn btn-outline btn-sm">Contact</a>
-
     <!-- Toggle Dark / Light -->
     <button class="theme-toggle" onclick="toggleTheme()" title="Changer le thème">
       <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg class="icon-sun"  width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
     </button>
 
-    <!-- Bouton Connexion (visible si non connecté) -->
-    <button id="btnConnexion" onclick="openAuth('login')" class="btn btn-outline btn-sm" style="display:flex;align-items:center;gap:6px;">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-        <polyline points="10 17 15 12 10 7"/>
-        <line x1="15" y1="12" x2="3" y2="12"/>
-      </svg>
+    <!-- Connexion (visible si non connecté) -->
+    <button id="btnConnexion" onclick="openAuth('login')" class="btn-nav-outline" style="display:flex;align-items:center;gap:6px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
       Connexion
     </button>
+
+    <!-- S'inscrire -->
+    <button onclick="openAuth('register')" class="btn-nav-primary" id="btnInscription">S'inscrire</button>
 
     <!-- Avatar utilisateur (visible si connecté) -->
     <div id="userAvatarBtn" class="user-avatar-btn" style="display:none;" tabindex="0">
@@ -1873,16 +1939,52 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         </div>
         <div class="user-dropdown-divider"></div>
         <a href="#" onclick="openProfile(); return false;">Mon profil</a>
-        <a href="#">Mes formations</a>
+        <a href="dashboard.html">Ma progression</a>
         <div class="user-dropdown-divider"></div>
         <button class="signout" onclick="handleSignOut()">Se déconnecter</button>
       </div>
     </div>
-
   </div>
+
   <button class="nav-burger" id="burger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
+
+  </div><!-- /nav-top -->
+
+  <!-- ── ROW 2 : Categories ── -->
+  <div class="nav-cat">
+    <button class="nav-cat-link active" onclick="filterFormations('domain','all');setActivecat(this)">Tout</button>
+    <div class="nav-cat-sep"></div>
+    <button class="nav-cat-link" onclick="filterFormations('domain','ia');setActivecat(this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 7V4M14 7V4M10 20v-3M14 20v-3M7 10H4M7 14H4M20 10h-3M20 14h-3"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
+      Intelligence Artificielle
+    </button>
+    <button class="nav-cat-link" onclick="filterFormations('domain','data');setActivecat(this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="5" rx="7" ry="2.5"/><path d="M5 5v4c0 1.38 3.13 2.5 7 2.5S19 10.38 19 9V5"/><path d="M5 9v4c0 1.38 3.13 2.5 7 2.5S19 14.38 19 13V9"/></svg>
+      Data & BI
+    </button>
+    <button class="nav-cat-link" onclick="filterFormations('domain','cloud');setActivecat(this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+      Cloud
+    </button>
+    <button class="nav-cat-link" onclick="filterFormations('domain','software');setActivecat(this)">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      Software & Outils
+    </button>
+
+    <div class="nav-cat-right">
+      <a href="contact.html" class="nav-cat-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Contact
+      </a>
+      <a href="dashboard.html" class="nav-cat-link" style="color:var(--blue);">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        Ma Progression
+      </a>
+    </div>
+  </div>
+
 </nav>
 
 <!-- MOBILE MENU -->
@@ -3410,6 +3512,24 @@ function selectSubcat(subcat) {
     if (pill) pill.classList.add('active');
   }
   _applyFilters();
+}
+
+/* Nav cat active state */
+function setActivecat(el) {
+  document.querySelectorAll('.nav-cat-link').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* Live search from navbar */
+function liveSearch(q) {
+  const val = q.toLowerCase().trim();
+  const cards = document.querySelectorAll('.formation-card');
+  cards.forEach(card => {
+    const txt = (card.querySelector('.card-title')?.textContent || '') +
+                (card.querySelector('.card-desc')?.textContent || '') +
+                (card.dataset.domain || '') + (card.dataset.subcategory || '');
+    card.style.display = (!val || txt.toLowerCase().includes(val)) ? '' : 'none';
+  });
 }
 
 function filterFormations(type, value) {
