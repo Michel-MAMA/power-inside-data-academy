@@ -192,20 +192,47 @@ body:hover #cursor { opacity: 1; }
 .nav-cat-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
 /* Search bar */
-.nav-search { flex: 1; max-width: 260px; position: relative; }
+.nav-search { flex: 1; max-width: 320px; position: relative; }
 .nav-search input {
   width: 100%; font-family: var(--fb); font-size: 13px;
   background: var(--s2); border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 999px; padding: 8px 16px 8px 40px;
+  border-radius: 999px; padding: 9px 16px 9px 40px;
   color: var(--w85); outline: none;
-  transition: border-color .2s, background .2s;
+  transition: border-color .2s, background .2s, border-radius .2s;
 }
 .nav-search input::placeholder { color: var(--w35); font-size: 13px; }
-.nav-search input:focus { border-color: rgba(0,155,249,0.45); background: var(--s3); }
+.nav-search.open input {
+  border-color: rgba(0,155,249,0.5); background: var(--s3);
+  border-radius: 14px 14px 0 0;
+}
 .nav-search-icon {
   position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  color: var(--w35); pointer-events: none;
+  color: var(--w35); pointer-events: none; transition: color .2s;
 }
+.nav-search.open .nav-search-icon { color: var(--blue); }
+
+/* Search dropdown */
+.nav-search-drop {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  background: #fff; border: 1px solid rgba(0,155,249,0.3);
+  border-top: none; border-radius: 0 0 16px 16px;
+  padding: 16px 8px 12px; z-index: 200;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.22);
+}
+.nav-search.open .nav-search-drop { display: block; }
+.nav-search-drop-title {
+  font-family: var(--fd); font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: #374151; padding: 0 10px 10px;
+}
+.nav-search-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: 8px; cursor: pointer;
+  transition: background .15s;
+}
+.nav-search-item:hover { background: #F3F4F6; }
+.nav-search-item svg { color: #9CA3AF; flex-shrink: 0; }
+.nav-search-item span { font-size: 13px; color: #111827; font-family: var(--fb); }
 
 /* Logo */
 .nav-logo { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
@@ -1789,9 +1816,42 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
     </a>
 
     <!-- Search bar -->
-    <div class="nav-search">
+    <div class="nav-search" id="navSearchWrap">
       <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="search" id="navSearch" placeholder="Rechercher…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="liveSearch(this.value)">
+      <input type="search" id="navSearch" placeholder="Que souhaitez-vous apprendre ?" autocomplete="off" autocorrect="off" spellcheck="false"
+        onfocus="openSearchDrop()" oninput="liveSearch(this.value)">
+      <!-- Dropdown suggestions -->
+      <div class="nav-search-drop" id="navSearchDrop">
+        <div class="nav-search-drop-title">Recherches populaires</div>
+        <div class="nav-search-item" onclick="pickSearch('Machine Learning')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Machine Learning</span>
+        </div>
+        <div class="nav-search-item" onclick="pickSearch('Python Data Science')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Python Data Science</span>
+        </div>
+        <div class="nav-search-item" onclick="pickSearch('Power BI')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Power BI &amp; DAX</span>
+        </div>
+        <div class="nav-search-item" onclick="pickSearch('Azure')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Azure Data Services</span>
+        </div>
+        <div class="nav-search-item" onclick="pickSearch('MLOps')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>MLOps &amp; Déploiement</span>
+        </div>
+        <div class="nav-search-item" onclick="pickSearch('SQL')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>SQL &amp; Bases de données</span>
+        </div>
+        <div class="nav-search-item" onclick="pickSearch('Power Automate')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Power Automate</span>
+        </div>
+      </div>
     </div>
 
   <div class="nav-links">
@@ -3532,6 +3592,28 @@ function selectSubcat(subcat) {
   }
   _applyFilters();
 }
+
+/* ── SEARCH DROPDOWN ── */
+function openSearchDrop() {
+  document.getElementById('navSearchWrap').classList.add('open');
+}
+function closeSearchDrop() {
+  document.getElementById('navSearchWrap').classList.remove('open');
+  document.getElementById('navSearch').value = '';
+}
+function pickSearch(term) {
+  const input = document.getElementById('navSearch');
+  input.value = term;
+  closeSearchDrop();
+  liveSearch(term);
+  // Scroll to formations section
+  document.getElementById('formations')?.scrollIntoView({ behavior: 'smooth' });
+}
+// Close on click outside
+document.addEventListener('click', e => {
+  const wrap = document.getElementById('navSearchWrap');
+  if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
+});
 
 /* Nav cat active state */
 function setActivecat(el) {
