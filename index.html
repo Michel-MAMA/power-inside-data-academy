@@ -2050,7 +2050,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         Contact
       </a>
-      <a href="dashboard.html" class="nav-cat-link" style="color:var(--blue);">
+      <a id="maProgressionLink" href="#" onclick="goProgression(event)" class="nav-cat-link" style="color:var(--blue);">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         Ma Progression
       </a>
@@ -3498,10 +3498,12 @@ async function updateNavbar(user, overrides = {}) {
     btnConnexion.style.display  = 'none';
     document.getElementById('btnInscription').style.display = 'none';
     userAvatarBtn.style.display = 'flex';
+    _isConnected = true;
   } else {
     btnConnexion.style.display  = '';
     document.getElementById('btnInscription').style.display = '';
     userAvatarBtn.style.display = 'none';
+    _isConnected = false;
   }
 }
 
@@ -3614,6 +3616,17 @@ document.addEventListener('click', e => {
   const wrap = document.getElementById('navSearchWrap');
   if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
 });
+
+/* Ma Progression — connecté → dashboard, sinon → login */
+let _isConnected = false;
+function goProgression(e) {
+  e.preventDefault();
+  if (_isConnected) {
+    window.location.href = 'dashboard.html';
+  } else {
+    openAuth('login');
+  }
+}
 
 /* Nav cat active state */
 function setActivecat(el) {
