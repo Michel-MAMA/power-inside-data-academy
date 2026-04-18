@@ -104,31 +104,6 @@ body {
   transition: stroke-dashoffset .6s ease;
 }
 
-.avatar-btn {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--blue); color: #fff;
-  font-weight: 700; font-size: .875rem;
-  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  position: relative;
-}
-.avatar-dropdown {
-  display: none; position: absolute; top: calc(100% + 8px); right: 0;
-  background: var(--nav-bg); border: 1px solid var(--gray-200);
-  border-radius: var(--radius); box-shadow: var(--shadow);
-  min-width: 180px; overflow: hidden; z-index: 200;
-}
-.avatar-btn:focus .avatar-dropdown,
-.avatar-btn.open .avatar-dropdown { display: block; }
-.avatar-dropdown a, .avatar-dropdown button {
-  display: block; width: 100%; padding: 10px 16px;
-  font-family: inherit; font-size: .875rem; font-weight: 500;
-  color: var(--gray-700); text-decoration: none; text-align: left;
-  background: none; border: none; cursor: pointer;
-  transition: background .15s;
-}
-.avatar-dropdown a:hover, .avatar-dropdown button:hover { background: var(--gray-100); }
-.avatar-dropdown .signout { color: #DC2626; }
-.avatar-wrap { position: relative; }
 
 /* ── LAYOUT ── */
 .layout {
@@ -512,12 +487,57 @@ body {
 .theme-btn:hover { background: var(--gray-200); }
 .theme-btn svg { width: 17px; height: 17px; }
 
-/* Avatar image support */
-.avatar-btn { overflow: hidden; }
-.avatar-btn img.av-photo {
+/* ── USER PILL (avatar + nom + dropdown) ── */
+.user-pill {
+  position: relative; display: flex; align-items: center; gap: 8px;
+  background: var(--gray-100); border: 1px solid var(--gray-200);
+  border-radius: 50px; padding: 4px 12px 4px 4px;
+  cursor: pointer; transition: border-color .2s, background .2s;
+  user-select: none;
+}
+.user-pill:hover { border-color: var(--blue); background: var(--blue-l); }
+
+.user-pill-circle {
+  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--blue), #7B2FFF);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 12px; color: #fff;
+  overflow: hidden; position: relative;
+}
+.user-pill-circle img {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: cover; border-radius: 50%;
 }
+.user-pill-name {
+  font-size: .8rem; font-weight: 600; color: var(--gray-700);
+  max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Dropdown */
+.user-pill-drop {
+  display: none; position: absolute; top: calc(100% + 10px); right: 0;
+  background: var(--card-bg); border: 1px solid var(--gray-200);
+  border-radius: 16px; min-width: 210px; padding: 8px; z-index: 300;
+  box-shadow: 0 20px 50px rgba(0,0,0,.15);
+}
+.user-pill.open .user-pill-drop,
+.user-pill:focus-within .user-pill-drop { display: block; }
+
+.drop-header { padding: 8px 12px 10px; }
+.drop-header strong { display: block; font-size: .85rem; font-weight: 700; color: var(--gray-900); }
+.drop-header span { font-size: .72rem; color: var(--gray-400); }
+.drop-divider { height: 1px; background: var(--gray-200); margin: 4px 0; }
+.user-pill-drop a, .user-pill-drop button {
+  display: flex; align-items: center; gap: 8px; width: 100%; text-align: left;
+  padding: 8px 12px; font-family: inherit; font-size: .825rem; color: var(--gray-700);
+  border-radius: 9px; background: none; border: none; cursor: pointer;
+  text-decoration: none; transition: background .15s, color .15s;
+}
+.user-pill-drop a:hover, .user-pill-drop button:hover {
+  background: var(--gray-100); color: var(--gray-900);
+}
+.user-pill-drop button.signout { color: #DC2626; }
+.user-pill-drop button.signout:hover { background: #FEF2F2; color: #DC2626; }
 
 /* ── MOBILE ── */
 .sidebar-toggle {
@@ -602,17 +622,33 @@ body {
       <svg id="themeIconMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg id="themeIconSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
     </button>
-    <!-- Avatar -->
-    <div class="avatar-wrap">
-      <button class="avatar-btn" id="avatarBtn">
-        <img class="av-photo" id="avatarPhoto" src="" alt="" style="display:none">
-        <span id="avatarInitial">U</span>
-        <div class="avatar-dropdown" id="avatarDrop">
-          <a href="#">Mon profil</a>
-          <a href="index.html#abonnement">Abonnement</a>
-          <button class="signout" id="signoutBtn">Se déconnecter</button>
+    <!-- User pill -->
+    <div class="user-pill" id="userPill" tabindex="0">
+      <div class="user-pill-circle" id="pillCircle">
+        <img id="pillPhoto" src="" alt="" style="display:none">
+        <span id="pillInitial">?</span>
+      </div>
+      <span class="user-pill-name" id="pillName">Mon Espace</span>
+      <div class="user-pill-drop">
+        <div class="drop-header">
+          <strong id="dropName">—</strong>
+          <span id="dropEmail">—</span>
         </div>
-      </button>
+        <div class="drop-divider"></div>
+        <a href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          Mon profil
+        </a>
+        <a href="index.html">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Accueil
+        </a>
+        <div class="drop-divider"></div>
+        <button class="signout" id="signoutBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Se déconnecter
+        </button>
+      </div>
     </div>
   </div>
 </nav>
@@ -1187,15 +1223,16 @@ function setupFilters() {
   });
 }
 
-// ── AVATAR DROPDOWN ──
+// ── USER PILL DROPDOWN ──
 function setupAvatar() {
-  const btn  = document.getElementById('avatarBtn');
-  const drop = document.getElementById('avatarDrop');
-  btn.addEventListener('click', e => {
+  const pill = document.getElementById('userPill');
+  const drop = pill.querySelector('.user-pill-drop');
+
+  pill.addEventListener('click', e => {
     e.stopPropagation();
-    btn.classList.toggle('open');
+    pill.classList.toggle('open');
   });
-  document.addEventListener('click', () => btn.classList.remove('open'));
+  document.addEventListener('click', () => pill.classList.remove('open'));
   drop.addEventListener('click', e => e.stopPropagation());
 }
 
@@ -1242,66 +1279,91 @@ function setupMobileSidebar() {
 // ── AUTH ──
 async function initAuth() {
   const { data: { session } } = await _sb.auth.getSession();
-  if (session?.user) {
-    setUser(session.user);
-  } else {
-    // Pas de session — mode aperçu
-    setUser(null);
-  }
-  // Écouter les changements d'auth en temps réel
-  _sb.auth.onAuthStateChange((_event, session) => {
-    setUser(session?.user ?? null);
+  await applyUser(session?.user ?? null);
+  _sb.auth.onAuthStateChange(async (_event, session) => {
+    await applyUser(session?.user ?? null);
   });
 }
 
-function setUser(user) {
-  if (user) {
-    const meta  = user.user_metadata || {};
-    const name  = meta.full_name || meta.name || user.email?.split('@')[0] || 'Utilisateur';
-    const init  = name.charAt(0).toUpperCase();
+// Résout nom, initiales et photo en interrogeant aussi la table profiles
+async function applyUser(user) {
+  if (!user) { renderUser(null); return; }
 
-    document.getElementById('sideAvatar').textContent    = init;
-    document.getElementById('sideName').textContent      = name;
-    document.getElementById('avatarInitial').textContent = init;
-    document.getElementById('sidePlan').textContent      = meta.plan || 'Gratuit';
+  const meta = user.user_metadata || {};
 
-    // Photo de profil — supporte Google OAuth (picture), GitHub, custom (avatar_url)
-    const photo = meta.avatar_url || meta.picture || meta.avatar || null;
-    if (photo) {
-      // Sidebar avatar — background image
-      const sideEl = document.getElementById('sideAvatar');
-      sideEl.style.cssText += `;background-image:url('${photo}');background-size:cover;background-position:center;`;
-      sideEl.textContent = '';
+  // Nom
+  const prenom  = meta.prenom || meta.full_name?.split(' ')[0] || '';
+  const nom     = meta.nom    || meta.full_name?.split(' ').slice(1).join(' ') || '';
+  const display = (prenom + ' ' + nom).trim() || user.email?.split('@')[0] || 'Utilisateur';
+  const init    = display.charAt(0).toUpperCase();
 
-      // Navbar avatar — img tag (évite les problèmes de span sans dimensions)
-      const photoEl = document.getElementById('avatarPhoto');
-      const initEl  = document.getElementById('avatarInitial');
-      photoEl.src = photo;
-      photoEl.onerror = () => { photoEl.style.display = 'none'; initEl.style.display = ''; };
-      photoEl.style.display = '';
-      initEl.style.display  = 'none';
+  // Photo : priorité profile DB → user_metadata.avatar_url → Google/GitHub picture
+  let photo = meta.avatar_url || meta.picture || meta.avatar_url || null;
+  try {
+    const { data: profile } = await _sb
+      .from('profiles').select('avatar_url, prenom, nom').eq('id', user.id).single();
+    if (profile?.avatar_url) photo = profile.avatar_url;
+  } catch(_) {}
+
+  renderUser({ display, init, email: user.email || '', photo });
+}
+
+function renderUser(u) {
+  const pillPhoto   = document.getElementById('pillPhoto');
+  const pillInitial = document.getElementById('pillInitial');
+  const pillName    = document.getElementById('pillName');
+  const dropName    = document.getElementById('dropName');
+  const dropEmail   = document.getElementById('dropEmail');
+  const sideAvatar  = document.getElementById('sideAvatar');
+  const sideName    = document.getElementById('sideName');
+  const sidePlan    = document.getElementById('sidePlan');
+
+  if (u) {
+    // Pill navbar
+    pillName.textContent  = u.display;
+    dropName.textContent  = u.display;
+    dropEmail.textContent = u.email;
+
+    if (u.photo) {
+      pillPhoto.src = u.photo;
+      pillPhoto.style.display = '';
+      pillInitial.style.display = 'none';
+      pillPhoto.onerror = () => { pillPhoto.style.display = 'none'; pillInitial.style.display = ''; };
+
+      // Sidebar — background image
+      sideAvatar.style.backgroundImage = `url('${u.photo}')`;
+      sideAvatar.style.backgroundSize  = 'cover';
+      sideAvatar.style.backgroundPosition = 'center';
+      sideAvatar.textContent = '';
     } else {
-      // Pas de photo — affiche initiales
-      const sideEl = document.getElementById('sideAvatar');
-      sideEl.style.backgroundImage = '';
-      sideEl.textContent = init;
-      document.getElementById('avatarPhoto').style.display = 'none';
-      const initEl = document.getElementById('avatarInitial');
-      initEl.style.display = '';
-      initEl.textContent   = init;
+      pillPhoto.style.display   = 'none';
+      pillInitial.style.display = '';
+      pillInitial.textContent   = u.init;
+
+      sideAvatar.style.backgroundImage = '';
+      sideAvatar.textContent = u.init;
     }
+
+    sideName.textContent = u.display;
+    sidePlan.textContent = 'Gratuit';
   } else {
-    document.getElementById('sideAvatar').textContent    = '?';
-    document.getElementById('sideName').textContent      = 'Mon Espace';
-    document.getElementById('avatarInitial').textContent = '?';
-    document.getElementById('sidePlan').textContent      = 'Non connecté';
-    document.getElementById('avatarPhoto').style.display = 'none';
-    document.getElementById('avatarInitial').style.display = '';
+    // Déconnecté / visiteur
+    pillName.textContent      = 'Mon Espace';
+    dropName.textContent      = 'Visiteur';
+    dropEmail.textContent     = 'Non connecté';
+    pillPhoto.style.display   = 'none';
+    pillInitial.style.display = '';
+    pillInitial.textContent   = '?';
+    sideAvatar.style.backgroundImage = '';
+    sideAvatar.textContent    = '?';
+    sideName.textContent      = 'Mon Espace';
+    sidePlan.textContent      = 'Non connecté';
   }
 }
 
 // ── SIGN OUT ──
-document.getElementById('signoutBtn').addEventListener('click', async () => {
+document.getElementById('signoutBtn').addEventListener('click', async (e) => {
+  e.stopPropagation();
   await _sb.auth.signOut();
   window.location.href = 'index.html';
 });
