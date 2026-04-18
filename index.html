@@ -330,32 +330,46 @@ body:hover #cursor { opacity: 1; }
 
 .hero-title {
   animation: fadeUp 0.8s var(--ease) 0.1s both;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  line-height: 1.04;
 }
-.hero-title .accent { color: var(--blue); position: relative; }
-.hero-title .accent::after {
-  content: '';
-  position: absolute; bottom: -4px; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--blue), transparent);
+/* Line 1 : poids normal, blanc légèrement atténué */
+.hero-line-1 { color: var(--w85); font-weight: 700; display: block; }
+/* Line 2 : bleu vif, gras, légèrement plus grand */
+.hero-line-2 {
+  color: var(--blue); font-weight: 800; display: block;
+  font-size: 1.08em; letter-spacing: -0.035em;
+}
+/* Line 3 : gradient bleu→violet, ultra gras — la punchline */
+.hero-line-3 {
+  display: block; font-weight: 800;
+  font-size: 1.12em; letter-spacing: -0.04em;
+  background: linear-gradient(100deg, var(--blue) 10%, #7B2FFF 55%, #B46CFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-sub {
-  font-size: 18px; font-weight: 300; color: var(--w60); line-height: 1.7;
-  margin-bottom: 40px; max-width: 560px;
+  font-size: 16px; font-weight: 400; color: var(--w60); line-height: 1.75;
+  margin-bottom: 40px; max-width: 600px;
   animation: fadeUp 0.8s var(--ease) 0.2s both;
 }
+.hero-sub strong { color: var(--w85); font-weight: 600; }
 
 .hero-actions {
   display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
   animation: fadeUp 0.8s var(--ease) 0.3s both;
-  margin-bottom: 56px;
+  margin-bottom: 44px;
 }
 
+/* Trust bar */
 .hero-trust {
-  display: flex; align-items: center; gap: 20px;
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
   animation: fadeUp 0.8s var(--ease) 0.4s both;
 }
-.trust-divider { width: 1px; height: 32px; background: var(--border); }
+.trust-divider { width: 1px; height: 36px; background: var(--border); }
+.trust-stat { display: flex; flex-direction: column; gap: 3px; }
 .trust-stat { display: flex; flex-direction: column; gap: 2px; }
 .trust-num { font-family: var(--fd); font-size: 20px; font-weight: 800; color: var(--white); line-height: 1; }
 .trust-label { font-size: 11px; color: var(--w35); letter-spacing: 0.05em; }
@@ -815,8 +829,12 @@ footer {
   /* ── Hero ── */
   .hero-wrap { padding-bottom: 48px; }
   .hero-content { padding: 0 18px; gap: 36px; }
-  .display { font-size: clamp(36px, 10vw, 52px); line-height: 1; }
-  .hero-sub { font-size: 15px; line-height: 1.7; margin-bottom: 32px; }
+  .display { font-size: clamp(34px, 9.5vw, 52px); line-height: 1.04; }
+  .hero-sub { font-size: 15px; line-height: 1.75; margin-bottom: 32px; }
+  .hero-trust { gap: 16px; }
+  .trust-num { font-size: 17px !important; }
+  .hero-line-2 { font-size: 1.06em; }
+  .hero-line-3 { font-size: 1.1em; }
   .hero-eyebrow { font-size: 9px; margin-bottom: 20px; }
   .hero-actions {
     flex-direction: column; gap: 10px; margin-bottom: 36px;
@@ -2427,19 +2445,51 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
     <!-- LEFT -->
     <div class="hero-left">
 
-      <div class="display hero-title">
-        Donnez du<br>
-        <span class="accent">pouvoir</span> à<br>
-        vos données.
+      <!-- Eyebrow badge -->
+      <div class="hero-eyebrow" style="animation-delay:0s">
+        <span class="hero-eyebrow-dot"></span>
+        Plateforme Data · IA · Cloud
       </div>
 
+      <!-- Title — 3 lignes escaladées -->
+      <div class="display hero-title">
+        <span class="hero-line-1">Maîtrisez Data, IA &amp; Cloud.</span>
+        <span class="hero-line-2">Appliquez-les.</span>
+        <span class="hero-line-3">Dominez votre marché.</span>
+      </div>
+
+      <!-- Subtitle -->
       <p class="hero-sub">
-        Power Inside Data Academy forme les professionnels qui transforment la donnée brute en avantage concurrentiel. Des experts terrain, des cas réels, une pédagogie exigeante.
+        Passez de la donnée brute à l'<strong>Intelligence Actionnable</strong>. Power Inside Data Academy vous dote des compétences en <strong>Data, IA et Cloud</strong> pour automatiser votre succès et transformer vos flux d'informations en un moteur d'innovation propulsé par les algorithmes de demain.
       </p>
 
+      <!-- CTAs -->
       <div class="hero-actions">
         <a href="#formations" class="btn btn-primary btn-lg">Découvrir les formations →</a>
         <a href="#parcours" class="btn btn-outline btn-lg">Voir les parcours</a>
+      </div>
+
+      <!-- Chiffres clés -->
+      <div class="hero-trust">
+        <div class="trust-stat">
+          <div class="trust-num">500+</div>
+          <div class="trust-label">Apprenants actifs</div>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-stat">
+          <div class="trust-num">40+</div>
+          <div class="trust-label">Formations</div>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-stat">
+          <div class="trust-num">4.9<span style="font-size:.6em;letter-spacing:0;font-weight:700;color:var(--amber)">★</span></div>
+          <div class="trust-label">Note moyenne</div>
+        </div>
+        <div class="trust-divider"></div>
+        <div class="trust-stat">
+          <div class="trust-num">3</div>
+          <div class="trust-label">Domaines clés</div>
+        </div>
       </div>
 
     </div>
