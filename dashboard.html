@@ -384,6 +384,91 @@ body {
 }
 .no-results p { font-size: 1rem; margin-top: 8px; }
 
+/* ── PROGRAMME LINK ── */
+.btn-programme {
+  font-family: inherit; font-size: .78rem; font-weight: 500;
+  background: none; border: none; color: var(--blue);
+  cursor: pointer; padding: 0; text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.btn-programme:hover { opacity: .75; }
+
+/* ── MODAL PROGRAMME ── */
+.prog-overlay {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center; padding: 20px;
+}
+.prog-overlay.open { display: flex; }
+.prog-modal {
+  background: #fff; border-radius: 20px;
+  width: 100%; max-width: 640px; max-height: 88vh;
+  display: flex; flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0,0,0,.18);
+  overflow: hidden;
+}
+.prog-header {
+  padding: 22px 24px 18px; border-bottom: 1px solid var(--gray-200);
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+}
+.prog-header-left { display: flex; align-items: center; gap: 14px; }
+.prog-emoji { font-size: 2rem; }
+.prog-title { font-size: 1.05rem; font-weight: 700; letter-spacing: -.3px; }
+.prog-meta { display: flex; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+.prog-meta span { font-size: .75rem; color: var(--gray-600); }
+.prog-close {
+  background: var(--gray-100); border: none; border-radius: 50%;
+  width: 32px; height: 32px; cursor: pointer; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background .15s;
+}
+.prog-close:hover { background: var(--gray-200); }
+.prog-body { overflow-y: auto; padding: 20px 24px 28px; flex: 1; }
+.prog-body::-webkit-scrollbar { width: 4px; }
+.prog-body::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+.prog-module { margin-bottom: 16px; }
+.prog-module-head {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; padding: 11px 14px;
+  background: var(--gray-100); border-radius: 10px;
+  font-weight: 600; font-size: .875rem;
+  transition: background .15s;
+}
+.prog-module-head:hover { background: var(--gray-200); }
+.prog-module-head .pm-num {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: var(--blue); color: #fff;
+  font-size: .7rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.prog-module-head .pm-dur { font-size: .75rem; color: var(--gray-400); font-weight: 400; }
+.prog-module-lessons {
+  padding: 10px 14px 4px 44px;
+  display: none;
+}
+.prog-module.open .prog-module-lessons { display: block; }
+.prog-module-lessons li {
+  font-size: .82rem; color: var(--gray-700); padding: 5px 0;
+  border-bottom: 1px solid var(--gray-100); list-style: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.prog-module-lessons li::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--blue); opacity: .6; flex-shrink: 0;
+}
+.prog-module-lessons li:last-child { border-bottom: none; }
+.pm-arrow { transition: transform .2s; font-size: .75rem; color: var(--gray-400); }
+.prog-module.open .pm-arrow { transform: rotate(180deg); }
+.prog-summary {
+  display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.prog-stat {
+  flex: 1; min-width: 120px; background: var(--gray-100);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: .82rem; color: var(--gray-600);
+}
+.prog-stat strong { display: block; font-size: 1.1rem; color: var(--gray-900); font-weight: 700; }
+
 /* ── MOBILE ── */
 .sidebar-toggle {
   display: none; position: fixed; bottom: 20px; right: 20px; z-index: 300;
@@ -588,6 +673,26 @@ body {
 <button class="sidebar-toggle" id="sideToggle">☰</button>
 <div class="sidebar-overlay" id="sideOverlay"></div>
 
+<!-- MODAL PROGRAMME -->
+<div class="prog-overlay" id="progOverlay" onclick="closeProgram(event)">
+  <div class="prog-modal" id="progModal">
+    <div class="prog-header">
+      <div class="prog-header-left">
+        <div class="prog-emoji" id="progEmoji">📚</div>
+        <div>
+          <div class="prog-title" id="progTitle">—</div>
+          <div class="prog-meta" id="progMeta"></div>
+        </div>
+      </div>
+      <button class="prog-close" onclick="closeProgram()">✕</button>
+    </div>
+    <div class="prog-body">
+      <div class="prog-summary" id="progSummary"></div>
+      <div id="progModules"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── CONFIG ──
 const SB_URL = 'https://qvifydoghyniyuaeqgir.supabase.co';
@@ -602,7 +707,15 @@ const FDATA = [
     domain: 'ia', level: 'debutant', hours: 12,
     emoji: '🐍', color: '#3B82F6',
     topics: ['Python', 'Pandas', 'NumPy', 'Visualisation'],
-    status: 'in_progress', pct: 65
+    status: 'in_progress', pct: 65,
+    modules: [
+      { title: 'Introduction à Python', duration: '2h', lessons: ['Variables & types de données', 'Structures de contrôle (if, for, while)', 'Fonctions et portée', 'Modules et imports'] },
+      { title: 'Environnement de travail', duration: '1h', lessons: ['Installation Anaconda / Conda', 'Jupyter Notebook & JupyterLab', 'Gestionnaire de paquets pip', 'Bonnes pratiques de projet'] },
+      { title: 'NumPy — Calcul scientifique', duration: '2h', lessons: ['Arrays N-dimensionnels', 'Opérations vectorielles & broadcasting', 'Indexation avancée', 'Algèbre linéaire avec NumPy'] },
+      { title: 'Pandas — Manipulation de données', duration: '3h', lessons: ['Series & DataFrames', 'Lecture de fichiers (CSV, Excel, JSON)', 'Filtrage, tri et sélection', 'GroupBy & agrégations', 'Gestion des valeurs manquantes', 'Merge & Join'] },
+      { title: 'Visualisation de données', duration: '2h', lessons: ['Matplotlib : graphiques fondamentaux', 'Seaborn : statistiques visuelles', 'Personnalisation et mise en forme', 'Graphiques interactifs avec Plotly'] },
+      { title: 'Projet final', duration: '2h', lessons: ['Analyse exploratoire complète (EDA)', 'Nettoyage et transformation d\'un dataset réel', 'Rapport de visualisations', 'Présentation des insights'] }
+    ]
   },
   {
     id: 'powerbi',
@@ -611,7 +724,16 @@ const FDATA = [
     domain: 'data', level: 'intermediaire', hours: 18,
     emoji: '📊', color: '#F59E0B',
     topics: ['Power BI', 'DAX', 'Dashboard', 'ETL'],
-    status: 'in_progress', pct: 30
+    status: 'in_progress', pct: 30,
+    modules: [
+      { title: 'Découverte de Power BI', duration: '2h', lessons: ['Interface Power BI Desktop', 'Flux de travail : obtenir → transformer → modéliser → visualiser', 'Publication sur Power BI Service', 'Licences et options de partage'] },
+      { title: 'Connexion aux données', duration: '2h', lessons: ['Sources Excel, CSV, SharePoint', 'Connexion SQL Server & Azure', 'APIs REST et connecteurs Web', 'Mode Import vs DirectQuery vs Live'] },
+      { title: 'Power Query — ETL & Transformation', duration: '3h', lessons: ['Éditeur de requêtes avancé', 'Nettoyage et standardisation', 'Pivots, dépivots et colonnes calculées', 'Requêtes paramétrées', 'Langage M fondamental'] },
+      { title: 'Modélisation & Relations', duration: '3h', lessons: ['Schéma en étoile et flocon', 'Relations actives et inactives', 'Tables de dates', 'Cardinalité et direction de filtre'] },
+      { title: 'DAX — Formules et mesures', duration: '4h', lessons: ['Colonnes calculées vs Mesures', 'Fonctions de base (SUM, AVERAGE, COUNT)', 'Contexte de filtre et de ligne', 'CALCULATE & modificateurs de filtre', 'Time Intelligence (YTD, MTD, Variation N-1)', 'Variables DAX'] },
+      { title: 'Visualisations avancées', duration: '2h', lessons: ['Visuels natifs et personnalisés', 'Interactions entre visuels', 'Bookmarks et navigation', 'Tooltips enrichis', 'Thèmes et accessibilité'] },
+      { title: 'Publication & Administration', duration: '2h', lessons: ['Workspaces et App Power BI', 'Actualisation planifiée', 'Sécurité au niveau des lignes (RLS)', 'Partage et embedding'] }
+    ]
   },
   {
     id: 'automate',
@@ -620,7 +742,15 @@ const FDATA = [
     domain: 'software', level: 'debutant', hours: 8,
     emoji: '⚡', color: '#8B5CF6',
     topics: ['Power Automate', 'Power Apps', 'SharePoint'],
-    status: 'enrolled', pct: 0
+    status: 'enrolled', pct: 0,
+    modules: [
+      { title: 'Introduction à Power Automate', duration: '1h', lessons: ['Qu\'est-ce que la Power Platform ?', 'Types de flows (Cloud, Desktop, Instant)', 'Connecteurs et déclencheurs principaux', 'Votre premier flux en 10 minutes'] },
+      { title: 'Automatisation des workflows', duration: '2h', lessons: ['Déclencheurs Outlook, Teams, SharePoint', 'Conditions et boucles', 'Expressions et fonctions', 'Gestion des erreurs et retry'] },
+      { title: 'Power Apps — Applications métier', duration: '2h', lessons: ['Canvas Apps vs Model-driven Apps', 'Galeries, formulaires, écrans', 'Connexions aux sources de données', 'Formules Power Fx'] },
+      { title: 'SharePoint & Microsoft Lists', duration: '1h', lessons: ['Listes et bibliothèques', 'Colonnes calculées et vues', 'Intégration avec Power Automate', 'Permissions et partage'] },
+      { title: 'Intégrations Office 365', duration: '1h', lessons: ['Automatiser Outlook et Teams', 'Traitement de fichiers Excel / Word', 'Approbations et notifications', 'Microsoft Graph via HTTP'] },
+      { title: 'Projet pratique', duration: '1h', lessons: ['Workflow de validation de congés', 'Application de suivi de tickets', 'Dashboard SharePoint automatisé'] }
+    ]
   },
   {
     id: 'ml',
@@ -629,7 +759,19 @@ const FDATA = [
     domain: 'ia', level: 'avance', hours: 25,
     emoji: '🤖', color: '#EC4899',
     topics: ['Scikit-learn', 'ML Ops', 'Python'],
-    status: 'not_enrolled', pct: 0
+    status: 'not_enrolled', pct: 0,
+    modules: [
+      { title: 'Fondamentaux du Machine Learning', duration: '2h', lessons: ['Apprentissage supervisé vs non supervisé', 'Le pipeline ML de bout en bout', 'Biais, variance et généralisation', 'Choix du bon algorithme'] },
+      { title: 'Préparation des données', duration: '3h', lessons: ['Analyse exploratoire (EDA)', 'Gestion des valeurs manquantes', 'Encodage des variables catégorielles', 'Normalisation et standardisation', 'Feature Engineering avancé', 'Sélection de features (RFE, LASSO)'] },
+      { title: 'Algorithmes de Régression', duration: '3h', lessons: ['Régression linéaire et polynomiale', 'Ridge, Lasso et ElasticNet', 'Arbres de décision pour la régression', 'Gradient Boosting (XGBoost, LightGBM)'] },
+      { title: 'Algorithmes de Classification', duration: '4h', lessons: ['Régression logistique', 'K-Nearest Neighbors (KNN)', 'Support Vector Machines (SVM)', 'Random Forest & Bagging', 'XGBoost & LightGBM', 'Gestion des classes déséquilibrées (SMOTE)'] },
+      { title: 'Clustering & Apprentissage non supervisé', duration: '2h', lessons: ['K-Means et choix de K (Elbow, Silhouette)', 'Clustering hiérarchique', 'DBSCAN', 'Réduction de dimension : PCA, t-SNE, UMAP'] },
+      { title: 'Évaluation des modèles', duration: '2h', lessons: ['Métriques de régression (RMSE, MAE, R²)', 'Métriques de classification (F1, AUC-ROC, Precision-Recall)', 'Cross-validation (KFold, StratifiedKFold)', 'Courbes d\'apprentissage'] },
+      { title: 'Pipelines Scikit-learn', duration: '3h', lessons: ['Pipeline et ColumnTransformer', 'Custom transformers', 'GridSearchCV & RandomizedSearchCV', 'Optuna : optimisation bayésienne'] },
+      { title: 'Interprétabilité des modèles', duration: '2h', lessons: ['Feature importance', 'SHAP values (SHapley Additive exPlanations)', 'LIME', 'Partial Dependence Plots'] },
+      { title: 'Déploiement en production', duration: '3h', lessons: ['Sérialisation avec joblib/pickle', 'API avec FastAPI', 'Containerisation Docker', 'Tracking avec MLflow', 'CI/CD pour ML (GitHub Actions)'] },
+      { title: 'Projet Capstone', duration: '1h', lessons: ['Problème métier réel', 'Modélisation complète', 'API déployée et documentée', 'Présentation et rapport'] }
+    ]
   },
   {
     id: 'sql',
@@ -638,7 +780,15 @@ const FDATA = [
     domain: 'data', level: 'debutant', hours: 10,
     emoji: '🗄️', color: '#10B981',
     topics: ['SQL', 'PostgreSQL', 'Modélisation', 'Optimisation'],
-    status: 'completed', pct: 100
+    status: 'completed', pct: 100,
+    modules: [
+      { title: 'Fondamentaux SQL', duration: '2h', lessons: ['SELECT, FROM, WHERE', 'Tri et limitation (ORDER BY, LIMIT)', 'Opérateurs logiques et comparaisons', 'Fonctions de texte, date et mathématiques'] },
+      { title: 'Jointures & Relations', duration: '2h', lessons: ['INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN', 'Self JOIN et jointures multiples', 'UNION et INTERSECT', 'Sous-requêtes dans FROM et WHERE'] },
+      { title: 'Agrégation & Groupement', duration: '2h', lessons: ['GROUP BY et fonctions d\'agrégation', 'HAVING vs WHERE', 'Fonctions de fenêtre (OVER, PARTITION BY)', 'ROW_NUMBER, RANK, LAG, LEAD'] },
+      { title: 'Modélisation de données', duration: '1h', lessons: ['Modèle Entité-Association (MCD)', 'Normalisation (1NF, 2NF, 3NF)', 'Clés primaires et étrangères', 'Schéma en étoile vs flocon'] },
+      { title: 'PostgreSQL avancé', duration: '2h', lessons: ['Types JSON et JSONB', 'Index et stratégies d\'indexation', 'Vues et vues matérialisées', 'Fonctions et procédures stockées', 'Triggers'] },
+      { title: 'Optimisation des requêtes', duration: '1h', lessons: ['EXPLAIN et EXPLAIN ANALYZE', 'Plans d\'exécution', 'Requêtes N+1 et comment les éviter', 'CTEs récursives'] }
+    ]
   },
   {
     id: 'azure',
@@ -647,7 +797,16 @@ const FDATA = [
     domain: 'cloud', level: 'avance', hours: 22,
     emoji: '☁️', color: '#0EA5E9',
     topics: ['Azure', 'Synapse', 'Databricks', 'Data Factory'],
-    status: 'not_enrolled', pct: 0
+    status: 'not_enrolled', pct: 0,
+    modules: [
+      { title: 'Architecture Azure pour la Data', duration: '2h', lessons: ['Services de données Azure (vue d\'ensemble)', 'IAM : rôles, groupes et RBAC', 'Concepts Lakehouse & Medallion Architecture', 'Coûts et bonnes pratiques'] },
+      { title: 'Azure Data Lake Storage Gen2', duration: '2h', lessons: ['Organisation des dossiers (zones Bronze/Silver/Gold)', 'Contrôle d\'accès ACL et RBAC', 'Integration avec Synapse et Databricks', 'Partitionnement des fichiers'] },
+      { title: 'Azure Data Factory', duration: '4h', lessons: ['Pipelines et activités', 'Datasets et services liés', 'Flux de données (Mapping Data Flows)', 'Déclencheurs et monitoring', 'Paramètres et variables', 'Gestion des erreurs'] },
+      { title: 'Azure Synapse Analytics', duration: '5h', lessons: ['Synapse Studio : interface unifiée', 'Dedicated SQL Pools (DWH)', 'Serverless SQL Pool', 'Spark Pools', 'Intégration et orchestration', 'Synapse Link pour Cosmos DB'] },
+      { title: 'Azure Databricks', duration: '5h', lessons: ['Architecture Databricks & Apache Spark', 'Delta Lake : tables ACID', 'PySpark fondamental et avancé', 'Databricks Workflows', 'MLflow sur Databricks', 'Unity Catalog'] },
+      { title: 'Sécurité & Gouvernance', duration: '2h', lessons: ['Microsoft Purview', 'Chiffrement et conformité', 'Private Endpoints et réseau virtuel', 'Audit et journalisation'] },
+      { title: 'Projet End-to-End', duration: '2h', lessons: ['Ingestion depuis sources hétérogènes', 'Transformation avec Databricks', 'Chargement dans Synapse', 'Rapport Power BI connecté'] }
+    ]
   }
 ];
 
@@ -728,7 +887,10 @@ function buildCard(f) {
           <span>· ${f.topics.slice(0,3).join(', ')}</span>
         </div>
         ${fillBar}
-        <div class="fcard-foot">${cta}</div>
+        <div class="fcard-foot">
+          ${cta}
+          <button class="btn-programme" onclick="openProgram('${f.id}')">Voir le programme</button>
+        </div>
       </div>
     </div>`;
 }
@@ -783,6 +945,56 @@ function updateStats() {
   const navOffset = 66 - (66 * globalPct / 100);
   document.getElementById('navRing').style.strokeDashoffset = navOffset;
   document.getElementById('navPct').textContent = globalPct + '%';
+}
+
+// ── PROGRAMME MODAL ──
+function openProgram(id) {
+  const f = FDATA.find(f => f.id === id);
+  if (!f || !f.modules) return;
+
+  document.getElementById('progEmoji').textContent  = f.emoji;
+  document.getElementById('progTitle').textContent  = f.title;
+
+  const levelMap = { debutant: '🟢 Débutant', intermediaire: '🟡 Intermédiaire', avance: '🔴 Avancé' };
+  document.getElementById('progMeta').innerHTML =
+    `<span>${levelMap[f.level] || f.level}</span><span>·</span><span>⏱ ${f.hours}h au total</span><span>·</span><span>${f.modules.length} modules</span>`;
+
+  const totalLessons = f.modules.reduce((a, m) => a + m.lessons.length, 0);
+  document.getElementById('progSummary').innerHTML = `
+    <div class="prog-stat"><strong>${f.modules.length}</strong>Modules</div>
+    <div class="prog-stat"><strong>${totalLessons}</strong>Leçons</div>
+    <div class="prog-stat"><strong>${f.hours}h</strong>Durée totale</div>
+    <div class="prog-stat"><strong>${levelMap[f.level].split(' ')[1]}</strong>Niveau</div>`;
+
+  document.getElementById('progModules').innerHTML = f.modules.map((m, i) => `
+    <div class="prog-module" id="pm-${id}-${i}">
+      <div class="prog-module-head" onclick="toggleModule('pm-${id}-${i}')">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="pm-num">${i + 1}</div>
+          <span>${m.title}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span class="pm-dur">${m.duration} · ${m.lessons.length} leçons</span>
+          <span class="pm-arrow">▾</span>
+        </div>
+      </div>
+      <ul class="prog-module-lessons">
+        ${m.lessons.map(l => `<li>${l}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+
+  document.getElementById('progOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function toggleModule(id) {
+  document.getElementById(id)?.classList.toggle('open');
+}
+
+function closeProgram(e) {
+  if (e && e.target !== document.getElementById('progOverlay')) return;
+  document.getElementById('progOverlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ── ACTIONS ──
@@ -924,26 +1136,17 @@ function setupMobileSidebar() {
 // ── AUTH ──
 async function initAuth() {
   try {
-    const res = await fetch(`${SB_URL}/auth/v1/user`, {
-      headers: { apikey: SB_KEY, Authorization: `Bearer ${SB_KEY}` }
-    });
-    // Try to get stored session
     const session = JSON.parse(localStorage.getItem('sb-session') || 'null');
     if (session && session.access_token) {
-      const r2 = await fetch(`${SB_URL}/auth/v1/user`, {
+      const r = await fetch(`${SB_URL}/auth/v1/user`, {
         headers: { apikey: SB_KEY, Authorization: `Bearer ${session.access_token}` }
       });
-      if (r2.ok) {
-        const user = await r2.json();
-        setUser(user);
-        return;
-      }
+      if (r.ok) { setUser(await r.json()); return; }
     }
-    // No valid session — redirect
-    window.location.href = 'index.html';
+    // Pas de session — mode aperçu (ne pas rediriger)
+    setUser({ email: '', user_metadata: { full_name: 'Mon Espace' } });
   } catch(e) {
-    // Offline / dev mode — show demo user
-    setUser({ email: 'demo@pida.academy', user_metadata: { full_name: 'Demo User' } });
+    setUser({ email: '', user_metadata: { full_name: 'Mon Espace' } });
   }
 }
 

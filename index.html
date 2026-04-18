@@ -192,7 +192,7 @@ body:hover #cursor { opacity: 1; }
 .nav-cat-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
 /* Search bar */
-.nav-search { flex: 1; max-width: 400px; position: relative; }
+.nav-search { flex: 1; max-width: 260px; position: relative; }
 .nav-search input {
   width: 100%; font-family: var(--fb); font-size: 13px;
   background: var(--s2); border: 1px solid rgba(255,255,255,0.09);
@@ -1779,7 +1779,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
     <!-- Search bar -->
     <div class="nav-search">
       <svg class="nav-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="navSearch" placeholder="Rechercher une formation…" oninput="liveSearch(this.value)">
+      <input type="search" id="navSearch" placeholder="Rechercher…" autocomplete="off" autocorrect="off" spellcheck="false" oninput="liveSearch(this.value)">
     </div>
 
   <div class="nav-links">
@@ -3419,9 +3419,11 @@ async function updateNavbar(user, overrides = {}) {
     document.getElementById('dropdownEmail').textContent   = user.email;
 
     btnConnexion.style.display  = 'none';
+    document.getElementById('btnInscription').style.display = 'none';
     userAvatarBtn.style.display = 'flex';
   } else {
     btnConnexion.style.display  = '';
+    document.getElementById('btnInscription').style.display = '';
     userAvatarBtn.style.display = 'none';
   }
 }
