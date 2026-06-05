@@ -4411,6 +4411,30 @@ async function handlePhotoUpload(event) {
   showProfileMsg('✓ Photo mise à jour !', 'success');
 }
 
+/* ── NOUVEAUX COURS BANNER ── */
+.new-courses-banner {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(90deg, var(--blue), #0048CC);
+  color: white; padding: 16px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; z-index: 50; flex-wrap: wrap;
+  font-size: 14px; font-weight: 500;
+}
+.new-courses-banner a {
+  color: white; text-decoration: underline; cursor: pointer;
+  padding: 6px 12px; background: rgba(255,255,255,0.2);
+  border-radius: 4px; transition: all .2s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.new-courses-banner a:hover {
+  background: rgba(255,255,255,0.35);
+}
+.close-banner {
+  background: none; border: none; color: white; cursor: pointer;
+  font-size: 20px; padding: 0; width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+
 /* ── HERO CYCLE ── */
 (function() {
   const WORDS = ['Data,', 'IA,', 'Cloud.'];
@@ -4451,6 +4475,15 @@ async function handlePhotoUpload(event) {
   });
 })();
 </script>
+
+<!-- NOUVEAUX COURS BANNER -->
+<div class="new-courses-banner" id="newCoursesBanner">
+  <span>🎓 <strong>NOUVEAUX !</strong> Cours interactifs avec sandboxes → </span>
+  <a href="python-developer.html">🐍 Python Développeur</a>
+  <a href="sql-fundamentals.html">🗄️ SQL Fondamentaux</a>
+  <button class="close-banner" onclick="document.getElementById('newCoursesBanner').style.display='none'">&times;</button>
+</div>
+
 </body>
 </html>
 
