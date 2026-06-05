@@ -198,6 +198,13 @@ nav{
 .output-table tr:nth-child(even){background:#f0f0f0}
 .output-empty{color:var(--gray-light)}
 .output-error{color:#d32f2f}
+.loader{
+  display:inline-block;width:20px;height:20px;
+  border:3px solid var(--gray-light);border-top-color:var(--blue);
+  border-radius:50%;animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:var(--gray-mid);font-size:12px}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
@@ -533,12 +540,13 @@ function runSQL(sandboxId) {
     const btn = event.target;
 
     if (!db) {
-        outputEl.innerHTML = '<span class="output-error">Base de données non initialisée...</span>';
+        outputEl.innerHTML = '<div style="padding:12px"><div class="loader"></div> <span class="loading-text">Initialisation de SQLite...</span></div>';
         return;
     }
 
     btn.classList.add('loading');
     btn.textContent = 'Exécution...';
+    outputEl.innerHTML = '<div style="padding:12px"><div class="loader"></div> <span class="loading-text">Exécution requête SQL...</span></div>';
 
     try {
         const result = db.exec(query);
