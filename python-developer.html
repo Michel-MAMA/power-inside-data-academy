@@ -609,14 +609,20 @@ async function runCode(sandboxId) {
 
     btn.classList.add('loading');
     btn.textContent = 'Chargement...';
-    outputEl.innerHTML = '<div class="loader"></div> <span class="loading-text">Initialisation Python...</span>';
-
-    // Attendre Pyodide si pas encore chargé
-    if (!pyodideReady) {
-        outputEl.innerHTML = '<div style="padding:12px"><div class="loader"></div> <span class="loading-text">Chargement de Pyodide (WebAssembly)...<br>Cela peut prendre 3-5 secondes la première fois</span></div>';
-    }
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span class="loading-text">Initialisation Python...</span></div>';
 
     try {
+        // Attendre que Pyodide soit complètement chargé
+        let attempts = 0;
+        while (!pyodideReady && attempts < 60) {
+            await new Promise(r => setTimeout(r, 500));
+            attempts++;
+        }
+
+        if (!pyodideReady) {
+            throw new Error('Pyodide ne s\'est pas chargé correctement. Essayez de rafraîchir la page.');
+        }
+
         // Capturer console.log
         let output = '';
         const originalLog = console.log;
@@ -636,12 +642,13 @@ async function runCode(sandboxId) {
             outputEl.classList.remove('output-empty', 'output-error');
             outputEl.classList.add('output-success');
         } else {
-            outputEl.textContent = '(Pas de sortie)';
-            outputEl.classList.remove('output-error');
+            outputEl.innerHTML = '<span class="output-empty">(Pas de sortie affichée)</span>';
+            outputEl.classList.remove('output-error', 'output-success');
             outputEl.classList.add('output-empty');
         }
     } catch (err) {
-        outputEl.textContent = 'Erreur: ' + err.message;
+        console.error('Python Error:', err);
+        outputEl.textContent = 'Erreur: ' + (err.message || String(err));
         outputEl.classList.remove('output-empty', 'output-success');
         outputEl.classList.add('output-error');
     } finally {

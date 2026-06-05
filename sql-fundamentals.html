@@ -480,12 +480,18 @@ LIMIT 3;
 <script>
 let SQL = null;
 let db = null;
+let dbReady = false;
 
 // Charger sql.js
 async function loadSQL() {
-    const sqlJs = window.SQL;
-    SQL = await sqlJs();
-    initDatabase();
+    try {
+        const sqlJs = window.SQL;
+        SQL = await sqlJs();
+        initDatabase();
+        dbReady = true;
+    } catch (e) {
+        console.error('SQL.js load error:', e);
+    }
 }
 
 loadSQL();
@@ -533,22 +539,28 @@ function initDatabase() {
     `);
 }
 
-function runSQL(sandboxId) {
+async function runSQL(sandboxId) {
     const query = document.getElementById(sandboxId).value;
     const outputId = 'output' + sandboxId.replace('sandbox', '');
     const outputEl = document.getElementById(outputId);
     const btn = event.target;
 
-    if (!db) {
-        outputEl.innerHTML = '<div style="padding:12px"><div class="loader"></div> <span class="loading-text">Initialisation de SQLite...</span></div>';
-        return;
-    }
-
     btn.classList.add('loading');
-    btn.textContent = 'Exécution...';
-    outputEl.innerHTML = '<div style="padding:12px"><div class="loader"></div> <span class="loading-text">Exécution requête SQL...</span></div>';
+    btn.textContent = 'Chargement...';
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span class="loading-text">Initialisation SQLite...</span></div>';
 
     try {
+        // Attendre que la base de données soit prête
+        let attempts = 0;
+        while (!dbReady && attempts < 60) {
+            await new Promise(r => setTimeout(r, 500));
+            attempts++;
+        }
+
+        if (!dbReady) {
+            throw new Error('SQLite ne s\'est pas chargé correctement. Essayez de rafraîchir la page.');
+        }
+
         const result = db.exec(query);
 
         if (result.length === 0) {
@@ -579,7 +591,7 @@ function runSQL(sandboxId) {
             outputEl.classList.remove('output-error', 'output-empty');
         }
     } catch (err) {
-        outputEl.textContent = 'Erreur SQL: ' + err.message;
+        outputEl.textContent = 'Erreur: ' + (err.message || String(err));
         outputEl.classList.remove('output-empty');
         outputEl.classList.add('output-error');
     } finally {
