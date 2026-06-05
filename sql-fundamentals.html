@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Fondamentaux — Power Inside Data Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://sql.js.org/dist/sql-wasm.js"></script>
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#fff;color:#111;font-family:'Inter',sans-serif;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ─── VARIABLES ─── */
+:root{
+  --blue:#1561FF;
+  --blue-light:#EEF3FF;
+  --black:#111111;
+  --gray:#666666;
+  --gray-mid:#999999;
+  --gray-light:#E8E8E8;
+  --bg:#FFFFFF;
+  --radius:6px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --max:1160px;
+}
+
+/* ─── NAV ─── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:#fff;border-bottom:1px solid var(--gray-light);
+  padding:0 24px;
+}
+.nav-inner{
+  max-width:var(--max);margin:0 auto;
+  display:flex;align-items:center;gap:40px;height:60px;
+}
+.nav-logo{
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;
+  color:var(--black);flex-shrink:0;letter-spacing:-0.03em;
+}
+.nav-logo span{color:var(--blue)}
+.nav-links{
+  display:flex;align-items:center;gap:0;flex:1;
+}
+.nav-links a{
+  font-size:14px;font-weight:500;color:var(--gray);
+  padding:0 16px;height:60px;display:flex;align-items:center;
+  border-bottom:2px solid transparent;
+  transition:color .2s,border-color .2s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--black);border-color:var(--black)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0}
+.nav-cta{
+  font-size:13px;font-weight:600;
+  padding:8px 18px;border-radius:var(--radius);
+  background:var(--black);color:#fff;
+  transition:opacity .2s;
+}
+.nav-cta:hover{opacity:.8}
+
+/* ─── BREADCRUMB ─── */
+.breadcrumb{
+  padding:16px 24px;max-width:var(--max);margin:0 auto;
+  font-size:13px;color:var(--gray);border-bottom:1px solid var(--gray-light);
+}
+.breadcrumb a{color:var(--blue);transition:opacity .2s}
+.breadcrumb a:hover{opacity:.75}
+
+/* ─── HERO ─── */
+.course-hero{
+  padding:48px 24px;background:#f9f9f9;border-bottom:1px solid var(--gray-light);
+}
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero-title{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(28px,4vw,42px);font-weight:800;
+  color:var(--black);letter-spacing:-.03em;margin-bottom:16px;line-height:1.2;
+}
+.hero-desc{font-size:15px;color:var(--gray);line-height:1.7;margin-bottom:24px;max-width:700px}
+.hero-meta{
+  display:flex;gap:24px;flex-wrap:wrap;
+}
+.meta-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-mid)}
+.meta-label{font-weight:600;color:var(--black)}
+
+/* ─── SECTION ─── */
+.section{padding:48px 24px}
+.section-inner{max-width:var(--max);margin:0 auto}
+.section-title{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(22px,3vw,28px);font-weight:800;
+  color:var(--black);letter-spacing:-.02em;margin-bottom:32px;
+}
+
+/* ─── LESSON ─── */
+.lesson-grid{
+  display:grid;grid-template-columns:1fr;gap:32px;
+  padding:32px;background:#f9f9f9;border-radius:8px;border:1px solid var(--gray-light);
+  margin-bottom:24px;
+}
+.lesson-content{
+  font-size:15px;color:var(--gray);line-height:1.8;
+}
+.lesson-content h3{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:17px;font-weight:700;color:var(--black);
+  margin:20px 0 12px;
+}
+.lesson-content p{margin-bottom:14px}
+.lesson-content ul{margin-left:20px;margin-bottom:14px}
+.lesson-content li{margin-bottom:6px}
+.lesson-content code{
+  background:#fff;padding:2px 6px;border-radius:4px;
+  border:1px solid var(--gray-light);font-family:monospace;font-size:13px;
+  color:var(--blue);
+}
+
+/* ─── SANDBOX ─── */
+.sandbox-wrap{
+  border:1px solid var(--gray-light);border-radius:8px;
+  overflow:hidden;margin-bottom:32px;
+}
+.sandbox-header{
+  background:var(--black);color:#fff;padding:14px 20px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sandbox-body{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  min-height:400px;
+}
+.sandbox-editor{
+  border-right:1px solid var(--gray-light);
+  display:flex;flex-direction:column;
+  background:#1e1e1e;
+}
+.editor-controls{
+  padding:12px 16px;border-bottom:1px solid #333;
+  display:flex;gap:8px;
+}
+.btn-run{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:12px;font-weight:700;
+  padding:8px 16px;border-radius:var(--radius);
+  background:var(--blue);color:#fff;border:none;cursor:pointer;
+  text-transform:uppercase;letter-spacing:.08em;
+  transition:opacity .2s;
+}
+.btn-run:hover{opacity:.85}
+.btn-run.loading{opacity:.6;pointer-events:none}
+.editor-wrapper{
+  flex:1;overflow:auto;position:relative;
+}
+.code-editor{
+  position:absolute;inset:0;
+  font-family:'Courier New',monospace;
+  font-size:13px;
+  padding:16px;
+  border:none;
+  outline:none;
+  background:#1e1e1e;
+  color:#e0e0e0;
+  resize:none;
+  line-height:1.6;
+  white-space:pre;
+  tab-size:2;
+}
+.sandbox-output{
+  display:flex;flex-direction:column;background:#f9f9f9;
+}
+.output-header{
+  padding:12px 16px;border-bottom:1px solid var(--gray-light);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:var(--gray-mid);
+}
+.output-content{
+  flex:1;overflow:auto;padding:16px;
+  font-family:'Courier New',monospace;
+  font-size:13px;
+  line-height:1.6;
+  color:var(--black);
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.output-table{
+  width:100%;border-collapse:collapse;font-size:12px;
+}
+.output-table th,.output-table td{
+  border:1px solid var(--gray-light);padding:8px;text-align:left;
+}
+.output-table th{background:var(--blue-light);color:var(--blue);font-weight:700}
+.output-table tr:nth-child(even){background:#f0f0f0}
+.output-empty{color:var(--gray-light)}
+.output-error{color:#d32f2f}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .sandbox-body{grid-template-columns:1fr;min-height:auto}
+  .sandbox-editor{border-right:none;border-bottom:1px solid var(--gray-light);min-height:300px}
+}
+@media(max-width:600px){
+  .course-hero,.section{padding:24px 20px}
+  .hero-inner{gap:16px}
+  .sandbox-wrap{margin-bottom:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">PIDA<span>.</span></a>
+    <div class="nav-links">
+      <a href="power_inside_data_academy_catalogue.html">Formations</a>
+      <a href="index.html#parcours">Parcours</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a href="contact.html" class="nav-cta">Nous contacter</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── BREADCRUMB ─── -->
+<div class="breadcrumb">
+  <a href="index.html">Accueil</a> /
+  <a href="power_inside_data_academy_catalogue.html">Formations</a> /
+  <span>SQL Fondamentaux</span>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="course-hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">SQL Fondamentaux</h1>
+    <p class="hero-desc">Maîtrisez le langage SQL — de la récupération de données simples aux requêtes complexes avec JOIN, agrégation et sous-requêtes. Apprenez en écrivant vos propres requêtes.</p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Niveau</span>
+        <span>Débutant</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Durée</span>
+        <span>2 jours (12h)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Formateur</span>
+        <span>Dr. Michel MAMA TOULOU</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MODULE 1: SELECT ─── -->
+<section class="section">
+  <div class="section-inner">
+    <h2 class="section-title">Module 1 · SELECT et Filtrage</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>La clause SELECT</h3>
+        <p><code>SELECT</code> récupère les colonnes. <code>*</code> signifie "toutes les colonnes".</p>
+        <p><code>SELECT colonne1, colonne2 FROM table_name;</code></p>
+        <h3 style="margin-top:20px">WHERE — Filtrer les lignes</h3>
+        <p>La clause <code>WHERE</code> filtre les résultats selon des conditions :</p>
+        <ul>
+          <li><code>=</code> — Égal à</li>
+          <li><code>!=</code> ou <code>&lt;&gt;</code> — Différent de</li>
+          <li><code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> — Comparaisons</li>
+          <li><code>BETWEEN</code> — Entre deux valeurs</li>
+          <li><code>IN</code> — Dans une liste</li>
+          <li><code>LIKE</code> — Recherche de texte avec % et _</li>
+          <li><code>AND</code>, <code>OR</code>, <code>NOT</code> — Combinaisons logiques</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — SELECT et WHERE
+        <button class="btn-run" onclick="runSQL('sandbox1')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur SQL</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox1" spellcheck="false">-- Voir tous les employés
+SELECT * FROM employes;
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output1" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 2: JOIN ─── -->
+<section class="section" style="background:#f9f9f9">
+  <div class="section-inner">
+    <h2 class="section-title">Module 2 · Joindre des tables (JOIN)</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>Types de JOIN</h3>
+        <p>Les JOIN combinent des lignes de plusieurs tables :</p>
+        <ul>
+          <li><code>INNER JOIN</code> — Lignes qui correspondent dans les deux tables</li>
+          <li><code>LEFT JOIN</code> — Toutes les lignes de gauche + correspondances</li>
+          <li><code>RIGHT JOIN</code> — Toutes les lignes de droite + correspondances</li>
+          <li><code>FULL OUTER JOIN</code> — Toutes les lignes des deux tables</li>
+        </ul>
+        <h3 style="margin-top:20px">Syntaxe</h3>
+        <p><code>SELECT ... FROM table1 INNER JOIN table2 ON table1.id = table2.foreign_id</code></p>
+        <p>La clause <code>ON</code> spécifie la condition de jointure (habituellement sur les clés primaires/étrangères).</p>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — JOIN
+        <button class="btn-run" onclick="runSQL('sandbox2')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur SQL</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox2" spellcheck="false">-- Employés avec leur département
+SELECT
+    e.nom,
+    e.salaire,
+    d.nom AS departement
+FROM employes e
+INNER JOIN departements d ON e.dept_id = d.id;
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output2" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 3: AGRÉGATION ─── -->
+<section class="section">
+  <div class="section-inner">
+    <h2 class="section-title">Module 3 · Agrégation et GROUP BY</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>Fonctions d'agrégation</h3>
+        <p>Résument les données sur un groupe de lignes :</p>
+        <ul>
+          <li><code>COUNT()</code> — Compte le nombre de lignes</li>
+          <li><code>SUM()</code> — Somme les valeurs</li>
+          <li><code>AVG()</code> — Moyenne des valeurs</li>
+          <li><code>MIN()</code>, <code>MAX()</code> — Valeurs min et max</li>
+        </ul>
+        <h3 style="margin-top:20px">GROUP BY</h3>
+        <p><code>GROUP BY</code> regroupe les lignes par colonnes spécifiques, puis applique les agrégations :</p>
+        <p><code>SELECT dept_id, COUNT(*) FROM employes GROUP BY dept_id;</code></p>
+        <p>La clause <code>HAVING</code> filtre les groupes (comme <code>WHERE</code> pour les groupes).</p>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — GROUP BY et COUNT
+        <button class="btn-run" onclick="runSQL('sandbox3')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur SQL</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox3" spellcheck="false">-- Nombre d'employés par département
+SELECT
+    d.nom AS departement,
+    COUNT(e.id) AS nb_employes,
+    AVG(e.salaire) AS salaire_moyen
+FROM departements d
+LEFT JOIN employes e ON d.id = e.dept_id
+GROUP BY d.id, d.nom
+ORDER BY nb_employes DESC;
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output3" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 4: ORDER & LIMIT ─── -->
+<section class="section" style="background:#f9f9f9">
+  <div class="section-inner">
+    <h2 class="section-title">Module 4 · Tri et Pagination</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>ORDER BY — Trier les résultats</h3>
+        <p><code>ORDER BY colonne ASC|DESC;</code></p>
+        <ul>
+          <li><code>ASC</code> — Ascendant (par défaut)</li>
+          <li><code>DESC</code> — Descendant</li>
+          <li>Supportes plusieurs colonnes : <code>ORDER BY nom ASC, salaire DESC</code></li>
+        </ul>
+        <h3 style="margin-top:20px">LIMIT et OFFSET</h3>
+        <ul>
+          <li><code>LIMIT n</code> — Retourne les n premières lignes</li>
+          <li><code>OFFSET m</code> — Saute les m premières lignes</li>
+          <li><code>LIMIT n OFFSET m</code> — Pagination (page m, taille n)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — ORDER BY et LIMIT
+        <button class="btn-run" onclick="runSQL('sandbox4')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur SQL</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox4" spellcheck="false">-- Top 3 des employés les mieux payés
+SELECT
+    nom,
+    salaire,
+    d.nom AS departement
+FROM employes e
+LEFT JOIN departements d ON e.dept_id = d.id
+ORDER BY salaire DESC
+LIMIT 3;
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output4" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+let SQL = null;
+let db = null;
+
+// Charger sql.js
+async function loadSQL() {
+    const sqlJs = window.SQL;
+    SQL = await sqlJs();
+    initDatabase();
+}
+
+loadSQL();
+
+function initDatabase() {
+    db = new SQL.Database();
+
+    // Créer des tables de démonstration
+    db.run(`
+        CREATE TABLE departements (
+            id INTEGER PRIMARY KEY,
+            nom TEXT NOT NULL
+        );
+    `);
+
+    db.run(`
+        CREATE TABLE employes (
+            id INTEGER PRIMARY KEY,
+            nom TEXT NOT NULL,
+            salaire REAL NOT NULL,
+            dept_id INTEGER,
+            FOREIGN KEY(dept_id) REFERENCES departements(id)
+        );
+    `);
+
+    // Insérer les données
+    db.run(`
+        INSERT INTO departements VALUES
+        (1, 'Informatique'),
+        (2, 'Ressources Humaines'),
+        (3, 'Ventes'),
+        (4, 'Finance');
+    `);
+
+    db.run(`
+        INSERT INTO employes VALUES
+        (1, 'Alice', 45000, 1),
+        (2, 'Bob', 38000, 1),
+        (3, 'Charlie', 42000, 2),
+        (4, 'Diana', 51000, 3),
+        (5, 'Eve', 48000, 1),
+        (6, 'Frank', 39000, 4),
+        (7, 'Grace', 44000, 3),
+        (8, 'Henry', 36000, 2);
+    `);
+}
+
+function runSQL(sandboxId) {
+    const query = document.getElementById(sandboxId).value;
+    const outputId = 'output' + sandboxId.replace('sandbox', '');
+    const outputEl = document.getElementById(outputId);
+    const btn = event.target;
+
+    if (!db) {
+        outputEl.innerHTML = '<span class="output-error">Base de données non initialisée...</span>';
+        return;
+    }
+
+    btn.classList.add('loading');
+    btn.textContent = 'Exécution...';
+
+    try {
+        const result = db.exec(query);
+
+        if (result.length === 0) {
+            outputEl.textContent = '(Pas de résultat)';
+            outputEl.classList.remove('output-error');
+            outputEl.classList.add('output-empty');
+        } else {
+            const columns = result[0].columns;
+            const values = result[0].values;
+
+            // Créer un tableau HTML
+            let html = '<table class="output-table"><thead><tr>';
+            columns.forEach(col => {
+                html += `<th>${col}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            values.forEach(row => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    html += `<td>${cell !== null ? cell : 'NULL'}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            outputEl.innerHTML = html;
+            outputEl.classList.remove('output-error', 'output-empty');
+        }
+    } catch (err) {
+        outputEl.textContent = 'Erreur SQL: ' + err.message;
+        outputEl.classList.remove('output-empty');
+        outputEl.classList.add('output-error');
+    } finally {
+        btn.classList.remove('loading');
+        btn.textContent = 'Exécuter (Run)';
+    }
+}
+</script>
+
+</body>
+</html>
