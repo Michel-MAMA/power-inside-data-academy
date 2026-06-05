@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Développeur — Power Inside Data Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pyodide@0.23.4/pyodide.js"></script>
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#fff;color:#111;font-family:'Inter',sans-serif;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ─── VARIABLES ─── */
+:root{
+  --blue:#1561FF;
+  --blue-light:#EEF3FF;
+  --black:#111111;
+  --gray:#666666;
+  --gray-mid:#999999;
+  --gray-light:#E8E8E8;
+  --bg:#FFFFFF;
+  --radius:6px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --max:1160px;
+}
+
+/* ─── NAV ─── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:#fff;border-bottom:1px solid var(--gray-light);
+  padding:0 24px;
+}
+.nav-inner{
+  max-width:var(--max);margin:0 auto;
+  display:flex;align-items:center;gap:40px;height:60px;
+}
+.nav-logo{
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;
+  color:var(--black);flex-shrink:0;letter-spacing:-0.03em;
+}
+.nav-logo span{color:var(--blue)}
+.nav-links{
+  display:flex;align-items:center;gap:0;flex:1;
+}
+.nav-links a{
+  font-size:14px;font-weight:500;color:var(--gray);
+  padding:0 16px;height:60px;display:flex;align-items:center;
+  border-bottom:2px solid transparent;
+  transition:color .2s,border-color .2s;
+}
+.nav-links a:hover,.nav-links a.active{color:var(--black);border-color:var(--black)}
+.nav-right{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0}
+.nav-cta{
+  font-size:13px;font-weight:600;
+  padding:8px 18px;border-radius:var(--radius);
+  background:var(--black);color:#fff;
+  transition:opacity .2s;
+}
+.nav-cta:hover{opacity:.8}
+
+/* ─── BREADCRUMB ─── */
+.breadcrumb{
+  padding:16px 24px;max-width:var(--max);margin:0 auto;
+  font-size:13px;color:var(--gray);border-bottom:1px solid var(--gray-light);
+}
+.breadcrumb a{color:var(--blue);transition:opacity .2s}
+.breadcrumb a:hover{opacity:.75}
+
+/* ─── HERO ─── */
+.course-hero{
+  padding:48px 24px;background:#f9f9f9;border-bottom:1px solid var(--gray-light);
+}
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero-title{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(28px,4vw,42px);font-weight:800;
+  color:var(--black);letter-spacing:-.03em;margin-bottom:16px;line-height:1.2;
+}
+.hero-desc{font-size:15px;color:var(--gray);line-height:1.7;margin-bottom:24px;max-width:700px}
+.hero-meta{
+  display:flex;gap:24px;flex-wrap:wrap;
+}
+.meta-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-mid)}
+.meta-label{font-weight:600;color:var(--black)}
+
+/* ─── SECTION ─── */
+.section{padding:48px 24px}
+.section-inner{max-width:var(--max);margin:0 auto}
+.section-title{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:clamp(22px,3vw,28px);font-weight:800;
+  color:var(--black);letter-spacing:-.02em;margin-bottom:32px;
+}
+
+/* ─── LESSON ─── */
+.lesson-grid{
+  display:grid;grid-template-columns:1fr;gap:32px;
+  padding:32px;background:#f9f9f9;border-radius:8px;border:1px solid var(--gray-light);
+  margin-bottom:24px;
+}
+.lesson-content{
+  font-size:15px;color:var(--gray);line-height:1.8;
+}
+.lesson-content h3{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:17px;font-weight:700;color:var(--black);
+  margin:20px 0 12px;
+}
+.lesson-content p{margin-bottom:14px}
+.lesson-content ul{margin-left:20px;margin-bottom:14px}
+.lesson-content li{margin-bottom:6px}
+.lesson-content code{
+  background:#fff;padding:2px 6px;border-radius:4px;
+  border:1px solid var(--gray-light);font-family:monospace;font-size:13px;
+  color:var(--blue);
+}
+
+/* ─── SANDBOX ─── */
+.sandbox-wrap{
+  border:1px solid var(--gray-light);border-radius:8px;
+  overflow:hidden;margin-bottom:32px;
+}
+.sandbox-header{
+  background:var(--black);color:#fff;padding:14px 20px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.sandbox-body{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  min-height:400px;
+}
+.sandbox-editor{
+  border-right:1px solid var(--gray-light);
+  display:flex;flex-direction:column;
+  background:#1e1e1e;
+}
+.editor-controls{
+  padding:12px 16px;border-bottom:1px solid #333;
+  display:flex;gap:8px;
+}
+.btn-run{
+  font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:12px;font-weight:700;
+  padding:8px 16px;border-radius:var(--radius);
+  background:var(--blue);color:#fff;border:none;cursor:pointer;
+  text-transform:uppercase;letter-spacing:.08em;
+  transition:opacity .2s;
+}
+.btn-run:hover{opacity:.85}
+.btn-run.loading{opacity:.6;pointer-events:none}
+.editor-wrapper{
+  flex:1;overflow:auto;position:relative;
+}
+.code-editor{
+  position:absolute;inset:0;
+  font-family:'Courier New',monospace;
+  font-size:13px;
+  padding:16px;
+  border:none;
+  outline:none;
+  background:#1e1e1e;
+  color:#e0e0e0;
+  resize:none;
+  line-height:1.6;
+  white-space:pre;
+  tab-size:2;
+}
+.code-highlight{
+  position:absolute;inset:0;
+  padding:16px;
+  font-family:'Courier New',monospace;
+  font-size:13px;
+  line-height:1.6;
+  white-space:pre;
+  pointer-events:none;
+  overflow:auto;
+  color:transparent;
+}
+.sandbox-output{
+  display:flex;flex-direction:column;background:#f9f9f9;
+}
+.output-header{
+  padding:12px 16px;border-bottom:1px solid var(--gray-light);
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:var(--gray-mid);
+}
+.output-content{
+  flex:1;overflow:auto;padding:16px;
+  font-family:'Courier New',monospace;
+  font-size:13px;
+  line-height:1.6;
+  color:var(--black);
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.output-empty{color:var(--gray-light)}
+.output-error{color:#d32f2f}
+.output-success{color:var(--blue)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .sandbox-body{grid-template-columns:1fr;min-height:auto}
+  .sandbox-editor{border-right:none;border-bottom:1px solid var(--gray-light);min-height:300px}
+}
+@media(max-width:600px){
+  .course-hero,.section{padding:24px 20px}
+  .hero-inner{gap:16px}
+  .sandbox-wrap{margin-bottom:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">PIDA<span>.</span></a>
+    <div class="nav-links">
+      <a href="power_inside_data_academy_catalogue.html">Formations</a>
+      <a href="index.html#parcours">Parcours</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a href="contact.html" class="nav-cta">Nous contacter</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── BREADCRUMB ─── -->
+<div class="breadcrumb">
+  <a href="index.html">Accueil</a> /
+  <a href="power_inside_data_academy_catalogue.html">Formations</a> /
+  <span>Python Développeur</span>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="course-hero">
+  <div class="hero-inner">
+    <h1 class="hero-title">Python Développeur</h1>
+    <p class="hero-desc">Maîtrisez Python pour développer des applications robustes. Des fondamentaux à la POO, Flask et API REST — apprenez en pratiquant avec les sandboxes interactives.</p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Niveau</span>
+        <span>Débutant → Intermédiaire</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Durée</span>
+        <span>3 jours (18h)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Formateur</span>
+        <span>Dr. Michel MAMA TOULOU</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MODULE 1: FONDAMENTAUX ─── -->
+<section class="section">
+  <div class="section-inner">
+    <h2 class="section-title">Module 1 · Fondamentaux Python</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>Variables et Types de données</h3>
+        <p>En Python, les variables sont déclarées sans type explicite. Python infère le type automatiquement.</p>
+        <p><strong>Types principaux :</strong></p>
+        <ul>
+          <li><code>int</code> — Nombres entiers : 42, -10, 0</li>
+          <li><code>float</code> — Nombres décimaux : 3.14, -0.5</li>
+          <li><code>str</code> — Chaînes de caractères : "Hello", 'Python'</li>
+          <li><code>bool</code> — Booléens : True, False</li>
+          <li><code>list</code> — Listes : [1, 2, 3], ['a', 'b']</li>
+          <li><code>dict</code> — Dictionnaires : {'nom': 'Alice', 'age': 30}</li>
+        </ul>
+        <p>Les variables Python sont dynamiquement typées et peuvent changer de type au cours du programme.</p>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — Variables et Types
+        <button class="btn-run" onclick="runCode('sandbox1')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur Python</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox1" spellcheck="false"># Variables et types de données
+nom = "Alice"
+age = 30
+salaire = 45000.50
+actif = True
+
+print(f"Nom: {nom}")
+print(f"Age: {age}")
+print(f"Type d'age: {type(age)}")
+print(f"Salaire: {salaire}")
+print(f"Actif: {actif}")
+
+# Listes
+nombres = [1, 2, 3, 4, 5]
+print(f"Nombres: {nombres}")
+print(f"Premier: {nombres[0]}")
+
+# Dictionnaires
+personne = {"nom": "Bob", "age": 25, "ville": "Paris"}
+print(f"Personne: {personne}")
+print(f"Ville: {personne['ville']}")
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output1" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 2: CONTRÔLE DE FLUX ─── -->
+<section class="section" style="background:#f9f9f9">
+  <div class="section-inner">
+    <h2 class="section-title">Module 2 · Contrôle de flux et Boucles</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>Conditions (if/elif/else)</h3>
+        <p>Les conditions permettent d'exécuter du code selon des critères :</p>
+        <ul>
+          <li><code>if condition:</code> — Exécute si la condition est vraie</li>
+          <li><code>elif condition:</code> — Exécute si précédent if est faux</li>
+          <li><code>else:</code> — Exécute si aucun if/elif n'est vrai</li>
+        </ul>
+        <h3 style="margin-top:20px">Boucles</h3>
+        <ul>
+          <li><code>for x in liste:</code> — Boucle sur les éléments</li>
+          <li><code>while condition:</code> — Boucle tant que condition est vraie</li>
+          <li><code>break</code> — Sort de la boucle</li>
+          <li><code>continue</code> — Passe à l'itération suivante</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — Conditions et Boucles
+        <button class="btn-run" onclick="runCode('sandbox2')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur Python</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox2" spellcheck="false"># Conditions
+age = 20
+if age >= 18:
+    print(f"L'âge {age} est majeur")
+elif age >= 13:
+    print("C'est un adolescent")
+else:
+    print("C'est un enfant")
+
+# Boucle for
+print("\nBoucle for:")
+for i in range(1, 6):
+    print(f"Itération {i}")
+
+# Boucle sur une liste
+fruits = ["pomme", "banane", "cerise"]
+print("\nFruits:")
+for fruit in fruits:
+    print(f"- {fruit}")
+
+# Boucle while
+print("\nBoucle while:")
+compte = 0
+while compte < 3:
+    print(f"Compte: {compte}")
+    compte += 1
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output2" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 3: FONCTIONS ─── -->
+<section class="section">
+  <div class="section-inner">
+    <h2 class="section-title">Module 3 · Fonctions et Modules</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>Définir des Fonctions</h3>
+        <p>Une fonction regroupe du code réutilisable :</p>
+        <p><code>def nom_fonction(parametres):</code></p>
+        <ul>
+          <li>Accepte des paramètres (optionnels)</li>
+          <li>Retourne une valeur avec <code>return</code></li>
+          <li>Peut avoir des valeurs par défaut</li>
+          <li>Supporte les *args et **kwargs</li>
+        </ul>
+        <h3 style="margin-top:20px">Bonnes pratiques</h3>
+        <ul>
+          <li>Noms descriptifs (verbes pour les actions)</li>
+          <li>Une responsabilité par fonction</li>
+          <li>Ajouter une docstring (<code>"""..."""</code>)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — Fonctions
+        <button class="btn-run" onclick="runCode('sandbox3')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur Python</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox3" spellcheck="false"># Fonction simple
+def saluer(nom):
+    """Salue une personne"""
+    return f"Bonjour, {nom}!"
+
+print(saluer("Alice"))
+print(saluer("Bob"))
+
+# Fonction avec valeur par défaut
+def calculer_prix(montant, taxe=0.20):
+    """Calcule le prix TTC"""
+    return montant * (1 + taxe)
+
+print(f"Prix HT: 100€, TTC: {calculer_prix(100)}€")
+print(f"Prix HT: 100€, TTC (0% taxe): {calculer_prix(100, 0)}€")
+
+# Fonction avec plusieurs retours
+def diviser(a, b):
+    """Divise a par b et retourne quotient et reste"""
+    return a // b, a % b
+
+quotient, reste = diviser(17, 5)
+print(f"17 / 5 = {quotient} reste {reste}")
+
+# Fonction avec *args
+def somme(*nombres):
+    """Somme tous les arguments"""
+    total = 0
+    for n in nombres:
+        total += n
+    return total
+
+print(f"Somme(1,2,3) = {somme(1, 2, 3)}")
+print(f"Somme(10,20,30,40) = {somme(10, 20, 30, 40)}")
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output3" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 4: POO ─── -->
+<section class="section" style="background:#f9f9f9">
+  <div class="section-inner">
+    <h2 class="section-title">Module 4 · Programmation Orientée Objet</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>Classes et Objets</h3>
+        <p>La POO permet d'organiser le code autour d'objets avec état et comportement :</p>
+        <ul>
+          <li><code>class NomClasse:</code> — Définit une classe</li>
+          <li><code>def __init__(self):</code> — Constructeur (initialise l'objet)</li>
+          <li><code>self</code> — Référence à l'instance courante</li>
+          <li>Attributs — Variables de l'objet</li>
+          <li>Méthodes — Fonctions de l'objet</li>
+        </ul>
+        <h3 style="margin-top:20px">Principes POO</h3>
+        <ul>
+          <li><strong>Encapsulation</strong> — Regrouper données et comportements</li>
+          <li><strong>Héritage</strong> — Une classe peut hériter d'une autre</li>
+          <li><strong>Polymorphisme</strong> — Même méthode, comportements différents</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — Classes et POO
+        <button class="btn-run" onclick="runCode('sandbox4')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur Python</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox4" spellcheck="false"># Définir une classe
+class Personne:
+    """Classe représentant une personne"""
+
+    def __init__(self, nom, age):
+        """Constructeur"""
+        self.nom = nom
+        self.age = age
+
+    def se_presenter(self):
+        """Méthode d'instance"""
+        return f"Je m'appelle {self.nom} et j'ai {self.age} ans"
+
+    def est_majeur(self):
+        return self.age >= 18
+
+# Créer des instances (objets)
+alice = Personne("Alice", 30)
+bob = Personne("Bob", 16)
+
+print(alice.se_presenter())
+print(f"Alice est majeure: {alice.est_majeur()}")
+
+print(bob.se_presenter())
+print(f"Bob est majeur: {bob.est_majeur()}")
+
+# Héritage
+class Employe(Personne):
+    """Classe qui hérite de Personne"""
+
+    def __init__(self, nom, age, metier):
+        super().__init__(nom, age)
+        self.metier = metier
+
+    def se_presenter(self):
+        """Surcharge de méthode"""
+        parent = super().se_presenter()
+        return f"{parent} et je suis {self.metier}"
+
+employe = Employe("Charlie", 28, "Développeur")
+print(employe.se_presenter())
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output4" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+// Charger Pyodide et exécuter du code Python
+let pyodideReady = false;
+
+async function loadPyodide() {
+    try {
+        await loadPyodideIndependent();
+        pyodideReady = true;
+    } catch (e) {
+        console.log('Pyodide load error:', e);
+    }
+}
+
+loadPyodide();
+
+async function runCode(sandboxId) {
+    if (!pyodideReady) {
+        alert('Chargement en cours... Attendez un moment');
+        return;
+    }
+
+    const code = document.getElementById(sandboxId).value;
+    const outputId = 'output' + sandboxId.replace('sandbox', '');
+    const outputEl = document.getElementById(outputId);
+    const btn = event.target;
+
+    btn.classList.add('loading');
+    btn.textContent = 'Exécution...';
+    outputEl.innerHTML = '<span class="output-success">Exécution...</span>';
+
+    try {
+        // Capturer console.log
+        let output = '';
+        const originalLog = console.log;
+        console.log = function(...args) {
+            output += args.join(' ') + '\n';
+            originalLog.apply(console, args);
+        };
+
+        // Exécuter le code
+        await pyodide.runPythonAsync(code);
+
+        // Restaurer console.log
+        console.log = originalLog;
+
+        if (output) {
+            outputEl.textContent = output;
+            outputEl.classList.remove('output-empty', 'output-error');
+            outputEl.classList.add('output-success');
+        } else {
+            outputEl.textContent = '(Pas de sortie)';
+            outputEl.classList.remove('output-error');
+            outputEl.classList.add('output-empty');
+        }
+    } catch (err) {
+        outputEl.textContent = 'Erreur: ' + err.message;
+        outputEl.classList.remove('output-empty', 'output-success');
+        outputEl.classList.add('output-error');
+    } finally {
+        btn.classList.remove('loading');
+        btn.textContent = 'Exécuter (Run)';
+    }
+}
+</script>
+
+</body>
+</html>
