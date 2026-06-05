@@ -205,6 +205,15 @@ nav{
 .output-error{color:#d32f2f}
 .output-success{color:var(--blue)}
 
+/* ─── LOADER ─── */
+.loader{
+  display:inline-block;width:20px;height:20px;
+  border:3px solid var(--gray-light);border-top-color:var(--blue);
+  border-radius:50%;animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:var(--gray-mid);font-size:12px}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
   .sandbox-body{grid-template-columns:1fr;min-height:auto}
@@ -593,19 +602,19 @@ async function loadPyodide() {
 loadPyodide();
 
 async function runCode(sandboxId) {
-    if (!pyodideReady) {
-        alert('Chargement en cours... Attendez un moment');
-        return;
-    }
-
     const code = document.getElementById(sandboxId).value;
     const outputId = 'output' + sandboxId.replace('sandbox', '');
     const outputEl = document.getElementById(outputId);
     const btn = event.target;
 
     btn.classList.add('loading');
-    btn.textContent = 'Exécution...';
-    outputEl.innerHTML = '<span class="output-success">Exécution...</span>';
+    btn.textContent = 'Chargement...';
+    outputEl.innerHTML = '<div class="loader"></div> <span class="loading-text">Initialisation Python...</span>';
+
+    // Attendre Pyodide si pas encore chargé
+    if (!pyodideReady) {
+        outputEl.innerHTML = '<div style="padding:12px"><div class="loader"></div> <span class="loading-text">Chargement de Pyodide (WebAssembly)...<br>Cela peut prendre 3-5 secondes la première fois</span></div>';
+    }
 
     try {
         // Capturer console.log
