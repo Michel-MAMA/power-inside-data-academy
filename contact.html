@@ -70,28 +70,44 @@ a{text-decoration:none;color:inherit}
 .mobile-menu .m-cta{background:var(--blue);color:#fff;font-size:14px;padding:14px 40px}
 .mobile-menu .m-cta:hover{background:var(--blue-l)}
 
-@media(max-width:900px){.contact-grid{grid-template-columns:1fr}.container{padding:0 24px}.page-hero{padding:120px 24px 48px}#navbar{padding:0 24px}}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}.container{padding:0 24px}.page-hero{padding:120px 24px 48px}#navbar{padding:0 24px}.form-modal{margin:40px 20px !important}}
 @media(max-width:768px){.nav-links,.nav-cta{display:none}.nav-burger{display:flex}}
 
-/* ── FORM PANEL ── */
-.form-panel{background:var(--s1);border:1px solid var(--border);border-radius:20px;padding:40px;position:relative;overflow:hidden}
-.form-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent)}
-.form-title{font-family:var(--fd);font-size:20px;font-weight:700;margin-bottom:6px}
-.form-sub{font-size:13px;color:var(--w60);margin-bottom:32px}
+/* ── PREMIUM MODAL FORM ── */
+.form-modal{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4);display:grid;grid-template-columns:1.1fr 1fr;gap:0;margin:40px auto;max-width:1400px}
+.form-modal::before{content:'';position:absolute;inset:0;background:url('data:image/svg+xml,<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="400" height="400" fill="url(%23dots)"/></svg>');opacity:.6;pointer-events:none}
+.form-visual{position:relative;padding:60px 50px;display:flex;flex-direction:column;justify-content:center;gap:32px;background:linear-gradient(135deg,rgba(255,107,53,.08) 0%,rgba(21,97,255,.04) 100%)}
+.form-visual::after{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,107,53,.15) 0%,transparent 70%);border-radius:50%;pointer-events:none}
+.visual-title{font-family:var(--fd);font-size:clamp(28px,3vw,42px);font-weight:800;color:#fff;line-height:1.2;position:relative;z-index:2}
+.visual-title span{color:#FF6B35;display:block;margin-top:8px}
+.visual-subtitle{font-size:16px;color:rgba(255,255,255,.75);line-height:1.7;max-width:380px;position:relative;z-index:2}
+.visual-features{display:flex;flex-direction:column;gap:20px;position:relative;z-index:2}
+.feature{display:flex;gap:14px;align-items:flex-start}
+.feature-icon{width:40px;height:40px;background:linear-gradient(135deg,#FF6B35,#FF8C5C);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.feature-text{flex:1}
+.feature-title{font-weight:600;color:#fff;margin-bottom:4px;font-size:14px}
+.feature-desc{font-size:12px;color:rgba(255,255,255,.65);line-height:1.5}
+
+.form-panel{position:relative;padding:50px 45px;display:flex;flex-direction:column;justify-content:center;gap:24px;background:transparent;border:none;z-index:3}
+.form-title{font-family:var(--fd);font-size:24px;font-weight:800;color:#fff;margin:0 0 6px 0;letter-spacing:-.01em}
+.form-sub{font-size:14px;color:rgba(255,255,255,.7);margin:0 0 28px 0}
 
 .field{margin-bottom:20px}
-.field label{display:block;font-family:var(--fd);font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--w35);margin-bottom:8px}
-.field input,.field textarea,.field select{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:13px 16px;font-family:var(--fb);font-size:14px;color:var(--white);outline:none;transition:border .2s,background .2s;resize:none;-webkit-appearance:none}
-.field input::placeholder,.field textarea::placeholder{color:var(--w35)}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--blue-border);background:var(--s3)}
-.field select option{background:var(--s2)}
-.field textarea{min-height:130px;line-height:1.6}
+.field label{display:block;font-family:var(--fb);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
+.field input,.field textarea,.field select{width:100%;background:#fff;border:2px solid transparent;border-radius:12px;padding:14px 16px;font-family:var(--fb);font-size:14px;color:#1a1a1a;outline:none;transition:all .25s;resize:none;-webkit-appearance:none;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.field input::placeholder,.field textarea::placeholder{color:rgba(0,0,0,.45)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#FF6B35;box-shadow:0 6px 20px rgba(255,107,53,.2);background:#fff}
+.field select{appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%231a1a1a" d="M1 1l5 5 5-5"/></svg>');background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field select option{background:#fff;color:#1a1a1a}
+.field textarea{min-height:100px;line-height:1.6}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:500px){.field-row{grid-template-columns:1fr}}
+@media(max-width:600px){.field-row{grid-template-columns:1fr}.form-modal{grid-template-columns:1fr}.form-visual{padding:40px 30px}.form-panel{padding:40px 30px}}
 
-.form-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:8px}
-.form-notice{font-size:11px;color:var(--w35);line-height:1.5;max-width:280px}
-.form-notice a{color:var(--blue)}
+.form-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:24px}
+.form-notice{font-size:11px;color:rgba(255,255,255,.6);line-height:1.6;max-width:320px}
+.form-notice a{color:#FF6B35;text-decoration:underline}
+.btn-submit{background:linear-gradient(135deg,#FF6B35,#FF8C5C) !important;color:#fff !important;padding:14px 32px !important;border-radius:12px !important;border:none !important;font-weight:700 !important;font-size:12px !important;letter-spacing:.1em !important;text-transform:uppercase !important;cursor:pointer !important;transition:all .3s !important;box-shadow:0 8px 24px rgba(255,107,53,.3) !important;font-family:var(--fd) !important}
+.btn-submit:hover{transform:translateY(-2px) !important;box-shadow:0 12px 32px rgba(255,107,53,.4) !important;background:linear-gradient(135deg,#FF7D4A,#FFA070) !important}
 
 /* Success state */
 .form-success{display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;gap:16px}
@@ -227,72 +243,113 @@ footer{border-top:1px solid var(--border);padding:32px 40px;display:flex;align-i
 
 <div class="sep"></div>
 
-<!-- ── MAIN CONTENT ── -->
-<section style="padding:56px 0">
-  <div class="container">
-    <div class="contact-grid">
+<!-- ── PREMIUM CONTACT FORM ── -->
+<section style="padding:80px 40px 60px">
+  <div class="form-modal" id="contact-form">
 
-      <!-- FORM -->
-      <div class="form-panel reveal" id="contact-form">
-        <div id="formContent">
-          <div class="form-title">Envoyez-nous un message</div>
-          <div class="form-sub">Réponse garantie sous 24h ouvrées.</div>
+    <!-- VISUAL CONTENT (LEFT) -->
+    <div class="form-visual">
+      <div>
+        <div class="visual-title">Trouvez la<span>formation idéale</span></div>
+        <div class="visual-subtitle">Parlons de vos objectifs, vos contraintes et votre contexte. Notre équipe d'experts conçoit le programme parfait pour vous.</div>
+      </div>
 
-          <form id="contactForm" onsubmit="handleSubmit(event)">
-            <div class="field-row">
-              <div class="field">
-                <label for="prenom">Prénom</label>
-                <input type="text" id="prenom" name="prenom" placeholder="Jean" required>
-              </div>
-              <div class="field">
-                <label for="nom">Nom</label>
-                <input type="text" id="nom" name="nom" placeholder="Dupont" required>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="email">Adresse e-mail</label>
-              <input type="email" id="email" name="email" placeholder="jean.dupont@entreprise.com" required>
-            </div>
-
-            <div class="field">
-              <label for="tel">Téléphone (optionnel)</label>
-              <input type="tel" id="tel" name="tel" placeholder="+33 6 XX XX XX XX">
-            </div>
-
-            <div class="field">
-              <label for="sujet">Sujet</label>
-              <select id="sujet" name="sujet" required>
-                <option value="" disabled selected>Choisissez un sujet…</option>
-                <option value="devis">Demande de devis / formation sur mesure</option>
-                <option value="inscription">Inscription à une formation</option>
-                <option value="financement">Financement (CPF, OPCO, plan de formation)</option>
-                <option value="programme">Question sur un programme</option>
-                <option value="entreprise">Formation pour mon entreprise</option>
-                <option value="partenariat">Partenariat / formateur</option>
-                <option value="autre">Autre</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" placeholder="Décrivez votre projet, votre profil, vos objectifs…" required></textarea>
-            </div>
-
-            <div class="form-footer">
-              <p class="form-notice">En soumettant ce formulaire, vous acceptez notre <a href="#">politique de confidentialité</a>. Vos données ne seront jamais revendues.</p>
-              <button type="submit" class="btn btn-primary btn-lg">Envoyer →</button>
-            </div>
-          </form>
+      <div class="visual-features">
+        <div class="feature">
+          <div class="feature-icon">📍</div>
+          <div class="feature-text">
+            <div class="feature-title">Réponse garantie en 24h</div>
+            <div class="feature-desc">Un expert de notre équipe vous contacte rapidement</div>
+          </div>
         </div>
-
-        <div class="form-success" id="formSuccess">
-          <div class="success-icon">✓</div>
-          <div class="success-title">Message envoyé !</div>
-          <div class="success-sub">Merci pour votre message. Un expert de l'Academy vous répondra dans les 24h ouvrées.</div>
-          <a href="index.html" class="btn btn-outline" style="margin-top:8px">← Retour à l'accueil</a>
+        <div class="feature">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-text">
+            <div class="feature-title">Formations personnalisées</div>
+            <div class="feature-desc">Intra-entreprise, distanciel ou présentiel adapté à vous</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💰</div>
+          <div class="feature-text">
+            <div class="feature-title">Financement à 100%</div>
+            <div class="feature-desc">CPF, OPCO, plan de formation — on gère tout pour vous</div>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">⭐</div>
+          <div class="feature-text">
+            <div class="feature-title">50+ formations</div>
+            <div class="feature-desc">Data, IA, Cloud, BI et développement avancé</div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- FORM (RIGHT) -->
+    <div class="form-panel">
+      <div id="formContent">
+        <div class="form-title">Envoyez-nous un message</div>
+        <div class="form-sub">Réponse garantie sous 24h ouvrées.</div>
+
+        <form id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="field-row">
+            <div class="field">
+              <label for="prenom">Prénom</label>
+              <input type="text" id="prenom" name="prenom" placeholder="Jean" required>
+            </div>
+            <div class="field">
+              <label for="nom">Nom</label>
+              <input type="text" id="nom" name="nom" placeholder="Dupont" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="email">Adresse e-mail</label>
+            <input type="email" id="email" name="email" placeholder="jean.dupont@entreprise.com" required>
+          </div>
+
+          <div class="field">
+            <label for="tel">Téléphone (optionnel)</label>
+            <input type="tel" id="tel" name="tel" placeholder="+33 6 XX XX XX XX">
+          </div>
+
+          <div class="field">
+            <label for="sujet">Sujet</label>
+            <select id="sujet" name="sujet" required>
+              <option value="" disabled selected>Choisissez un sujet…</option>
+              <option value="devis">Demande de devis / formation sur mesure</option>
+              <option value="inscription">Inscription à une formation</option>
+              <option value="financement">Financement (CPF, OPCO, plan de formation)</option>
+              <option value="programme">Question sur un programme</option>
+              <option value="entreprise">Formation pour mon entreprise</option>
+              <option value="partenariat">Partenariat / formateur</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Décrivez votre projet, votre profil, vos objectifs…" required></textarea>
+          </div>
+
+          <div class="form-footer">
+            <p class="form-notice">En soumettant ce formulaire, vous acceptez notre <a href="#">politique de confidentialité</a>. Vos données ne seront jamais revendues.</p>
+            <button type="submit" class="btn-submit">Envoyer →</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon">✓</div>
+        <div class="success-title" style="color:#fff">Message envoyé !</div>
+        <div class="success-sub">Merci pour votre message. Un expert de l'Academy vous répondra dans les 24h ouvrées.</div>
+        <a href="index.html" class="btn btn-outline" style="margin-top:8px">← Retour à l'accueil</a>
+      </div>
+    </div>
+
+  </div>
+</section>
 
       <!-- INFO -->
       <div class="info-panel">
