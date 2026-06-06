@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Avancé — Cours Interactif | Power Inside Data Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pyodide@0.23.4/pyodide.js"></script>
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#fff;color:#111;font-family:'Inter',sans-serif;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ─── VARIABLES ─── */
+:root{
+  --blue:#1561FF;
+  --blue-light:#EEF3FF;
+  --black:#111111;
+  --gray:#666666;
+  --gray-mid:#999999;
+  --gray-light:#E8E8E8;
+  --green:#00D68F;
+  --red:#FF4757;
+  --bg:#FFFFFF;
+  --radius:6px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --max:1160px;
+}
+
+/* ─── CORE ─── */
+body{background:var(--bg);color:var(--black);font-family:'Inter',sans-serif}
+a{color:var(--blue);text-decoration:none}
+
+/* ─── NAV ─── */
+nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--gray-light);padding:0 24px}
+.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;height:60px}
+.nav-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:var(--black);flex-shrink:0}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:20px;flex:1}
+.nav-links a{color:var(--gray);font-size:14px;font-weight:500;padding:6px 12px;border-radius:4px;transition:all .2s}
+.nav-links a:hover{color:var(--blue);background:var(--blue-light)}
+.nav-cta{display:flex;gap:10px;margin-left:auto}
+.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;font-weight:600}
+.nav-cta a:hover{opacity:.9}
+
+/* ─── HERO ─── */
+.hero{padding:60px 24px;background:linear-gradient(135deg,var(--blue-light),#fff);text-align:center}
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero h1{font-size:clamp(32px,4vw,56px);font-weight:800;margin-bottom:16px;font-family:'Plus Jakarta Sans',sans-serif}
+.hero p{font-size:16px;color:var(--gray);max-width:700px;margin:0 auto 32px;line-height:1.7}
+.hero-meta{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:14px}
+.meta-item{display:flex;align-items:center;gap:8px}
+.meta-badge{display:inline-block;padding:4px 12px;background:var(--blue);color:#fff;border-radius:20px;font-size:11px;font-weight:600}
+
+/* ─── SECTION ─── */
+.section{padding:60px 24px}
+.section-inner{max-width:var(--max);margin:0 auto}
+.section h2{font-size:clamp(24px,3vw,38px);font-weight:800;margin-bottom:32px;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* ─── MODULE ─── */
+.module{margin-bottom:48px;padding:32px;background:var(--blue-light);border-radius:12px;border-left:4px solid var(--blue)}
+.module-title{font-size:20px;font-weight:700;color:var(--black);margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif}
+.module-desc{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px}
+
+/* ─── SANDBOX ─── */
+.sandbox-container{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+@media(max-width:900px){.sandbox-container{grid-template-columns:1fr}}
+.sandbox-editor{display:flex;flex-direction:column;gap:8px}
+.sandbox-label{font-size:12px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:.05em}
+textarea{width:100%;height:300px;padding:16px;background:#1e1e1e;color:#d4d4d4;border:1px solid var(--gray-light);border-radius:8px;font-family:'Courier New',monospace;font-size:13px;resize:vertical;outline:none}
+textarea:focus{border-color:var(--blue)}
+.btn-run{padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-run:hover{background:#0048CC;transform:translateY(-2px)}
+.btn-run.loading{opacity:.6;cursor:wait}
+
+.sandbox-output{padding:16px;background:#f5f5f5;border-radius:8px;border:1px solid var(--gray-light);min-height:100px;font-family:'Courier New',monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;overflow-y:auto;max-height:400px}
+.sandbox-output.success{color:var(--green);background:#f0fff4;border-color:var(--green)}
+.sandbox-output.error{color:var(--red);background:#fff5f5;border-color:var(--red)}
+.output-label{font-size:11px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;margin-bottom:8px;letter-spacing:.05em}
+
+/* ─── LOADER ─── */
+.loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.1);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── FOOTER ─── */
+footer{padding:40px 24px;background:var(--gray-light);text-align:center;border-top:1px solid #ddd}
+footer p{font-size:13px;color:var(--gray)}
+footer a{color:var(--blue);font-weight:600}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  nav{padding:0 16px}
+  .nav-inner{gap:12px;padding:0}
+  .nav-links{display:none}
+  .nav-cta{gap:6px}
+  .section{padding:40px 16px}
+  .module{padding:20px}
+  textarea{height:200px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Power <span>Inside</span></div>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="power_inside_data_academy_catalogue.html">Formations</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="index.html">← Retour</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- HERO -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>🐍 Python Avancé</h1>
+    <p>Maîtrisez les concepts avancés de Python avec des exercices pratiques interactifs</p>
+    <div class="hero-meta">
+      <div class="meta-item">⏱️ 6 modules</div>
+      <div class="meta-item">💪 Débutant → Expert</div>
+      <div class="meta-item"><span class="meta-badge">Sandbox inclus</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- MODULES -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <h2>Modules Interactifs</h2>
+
+    <!-- MODULE 1 -->
+    <div class="module">
+      <div class="module-title">Module 1: Compréhension & Gestion des Données</div>
+      <div class="module-desc">Explorez les fondamentaux avancés: listes, dictionnaires, tuples, sets et les méthodes associées.</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Code Python</div>
+          <textarea id="sandbox1" spellcheck="false"># Manipulation avancée de données
+data = [1, 2, 3, 4, 5]
+squares = [x**2 for x in data]
+print(f"Nombres: {data}")
+print(f"Carrés: {squares}")
+
+# Dictionnaire avec compréhension
+dict_comp = {x: x**2 for x in range(5)}
+print(f"Dict: {dict_comp}")
+
+# Set et opérations
+set1 = {1, 2, 3, 4}
+set2 = {3, 4, 5, 6}
+print(f"Union: {set1 | set2}")
+print(f"Intersection: {set1 & set2}")
+</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output1">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runCode('sandbox1')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2 -->
+    <div class="module">
+      <div class="module-title">Module 2: Programmation Fonctionnelle</div>
+      <div class="module-desc">Lambda, Map, Filter, Reduce et programmation déclarative.</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Code Python</div>
+          <textarea id="sandbox2" spellcheck="false"># Programmation Fonctionnelle
+from functools import reduce
+
+nombres = [1, 2, 3, 4, 5]
+
+# Map: appliquer une fonction
+doubles = list(map(lambda x: x * 2, nombres))
+print(f"Doublés: {doubles}")
+
+# Filter: sélectionner
+pairs = list(filter(lambda x: x % 2 == 0, nombres))
+print(f"Nombres pairs: {pairs}")
+
+# Reduce: agréger
+somme = reduce(lambda a, b: a + b, nombres)
+print(f"Somme: {somme}")
+
+# Sorted avec clé personnalisée
+mots = ["python", "java", "c"]
+tries = sorted(mots, key=len, reverse=True)
+print(f"Mots (par longueur): {tries}")
+</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output2">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runCode('sandbox2')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3 -->
+    <div class="module">
+      <div class="module-title">Module 3: Programmation Orientée Objet Avancée</div>
+      <div class="module-desc">Héritage, polymorphisme, encapsulation et décorateurs.</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Code Python</div>
+          <textarea id="sandbox3" spellcheck="false"># POO Avancée avec Héritage et Polymorphisme
+class Animal:
+    def __init__(self, nom, age):
+        self.nom = nom
+        self.age = age
+
+    def parler(self):
+        return f"{self.nom} fait du bruit"
+
+class Chien(Animal):
+    def parler(self):
+        return f"{self.nom} aboie: Ouaf! Ouaf!"
+
+class Chat(Animal):
+    def parler(self):
+        return f"{self.nom} miaule: Miaou!"
+
+# Polymorphisme
+animaux = [Chien("Rex", 3), Chat("Minou", 2), Animal("Chose", 1)]
+for animal in animaux:
+    print(animal.parler())
+
+# Vérification du type
+print(f"\nRex est un Chien? {isinstance(animaux[0], Chien)}")
+</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output3">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runCode('sandbox3')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4 -->
+    <div class="module">
+      <div class="module-title">Module 4: Gestion des Erreurs & Exceptions</div>
+      <div class="module-desc">Try-Except, Finally, Custom Exceptions et gestion robuste.</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Code Python</div>
+          <textarea id="sandbox4" spellcheck="false"># Gestion avancée des erreurs
+class ValidationError(Exception):
+    pass
+
+def diviser_securise(a, b):
+    try:
+        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+            raise ValidationError("Les arguments doivent être des nombres")
+        if b == 0:
+            raise ZeroDivisionError("Division par zéro impossible")
+        resultat = a / b
+        return resultat
+    except ZeroDivisionError as e:
+        return f"Erreur: {e}"
+    except ValidationError as e:
+        return f"Validation échouée: {e}"
+    except Exception as e:
+        return f"Erreur inconnue: {e}"
+    finally:
+        print("Opération terminou")
+
+print(divider_securise(10, 2))
+print(diviser_securise(10, 0))
+print(diviser_securise("10", 2))
+</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output4">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runCode('sandbox4')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5 -->
+    <div class="module">
+      <div class="module-title">Module 5: Décorateurs & Métaprogrammation</div>
+      <div class="module-desc">Créez des décorateurs pour modifier le comportement des fonctions.</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Code Python</div>
+          <textarea id="sandbox5" spellcheck="false"># Décorateurs
+import time
+
+def chronometrer(func):
+    def wrapper(*args, **kwargs):
+        debut = time.time()
+        resultat = func(*args, **kwargs)
+        duree = time.time() - debut
+        print(f"{func.__name__} a pris {duree:.4f}s")
+        return resultat
+    return wrapper
+
+def log_appels(func):
+    def wrapper(*args, **kwargs):
+        print(f"Appel de {func.__name__}({args}, {kwargs})")
+        return func(*args, **kwargs)
+    return wrapper
+
+@log_appels
+@chronometrer
+def calculer_factorielle(n):
+    if n <= 1:
+        return 1
+    return n * calculer_factorielle(n - 1)
+
+# Test
+print(f"Résultat: {calculer_factorielle(5)}")
+</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output5">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runCode('sandbox5')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6 -->
+    <div class="module">
+      <div class="module-title">Module 6: Traitement & Analyse de Données</div>
+      <div class="module-desc">Manipulation de données avec approche fonctionnelle et statistiques.</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Code Python</div>
+          <textarea id="sandbox6" spellcheck="false"># Analyse de données
+import statistics
+
+donnees = [10, 20, 15, 30, 25, 40, 35, 45, 50]
+
+# Statistiques
+moyenne = statistics.mean(donnees)
+mediane = statistics.median(donnees)
+variance = statistics.variance(donnees)
+
+print(f"Moyenne: {moyenne}")
+print(f"Médiane: {mediane}")
+print(f"Variance: {variance:.2f}")
+
+# Transformation et filtrage
+donnees_transformees = [x * 1.1 for x in donnees if x > 20]
+print(f"\nDonnées > 20 (+10%): {donnees_transformees}")
+
+# Groupement
+pairs_impairs = {'pairs': [x for x in donnees if x % 2 == 0],
+                 'impairs': [x for x in donnees if x % 2 != 0]}
+print(f"Pairs: {pairs_impairs['pairs']}")
+print(f"Impairs: {pairs_impairs['impairs']}")
+</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output6">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runCode('sandbox6')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>Power Inside Data Academy — Apprendre en pratiquant</p>
+  <p><a href="index.html">Retour à l'accueil</a> | <a href="contact.html">Contact</a></p>
+</footer>
+
+<script>
+let pyodideReady = false;
+
+async function loadPyodide() {
+    try {
+        await loadPyodideIndependent();
+        pyodideReady = true;
+    } catch (e) {
+        console.log('Pyodide load error:', e);
+    }
+}
+
+loadPyodide();
+
+async function runCode(sandboxId) {
+    const code = document.getElementById(sandboxId).value;
+    const outputId = 'output' + sandboxId.replace('sandbox', '');
+    const outputEl = document.getElementById(outputId);
+    const btn = event.target;
+
+    btn.classList.add('loading');
+    btn.textContent = 'Chargement...';
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Initialisation Python...</span></div>';
+
+    try {
+        // Attendre que Pyodide soit prêt
+        let attempts = 0;
+        while (!pyodideReady && attempts < 60) {
+            await new Promise(r => setTimeout(r, 500));
+            attempts++;
+        }
+
+        if (!pyodideReady) {
+            throw new Error('Pyodide ne s\'est pas chargé correctement. Essayez de rafraîchir la page.');
+        }
+
+        // Capturer console.log
+        let output = '';
+        const originalLog = console.log;
+        console.log = function(...args) {
+            output += args.join(' ') + '\n';
+            originalLog.apply(console, args);
+        };
+
+        // Exécuter le code
+        await pyodide.runPythonAsync(code);
+
+        // Restaurer console.log
+        console.log = originalLog;
+
+        if (output.trim()) {
+            outputEl.textContent = output;
+            outputEl.classList.remove('error');
+            outputEl.classList.add('success');
+        } else {
+            outputEl.textContent = '(Pas de sortie)';
+            outputEl.classList.remove('error');
+        }
+    } catch (err) {
+        console.error('Python Error:', err);
+        outputEl.textContent = 'Erreur: ' + (err.message || String(err));
+        outputEl.classList.add('error');
+    } finally {
+        btn.classList.remove('loading');
+        btn.textContent = 'Exécuter';
+    }
+}
+</script>
+
+</body>
+</html>

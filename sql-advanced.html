@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Avancé — Cours Interactif | Power Inside Data Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://sql.js.org/dist/sql-wasm.js"></script>
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#fff;color:#111;font-family:'Inter',sans-serif;overflow-x:hidden}
+
+:root{
+  --blue:#1561FF;
+  --blue-light:#EEF3FF;
+  --black:#111111;
+  --gray:#666666;
+  --gray-mid:#999999;
+  --gray-light:#E8E8E8;
+  --green:#00D68F;
+  --purple:#9B59B6;
+  --bg:#FFFFFF;
+  --radius:6px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --max:1160px;
+}
+
+body{background:var(--bg);color:var(--black)}
+a{color:var(--blue);text-decoration:none}
+
+/* ─── NAV ─── */
+nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--gray-light);padding:0 24px}
+.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;height:60px}
+.nav-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:var(--black);flex-shrink:0}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:20px;flex:1}
+.nav-links a{color:var(--gray);font-size:14px;font-weight:500;padding:6px 12px;border-radius:4px;transition:all .2s}
+.nav-links a:hover{color:var(--blue);background:var(--blue-light)}
+.nav-cta{display:flex;gap:10px;margin-left:auto}
+.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;font-weight:600}
+
+/* ─── HERO ─── */
+.hero{padding:60px 24px;background:linear-gradient(135deg,#E6F3FF,#fff);text-align:center}
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero h1{font-size:clamp(32px,4vw,56px);font-weight:800;margin-bottom:16px;font-family:'Plus Jakarta Sans',sans-serif}
+.hero p{font-size:16px;color:var(--gray);max-width:700px;margin:0 auto 32px;line-height:1.7}
+.hero-meta{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:14px}
+.meta-badge{display:inline-block;padding:4px 12px;background:var(--purple);color:#fff;border-radius:20px;font-size:11px;font-weight:600}
+
+/* ─── SECTION ─── */
+.section{padding:60px 24px}
+.section-inner{max-width:var(--max);margin:0 auto}
+.section h2{font-size:clamp(24px,3vw,38px);font-weight:800;margin-bottom:32px;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* ─── MODULE ─── */
+.module{margin-bottom:48px;padding:32px;background:#E6F3FF;border-radius:12px;border-left:4px solid var(--blue)}
+.module-title{font-size:20px;font-weight:700;color:var(--black);margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif}
+.module-desc{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px}
+
+/* ─── SANDBOX ─── */
+.sandbox-container{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+@media(max-width:900px){.sandbox-container{grid-template-columns:1fr}}
+
+.sandbox-editor{display:flex;flex-direction:column;gap:8px}
+.sandbox-label{font-size:12px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:.05em}
+
+textarea{width:100%;height:280px;padding:16px;background:#1e1e1e;color:#d4d4d4;border:1px solid var(--gray-light);border-radius:8px;font-family:'Courier New',monospace;font-size:13px;resize:vertical;outline:none}
+textarea:focus{border-color:var(--blue)}
+
+.btn-run{padding:10px 20px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-run:hover{background:#0048CC;transform:translateY(-2px)}
+.btn-run.loading{opacity:.6;cursor:wait}
+
+.sandbox-output{padding:16px;background:#f5f5f5;border-radius:8px;border:1px solid var(--gray-light);min-height:100px;font-family:'Courier New',monospace;font-size:11px;overflow:auto;max-height:400px}
+
+.output-table{width:100%;border-collapse:collapse;font-family:'Courier New',monospace;font-size:11px}
+.output-table th{background:#e8e8e8;padding:8px;text-align:left;font-weight:600;border-bottom:2px solid var(--blue)}
+.output-table td{padding:8px;border-bottom:1px solid #ddd}
+.output-table tbody tr:hover{background:#f9f9f9}
+
+/* ─── LOADER ─── */
+.loader{display:inline-block;width:12px;height:12px;border:2px solid rgba(0,0,0,.1);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── FOOTER ─── */
+footer{padding:40px 24px;background:var(--gray-light);text-align:center;border-top:1px solid #ddd}
+footer p{font-size:13px;color:var(--gray)}
+
+@media(max-width:768px){
+  nav{padding:0 16px}
+  .nav-links{display:none}
+  .section{padding:40px 16px}
+  .module{padding:20px}
+  textarea{height:200px}
+  .sandbox-container{gap:16px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Power <span>Inside</span></div>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="power_inside_data_academy_catalogue.html">Formations</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="index.html">← Retour</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- HERO -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>🗄️ SQL Avancé</h1>
+    <p>Maîtrisez SQL avec des requêtes complexes, jointures, agrégations et optimisations</p>
+    <div class="hero-meta">
+      <div class="meta-item">⏱️ 6 modules</div>
+      <div class="meta-item">📊 Données pratiques</div>
+      <div class="meta-item"><span class="meta-badge">Sandbox inclus</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<!-- MODULES -->
+<!-- ═══════════════════════════════════════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-inner">
+    <h2>Modules Interactifs</h2>
+
+    <!-- MODULE 1 -->
+    <div class="module">
+      <div class="module-title">Module 1: SELECT Avancé & Filtrage</div>
+      <div class="module-desc">SELECT, WHERE, LIKE, IN, BETWEEN et conditions complexes</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Requête SQL</div>
+          <textarea id="sandbox1" spellcheck="false">-- Sélectionnez les employés dont le salaire est entre 40000 et 60000
+SELECT nom, departement, salaire
+FROM employes
+WHERE salaire BETWEEN 40000 AND 60000
+ORDER BY salaire DESC;</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output1">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runSQL('sandbox1')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 2 -->
+    <div class="module">
+      <div class="module-title">Module 2: Jointures Avancées</div>
+      <div class="module-desc">INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN et jointures multiples</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Requête SQL</div>
+          <textarea id="sandbox2" spellcheck="false">-- Joignez employés et départements avec conditions
+SELECT
+    e.nom AS employe,
+    d.nom_dept AS departement,
+    e.salaire
+FROM employes e
+LEFT JOIN departements d ON e.dept_id = d.id
+WHERE e.salaire > 40000
+ORDER BY e.salaire DESC;</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output2">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runSQL('sandbox2')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 3 -->
+    <div class="module">
+      <div class="module-title">Module 3: GROUP BY & Agrégations</div>
+      <div class="module-desc">COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING et statistiques</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Requête SQL</div>
+          <textarea id="sandbox3" spellcheck="false">-- Statistiques par département
+SELECT
+    d.nom_dept,
+    COUNT(*) AS nb_employes,
+    ROUND(AVG(e.salaire), 2) AS salaire_moyen,
+    MIN(e.salaire) AS salaire_min,
+    MAX(e.salaire) AS salaire_max,
+    SUM(e.salaire) AS masse_salariale
+FROM employes e
+JOIN departements d ON e.dept_id = d.id
+GROUP BY d.nom_dept
+HAVING COUNT(*) >= 2
+ORDER BY masse_salariale DESC;</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output3">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runSQL('sandbox3')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 4 -->
+    <div class="module">
+      <div class="module-title">Module 4: Sous-requêtes & CTE (Common Table Expressions)</div>
+      <div class="module-desc">WITH, sous-requêtes, requêtes imbriquées et requêtes récursives</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Requête SQL</div>
+          <textarea id="sandbox4" spellcheck="false">-- CTE (WITH clause) pour clarifier la logique
+WITH salaire_moyen_dept AS (
+    SELECT
+        dept_id,
+        ROUND(AVG(salaire), 2) AS salaire_moyen
+    FROM employes
+    GROUP BY dept_id
+)
+SELECT
+    e.nom,
+    e.salaire,
+    smd.salaire_moyen,
+    ROUND(e.salaire - smd.salaire_moyen, 2) AS ecart
+FROM employes e
+JOIN salaire_moyen_dept smd ON e.dept_id = smd.dept_id
+ORDER BY ecart DESC;</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output4">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runSQL('sandbox4')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 5 -->
+    <div class="module">
+      <div class="module-title">Module 5: Window Functions (Fenêtres)</div>
+      <div class="module-desc">ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD et analyses temporelles</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Requête SQL</div>
+          <textarea id="sandbox5" spellcheck="false">-- Classement des salaires par département
+SELECT
+    nom,
+    departement,
+    salaire,
+    ROW_NUMBER() OVER (PARTITION BY departement ORDER BY salaire DESC) AS rang,
+    RANK() OVER (PARTITION BY departement ORDER BY salaire DESC) AS rang_avec_ex,
+    SUM(salaire) OVER (PARTITION BY departement) AS total_dept,
+    ROUND(AVG(salaire) OVER (PARTITION BY departement), 2) AS moy_dept
+FROM employes
+ORDER BY departement, rang;</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output5">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runSQL('sandbox5')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODULE 6 -->
+    <div class="module">
+      <div class="module-title">Module 6: Union, Except, Intersect & Optimisation</div>
+      <div class="module-desc">Opérations d'ensemble, performances et best practices SQL</div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <div class="sandbox-label">📝 Requête SQL</div>
+          <textarea id="sandbox6" spellcheck="false">-- Combiner résultats avec UNION
+SELECT nom, 'Employé' AS type, departement, salaire
+FROM employes
+WHERE salaire > 45000
+
+UNION
+
+SELECT nom_dept, 'Département' AS type, NULL, NULL
+FROM departements
+ORDER BY type, nom;</textarea>
+        </div>
+        <div>
+          <div class="sandbox-label">📤 Résultat</div>
+          <div class="sandbox-output" id="output6">Cliquez sur "Exécuter"...</div>
+          <button class="btn-run" onclick="runSQL('sandbox6')">Exécuter</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>Power Inside Data Academy — Maîtrisez SQL comme un pro</p>
+  <p><a href="index.html">Retour à l'accueil</a> | <a href="contact.html">Contact</a></p>
+</footer>
+
+<script>
+let SQL = null;
+let db = null;
+let dbReady = false;
+
+async function loadSQL() {
+    try {
+        const sqlJs = window.SQL;
+        SQL = await sqlJs();
+        initDatabase();
+        dbReady = true;
+    } catch (e) {
+        console.error('SQL.js load error:', e);
+    }
+}
+
+loadSQL();
+
+function initDatabase() {
+    db = new SQL.Database();
+
+    // Créer les tables
+    db.run(`
+        CREATE TABLE departements (
+            id INTEGER PRIMARY KEY,
+            nom_dept TEXT NOT NULL
+        );
+    `);
+
+    db.run(`
+        CREATE TABLE employes (
+            id INTEGER PRIMARY KEY,
+            nom TEXT NOT NULL,
+            departement TEXT,
+            salaire REAL NOT NULL,
+            dept_id INTEGER
+        );
+    `);
+
+    // Insérer les données
+    db.run(`
+        INSERT INTO departements VALUES
+        (1, 'Informatique'),
+        (2, 'Ressources Humaines'),
+        (3, 'Ventes'),
+        (4, 'Finance');
+    `);
+
+    db.run(`
+        INSERT INTO employes VALUES
+        (1, 'Alice', 'Informatique', 65000, 1),
+        (2, 'Bob', 'Informatique', 55000, 1),
+        (3, 'Charlie', 'Ressources Humaines', 45000, 2),
+        (4, 'Diana', 'Ventes', 52000, 3),
+        (5, 'Eve', 'Informatique', 60000, 1),
+        (6, 'Frank', 'Finance', 48000, 4),
+        (7, 'Grace', 'Ventes', 51000, 3),
+        (8, 'Henry', 'Ressources Humaines', 42000, 2);
+    `);
+}
+
+async function runSQL(sandboxId) {
+    const query = document.getElementById(sandboxId).value;
+    const outputId = 'output' + sandboxId.replace('sandbox', '');
+    const outputEl = document.getElementById(outputId);
+    const btn = event.target;
+
+    btn.classList.add('loading');
+    btn.textContent = 'Chargement...';
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Initialisation SQLite...</span></div>';
+
+    try {
+        // Attendre que la DB soit prête
+        let attempts = 0;
+        while (!dbReady && attempts < 60) {
+            await new Promise(r => setTimeout(r, 500));
+            attempts++;
+        }
+
+        if (!dbReady) {
+            throw new Error('SQLite ne s\'est pas chargé correctement. Essayez de rafraîchir la page.');
+        }
+
+        const result = db.exec(query);
+
+        if (result.length === 0) {
+            outputEl.textContent = '(Aucun résultat)';
+        } else {
+            const columns = result[0].columns;
+            const values = result[0].values;
+
+            // Créer un tableau HTML
+            let html = '<table class="output-table"><thead><tr>';
+            columns.forEach(col => {
+                html += `<th>${col}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            values.forEach(row => {
+                html += '<tr>';
+                row.forEach(cell => {
+                    html += `<td>${cell !== null ? cell : 'NULL'}</td>`;
+                });
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            outputEl.innerHTML = html;
+        }
+    } catch (err) {
+        outputEl.textContent = 'Erreur SQL: ' + (err.message || String(err));
+    } finally {
+        btn.classList.remove('loading');
+        btn.textContent = 'Exécuter';
+    }
+}
+</script>
+
+</body>
+</html>
