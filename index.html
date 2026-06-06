@@ -202,8 +202,7 @@ body:hover #cursor { opacity: 1; }
 /* Hide unnecessary nav elements */
 #navbar .nav-search { display: none !important; }
 #navbar .nav-row-2 { display: none !important; }
-.nav-item .nav-link-dd { pointer-events: none; opacity: 0; width: 0; overflow: hidden; }
-.nav-dropdown { display: none !important; }
+/* Formations dropdown is now visible and functional (restored from line 205-206 where it was hidden) */
 
 /* Hide visual decorations in hero */
 .premium-hero .orb-glow,
@@ -3675,7 +3674,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
         <span class="eyebrow" style="display:block;margin-bottom:16px">Formations phares</span>
         <h2 class="h2">Les plus demandées.</h2>
       </div>
-      <a href="#" class="btn btn-outline" style="flex-shrink:0">Voir tout le catalogue →</a>
+      <a href="power_inside_data_academy_catalogue.html" class="btn btn-primary" style="flex-shrink:0">Voir tout le catalogue →</a>
     </div>
 
     <!-- Strip catégories (niveau 1) -->
@@ -4227,6 +4226,25 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
 const _stripe = Stripe(STRIPE_PUBLIC_KEY);
 let _stripeElements = null;
 
+// Debug logging
+console.log('✓ Supabase client initialized:', { url: SUPABASE_URL.substring(0, 30) + '...' });
+console.log('✓ Page loaded, ready for auth');
+
+// Check if elements exist on page load
+window.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded. Checking auth elements...');
+  const authOverlay = document.getElementById('authOverlay');
+  const loginEmail = document.getElementById('loginEmail');
+  const loginPassword = document.getElementById('loginPassword');
+  const loginBtn = document.getElementById('loginBtn');
+  console.log({
+    authOverlayExists: !!authOverlay,
+    loginEmailExists: !!loginEmail,
+    loginPasswordExists: !!loginPassword,
+    loginBtnExists: !!loginBtn
+  });
+});
+
 /* ── MODAL ── */
 function openAuth(tab = 'login') {
   document.getElementById('authOverlay').classList.add('open');
@@ -4280,23 +4298,39 @@ function setLoading(btnId, loading) {
 
 /* ── LOGIN ── */
 async function handleLogin() {
-  const email    = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  if (!email || !password) return showMsg('loginMsg', 'Veuillez remplir tous les champs.');
+  try {
+    const email    = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    console.log('Login attempt:', { email, hasPassword: !!password });
 
-  setLoading('loginBtn', true);
-  const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-  setLoading('loginBtn', false);
+    if (!email || !password) {
+      showMsg('loginMsg', 'Veuillez remplir tous les champs.');
+      return;
+    }
 
-  if (error) {
-    const msg = error.message.includes('Invalid') ? 'Email ou mot de passe incorrect.' : error.message;
+    setLoading('loginBtn', true);
+    console.log('Calling Supabase signInWithPassword...');
+    const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+    setLoading('loginBtn', false);
+
+    if (error) {
+      console.error('Login error:', error);
+      const msg = error.message.includes('Invalid') ? 'Email ou mot de passe incorrect.' : error.message;
+      document.getElementById('loginBtn').innerHTML = 'Se connecter';
+      showMsg('loginMsg', msg);
+      return;
+    }
+
+    console.log('Login success:', data);
     document.getElementById('loginBtn').innerHTML = 'Se connecter';
-    return showMsg('loginMsg', msg);
+    closeAuth();
+    updateNavbar(data.user);
+  } catch (err) {
+    console.error('Unexpected login error:', err);
+    setLoading('loginBtn', false);
+    document.getElementById('loginBtn').innerHTML = 'Se connecter';
+    showMsg('loginMsg', 'Une erreur inattendue s\'est produite. Vérifiez la console.');
   }
-
-  document.getElementById('loginBtn').innerHTML = 'Se connecter';
-  closeAuth();
-  updateNavbar(data.user);
 }
 
 /* ── SIGNUP ── */
