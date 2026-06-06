@@ -587,19 +587,26 @@ print(employe.se_presenter())
 </section>
 
 <script>
-// Charger Pyodide et exécuter du code Python
+// Charger Pyodide et executer du code Python
+let pyodide = null;
 let pyodideReady = false;
 
-async function loadPyodide() {
+async function initPyodide() {
     try {
-        await loadPyodideIndependent();
+        if (!window.loadPyodide) {
+            throw new Error('Pyodide script not loaded from CDN');
+        }
+        pyodide = await window.loadPyodide();
         pyodideReady = true;
+        console.log('✓ Pyodide loaded successfully');
     } catch (e) {
-        console.log('Pyodide load error:', e);
+        console.error('Pyodide initialization error:', e);
+        pyodideReady = false;
     }
 }
 
-loadPyodide();
+// Initialize on page load
+initPyodide();
 
 async function runCode(sandboxId) {
     const code = document.getElementById(sandboxId).value;
@@ -608,19 +615,19 @@ async function runCode(sandboxId) {
     const btn = event.target;
 
     btn.classList.add('loading');
-    btn.textContent = 'Chargement...';
-    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span class="loading-text">Initialisation Python...</span></div>';
+    btn.textContent = 'Initialisation...';
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span class="loading-text">Chargement Pyodide (1ere fois: 3-5s)...</span></div>';
 
     try {
-        // Attendre que Pyodide soit complètement chargé
+        // Attendre que Pyodide soit pret (max 60 secondes)
         let attempts = 0;
-        while (!pyodideReady && attempts < 60) {
+        while (!pyodideReady && attempts < 120) {
             await new Promise(r => setTimeout(r, 500));
             attempts++;
         }
 
         if (!pyodideReady) {
-            throw new Error('Pyodide ne s\'est pas chargé correctement. Essayez de rafraîchir la page.');
+            throw new Error('Pyodide ne s\'est pas charge apres 60 secondes. Verifiez votre connexion et rafraichissez la page.');
         }
 
         // Capturer console.log
@@ -631,7 +638,7 @@ async function runCode(sandboxId) {
             originalLog.apply(console, args);
         };
 
-        // Exécuter le code
+        // Executer le code Python
         await pyodide.runPythonAsync(code);
 
         // Restaurer console.log
@@ -642,7 +649,7 @@ async function runCode(sandboxId) {
             outputEl.classList.remove('output-empty', 'output-error');
             outputEl.classList.add('output-success');
         } else {
-            outputEl.innerHTML = '<span class="output-empty">(Pas de sortie affichée)</span>';
+            outputEl.innerHTML = '<span class="output-empty">(Pas de sortie affichee)</span>';
             outputEl.classList.remove('output-error', 'output-success');
             outputEl.classList.add('output-empty');
         }
@@ -653,7 +660,7 @@ async function runCode(sandboxId) {
         outputEl.classList.add('output-error');
     } finally {
         btn.classList.remove('loading');
-        btn.textContent = 'Exécuter (Run)';
+        btn.textContent = 'Executer (Run)';
     }
 }
 </script>

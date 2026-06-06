@@ -393,18 +393,25 @@ print(f"Impairs: {pairs_impairs['impairs']}")
 </footer>
 
 <script>
+let pyodide = null;
 let pyodideReady = false;
 
-async function loadPyodide() {
+async function initPyodide() {
     try {
-        await loadPyodideIndependent();
+        if (!window.loadPyodide) {
+            throw new Error('Pyodide script not loaded. Check CDN connection.');
+        }
+        pyodide = await window.loadPyodide();
         pyodideReady = true;
+        console.log('✓ Pyodide loaded successfully');
     } catch (e) {
-        console.log('Pyodide load error:', e);
+        console.error('Pyodide initialization error:', e);
+        pyodideReady = false;
     }
 }
 
-loadPyodide();
+// Initialize Pyodide on page load
+initPyodide();
 
 async function runCode(sandboxId) {
     const code = document.getElementById(sandboxId).value;
@@ -413,19 +420,19 @@ async function runCode(sandboxId) {
     const btn = event.target;
 
     btn.classList.add('loading');
-    btn.textContent = 'Chargement...';
-    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Initialisation Python...</span></div>';
+    btn.textContent = 'Initialisation...';
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Initialisation Python (1ere fois: 3-5s)...</span></div>';
 
     try {
-        // Attendre que Pyodide soit prêt
+        // Attendre que Pyodide soit pret (max 60 secondes)
         let attempts = 0;
-        while (!pyodideReady && attempts < 60) {
+        while (!pyodideReady && attempts < 120) {
             await new Promise(r => setTimeout(r, 500));
             attempts++;
         }
 
         if (!pyodideReady) {
-            throw new Error('Pyodide ne s\'est pas chargé correctement. Essayez de rafraîchir la page.');
+            throw new Error('Pyodide ne s\'est pas charge apres 60 secondes. Verifiez votre connexion et rafraichissez la page.');
         }
 
         // Capturer console.log
@@ -436,7 +443,7 @@ async function runCode(sandboxId) {
             originalLog.apply(console, args);
         };
 
-        // Exécuter le code
+        // Executer le code Python
         await pyodide.runPythonAsync(code);
 
         // Restaurer console.log
@@ -447,7 +454,7 @@ async function runCode(sandboxId) {
             outputEl.classList.remove('error');
             outputEl.classList.add('success');
         } else {
-            outputEl.textContent = '(Pas de sortie)';
+            outputEl.innerHTML = '<span style="color:#999">(Pas de sortie affichee)</span>';
             outputEl.classList.remove('error');
         }
     } catch (err) {
@@ -456,7 +463,7 @@ async function runCode(sandboxId) {
         outputEl.classList.add('error');
     } finally {
         btn.classList.remove('loading');
-        btn.textContent = 'Exécuter';
+        btn.textContent = 'Executer';
     }
 }
 </script>
