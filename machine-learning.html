@@ -750,8 +750,12 @@ async function initPyodide() {
         }
         pyodide = await window.loadPyodide();
 
-        // Install required packages
-        await pyodide.loadPackage(['numpy', 'pandas', 'scikit-learn']);
+        // Load built-in packages
+        await pyodide.loadPackage(['numpy', 'pandas']);
+
+        // Install scikit-learn via micropip
+        const micropip = await pyodide.pyimport('micropip');
+        await micropip.install(['scikit-learn']);
 
         pyodideReady = true;
         console.log('✓ Pyodide loaded successfully with ML packages');
