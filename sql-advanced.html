@@ -317,12 +317,16 @@ let dbReady = false;
 
 async function loadSQL() {
     try {
-        const sqlJs = window.SQL;
-        SQL = await sqlJs();
+        if (!window.initSqlJs) {
+            throw new Error('sql.js script not loaded from CDN');
+        }
+        SQL = await window.initSqlJs();
         initDatabase();
         dbReady = true;
+        console.log('✓ SQL.js loaded successfully');
     } catch (e) {
         console.error('SQL.js load error:', e);
+        dbReady = false;
     }
 }
 
@@ -378,19 +382,19 @@ async function runSQL(sandboxId) {
     const btn = event.target;
 
     btn.classList.add('loading');
-    btn.textContent = 'Chargement...';
-    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Initialisation SQLite...</span></div>';
+    btn.textContent = 'Initialisation...';
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Chargement SQLite (1ere fois: 2-3s)...</span></div>';
 
     try {
-        // Attendre que la DB soit prête
+        // Attendre que la DB soit prete (max 60 secondes)
         let attempts = 0;
-        while (!dbReady && attempts < 60) {
+        while (!dbReady && attempts < 120) {
             await new Promise(r => setTimeout(r, 500));
             attempts++;
         }
 
         if (!dbReady) {
-            throw new Error('SQLite ne s\'est pas chargé correctement. Essayez de rafraîchir la page.');
+            throw new Error('SQLite ne s\'est pas charge apres 60 secondes. Verifiez votre connexion et rafraichissez la page.');
         }
 
         const result = db.exec(query);
