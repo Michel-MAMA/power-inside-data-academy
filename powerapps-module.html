@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power Apps Module | Power Inside Data Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: #111; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    :root {
+      --blue: #9933cc;
+      --blue-light: #f3e5f5;
+      --black: #111111;
+      --gray: #666666;
+      --gray-mid: #999999;
+      --gray-light: #E8E8E8;
+      --green: #00D68F;
+      --red: #FF4757;
+      --radius: 6px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --max: 1160px;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--gray-light); padding: 0 24px; }
+    .nav-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; gap: 40px; height: 60px; }
+    .nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: var(--black); flex-shrink: 0; }
+    .nav-logo span { color: var(--blue); }
+    .nav-breadcrumb { display: flex; align-items: center; gap: 12px; flex: 1; font-size: 13px; color: var(--gray); }
+    .nav-breadcrumb a { color: var(--blue); font-weight: 600; }
+    .nav-cta { display: flex; gap: 10px; margin-left: auto; }
+    .nav-cta a { padding: 8px 18px; background: var(--blue); color: #fff; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+    .nav-cta a:hover { opacity: 0.9; }
+    .hero { padding: 40px 24px; background: linear-gradient(135deg, var(--blue-light), #fff); text-align: center; }
+    .hero-inner { max-width: var(--max); margin: 0 auto; }
+    .hero h1 { font-size: clamp(28px, 3vw, 42px); font-weight: 800; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .hero p { font-size: 15px; color: var(--gray); max-width: 700px; margin: 0 auto; line-height: 1.6; }
+    .section { padding: 60px 24px; }
+    .section-inner { max-width: var(--max); margin: 0 auto; }
+    .module { margin-bottom: 48px; padding: 32px; background: var(--blue-light); border-radius: 12px; border-left: 4px solid var(--blue); }
+    .module-title { font-size: 20px; font-weight: 700; color: var(--black); margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .module-desc { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+    .concepts-box { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--blue); }
+    .concepts-box strong { display: block; margin-bottom: 12px; }
+    .concepts-box ul { margin-left: 20px; margin-top: 8px; }
+    .concepts-box li { margin-bottom: 6px; font-size: 14px; }
+    .code-box { background: #f5f5f5; padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--gray-light); }
+    .code-box pre { font-family: 'Courier New', monospace; font-size: 12px; overflow-x: auto; }
+    .takeaway-box { background: #e8f5e9; padding: 16px; border-radius: 8px; margin-top: 16px; border-left: 4px solid var(--green); }
+    .takeaway-box strong { display: block; margin-bottom: 8px; color: #2e7d32; }
+    .takeaway-box p { margin-top: 8px; font-size: 14px; line-height: 1.6; }
+    .module-nav { display: flex; gap: 12px; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--gray-light); }
+    .nav-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; font-size: 14px; }
+    .nav-button:hover:not(:disabled) { background: #7c2ba5; transform: translateY(-2px); }
+    .nav-button:disabled { background: var(--gray-light); color: var(--gray-mid); cursor: not-allowed; }
+    .nav-button.prev { flex-direction: row-reverse; }
+    .nav-progress { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray-mid); font-weight: 600; }
+    .progress-bar { width: 100px; height: 4px; background: var(--gray-light); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--blue); border-radius: 2px; }
+    footer { padding: 40px 24px; background: var(--gray-light); text-align: center; border-top: 1px solid #ddd; }
+    footer p { font-size: 13px; color: var(--gray); }
+    footer a { color: var(--blue); font-weight: 600; }
+    .info-box { background: #e3f2fd; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--blue); font-size: 14px; }
+    .info-box strong { color: var(--blue); }
+    @media(max-width: 768px) { nav { padding: 0 16px; } .nav-inner { gap: 12px; } .nav-breadcrumb { display: none; } .section { padding: 40px 16px; } .module { padding: 20px; } .module-nav { flex-wrap: wrap; } .nav-progress { width: 100%; order: -1; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0">
+      <svg width="24" height="24" viewBox="0 0 96 96" fill="none"><circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/><circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity=".9"/><circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity=".75"/><circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity=".85"/><circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity=".68"/><circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity=".8"/><circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity=".7"/><line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/><circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.14)"/><circle cx="48" cy="48" r="5.5" fill="#009BF9"/><circle cx="48" cy="48" r="2.5" fill="white" opacity=".9"/></svg>
+      <div style="display:flex;flex-direction:column;gap:2px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800">
+        <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1">Power Inside Data</span>
+        <span style="font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);line-height:1">Academy</span>
+      </div>
+    </a>
+    <div class="nav-breadcrumb">
+      <a href="powerapps-index.html">Power Apps</a>
+      <span>/</span>
+      <span id="breadcrumb-title">Module Chargement...</span>
+    </div>
+    <div class="nav-cta">
+      <a href="powerapps-index.html">← Catalogue</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1 id="module-title">Chargement du module...</h1>
+    <p id="module-desc">Merci de patienter</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner" id="module-content">
+    <p style="text-align: center; color: var(--gray);">Chargement du contenu...</p>
+  </div>
+</section>
+
+<footer>
+  <p>Power Inside Data Academy — Maîtrisez Power Apps</p>
+  <p><a href="powerapps-index.html">Retour au catalogue</a> | <a href="index.html">Accueil</a></p>
+</footer>
+
+<script>
+const MODULES_DATA = {
+  1: {
+    title: 'Interface & Premiers Pas',
+    desc: 'Découvrir Power Apps Studio et créer votre première application',
+    content: `<div class="module">
+      <h2 class="module-title">Interface & Premiers Pas</h2>
+      <p class="module-desc">Exploration de Power Apps Studio et création d'une première appli Canvas.</p>
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Apps Canvas:</strong> Conception libre, pixel-perfect</li>
+          <li><strong>Apps Model-Driven:</strong> Basées sur données, formulaires standards</li>
+          <li><strong>Studio:</strong> Éditeur visuel avec formules Power Fx</li>
+          <li><strong>Contrôles:</strong> Buttons, Text Input, Gallery, Forms, etc.</li>
+          <li><strong>Propriétés:</strong> Couleur, taille, visibilité, contenu</li>
+          <li><strong>Formules Power Fx:</strong> Langage Excel-like pour logique</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <strong>🎯 Workflow Typique:</strong> Créer appli → Ajouter contrôles → Lier données → Ajouter logique → Tester → Publier
+      </div>
+      <div class="code-box">
+        <pre><strong>Créer App TODO List</strong>
+
+1. CRÉER APPLI CANVAS
+   - Power Apps → Créer → Appli vierge
+   - Sélectionner format (Tablet/Phone)
+   - Nommer: TodoApp
+
+2. AJOUTER CONTRÔLES
+   - Insérer → Text Input
+   - Insérer → Button (Ajouter tâche)
+   - Insérer → Vertical Gallery (afficher tâches)
+
+3. LIER À DATA
+   - Gallery Source = array de tâches
+   - Exemple: ["Terminer rapport", "Email client", "Réunion 3pm"]
+
+4. AJOUTER LOGIQUE
+   Button.OnSelect =
+     Collect(tâches, TextInput.Value);
+     Reset(TextInput);
+
+5. TESTER
+   Appuyer sur tâche → supprimer?
+   Ajouter → apparaît en liste?</pre>
+      </div>
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Canvas apps = plus flexible. Model-driven = plus structure. Power Fx = clé logique. Formules Excel-familiar (SUM, IF, LEN, etc.). Tester sur mobile = important!</p>
+      </div>
+    </div>`
+  },
+
+  2: {
+    title: 'Connecteurs & Données',
+    desc: 'Connecter vos sources de données et créer des formulaires liés',
+    content: `<div class="module">
+      <h2 class="module-title">Connecteurs & Données</h2>
+      <p class="module-desc">Intégrer SharePoint, Excel, SQL Server et créer des formulaires dynamiques.</p>
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Connecteurs:</strong> SharePoint, Excel, SQL, Dataverse, APIs</li>
+          <li><strong>Tables Dataverse:</strong> Base données cloud native Microsoft</li>
+          <li><strong>Formes d'édition:</strong> Edit, New, View modes</li>
+          <li><strong>Formules d'accès:</strong> SharePoint lists, Excel tables</li>
+          <li><strong>Synchronisation:</strong> Offline support avec Dataverse</li>
+          <li><strong>Performance:</strong> Filtrer données côté serveur</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <strong>🔗 Sources Courantes:</strong> SharePoint Lists (+ populaire), Excel in OneDrive, Dataverse (recommandé), SQL Server, Google Sheets
+      </div>
+      <div class="code-box">
+        <pre><strong>Formulaire Gestion Clients</strong>
+
+1. CRÉER TABLE DATAVERSE
+   Créer table "Clients"
+   Colonnes: Nom, Email, Téléphone, Adresse
+
+2. CONNECTER À APP
+   Insérer → Formulaire d'édition
+   DataSource = Clients table
+   Champs affichés = Nom, Email, Tél
+
+3. MODE EDIT
+   Form1.Mode =
+     If(Button_New.Pressed, FormMode.New,
+        Button_Edit.Pressed, FormMode.Edit,
+        FormMode.View)
+
+4. AJOUTER CONTRÔLES
+   Button "Nouveau": ResetForm(Form1); NewForm(Form1)
+   Button "Enregistrer": SubmitForm(Form1)
+   Button "Supprimer": Delete(Clients, ThisRecord)
+
+5. LIER GALLERY À TABLE
+   Gallery.Items = Clients
+   Afficher: Nom + Email
+   OnSelect = EditForm(Form1, ThisRecord)</pre>
+      </div>
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Dataverse = choix recommandé pour applis métier. Forms = automatisé (Edit/New/View). Connecteurs = flexibles (40+). Filtrer serveur = perf critique. Offline mode = option avancée mais puissante!</p>
+      </div>
+    </div>`
+  },
+
+  3: {
+    title: 'Formules Power Fx & Logique',
+    desc: 'Maîtriser Power Fx et implémenter la logique métier complexe',
+    content: `<div class="module">
+      <h2 class="module-title">Formules Power Fx & Logique</h2>
+      <p class="module-desc">Créer des formules puissantes et de la logique métier avancée.</p>
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Power Fx:</strong> Langage Excel-like déclaratif</li>
+          <li><strong>IF/Switch:</strong> Conditionnelles</li>
+          <li><strong>Filter/Search:</strong> Requêtes données</li>
+          <li><strong>ForAll/Collect:</strong> Boucles et collections</li>
+          <li><strong>Variables:</strong> Set() et UpdateContext()</li>
+          <li><strong>Erreurs:</strong> IfError() pour gestion robuste</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <strong>⚡ Types de Formules:</strong> Propriétés (valeur affichée), Comportements (OnSelect, OnChange)
+      </div>
+      <div class="code-box">
+        <pre><strong>Exemples Formules Power Fx</strong>
+
+-- AFFICHAGE CONDITIONNEL
+Visible = User().Email = "admin@company.com"
+
+-- VALIDATION
+If(Len(TextInput.Value) < 3,
+   "Minimum 3 caractères",
+   IsBlank(TextInput2.Value),
+   "Email obligatoire",
+   true)
+
+-- FILTRER DONNÉES
+Filter(Clients,
+  Region = SelectedRegion.Value
+  And Montant > 1000)
+
+-- CALCUL AGRÉGÉ
+Sum(Filter(Commandes, Client = ThisRecord.ID),
+    Montant)
+
+-- FORMATAGE DATE
+Text(Today(), "dd/mm/yyyy")
+
+-- COLLECTION (Temp storage)
+Collect(PanierTemp, {Produit: Item.Name, Prix: Item.Price})
+
+-- BOUCLE
+ForAll(Clients As c,
+  Patch(c, {Statut: "Actif"}))
+
+-- GESTION ERREURS
+IfError(
+  Patch(Table, Record, Values),
+  "Erreur: " & FirstError().Message,
+  "Succès!")</pre>
+      </div>
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Fx = déclaratif, pas impératif (contrairement programming normal). Variables = Session scope (perdues refresh). Collections = RAM (petite data). Patch/Collect/Delete = opérations données. Tester formules en Formula bar!</p>
+      </div>
+    </div>`
+  },
+
+  4: {
+    title: 'Applications Model-Driven',
+    desc: 'Créer des applications model-driven sur Dataverse',
+    content: `<div class="module">
+      <h2 class="module-title">Applications Model-Driven</h2>
+      <p class="module-desc">Développer des applications métier avec formulaires et vues avancées.</p>
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Model-Driven:</strong> Auto-générées à partir structure données</li>
+          <li><strong>Dataverse:</strong> Base de données unifiée Microsoft</li>
+          <li><strong>Entités:</strong> Tables (Clients, Commandes, etc.)</li>
+          <li><strong>Formulaires:</strong> Edit, Create, Info, Quick Create</li>
+          <li><strong>Vues:</strong> Listes filtrées/triées</li>
+          <li><strong>Business Rules:</strong> Validation automatique</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <strong>📊 Avantages Model-Driven:</strong> Mobile native, offline sync, audit natif, scalabilité, moins de code
+      </div>
+      <div class="code-box">
+        <pre><strong>Créer App CRM Model-Driven</strong>
+
+1. CRÉER ENTITÉS DATAVERSE
+   - Contacts: Nom, Email, Téléphone, Adresse
+   - Comptes: Nom, Industrie, Montant annual
+   - Relations: Contact → Compte (N-1)
+
+2. CRÉER APP MODEL-DRIVEN
+   - Power Apps → Créer → App model-driven
+   - Ajouter entités: Contacts, Comptes, Interactions
+
+3. CRÉER FORMULAIRES
+   Contact form:
+   - Section 1: Infos (Nom, Email, Tél)
+   - Section 2: Adresse (Rue, Ville, Code)
+   - Section 3: Organisation (Compte, Titre)
+   - Business Rule: Email = validation email
+
+4. CRÉER VUES
+   - Tous contacts (trier par Nom)
+   - Mes contacts (filtre: AssignedTo = me())
+   - Hot prospects (filtre: Statut = Intéressé)
+
+5. TABLEAU DE BORD
+   - KPI: Nombre contacts, Avg montant
+   - Graphique: Contacts par industrie
+   - Listes: Contacts + Comptes
+
+6. PUBLIER
+   App → Publier
+   Distribuer via URL ou App launcher</pre>
+      </div>
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Model-driven = gold standard pour applis entreprise. Moins flexible que Canvas mais + robuste. Dataverse = clé succès (non Excel/SharePoint). Business rules = validation sans code. Audit natif = conformité!</p>
+      </div>
+    </div>`
+  },
+
+  5: {
+    title: 'Publication & Performance',
+    desc: 'Déployer, sécuriser et optimiser vos applications',
+    content: `<div class="module">
+      <h2 class="module-title">Publication & Performance</h2>
+      <p class="module-desc">Publier et administrer vos applications en production.</p>
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Publication:</strong> Développement → Production</li>
+          <li><strong>Environnements:</strong> Dev, Test, Prod (séparation)</li>
+          <li><strong>Permissions:</strong> Rôles sécurité & partage</li>
+          <li><strong>Monitoring:</strong> Usage analytics, erreurs</li>
+          <li><strong>Performance:</strong> Formules optimisées, images légères</li>
+          <li><strong>Versioning:</strong> Gérer mises à jour</li>
+        </ul>
+      </div>
+      <div class="info-box">
+        <strong>🚀 Checklist Production:</strong> Tester mobiles, sauvegarder données, configurer permissions, monitoring setup, user training
+      </div>
+      <div class="code-box">
+        <pre><strong>Processus Publication</strong>
+
+1. PRÉPARER APP
+   - Tester fonctionnalités complètes
+   - Tester sur mobile/tablet
+   - Vérifier offline sync (si Dataverse)
+   - Optimiser images (< 100KB)
+
+2. PUBLIER VERSION
+   Fichier → Enregistrer
+   Version ajoutée automatiquement
+   Ex: Version 1.1
+
+3. PARTAGER APP
+   Option A - URL directe:
+     Copier lien → Envoyer utilisateurs
+   Option B - Teams:
+     Ajouter app comme tab
+   Option C - Portal:
+     Inclure dans site portail
+
+4. CONFIGURER PERMISSIONS
+   Admin Center → Environnement
+   Assigner rôles sécurité
+   Ex: Sales rôle = peut voir/modifier propres contacts
+
+5. MONITORING
+   Admin Center → Analytics
+   Voir: Usage, Error rates, Response times
+   Alertes si > 10% erreurs
+
+6. METTRE À JOUR
+   Éditer app
+   Tester nouvelles features
+   Publier nouvelle version
+   Users = auto-updated</pre>
+      </div>
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Environnements = kritisch (ne pas publier directement Prod). Permissions = sécurité données. Monitoring = user experience. Performance = formules (pas boucles inefficaces). Versioning = rollback capability!</p>
+      </div>
+    </div>`
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const moduleNum = parseInt(params.get('m')) || 1;
+  if (!MODULES_DATA[moduleNum]) {
+    document.getElementById('module-content').innerHTML = '<p style="text-align:center;color:red;">Module non trouvé</p>';
+    return;
+  }
+  const module = MODULES_DATA[moduleNum];
+  document.title = `${module.title} - Power Apps | Power Inside Data Academy`;
+  document.getElementById('module-title').textContent = module.title;
+  document.getElementById('module-desc').textContent = module.desc;
+  document.getElementById('breadcrumb-title').textContent = module.title;
+  document.getElementById('module-content').innerHTML = module.content;
+  const totalModules = Object.keys(MODULES_DATA).length;
+  let navHTML = `<div class="nav-progress">
+    <span>Module ${moduleNum} / ${totalModules}</span>
+    <div class="progress-bar"><div class="progress-fill" style="width:${(moduleNum/totalModules)*100}%"></div></div>
+  </div>`;
+  if (moduleNum > 1) {
+    navHTML += `<a href="powerapps-module.html?m=${moduleNum-1}" class="nav-button prev">← Précédent</a>`;
+  } else {
+    navHTML += `<button class="nav-button" disabled>← Précédent</button>`;
+  }
+  if (moduleNum < totalModules) {
+    navHTML += `<a href="powerapps-module.html?m=${moduleNum+1}" class="nav-button">Suivant →</a>`;
+  } else {
+    navHTML += `<button class="nav-button" disabled>Suivant →</button>`;
+  }
+  const moduleDiv = document.querySelector('.module');
+  if (moduleDiv) {
+    moduleDiv.innerHTML += `<div class="module-nav">${navHTML}</div>`;
+  }
+});
+</script>
+
+</body>
+</html>

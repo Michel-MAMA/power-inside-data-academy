@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power BI Module | Power Inside Data Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: #111; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    :root {
+      --blue: #f25022;
+      --blue-light: #ffe8e0;
+      --black: #111111;
+      --gray: #666666;
+      --gray-mid: #999999;
+      --gray-light: #E8E8E8;
+      --green: #00D68F;
+      --red: #FF4757;
+      --radius: 6px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --max: 1160px;
+    }
+
+    a { color: var(--blue); text-decoration: none; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--gray-light); padding: 0 24px; }
+    .nav-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; gap: 40px; height: 60px; }
+    .nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: var(--black); flex-shrink: 0; }
+    .nav-logo span { color: var(--blue); }
+    .nav-breadcrumb { display: flex; align-items: center; gap: 12px; flex: 1; font-size: 13px; color: var(--gray); }
+    .nav-breadcrumb a { color: var(--blue); font-weight: 600; }
+    .nav-cta { display: flex; gap: 10px; margin-left: auto; }
+    .nav-cta a { padding: 8px 18px; background: var(--blue); color: #fff; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+    .nav-cta a:hover { opacity: 0.9; }
+
+    .hero { padding: 40px 24px; background: linear-gradient(135deg, var(--blue-light), #fff); text-align: center; }
+    .hero-inner { max-width: var(--max); margin: 0 auto; }
+    .hero h1 { font-size: clamp(28px, 3vw, 42px); font-weight: 800; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .hero p { font-size: 15px; color: var(--gray); max-width: 700px; margin: 0 auto; line-height: 1.6; }
+
+    .section { padding: 60px 24px; }
+    .section-inner { max-width: var(--max); margin: 0 auto; }
+
+    .module { margin-bottom: 48px; padding: 32px; background: var(--blue-light); border-radius: 12px; border-left: 4px solid var(--blue); }
+    .module-title { font-size: 20px; font-weight: 700; color: var(--black); margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .module-desc { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+
+    .concepts-box { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--blue); }
+    .concepts-box strong { display: block; margin-bottom: 12px; }
+    .concepts-box ul { margin-left: 20px; margin-top: 8px; }
+    .concepts-box li { margin-bottom: 6px; font-size: 14px; }
+
+    .code-box { background: #f5f5f5; padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--gray-light); }
+    .code-box pre { font-family: 'Courier New', monospace; font-size: 12px; overflow-x: auto; }
+
+    .takeaway-box { background: #e8f5e9; padding: 16px; border-radius: 8px; margin-top: 16px; border-left: 4px solid var(--green); }
+    .takeaway-box strong { display: block; margin-bottom: 8px; color: #2e7d32; }
+    .takeaway-box p { margin-top: 8px; font-size: 14px; line-height: 1.6; }
+
+    .module-nav { display: flex; gap: 12px; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--gray-light); }
+    .nav-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; font-size: 14px; }
+    .nav-button:hover:not(:disabled) { background: #d63d1b; transform: translateY(-2px); }
+    .nav-button:disabled { background: var(--gray-light); color: var(--gray-mid); cursor: not-allowed; }
+    .nav-button.prev { flex-direction: row-reverse; }
+    .nav-progress { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray-mid); font-weight: 600; }
+    .progress-bar { width: 100px; height: 4px; background: var(--gray-light); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--blue); border-radius: 2px; }
+
+    footer { padding: 40px 24px; background: var(--gray-light); text-align: center; border-top: 1px solid #ddd; }
+    footer p { font-size: 13px; color: var(--gray); }
+    footer a { color: var(--blue); font-weight: 600; }
+
+    .info-box { background: #e3f2fd; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--blue); font-size: 14px; }
+    .info-box strong { color: var(--blue); }
+
+    @media(max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-inner { gap: 12px; }
+      .nav-breadcrumb { display: none; }
+      .section { padding: 40px 16px; }
+      .module { padding: 20px; }
+      .module-nav { flex-wrap: wrap; }
+      .nav-progress { width: 100%; order: -1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0">
+      <svg width="24" height="24" viewBox="0 0 96 96" fill="none"><circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/><circle cx="48" cy="14" r="4.5" fill="#009BF9" opacity=".9"/><circle cx="76" cy="30" r="3.5" fill="#009BF9" opacity=".75"/><circle cx="76" cy="66" r="4.5" fill="#009BF9" opacity=".85"/><circle cx="48" cy="82" r="3.5" fill="#009BF9" opacity=".68"/><circle cx="20" cy="66" r="4.5" fill="#009BF9" opacity=".8"/><circle cx="20" cy="30" r="3.5" fill="#009BF9" opacity=".7"/><line x1="48" y1="18" x2="48" y2="41" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="73" y1="32" x2="53" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="73" y1="64" x2="53" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="48" y1="78" x2="48" y2="55" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="23" y1="64" x2="43" y2="51" stroke="#009BF9" stroke-width=".8" opacity=".5"/><line x1="23" y1="32" x2="43" y2="45" stroke="#009BF9" stroke-width=".8" opacity=".5"/><circle cx="48" cy="48" r="9" fill="rgba(0,155,249,0.14)"/><circle cx="48" cy="48" r="5.5" fill="#009BF9"/><circle cx="48" cy="48" r="2.5" fill="white" opacity=".9"/></svg>
+      <div style="display:flex;flex-direction:column;gap:2px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800">
+        <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1">Power Inside Data</span>
+        <span style="font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);line-height:1">Academy</span>
+      </div>
+    </a>
+    <div class="nav-breadcrumb">
+      <a href="powerbi-index.html">Power BI</a>
+      <span>/</span>
+      <span id="breadcrumb-title">Module Chargement...</span>
+    </div>
+    <div class="nav-cta">
+      <a href="powerbi-index.html">← Catalogue</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1 id="module-title">Chargement du module...</h1>
+    <p id="module-desc">Merci de patienter</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner" id="module-content">
+    <p style="text-align: center; color: var(--gray);">Chargement du contenu...</p>
+  </div>
+</section>
+
+<footer>
+  <p>Power Inside Data Academy — Maîtrisez Power BI</p>
+  <p><a href="powerbi-index.html">Retour au catalogue</a> | <a href="index.html">Accueil</a></p>
+</footer>
+
+<script>
+const MODULES_DATA = {
+  1: {
+    title: 'Interface & Sources de Données',
+    desc: 'Découvrir l\'interface Power BI Desktop, importer des données et explorer les bases',
+    concepts: [
+      'Interface Power BI Desktop: Ruban, volets et éditeurs',
+      'Types de sources: Excel, SQL Server, Web, APIs',
+      'Import vs Direct Query: Différences et use cases',
+      'Requêtes initiales et aperçu des données',
+      'Gestion des données importées',
+      'Exploration des données brutes'
+    ],
+    content: `<div class="module">
+      <h2 class="module-title">Interface & Sources de Données</h2>
+      <p class="module-desc">Découvrir l'interface Power BI Desktop et importer vos premières données.</p>
+
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Ruban Power BI:</strong> Accueil, Insérer, Modélisation, Révision</li>
+          <li><strong>Volets:</strong> Visualisations, Champs, Mises en forme</li>
+          <li><strong>Onglets:</strong> Rapport, Données, Modèle</li>
+          <li><strong>Sources courantes:</strong> Excel, CSV, SQL Server, Salesforce, Google Analytics</li>
+          <li><strong>Import mode:</strong> Copie complète des données (rapide, localisé)</li>
+          <li><strong>Direct Query:</strong> Connexion en temps réel (données volumineuses)</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 Étapes d'Import:</strong> Fichier → Importer → Aperçu → Chargement → Transformation (optionnelle)
+      </div>
+
+      <div class="code-box">
+        <pre><strong>Scénario Pratique: Importer des Ventes</strong>
+
+1. OUVRIR FICHIER EXCEL
+   - Fichier → Obtenir des données → Excel
+   - Sélectionner fichier ventes.xlsx
+   - Aperçu: colonnes (DateVente, Produit, Montant, Vendeur)
+
+2. TRANSFORMER RAPIDEMENT
+   - Éditer requête: Ajuster types de colonnes
+   - DateVente: Type Date
+   - Montant: Type Nombre décimal
+   - Charger les données
+
+3. EXPLORER LES DONNÉES
+   - Onglet "Données": Tableau complet
+   - Onglet "Modèle": Voir structure
+   - Onglet "Rapport": Créer visualisations
+
+4. AJOUTER AUTRE SOURCE (SQL Server)
+   - Obtenir données → SQL Server
+   - Serveur: localhost
+   - Base: VentesDB
+   - Requête: SELECT * FROM Clients
+   - Fusionner avec données Excel dans Power Query</pre>
+      </div>
+
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Power BI Desktop = IDE pour rapports. Sources multiples = fusionner dans Power Query. Import = recommandé pour < 1 Go. Direct Query = données en temps réel (attention latence). Toujours prévisualiser les données avant chargement!</p>
+      </div>
+    </div>`
+  },
+
+  2: {
+    title: 'Nettoyage & Transformation de Données',
+    desc: 'Utiliser Power Query pour nettoyer et transformer les données avant analyse',
+    concepts: [
+      'Power Query Editor: Interface de transformation',
+      'Fusionner & Ajouter: Combiner tables',
+      'Supprimer colonnes/lignes: Nettoyage',
+      'Remplacer valeurs: Correction de données',
+      'Diviser colonnes: Séparer texte',
+      'Créer colonnes personnalisées: M Language'
+    ],
+    content: `<div class="module">
+      <h2 class="module-title">Nettoyage & Transformation de Données</h2>
+      <p class="module-desc">Maîtriser Power Query pour nettoyer et transformer vos données.</p>
+
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Fusionner:</strong> INNER/LEFT JOIN sur clé commune</li>
+          <li><strong>Ajouter:</strong> UNION (empiler lignes)</li>
+          <li><strong>Supprimer lignes:</strong> Nulls, doublons, erreurs</li>
+          <li><strong>Diviser colonnes:</strong> "Nom Prénom" → 2 colonnes</li>
+          <li><strong>Remplacer:</strong> Valeurs incorrectes en masse</li>
+          <li><strong>Langage M:</strong> Formules avancées personnalisées</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>🔄 Pipeline Typique:</strong> Charger → Supprimer nulls → Fusionner → Diviser → Remplacer → Valider
+      </div>
+
+      <div class="code-box">
+        <pre><strong>Cas d'Utilisation: Nettoyage Ventes</strong>
+
+1. CHARGER ET EXPLORER
+   Importer fichier: ventes_brutes.xlsx
+   Voir problèmes:
+   - Colonnes inutiles (ID_Internal, Tests)
+   - 150 lignes avec Montant = Null
+   - Noms de vendeurs incohérents (Jean, jean, JEAN)
+
+2. SUPPRIMER COLONNES INUTILES
+   Clic droit colonne → Supprimer
+   Garder: Date, Produit, Montant, Vendeur
+
+3. SUPPRIMER LIGNES INVALIDES
+   Montant → Supprimer lignes vides
+   Montant > 0: Filtre (pas valeurs négatives)
+
+4. STANDARDISER TEXTE
+   Vendeur → Transformer → Minuscules
+   Ensuite → Capitaliser chaque mot
+
+5. DIVISER COLONNE PRODUIT
+   "Categorie-Nom": Diviser par trait d'union
+   → 2 colonnes: Categorie, NomProduit
+
+6. FUSIONNER AVEC TABLE CLIENTS
+   Fusionner requêtes (Vendeur = ID_Vendeur)
+   Type: Fusion gauche externe
+   Ajouter colonnes: Région, Secteur
+
+7. CHARGER RÉSULTAT
+   Fermer & Appliquer → Données nettoyées prêtes!</pre>
+      </div>
+
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Power Query = la clé du succès. 80% du temps analyst = nettoyage données! Étapes sont enregistrées (reproductibles). M Language = puissance avancée mais UI suffisante 95% cas. Toujours valider après transformation!</p>
+      </div>
+    </div>`
+  },
+
+  3: {
+    title: 'Modélisation & Relationnels',
+    desc: 'Créer des modèles de données, gérer les relations et optimiser les performances',
+    concepts: [
+      'Modèles star: Fact + Dimensions',
+      'Cardinalité: 1-1, 1-N, N-N',
+      'Direction de filtrage: Simple vs Bidirectionnelle',
+      'Clés primaires/étrangères: Intégrité',
+      'Colonnes calculées: Computed vs Measures',
+      'DAX & Performance: Optimiser requêtes'
+    ],
+    content: `<div class="module">
+      <h2 class="module-title">Modélisation & Relationnels</h2>
+      <p class="module-desc">Construire des modèles de données solides et performants.</p>
+
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Schéma Star:</strong> Table Faits (transactions) + Dimensions (contexte)</li>
+          <li><strong>Cardinalité 1-N:</strong> 1 Client → Plusieurs Commandes (standard)</li>
+          <li><strong>Cardinalité N-N:</strong> Produits ↔ Catégories (éviter ou bridge table)</li>
+          <li><strong>Filtrage Simple:</strong> Dimension → Faits (unidirectionnel)</li>
+          <li><strong>Filtrage Bidirectionnel:</strong> Utile mais attention performance</li>
+          <li><strong>Colonnes vs Mesures:</strong> Colonnes (dimension) vs Mesures (agrégation)</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>📐 Schéma Star Recommandé:</strong> Table Fact_Ventes (FK_Client, FK_Produit, FK_Date, Montant) + Dim_Clients, Dim_Produits, Dim_Dates
+      </div>
+
+      <div class="code-box">
+        <pre><strong>Exemple Modèle: Ventes Retail</strong>
+
+TABLES:
+1. Fact_Ventes (Faits)
+   - ID_Vente (Clé primaire)
+   - FK_Client, FK_Produit, FK_Date
+   - Montant, Quantité, Remise
+
+2. Dim_Clients (Dimension)
+   - ID_Client (Clé primaire)
+   - Nom, Région, Secteur
+
+3. Dim_Produits (Dimension)
+   - ID_Produit (Clé primaire)
+   - Nom, Catégorie, Prix
+
+4. Dim_Dates (Dimension - Calendrier)
+   - Date (Clé primaire)
+   - Année, Mois, Trimestre, Jour
+
+RELATIONS:
+- Fact_Ventes.FK_Client → Dim_Clients.ID_Client (1-N, Filtrage Simple)
+- Fact_Ventes.FK_Produit → Dim_Produits.ID_Produit (1-N, Filtrage Simple)
+- Fact_Ventes.FK_Date → Dim_Dates.Date (1-N, Filtrage Simple)
+
+RÉSULTAT: Modèle optimisé, requêtes rapides, rapports créent filtres automatiquement!</pre>
+      </div>
+
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Modèles solides = rapports rapides. Star schema = gold standard. Relations = toujours vers clés primaires. Direction filtrage = simple par défaut. Dénormaliser colonnes si nécessaire pour perf. Tester avec > 1M lignes!</p>
+      </div>
+    </div>`
+  },
+
+  4: {
+    title: 'Visualisations & Rapports',
+    desc: 'Créer des visuels percutants et des rapports interactifs',
+    concepts: [
+      'Types de visuels: Graphiques, cartes, KPI, tableaux',
+      'Mise en forme: Couleurs, polices, alignement',
+      'Filtrage croisé: Interactivité rapports',
+      'Segments & Filtres: Contrôle utilisateur',
+      'Drill-down & Drill-through: Navigation',
+      'Mise en page: Multi-pages, boutons, signets'
+    ],
+    content: `<div class="module">
+      <h2 class="module-title">Visualisations & Rapports</h2>
+      <p class="module-desc">Créer des rapports visuels impactants et interactifs.</p>
+
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Graphique Barres:</strong> Comparaisons catégories</li>
+          <li><strong>Courbe:</strong> Tendances temps</li>
+          <li><strong>Pie/Donut:</strong> Proportions (max 3-4 slices!)</li>
+          <li><strong>Map:</strong> Données géographiques</li>
+          <li><strong>KPI/Carte:</strong> Métriques principales</li>
+          <li><strong>Tableau/Matrice:</strong> Détails + drill-down</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>💡 Best Practices:</strong> 1 insight = 1 visuel. Couleur = codage info. Blanc = lisibilité. Éviter 3D, embrouillement.
+      </div>
+
+      <div class="code-box">
+        <pre><strong>Conception Rapport: Dashboard Ventes</strong>
+
+PAGE 1 - OVERVIEW
+1. KPI (Top)
+   - Total Ventes (€): Carte simple
+   - Nombre Commandes: Carte
+   - AOV (Avg Order Value): Carte
+
+2. Graphiques (Milieu)
+   - Ventes par Mois: Courbe (axe X: Mois)
+   - Top 10 Produits: Barres horiz. (axe X: Montant)
+   - Ventes par Région: Pie (données: Montant par Région)
+
+3. Tableau Détail (Bas)
+   - Dernières 100 commandes
+   - Colonnes: Date, Client, Produit, Montant
+
+4. Segmenteur (Côté)
+   - Région (multi-select)
+   - Mois (dropdown)
+   - Tous les visuels = filtrés
+
+PAGE 2 - DÉTAIL CLIENT
+- Sélectionner client → Drill-through de Overview
+- Ses commandes historiques
+- Comportement achat (produits, montants, fréquence)
+
+INTERACTIONS:
+- Clic barre mois → Filtre tout dashboard
+- Clic région pie → Met à jour graphiques
+- Drill-down tableau → Détail commande</pre>
+      </div>
+
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Visuels = histoires. Choisir bon type pour message. Moins = plus (ne pas surcharger). Interactivité = engagement. Segmenteurs > filtres visuels. Drill-down pour détails. Tester sur utilisateurs réels!</p>
+      </div>
+    </div>`
+  },
+
+  5: {
+    title: 'DAX & Mesures Avancées',
+    desc: 'Maîtriser le langage DAX pour créer des mesures complexes',
+    concepts: [
+      'Fonctions DAX de base: SUM, COUNT, AVERAGE',
+      'Contexte de ligne vs Contexte de filtre',
+      'CALCULATE: Modifier contexte filtre',
+      'Mesures vs Colonnes calculées: Différences clés',
+      'Fonctions temporelles: DATESYTD, PREVIOUSMONTH',
+      'Cas avancés: YoY, Running Totals, Ratios'
+    ],
+    content: `<div class="module">
+      <h2 class="module-title">DAX & Mesures Avancées</h2>
+      <p class="module-desc">Créer des mesures puissantes avec DAX.</p>
+
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>SUM / COUNT / AVERAGE:</strong> Agrégations basiques</li>
+          <li><strong>CALCULATE:</strong> Changer contexte filtre (clé DAX!)</li>
+          <li><strong>ALL / ALLEXCEPT:</strong> Ignorer filtres</li>
+          <li><strong>Contexte ligne:</strong> Évaluation par ligne (colonnes calculées)</li>
+          <li><strong>Contexte filtre:</strong> Évaluation par agrégation (mesures)</li>
+          <li><strong>Variables (VAR):</strong> Stocker valeurs intermédiaires</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>⚡ Règle d'Or DAX:</strong> Mesure = CALCULATE + filtre. Colonne = calcul par ligne. Mesure rapide = SUM/COUNT direct.
+      </div>
+
+      <div class="code-box">
+        <pre><strong>Exemples Mesures DAX</strong>
+
+-- 1. MESURES BASIQUES
+Ventes = SUM(Fact_Ventes[Montant])
+Nombre_Commandes = COUNT(Fact_Ventes[ID_Vente])
+Montant_Moyen = AVERAGE(Fact_Ventes[Montant])
+
+-- 2. POURCENTAGE DU TOTAL
+Pct_Total = DIVIDE(
+    [Ventes],
+    CALCULATE([Ventes], ALL(Dim_Clients))
+)
+
+-- 3. ANNÉE SUR ANNÉE (YoY)
+Ventes_YoY = CALCULATE(
+    [Ventes],
+    DATEADD(Dim_Dates[Date], -1, YEAR)
+)
+
+Croissance_YoY_Pct = DIVIDE(
+    [Ventes] - [Ventes_YoY],
+    [Ventes_YoY]
+)
+
+-- 4. CUMUL (RUNNING TOTAL)
+Ventes_Cumul = CALCULATE(
+    [Ventes],
+    FILTER(
+        ALL(Dim_Dates),
+        Dim_Dates[Date] <= MAX(Dim_Dates[Date])
+    )
+)
+
+-- 5. DISTINCT COUNT
+Nb_Clients = DISTINCTCOUNT(Fact_Ventes[FK_Client])</pre>
+      </div>
+
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>DAX = langage puissant mais syntax spécifique. CALCULATE = fondation. Contexte ligne ≠ contexte filtre (confusion commune!). Variables = clarté code. Tester mesures dans table avant visuels. Performance: éviter SUMPRODUCT, préférer CALCULATE.</p>
+      </div>
+    </div>`
+  },
+
+  6: {
+    title: 'Partage, Sécurité & Administration',
+    desc: 'Publier, sécuriser et administrer Power BI',
+    concepts: [
+      'Power BI Service: Publication et partage',
+      'Workspaces & Rôles: Collaborer en équipe',
+      'Row-Level Security (RLS): Filtrer par utilisateur',
+      'Refresh & Gateway: Données à jour',
+      'Permissions: Qui accède à quoi',
+      'Performance & Monitoring: Auditer usage'
+    ],
+    content: `<div class="module">
+      <h2 class="module-title">Partage, Sécurité & Administration</h2>
+      <p class="module-desc">Publier et administrer Power BI en production.</p>
+
+      <div class="concepts-box">
+        <strong>Concepts Clés</strong>
+        <ul>
+          <li><strong>Desktop → Service:</strong> Publier rapport</li>
+          <li><strong>Workspace:</strong> Espace collaboratif (Admin, Member, Contributor, Viewer)</li>
+          <li><strong>RLS:</strong> Row-Level Security - user sees only their data</li>
+          <li><strong>Refresh:</strong> Programmé (toutes les heures, quotidien, etc.)</li>
+          <li><strong>Gateway:</strong> Accès données on-premises</li>
+          <li><strong>Partage:</strong> Direct user, Group, App</li>
+        </ul>
+      </div>
+
+      <div class="info-box">
+        <strong>🔒 Sécurité Recommandée:</strong> RLS + Refresh automatique + Gateway + Audit logging
+      </div>
+
+      <div class="code-box">
+        <pre><strong>Processus Publication & Sécurité</strong>
+
+ÉTAPE 1: PUBLIER DEPUIS DESKTOP
+- Fichier → Publier
+- Sélectionner Workspace destination
+- Rapport uploadé au Service
+
+ÉTAPE 2: CRÉER WORKSPACE (Si nouveau projet)
+- Power BI Service → Créer Workspace
+- Ajouter membres avec rôles:
+  * Admin: Tout gérer (edit, publish, delete)
+  * Member: Publier, éditer, partager
+  * Contributor: Editer, consommer rapports
+  * Viewer: Lecture seule
+
+ÉTAPE 3: CONFIGURER RLS (SÉCURITÉ LIGNE)
+Scénario: Vendeurs = voient que leurs ventes
+
+Dans Power BI Desktop:
+- Onglet Modélisation → Manager Roles
+- Créer rôle "Vendeur"
+- Règle DAX:
+  [Vendeur] = USERNAME()
+- Sauvegarder & Publier
+
+En Service:
+- Onglet Sécurité → Configurer RLS
+- Tester roles (prévisualiser données)
+
+ÉTAPE 4: CONFIGURER REFRESH
+- Dataset → Paramètres
+- Refresh programmé (ex: 08:00 quotidien)
+- Si données on-premises:
+  * Installer Gateway
+  * Configurer source de données
+  * Activer refresh
+
+ÉTAPE 5: PARTAGER
+Option A - Direct:
+  - Bouton Partager
+  - Ajouter users email
+  - Ils reçoivent lien
+
+Option B - App (recommandé):
+  - Créer App depuis Workspace
+  - Curated list rapports
+  - Distribuer URL à équipe
+  - Updates auto
+
+ÉTAPE 6: MONITORING
+- Usage Analytics: Qui accède, quand
+- Performance: Query slow?
+- Premium Capacity: Si > 10 users</pre>
+      </div>
+
+      <div class="takeaway-box">
+        <strong>À Retenir</strong>
+        <p>Service = collaboration + partage. RLS = sécurité au niveau données. Refresh = automation crítica. Gateway = on-premises connectors. Apps > sharing direct (scalable). Audit logs = compliance. Capacity planning = si croissance users.</p>
+      </div>
+    </div>`
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  const moduleNum = parseInt(params.get('m')) || 1;
+
+  if (!MODULES_DATA[moduleNum]) {
+    document.getElementById('module-content').innerHTML = '<p style="text-align:center;color:red;">Module non trouvé</p>';
+    return;
+  }
+
+  const module = MODULES_DATA[moduleNum];
+  document.title = `${module.title} - Power BI | Power Inside Data Academy`;
+  document.getElementById('module-title').textContent = module.title;
+  document.getElementById('module-desc').textContent = module.desc;
+  document.getElementById('breadcrumb-title').textContent = module.title;
+  document.getElementById('module-content').innerHTML = module.content;
+
+  // Navigation
+  const totalModules = Object.keys(MODULES_DATA).length;
+  const prevBtn = document.querySelector('.module-nav .nav-button.prev');
+  const nextBtn = document.querySelector('.module-nav:not(.prev) .nav-button:not(.prev)');
+
+  let navHTML = `<div class="nav-progress">
+    <span>Module ${moduleNum} / ${totalModules}</span>
+    <div class="progress-bar"><div class="progress-fill" style="width:${(moduleNum/totalModules)*100}%"></div></div>
+  </div>`;
+
+  if (moduleNum > 1) {
+    navHTML += `<a href="powerbi-module.html?m=${moduleNum-1}" class="nav-button prev">← Précédent</a>`;
+  } else {
+    navHTML += `<button class="nav-button" disabled>← Précédent</button>`;
+  }
+
+  if (moduleNum < totalModules) {
+    navHTML += `<a href="powerbi-module.html?m=${moduleNum+1}" class="nav-button">Suivant →</a>`;
+  } else {
+    navHTML += `<button class="nav-button" disabled>Suivant →</button>`;
+  }
+
+  const moduleDiv = document.querySelector('.module');
+  if (moduleDiv) {
+    moduleDiv.innerHTML += `<div class="module-nav">${navHTML}</div>`;
+  }
+});
+</script>
+
+</body>
+</html>
