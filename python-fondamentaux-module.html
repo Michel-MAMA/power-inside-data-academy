@@ -1,5 +1,359 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><title>Python Fondamentaux Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#1561FF;--blue-light:#EEF3FF;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{padding:32px;background:var(--blue-light);border-radius:12px}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}</style></head><body><nav><div class="nav-inner"><a href="python-fondamentaux-index.html">Python Fondamentaux</a><span id="bc" style="flex:1"></span><div class="nav-cta"><a href="python-fondamentaux-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"></div></section><script>const D={1:{title:'Python Basics & Syntax',concepts:['Variables: Typage dynamique','Types: int, str, float, bool','Opérateurs: Arithmétique, logique','Commentaires: Documentation code','Print: Affichage console','Input: Lecture utilisateur'],code:`# Python Basics
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Fondamentaux Module | PIDA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+  <script async src="https://cdn.jsdelivr.net/pyodide/v0.24.0/full/pyodide.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue: #1561FF;
+      --blue-light: #EEF3FF;
+      --blue-dark: #0048CC;
+      --green: #00D68F;
+      --red: #FF6B35;
+      --gray: #E8E8E8;
+      --gray-dark: #666;
+      --max: 1160px;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #111;
+    }
+
+    /* NAVBAR */
+    nav {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-bottom: 1px solid var(--gray);
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      gap: 40px;
+      height: 60px;
+      align-items: center;
+    }
+
+    .nav-inner a {
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-inner a:hover {
+      color: var(--blue-dark);
+    }
+
+    #bc {
+      flex: 1;
+      color: var(--gray-dark);
+      font-size: 14px;
+    }
+
+    .nav-cta {
+      margin-left: auto;
+    }
+
+    .nav-cta a {
+      padding: 8px 18px;
+      background: var(--blue);
+      color: #fff;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav-cta a:hover {
+      background: var(--blue-dark);
+    }
+
+    /* SECTION */
+    .section {
+      padding: 40px 24px;
+    }
+
+    .section-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    /* MODULE */
+    .module {
+      padding: 32px;
+      background: var(--blue-light);
+      border-radius: 12px;
+      border: 1px solid #ddd;
+    }
+
+    .concepts-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+
+    .concepts-box strong {
+      display: block;
+      margin-bottom: 12px;
+      color: #111;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .concepts-box ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .concepts-box li {
+      padding: 8px 12px;
+      background: var(--blue-light);
+      border-left: 3px solid var(--blue);
+      font-size: 13px;
+      color: #333;
+    }
+
+    /* CODE EDITORS */
+    .editors-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .editor-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .editor-container {
+      height: 300px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #1e1e1e;
+    }
+
+    .CodeMirror {
+      height: 100% !important;
+      font-size: 13px;
+    }
+
+    /* OUTPUT CONSOLE */
+    .output-console {
+      background: #1a1a1a;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #0f0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-height: 300px;
+      overflow-y: auto;
+      line-height: 1.5;
+    }
+
+    .output-console.empty {
+      color: #666;
+    }
+
+    .output-error {
+      color: #ff6b6b;
+    }
+
+    /* BUTTONS */
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* NAVIGATION */
+    .module-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #ddd;
+    }
+
+    .nav-button {
+      padding: 12px 20px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .nav-button:hover {
+      background: var(--blue-dark);
+    }
+
+    .nav-button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-counter {
+      font-weight: 600;
+      color: #666;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .editors-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-inner {
+        gap: 16px;
+      }
+
+      .section {
+        padding: 24px 16px;
+      }
+
+      .module {
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn, .nav-button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="python-fondamentaux-index.html">Python Fondamentaux</a>
+    <span id="bc" style="flex: 1;"></span>
+    <div class="nav-cta">
+      <a href="python-fondamentaux-index.html">← Retour</a>
+    </div>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="section-inner">
+    <div id="content"></div>
+  </div>
+</section>
+
+<script>
+// Module data with Python code examples
+const modules = {
+  1: {
+    title: 'Python Basics & Syntax',
+    concepts: [
+      'Variables: Typage dynamique',
+      'Types: int, str, float, bool',
+      'Opérateurs: Arithmétique, logique',
+      'Commentaires: Documentation code',
+      'Print: Affichage console',
+      'Input: Lecture utilisateur'
+    ],
+    code: `# Python Basics
 print("=== Variables ===")
 name = "Alice"
 age = 25
@@ -22,7 +376,20 @@ print("\\n=== Logique ===")
 if age > 18:
     print("Adulte")
 else:
-    print("Mineur")`},2:{title:'Data Structures',concepts:['Listes: Arrays ordonnés','Tuples: Immutable sequences','Dictionnaires: Key-value pairs','Sets: Unique elements','List methods: append, extend, pop','Dictionary access: keys, values'],code:`# Python Data Structures
+    print("Mineur")`
+  },
+
+  2: {
+    title: 'Data Structures',
+    concepts: [
+      'Listes: Arrays ordonnés',
+      'Tuples: Immutable sequences',
+      'Dictionnaires: Key-value pairs',
+      'Sets: Unique elements',
+      'List methods: append, extend, pop',
+      'Dictionary access: keys, values'
+    ],
+    code: `# Python Data Structures
 print("=== Listes ===")
 numbers = [1, 2, 3, 4, 5]
 print(f"Premier: {numbers[0]}")
@@ -43,7 +410,20 @@ print(student)
 print("\\n=== Sets ===")
 tags = {"python", "data", "science"}
 tags.add("ai")
-print(tags)`},3:{title:'Functions & Modules',concepts:['Fonctions: Réutilisabilité','Arguments: Positional, keyword','Return values: Valeurs retournées','Modules: Import et utilisation','Built-ins: len, range, enumerate','Scoping: Local vs global'],code:`# Functions & Modules
+print(tags)`
+  },
+
+  3: {
+    title: 'Functions & Modules',
+    concepts: [
+      'Fonctions: Réutilisabilité',
+      'Arguments: Positional, keyword',
+      'Return values: Valeurs retournées',
+      'Modules: Import et utilisation',
+      'Built-ins: len, range, enumerate',
+      'Scoping: Local vs global'
+    ],
+    code: `# Functions & Modules
 print("=== Fonction Simple ===")
 def greet(name):
     return f"Bonjour {name}!"
@@ -67,43 +447,186 @@ print_items(1, 2, 3)
 print("\\n=== Modules ===")
 import math
 print(f"Pi: {math.pi}")
-print(f"Sqrt(16): {math.sqrt(16)}")
+print(f"Sqrt(16): {math.sqrt(16)}")`
+  },
 
-from datetime import datetime
-now = datetime.now()
-print(f"Maintenant: {now}")`},4:{title:'File I/O & Exceptions',concepts:['Reading files: open(), read()','Writing files: write(), append','Context manager: with statement','Exceptions: try, except, finally','Error handling: Custom exceptions','Logging: Debug et tracking'],code:`# File I/O & Exceptions
-print("=== Reading Files ===")
-print("""
-with open('data.txt', 'r') as f:
-    content = f.read()
-    print(content)
-""")
+  4: {
+    title: 'File I/O & Exceptions',
+    concepts: [
+      'Reading files: open(), read()',
+      'Writing files: write(), append',
+      'Context manager: with statement',
+      'Exceptions: try, except, finally',
+      'Error handling: Custom exceptions',
+      'Logging: Debug et tracking'
+    ],
+    code: `# File I/O & Exceptions
+print("=== Exception Handling ===")
 
-print("\\n=== Writing Files ===")
-print("""
-with open('output.txt', 'w') as f:
-    f.write("Hello, World!")
-""")
-
-print("\\n=== Exception Handling ===")
-print("""
 try:
-    result = 10 / 0
+    x = 10
+    y = 0
+    result = x / y
 except ZeroDivisionError as e:
-    print(f"Erreur: {e}")
+    print(f"Erreur: Division par zéro!")
 except Exception as e:
     print(f"Erreur inconnue: {e}")
 finally:
-    print("Nettoyage")
-""")
+    print("Nettoyage terminé")
 
 print("\\n=== Custom Exception ===")
-print("""
-class CustomError(Exception):
+class AgeError(Exception):
     pass
 
 try:
-    raise CustomError("Message d'erreur")
-except CustomError as e:
-    print(f"Caught: {e}")
-""")`}};let m=1;function render(e){document.getElementById('bc').textContent=`/${D[e].title}`;let s='<ul>';D[e].concepts.forEach(c=>s+=`<li>${c}</li>`);document.getElementById('content').innerHTML=`<div class="module"><div style="background:#fff;padding:16px;border-radius:8px"><strong>Concepts:</strong>${s}</ul></div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))">← Précédent</button><span>${m}/4</span><button class="nav-button" onclick="m<4&&(m++,render(m))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:D[e].code,mode:'python',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>
+    age = -5
+    if age < 0:
+        raise AgeError("L'âge ne peut pas être négatif!")
+except AgeError as e:
+    print(f"Erreur personnalisée: {e}")`
+  }
+};
+
+let currentModule = 1;
+let pyodide = null;
+let editor = null;
+
+// Initialize Pyodide
+async function initPyodide() {
+  if (!pyodide) {
+    console.log('Initializing Pyodide...');
+    pyodide = await loadPyodide();
+    console.log('✓ Pyodide ready');
+  }
+}
+
+// Run Python code
+async function runCode(code) {
+  const outputEl = document.getElementById('output');
+  outputEl.textContent = 'Exécution en cours...';
+  outputEl.classList.add('empty');
+
+  try {
+    await initPyodide();
+
+    // Capture output
+    let output = '';
+    const originalLog = console.log;
+
+    pyodide.globals.set('__builtins__', pyodide.pyimport('builtins'));
+
+    // Redirect print to capture output
+    pyodide.runPython(`
+import sys
+from io import StringIO
+
+class OutputCapture(StringIO):
+    def __init__(self):
+        super().__init__()
+        self.output = ""
+
+    def write(self, s):
+        self.output += s
+        return super().write(s)
+
+output_capture = OutputCapture()
+sys.stdout = output_capture
+`);
+
+    await pyodide.runPythonAsync(code);
+
+    const capturedOutput = pyodide.globals.get('output_capture').output;
+
+    outputEl.textContent = capturedOutput || '(Aucune sortie)';
+    outputEl.classList.remove('empty');
+
+  } catch (error) {
+    outputEl.textContent = `❌ Erreur:\n${error.message}`;
+    outputEl.classList.add('output-error');
+  }
+}
+
+// Clear output
+function clearOutput() {
+  const outputEl = document.getElementById('output');
+  outputEl.textContent = '';
+  outputEl.classList.add('empty');
+}
+
+// Render module
+function render(moduleId) {
+  document.getElementById('bc').textContent = `/ ${modules[moduleId].title}`;
+
+  let conceptsHtml = '';
+  modules[moduleId].concepts.forEach(concept => {
+    conceptsHtml += `<li>${concept}</li>`;
+  });
+
+  const html = `
+    <div class="module">
+      <div class="concepts-box">
+        <strong>Concepts:</strong>
+        <ul>${conceptsHtml}</ul>
+      </div>
+
+      <div class="button-group">
+        <button class="btn" id="runBtn" onclick="runCode(editor.getValue())">
+          ▶ Essayer le code
+        </button>
+        <button class="btn btn-secondary" onclick="clearOutput()">
+          🗑️ Effacer
+        </button>
+      </div>
+
+      <div class="editors-container">
+        <div class="editor-section">
+          <div class="editor-label">Code Python</div>
+          <div class="editor-container" id="codeEditor"></div>
+        </div>
+
+        <div class="editor-section">
+          <div class="editor-label">Sortie (Output)</div>
+          <div class="output-console empty" id="output"></div>
+        </div>
+      </div>
+
+      <div class="module-nav">
+        <button class="nav-button" ${currentModule <= 1 ? 'disabled' : ''}
+                onclick="currentModule > 1 && (currentModule--, render(currentModule))">
+          ← Précédent
+        </button>
+        <span class="page-counter">${currentModule} / 4</span>
+        <button class="nav-button" ${currentModule >= 4 ? 'disabled' : ''}
+                onclick="currentModule < 4 && (currentModule++, render(currentModule))">
+          Suivant →
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('content').innerHTML = html;
+
+  // Initialize CodeMirror
+  setTimeout(() => {
+    editor = CodeMirror(document.getElementById('codeEditor'), {
+      value: modules[moduleId].code,
+      mode: 'python',
+      theme: 'material-darker',
+      lineNumbers: true,
+      lineWrapping: true,
+      indentUnit: 4,
+      indentWithTabs: false,
+      viewportMargin: Infinity
+    });
+  }, 100);
+}
+
+// Initialize
+window.addEventListener('DOMContentLoaded', () => {
+  initPyodide();
+  render(1);
+});
+</script>
+
+</body>
+</html>
