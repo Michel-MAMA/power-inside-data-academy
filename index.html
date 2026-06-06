@@ -2178,7 +2178,7 @@ html[data-theme="light"] .theme-toggle .icon-moon { display: none; }
   <div class="m-auth-zone" id="mobileAuthZone">
     <!-- Déconnecté par défaut -->
     <button class="m-btn-connect" onclick="closeMobileMenu(); openAuth('login')">Se connecter</button>
-    <button class="m-btn-register" onclick="closeMobileMenu(); openAuth('register')">S'inscrire gratuitement</button>
+    <button class="m-btn-register" onclick="closeMobileMenu(); openAuth('signup')">S'inscrire gratuitement</button>
   </div>
 </div>
 
@@ -3794,7 +3794,7 @@ async function updateNavbar(user, overrides = {}) {
     if (mobileAuthZone) {
       mobileAuthZone.innerHTML = `
         <button class="m-btn-connect" onclick="closeMobileMenu(); openAuth('login')">Se connecter</button>
-        <button class="m-btn-register" onclick="closeMobileMenu(); openAuth('register')">S'inscrire gratuitement</button>`;
+        <button class="m-btn-register" onclick="closeMobileMenu(); openAuth('signup')">S'inscrire gratuitement</button>`;
     }
   }
 }
