@@ -18,7 +18,34 @@
   --green:#00D68F; --amber:#FFAA00; --red:#FF4D6A; --purple:#B464FF;
   --ease:cubic-bezier(.22,1,.36,1);
   --fd:'Plus Jakarta Sans',sans-serif; --fb:'Inter',sans-serif;
+  --logo-size:18px;
 }
+
+/* ── TECH LOGOS ── */
+.tech-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid rgba(0,0,0,.08);background:var(--s2);font-size:11px;font-weight:700;color:var(--w85);transition:all .2s;white-space:nowrap}
+.tech-badge:hover{border-color:rgba(0,0,0,.12);background:var(--s3);transform:translateY(-1px)}
+.tech-logo{display:inline-flex;align-items:center;justify-content:center;width:var(--logo-size);height:var(--logo-size);flex-shrink:0;border-radius:2px}
+.logo-python{background:linear-gradient(135deg,#3776ab,#ffd43b)}
+.logo-spark{background:#E35A16;clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%)}
+.logo-sql{background:#F29111;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+.logo-databricks{background:#FF6E35}
+.logo-docker{background:#2496ED}
+.logo-kubernetes{background:#326CE5;clip-path:circle(50%)}
+.logo-kafka{background:#000000}
+.logo-powerbi{background:#F2CC1C;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+.logo-tensorflow{background:#FF6F00;clip-path:polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%)}
+.logo-pytorch{background:#EE4C2C}
+.logo-dbt{background:#FF6D47}
+.logo-airflow{background:#017CEE;clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%)}
+.logo-snowflake{background:#29B5E8;clip-path:polygon(50% 0%,93.3% 25%,100% 75%,50% 100%,0% 75%,6.7% 25%)}
+.logo-tableau{background:#E97627}
+.logo-aws{background:#FF9900}
+.logo-azure{background:#0078D4}
+.logo-gcp{background:linear-gradient(135deg,#4285F4,#EA4335)}
+.logo-git{background:#F1502F;clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%)}
+.logo-github{background:#181717}
+.logo-openai{background:#10A37F;clip-path:circle(50%)}
+.logo-claude{background:#000000}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--w100);font-family:var(--fb);font-size:14px;line-height:1.6;overflow-x:hidden}
 a{text-decoration:none;color:inherit}
@@ -1256,7 +1283,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Expert</span>
             <span class="fc-mi">🛠️ Learning by doing</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">MLflow</span><span class="tool-tag">Kubernetes</span><span class="tool-tag">Docker</span><span class="tool-tag">Airflow</span><span class="tool-tag">Terraform</span><span class="tool-tag">GitLab CI</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-airflow"></span>MLflow</span><span class="tech-badge"><span class="tech-logo logo-kubernetes"></span>Kubernetes</span><span class="tech-badge"><span class="tech-logo logo-docker"></span>Docker</span><span class="tech-badge"><span class="tech-logo logo-airflow"></span>Airflow</span><span class="tech-badge"><span class="tech-logo logo-terraform"></span>Terraform</span><span class="tech-badge"><span class="tech-logo logo-gitlabci"></span>GitLab CI</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Financement OPCO / CPF</div></div>
             <div class="fc-cta">
@@ -1282,7 +1309,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">☁️ Azure Cloud</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Microsoft Fabric</span><span class="tool-tag">Data Factory</span><span class="tool-tag">Delta Lake</span><span class="tool-tag">Power BI</span><span class="tool-tag">Purview</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-fabric"></span>Microsoft Fabric</span><span class="tech-badge"><span class="tech-logo logo-datafactory"></span>Data Factory</span><span class="tech-badge"><span class="tech-logo logo-deltalake"></span>Delta Lake</span><span class="tech-badge"><span class="tech-logo logo-powerbi"></span>Power BI</span><span class="tech-badge"><span class="tech-logo logo-purview"></span>Purview</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Financement OPCO / CPF</div></div>
             <div class="fc-cta">
@@ -1309,7 +1336,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Débutant</span>
             <span class="fc-mi">💻 Try it yourself</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Python</span><span class="tool-tag">POO</span><span class="tool-tag">Flask</span><span class="tool-tag">APIs</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-python"></span>Python</span><span class="tech-badge"><span class="tech-logo logo-python"></span>POO</span><span class="tech-badge"><span class="tech-logo logo-flask"></span>Flask</span><span class="tech-badge"><span class="tech-logo logo-python"></span>APIs</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Sandbox inclus</div></div>
             <div class="fc-cta">
@@ -1336,7 +1363,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Débutant</span>
             <span class="fc-mi">💻 Try it yourself</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">SQL</span><span class="tool-tag">PostgreSQL</span><span class="tool-tag">Data</span><span class="tool-tag">Requêtes</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-sql"></span>SQL</span><span class="tech-badge"><span class="tech-logo logo-postgres"></span>PostgreSQL</span><span class="tech-badge"><span class="tech-logo logo-sql"></span>Data</span><span class="tech-badge"><span class="tech-logo logo-sql"></span>Requêtes</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Sandbox inclus</div></div>
             <div class="fc-cta">
@@ -1363,7 +1390,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">💻 6 sandboxes</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Python</span><span class="tool-tag">POO</span><span class="tool-tag">Fonctionnel</span><span class="tool-tag">Décorateurs</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-python"></span>Python</span><span class="tech-badge"><span class="tech-logo logo-python"></span>POO</span><span class="tech-badge"><span class="tech-logo logo-python"></span>Fonctionnel</span><span class="tech-badge"><span class="tech-logo logo-python"></span>Décorateurs</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Gratuit</div><div class="fc-price-sub">Sandbox inclus</div></div>
             <div class="fc-cta">
@@ -1390,7 +1417,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">💻 6 sandboxes</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">SQL</span><span class="tool-tag">Window Functions</span><span class="tool-tag">CTE</span><span class="tool-tag">Optimisation</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-sql"></span>SQL</span><span class="tech-badge"><span class="tech-logo logo-sql"></span>Window Functions</span><span class="tech-badge"><span class="tech-logo logo-sql"></span>CTE</span><span class="tech-badge"><span class="tech-logo logo-sql"></span>Optimisation</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Gratuit</div><div class="fc-price-sub">Sandbox inclus</div></div>
             <div class="fc-cta">
@@ -1417,7 +1444,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Expert</span>
             <span class="fc-mi">🚀 Quiz interactifs</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">PySpark</span><span class="tool-tag">Spark</span><span class="tool-tag">Big Data</span><span class="tool-tag">Distributed</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-spark"></span>PySpark</span><span class="tech-badge"><span class="tech-logo logo-spark"></span>Spark</span><span class="tech-badge"><span class="tech-logo logo-spark"></span>Big Data</span><span class="tech-badge"><span class="tech-logo logo-spark"></span>Distributed</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Gratuit</div><div class="fc-price-sub">Exercices inclus</div></div>
             <div class="fc-cta">
@@ -1444,7 +1471,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Expert</span>
             <span class="fc-mi">🎯 Défis inclus</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Scala</span><span class="tool-tag">Functional</span><span class="tool-tag">Pattern Matching</span><span class="tool-tag">Spark</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-scala"></span>Scala</span><span class="tech-badge"><span class="tech-logo logo-scala"></span>Functional</span><span class="tech-badge"><span class="tech-logo logo-scala"></span>Pattern Matching</span><span class="tech-badge"><span class="tech-logo logo-spark"></span>Spark</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Gratuit</div><div class="fc-price-sub">Défis pratiques</div></div>
             <div class="fc-cta">
@@ -1471,7 +1498,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🤖 Data Science</span>
             <span class="fc-mi">⚙️ Algorithmes avancés</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Scikit-learn</span><span class="tool-tag">TensorFlow</span><span class="tool-tag">Régression</span><span class="tool-tag">Classification</span><span class="tool-tag">Clustering</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-sklearn"></span>Scikit-learn</span><span class="tech-badge"><span class="tech-logo logo-tensorflow"></span>TensorFlow</span><span class="tech-badge"><span class="tech-logo logo-tensorflow"></span>Régression</span><span class="tech-badge"><span class="tech-logo logo-tensorflow"></span>Classification</span><span class="tech-badge"><span class="tech-logo logo-tensorflow"></span>Clustering</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Gratuit</div><div class="fc-price-sub">Sandboxes interactives</div></div>
             <div class="fc-cta">
@@ -1498,7 +1525,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Tous niveaux</span>
             <span class="fc-mi">📊 Power Platform</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Power BI Desktop</span><span class="tool-tag">DAX</span><span class="tool-tag">Power Query</span><span class="tool-tag">Power BI Service</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-powerbi"></span>Power BI Desktop</span><span class="tech-badge"><span class="tech-logo logo-dax"></span>DAX</span><span class="tech-badge"><span class="tech-logo logo-powerquery"></span>Power Query</span><span class="tech-badge"><span class="tech-logo logo-powerbi"></span>Power BI Service</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Financement OPCO / CPF</div></div>
             <div class="fc-cta">
@@ -1524,7 +1551,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Débutant</span>
             <span class="fc-mi">⚡ No-Code</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Power Automate</span><span class="tool-tag">Power Apps</span><span class="tool-tag">SharePoint</span><span class="tool-tag">Microsoft 365</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-powerautomate"></span>Power Automate</span><span class="tech-badge"><span class="tech-logo logo-powerapps"></span>Power Apps</span><span class="tech-badge"><span class="tech-logo logo-sharepoint"></span>SharePoint</span><span class="tech-badge"><span class="tech-logo logo-microsoft365"></span>Microsoft 365</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Financement OPCO / CPF</div></div>
             <div class="fc-cta">
@@ -1550,7 +1577,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Débutant</span>
             <span class="fc-mi">🖥️ Low-Code</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Power Apps</span><span class="tool-tag">Dataverse</span><span class="tool-tag">SharePoint</span><span class="tool-tag">Power Automate</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-powerapps"></span>Power Apps</span><span class="tech-badge"><span class="tech-logo logo-dataverse"></span>Dataverse</span><span class="tech-badge"><span class="tech-logo logo-sharepoint"></span>SharePoint</span><span class="tech-badge"><span class="tech-logo logo-powerautomate"></span>Power Automate</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Financement OPCO / CPF</div></div>
             <div class="fc-cta">
@@ -1576,7 +1603,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Débutant</span>
             <span class="fc-mi">🤖 No-Code IA</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Copilot Studio</span><span class="tool-tag">Power Automate</span><span class="tool-tag">Teams</span><span class="tool-tag">Dataverse</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-copilotstudio"></span>Copilot Studio</span><span class="tech-badge"><span class="tech-logo logo-powerautomate"></span>Power Automate</span><span class="tech-badge"><span class="tech-logo logo-teams"></span>Teams</span><span class="tech-badge"><span class="tech-logo logo-dataverse"></span>Dataverse</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Financement OPCO / CPF</div></div>
             <div class="fc-cta">
@@ -1602,7 +1629,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Débutant</span>
             <span class="fc-mi">🐍 Python 3</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Python 3</span><span class="tool-tag">VS Code</span><span class="tool-tag">Bibliothèques std</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-python"></span>Python 3</span><span class="tech-badge"><span class="tech-logo logo-vscode"></span>VS Code</span><span class="tech-badge"><span class="tech-logo logo-python"></span>Bibliothèques std</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">Sur devis</div><div class="fc-price-sub">Financement OPCO / CPF</div></div>
             <div class="fc-cta">
@@ -1628,7 +1655,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Avancé</span>
             <span class="fc-mi">🏢 Présentiel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Tableau Desktop</span><span class="tool-tag">Tableau Prep</span><span class="tool-tag">Python</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-tableau"></span>Tableau Desktop</span><span class="tech-badge"><span class="tech-logo logo-tableauprep"></span>Tableau Prep</span><span class="tech-badge"><span class="tech-logo logo-python"></span>Python</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">1 350 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
             <div class="fc-cta">
@@ -1654,7 +1681,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">🏢 Hybride</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">PyTorch</span><span class="tool-tag">HuggingFace</span><span class="tool-tag">CUDA</span><span class="tool-tag">ONNX</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-pytorch"></span>PyTorch</span><span class="tech-badge"><span class="tech-logo logo-huggingface"></span>HuggingFace</span><span class="tech-badge"><span class="tech-logo logo-cuda"></span>CUDA</span><span class="tech-badge"><span class="tech-logo logo-onnx"></span>ONNX</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">1 900 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
             <div class="fc-cta">
@@ -1680,7 +1707,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Avancé</span>
             <span class="fc-mi">💻 Distanciel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Databricks</span><span class="tool-tag">Delta Lake</span><span class="tool-tag">Unity Catalog</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-databricks"></span>Databricks</span><span class="tech-badge"><span class="tech-logo logo-deltalake"></span>Delta Lake</span><span class="tech-badge"><span class="tech-logo logo-deltalake"></span>Unity Catalog</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">2 200 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
             <div class="fc-cta">
@@ -1706,7 +1733,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Avancé</span>
             <span class="fc-mi">💻 Distanciel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">BigQuery</span><span class="tool-tag">Dataflow</span><span class="tool-tag">Pub/Sub</span><span class="tool-tag">Vertex AI</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-bigquery"></span>BigQuery</span><span class="tech-badge"><span class="tech-logo logo-dataflow"></span>Dataflow</span><span class="tech-badge"><span class="tech-logo logo-pubsub"></span>Pub/Sub</span><span class="tech-badge"><span class="tech-logo logo-vertexai"></span>Vertex AI</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">2 300 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
             <div class="fc-cta">
@@ -1732,7 +1759,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Débutant</span>
             <span class="fc-mi">🏢 Présentiel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Power BI Desktop</span><span class="tool-tag">Power Query</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-powerbi"></span>Power BI Desktop</span><span class="tech-badge"><span class="tech-logo logo-powerquery"></span>Power Query</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">990 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
             <div class="fc-cta">
@@ -1758,7 +1785,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Avancé</span>
             <span class="fc-mi">💻 Distanciel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">OpenCV</span><span class="tool-tag">YOLOv8</span><span class="tool-tag">TensorRT</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-opencv"></span>OpenCV</span><span class="tech-badge"><span class="tech-logo logo-yolo"></span>YOLOv8</span><span class="tech-badge"><span class="tech-logo logo-tensorrt"></span>TensorRT</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">1 450 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
             <div class="fc-cta">
@@ -1784,7 +1811,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">💻 Distanciel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">PostgreSQL</span><span class="tool-tag">Snowflake</span><span class="tool-tag">BigQuery</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-postgres"></span>PostgreSQL</span><span class="tech-badge"><span class="tech-logo logo-snowflake"></span>Snowflake</span><span class="tech-badge"><span class="tech-logo logo-bigquery"></span>BigQuery</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">1 100 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
             <div class="fc-cta">
@@ -1810,7 +1837,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Expert</span>
             <span class="fc-mi">💻 Distanciel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Llama 3</span><span class="tool-tag">Mistral</span><span class="tool-tag">LoRA</span><span class="tool-tag">vLLM</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-llama"></span>Llama 3</span><span class="tech-badge"><span class="tech-logo logo-mistral"></span>Mistral</span><span class="tech-badge"><span class="tech-logo logo-llama"></span>LoRA</span><span class="tech-badge"><span class="tech-logo logo-vllm"></span>vLLM</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">2 600 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
             <div class="fc-cta">
@@ -1836,7 +1863,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">🏢 Présentiel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Apache Kafka</span><span class="tool-tag">Kafka Streams</span><span class="tool-tag">ksqlDB</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-kafka"></span>Apache Kafka</span><span class="tech-badge"><span class="tech-logo logo-kafkastreams"></span>Kafka Streams</span><span class="tech-badge"><span class="tech-logo logo-ksqldb"></span>ksqlDB</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">1 600 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
             <div class="fc-cta">
@@ -1862,7 +1889,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">💻 Distanciel</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Looker Studio</span><span class="tool-tag">GA4</span><span class="tool-tag">BigQuery</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-lookerstudio"></span>Looker Studio</span><span class="tech-badge"><span class="tech-logo logo-ga4"></span>GA4</span><span class="tech-badge"><span class="tech-logo logo-bigquery"></span>BigQuery</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">1 150 €</div><div class="fc-price-sub">HT · OPCO éligible</div></div>
             <div class="fc-cta">
@@ -1888,7 +1915,7 @@ footer{border-top:1px solid var(--bdr);padding:40px;display:flex;align-items:cen
             <span class="fc-mi">🎯 Intermédiaire</span>
             <span class="fc-mi">🏢 Hybride</span>
           </div>
-          <div class="fc-tools"><span class="tool-tag">Snowflake</span><span class="tool-tag">Snowpark</span><span class="tool-tag">Snowpipe</span></div>
+          <div class="fc-tools"><span class="tech-badge"><span class="tech-logo logo-snowflake"></span>Snowflake</span><span class="tech-badge"><span class="tech-logo logo-snowpark"></span>Snowpark</span><span class="tech-badge"><span class="tech-logo logo-snowpipe"></span>Snowpipe</span></div>
           <div class="fc-footer">
             <div><div class="fc-price">1 850 €</div><div class="fc-price-sub">HT · CPF éligible</div></div>
             <div class="fc-cta">

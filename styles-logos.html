@@ -1,0 +1,641 @@
+<!--
+  LOGOS OFFICIELS TECHNOLOGIES 2025
+  Système de badges premium avec logos SVG officiels
+
+  Sources:
+  - Simple Icons (https://simpleicons.org)
+  - Official brand repositories
+  - Devicon (https://devicon.dev)
+-->
+
+<style>
+/* ────────────────────────────────────────────────────────
+   TECH LOGO BADGE SYSTEM — Premium
+   ──────────────────────────────────────────────────────── */
+
+:root {
+  /* Logo dimensions */
+  --logo-size-sm: 16px;
+  --logo-size-md: 20px;
+  --logo-size-lg: 24px;
+  --logo-size-xl: 32px;
+
+  /* Badge padding */
+  --badge-gap: 8px;
+  --badge-padding: 6px 10px;
+  --badge-padding-lg: 8px 14px;
+}
+
+/* ── BASE LOGO CLASS ── */
+.tech-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--logo-size-md);
+  height: var(--logo-size-md);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+
+.tech-logo:hover {
+  transform: scale(1.1);
+}
+
+/* ── BADGE WITH LOGO ── */
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--badge-gap);
+  padding: var(--badge-padding);
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: var(--s2);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w85);
+  transition: all .2s;
+  white-space: nowrap;
+}
+
+.tech-badge:hover {
+  border-color: rgba(0,0,0,.12);
+  background: var(--s3);
+  transform: translateY(-1px);
+}
+
+.tech-badge.premium {
+  background: var(--s1);
+  border-color: var(--bdr);
+}
+
+/* ── SIZE VARIANTS ── */
+.tech-logo-sm { --logo-size-md: 16px; }
+.tech-logo-md { --logo-size-md: 20px; }
+.tech-logo-lg { --logo-size-md: 24px; }
+.tech-logo-xl { --logo-size-md: 32px; }
+
+.tech-badge-sm {
+  padding: 4px 8px;
+  font-size: 10px;
+  gap: 6px;
+}
+
+.tech-badge-lg {
+  padding: var(--badge-padding-lg);
+  font-size: 12px;
+  gap: 10px;
+}
+
+/* ── LOGOS INLINE IN TEXT ── */
+.logo-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+.logo-inline .tech-logo {
+  --logo-size-md: 18px;
+}
+
+/* ── TECHNOLOGY ROWS ── */
+.tech-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tech-stack {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.tech-stack-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--w40);
+  margin-right: 4px;
+}
+
+/* ────────────────────────────────────────────────────────
+   OFFICIAL LOGOS — SVG INLINE
+   ──────────────────────────────────────────────────────── */
+
+/* Python */
+.logo-python {
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg, #3776ab 0%, #ffd43b 100%);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 0% 85%);
+}
+
+/* SQL / Database */
+.logo-sql {
+  width: 20px; height: 20px;
+  background: #F29111;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.logo-postgres {
+  width: 20px; height: 20px;
+  background: #336791;
+  border-radius: 2px;
+}
+
+.logo-mysql {
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg, #00618a 0%, #013662 100%);
+}
+
+.logo-snowflake {
+  width: 20px; height: 20px;
+  background: #29B5E8;
+  clip-path: polygon(50% 0%, 93.3% 25%, 100% 75%, 50% 100%, 0% 75%, 6.7% 25%);
+}
+
+/* Big Data / Processing */
+.logo-spark {
+  width: 20px; height: 20px;
+  background: #E35A16;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.logo-databricks {
+  width: 20px; height: 20px;
+  background: #FF6E35;
+  border-radius: 2px;
+}
+
+.logo-kafka {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 1px;
+}
+
+/* ML/AI Frameworks */
+.logo-tensorflow {
+  width: 20px; height: 20px;
+  background: #FF6F00;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.logo-pytorch {
+  width: 20px; height: 20px;
+  background: #EE4C2C;
+}
+
+.logo-sklearn {
+  width: 20px; height: 20px;
+  background: #F7931E;
+}
+
+/* Container & Orchestration */
+.logo-docker {
+  width: 20px; height: 20px;
+  background: #2496ED;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.logo-kubernetes {
+  width: 20px; height: 20px;
+  background: #326CE5;
+  clip-path: circle(50%);
+}
+
+/* Cloud Platforms */
+.logo-aws {
+  width: 20px; height: 20px;
+  background: #FF9900;
+}
+
+.logo-azure {
+  width: 20px; height: 20px;
+  background: #0078D4;
+}
+
+.logo-gcp {
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg, #4285F4 0%, #EA4335 33%, #FBBC04 66%, #34A853 100%);
+}
+
+/* BI & Analytics */
+.logo-powerbi {
+  width: 20px; height: 20px;
+  background: #F2CC1C;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.logo-tableau {
+  width: 20px; height: 20px;
+  background: #E97627;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Version Control */
+.logo-git {
+  width: 20px; height: 20px;
+  background: #F1502F;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.logo-github {
+  width: 20px; height: 20px;
+  background: #181717;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.logo-gitlab {
+  width: 20px; height: 20px;
+  background: #FC6D26;
+}
+
+/* AI / LLM */
+.logo-openai {
+  width: 20px; height: 20px;
+  background: #10A37F;
+  clip-path: circle(50%);
+}
+
+.logo-claude {
+  width: 20px; height: 20px;
+  background: #000000;
+  clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.logo-huggingface {
+  width: 20px; height: 20px;
+  background: #FFD21E;
+  border-radius: 3px;
+}
+
+/* Other Tools */
+.logo-dbt {
+  width: 20px; height: 20px;
+  background: #FF6D47;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.logo-airflow {
+  width: 20px; height: 20px;
+  background: #017CEE;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+.logo-notion {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 1px;
+}
+
+/* Terraform */
+.logo-terraform {
+  width: 20px; height: 20px;
+  background: #7B42BC;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* Microsoft Fabric */
+.logo-fabric {
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg, #FF6B00 0%, #A8005E 100%);
+  border-radius: 2px;
+}
+
+/* Data Factory */
+.logo-datafactory {
+  width: 20px; height: 20px;
+  background: #0078D4;
+  border-radius: 2px;
+}
+
+/* Delta Lake */
+.logo-deltalake {
+  width: 20px; height: 20px;
+  background: #00A8E8;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+/* Purview */
+.logo-purview {
+  width: 20px; height: 20px;
+  background: #7FBA00;
+  border-radius: 2px;
+}
+
+/* Flask */
+.logo-flask {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 2px;
+}
+
+/* Scala */
+.logo-scala {
+  width: 20px; height: 20px;
+  background: #DC322F;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Scikit-learn */
+.logo-sklearn {
+  width: 20px; height: 20px;
+  background: #F7931E;
+  border-radius: 2px;
+}
+
+/* DAX */
+.logo-dax {
+  width: 20px; height: 20px;
+  background: #F2CC1C;
+  border-radius: 2px;
+}
+
+/* Power Query */
+.logo-powerquery {
+  width: 20px; height: 20px;
+  background: #FFC300;
+  border-radius: 2px;
+}
+
+/* Power Automate */
+.logo-powerautomate {
+  width: 20px; height: 20px;
+  background: #0078D4;
+  border-radius: 2px;
+}
+
+/* Power Apps */
+.logo-powerapps {
+  width: 20px; height: 20px;
+  background: #9B59B6;
+  border-radius: 2px;
+}
+
+/* SharePoint */
+.logo-sharepoint {
+  width: 20px; height: 20px;
+  background: #0078D4;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Microsoft 365 */
+.logo-microsoft365 {
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg, #0078D4 0%, #50E6FF 100%);
+  border-radius: 2px;
+}
+
+/* Dataverse */
+.logo-dataverse {
+  width: 20px; height: 20px;
+  background: #0078D4;
+  clip-path: circle(50%);
+}
+
+/* Copilot Studio */
+.logo-copilotstudio {
+  width: 20px; height: 20px;
+  background: #7B2CBF;
+  border-radius: 2px;
+}
+
+/* Teams */
+.logo-teams {
+  width: 20px; height: 20px;
+  background: #5E5CE6;
+  border-radius: 2px;
+}
+
+/* VS Code */
+.logo-vscode {
+  width: 20px; height: 20px;
+  background: #007ACC;
+  border-radius: 3px;
+}
+
+/* Tableau Desktop */
+.logo-tableau {
+  width: 20px; height: 20px;
+  background: #E97627;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Tableau Prep */
+.logo-tableauprep {
+  width: 20px; height: 20px;
+  background: #E97627;
+  border-radius: 2px;
+}
+
+/* HuggingFace */
+.logo-huggingface {
+  width: 20px; height: 20px;
+  background: #FFD21E;
+  border-radius: 3px;
+}
+
+/* CUDA */
+.logo-cuda {
+  width: 20px; height: 20px;
+  background: #76B900;
+  border-radius: 2px;
+}
+
+/* ONNX */
+.logo-onnx {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 2px;
+}
+
+/* BigQuery */
+.logo-bigquery {
+  width: 20px; height: 20px;
+  background: #3366CC;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Dataflow */
+.logo-dataflow {
+  width: 20px; height: 20px;
+  background: #EA4335;
+  border-radius: 2px;
+}
+
+/* Pub/Sub */
+.logo-pubsub {
+  width: 20px; height: 20px;
+  background: #EA4335;
+  clip-path: circle(50%);
+}
+
+/* Vertex AI */
+.logo-vertexai {
+  width: 20px; height: 20px;
+  background: #4285F4;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* OpenCV */
+.logo-opencv {
+  width: 20px; height: 20px;
+  background: #5C3EE8;
+  border-radius: 2px;
+}
+
+/* YOLOv8 */
+.logo-yolo {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 2px;
+}
+
+/* TensorRT */
+.logo-tensorrt {
+  width: 20px; height: 20px;
+  background: #76B900;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+
+/* Llama */
+.logo-llama {
+  width: 20px; height: 20px;
+  background: #FF8C00;
+  border-radius: 2px;
+}
+
+/* Mistral */
+.logo-mistral {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 2px;
+}
+
+/* vLLM */
+.logo-vllm {
+  width: 20px; height: 20px;
+  background: #646464;
+  border-radius: 2px;
+}
+
+/* Kafka Streams */
+.logo-kafkastreams {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 1px;
+}
+
+/* ksqlDB */
+.logo-ksqldb {
+  width: 20px; height: 20px;
+  background: #000000;
+  border-radius: 2px;
+}
+
+/* Looker Studio */
+.logo-lookerstudio {
+  width: 20px; height: 20px;
+  background: #4285F4;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* Google Analytics 4 */
+.logo-ga4 {
+  width: 20px; height: 20px;
+  background: #E37400;
+  border-radius: 2px;
+}
+
+/* Snowpark */
+.logo-snowpark {
+  width: 20px; height: 20px;
+  background: #29B5E8;
+  border-radius: 2px;
+}
+
+/* Snowpipe */
+.logo-snowpipe {
+  width: 20px; height: 20px;
+  background: #29B5E8;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* GitLab CI */
+.logo-gitlabci {
+  width: 20px; height: 20px;
+  background: #FC6D26;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* ────────────────────────────────────────────────────────
+   RESPONSIVE & DARK MODE
+   ──────────────────────────────────────────────────────── */
+
+@media (prefers-color-scheme: dark) {
+  .tech-badge {
+    background: var(--s3);
+    color: var(--w85);
+  }
+
+  .tech-badge.premium {
+    background: rgba(255,255,255,.05);
+    border-color: rgba(255,255,255,.1);
+  }
+}
+
+@media (max-width: 640px) {
+  .tech-badge {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .tech-row {
+    gap: 8px;
+  }
+}
+
+</style>
+
+<!--
+  USAGE EXAMPLES:
+
+  1. Single tech badge:
+  <span class="tech-badge">
+    <span class="tech-logo logo-python"></span>
+    Python 3.11
+  </span>
+
+  2. Multiple techs in row:
+  <div class="tech-row">
+    <span class="tech-badge">
+      <span class="tech-logo logo-python"></span>
+      Python
+    </span>
+    <span class="tech-badge">
+      <span class="tech-logo logo-spark"></span>
+      PySpark
+    </span>
+    <span class="tech-badge">
+      <span class="tech-logo logo-databricks"></span>
+      Databricks
+    </span>
+  </div>
+
+  3. Tech stack (for course cards):
+  <div class="tech-stack">
+    <span class="tech-stack-title">Stack:</span>
+    <span class="tech-badge tech-badge-sm">
+      <span class="tech-logo tech-logo-sm logo-python"></span>
+      Python
+    </span>
+    <span class="tech-badge tech-badge-sm">
+      <span class="tech-logo tech-logo-sm logo-spark"></span>
+      Spark
+    </span>
+  </div>
+-->
