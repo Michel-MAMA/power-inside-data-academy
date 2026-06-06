@@ -167,49 +167,54 @@ footer a{color:var(--blue);font-weight:600}
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox1" spellcheck="false"># 1. IMPORTER LES BIBLIOTHÈQUES ESSENTIELLES
+          <textarea id="sandbox1" spellcheck="false"># 1. IMPORTER LES BIBLIOTHÈQUES
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.datasets import load_iris
-from sklearn.metrics import accuracy_score
 
-print("=== 1. CHARGER LES DONNÉES ===")
-# Dataset Iris (150 fleurs, 4 features, 3 classes)
-iris = load_iris()
-X = iris.data  # 150 × 4 features
-y = iris.target  # 150 labels (0, 1, ou 2)
+print("=== 1. CRÉER DONNÉES SYNTHÉTIQUES ===")
+# Créer un dataset simple: prix maisons vs surface
+np.random.seed(42)
+n_samples = 100
 
-print(f"X shape: {X.shape}")  # (150, 4)
-print(f"y shape: {y.shape}")  # (150,)
-print(f"Classe distribution: {np.bincount(y)}")
+surface = np.random.uniform(50, 200, n_samples)  # m²
+prix = 3000 * surface + 50000 + np.random.normal(0, 30000, n_samples)  # €
 
-# 2. CONVERTIR EN DATAFRAME
+print(f"Nombre de samples: {n_samples}")
+print(f"Surface: min={surface.min():.0f}, max={surface.max():.0f}")
+print(f"Prix: min={prix.min():.0f}, max={prix.max():.0f}")
+
+# 2. CRÉER DATAFRAME
 print(f"\n=== 2. DATAFRAME ===")
-df = pd.DataFrame(X, columns=iris.feature_names)
-df['target'] = y
-print(df.head())
+df = pd.DataFrame({
+    'surface_m2': surface,
+    'prix_euros': prix
+})
+print(df.head(10))
 print(f"\nStatistiques:\n{df.describe()}")
 
 # 3. TRAIN/TEST SPLIT - 80% entraînement, 20% test
-print(f"\n=== 3. TRAIN/TEST SPLIT ===")
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-print(f"Train: {X_train.shape[0]}, Test: {X_test.shape[0]}")
+print(f"\n=== 3. TRAIN/TEST SPLIT (80/20) ===")
+split_idx = int(n_samples * 0.8)
+X_train = surface[:split_idx]
+X_test = surface[split_idx:]
+y_train = prix[:split_idx]
+y_test = prix[split_idx:]
 
-# 4. FEATURES STATISTICS
-print(f"\n=== 4. FEATURES STATS ===")
-for i, name in enumerate(iris.feature_names):
-    print(f"{name}:")
-    print(f"  Min: {X[:, i].min():.2f}, Max: {X[:, i].max():.2f}")
-    print(f"  Mean: {X[:, i].mean():.2f}, Std: {X[:, i].std():.2f}")
+print(f"Train: {len(X_train)} samples")
+print(f"Test: {len(X_test)} samples")
 
-# 5. CLASSES
-print(f"\n=== 5. CLASSES ===")
-for i, name in enumerate(iris.target_names):
-    count = np.sum(y == i)
-    print(f"{name}: {count} samples")
+# 4. STATISTIQUES FEATURES
+print(f"\n=== 4. STATISTIQUES ===")
+print(f"Surface moyenne train: {X_train.mean():.1f} m²")
+print(f"Surface écart-type train: {X_train.std():.1f} m²")
+print(f"Prix moyen train: {y_train.mean():.0f} €")
+print(f"Prix écart-type train: {y_train.std():.0f} €")
+
+# 5. CORRÉLATION
+print(f"\n=== 5. CORRÉLATION ===")
+correlation = np.corrcoef(surface, prix)[0, 1]
+print(f"Corrélation surface-prix: {correlation:.4f}")
+print(f"(1 = corrélation parfaite, 0 = aucune corrélation)")
 </textarea>
         </div>
         <div>
@@ -245,60 +250,73 @@ for i, name in enumerate(iris.target_names):
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox2" spellcheck="false"># RÉGRESSION LINÉAIRE
+          <textarea id="sandbox2" spellcheck="false"># RÉGRESSION LINÉAIRE AVEC NUMPY
 import numpy as np
-from sklearn.linear_model import LinearRegression
-from sklearn.datasets import make_regression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
-# 1. CRÉER DONNÉES SYNTHÉTIQUES
 print("=== 1. DONNÉES DE RÉGRESSION ===")
-X, y = make_regression(n_samples=100, n_features=3, noise=10, random_state=42)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Créer données: y = 2*x1 + 3*x2 + bruit
+np.random.seed(42)
+n = 100
+x1 = np.random.randn(n)
+x2 = np.random.randn(n)
+X = np.column_stack([np.ones(n), x1, x2])  # Ajouter colonne 1 pour intercept
+y = 2*x1 + 3*x2 + np.random.randn(n) * 0.5
 
-print(f"Train: {X_train.shape}, Test: {X_test.shape}")
-print(f"y_train min/max: {y_train.min():.1f} / {y_train.max():.1f}")
+print(f"Nombre samples: {n}")
+print(f"Features: x1, x2 (+ intercept)")
 
-# 2. ENTRAÎNER LE MODÈLE
-print(f"\n=== 2. ENTRAÎNEMENT ===")
-model = LinearRegression()
-model.fit(X_train, y_train)
-print(f"Intercept (a₀): {model.intercept_:.4f}")
-print(f"Coefficients: {model.coef_}")
+# 2. TRAIN/TEST SPLIT
+print(f"\n=== 2. TRAIN/TEST SPLIT ===")
+split = int(n * 0.8)
+X_train, X_test = X[:split], X[split:]
+y_train, y_test = y[:split], y[split:]
 
-# 3. PRÉDICTIONS
-print(f"\n=== 3. PRÉDICTIONS ===")
-y_pred_train = model.predict(X_train)
-y_pred_test = model.predict(X_test)
+print(f"Train: {len(X_train)}, Test: {len(X_test)}")
 
-print(f"Premiers prédictions (train): {y_pred_train[:5].round(2)}")
-print(f"Valeurs réelles (train): {y_train[:5].round(2)}")
+# 3. RÉGRESSION LINÉAIRE (moindres carrés)
+print(f"\n=== 3. ENTRAÎNEMENT ===")
+# Résoudre: β = (X^T X)^-1 X^T y
+beta = np.linalg.lstsq(X_train, y_train, rcond=None)[0]
+intercept = beta[0]
+coefficients = beta[1:]
 
-# 4. ÉVALUATION - TRAIN vs TEST
-print(f"\n=== 4. MÉTRIQUES ===")
-train_mse = mean_squared_error(y_train, y_pred_train)
-test_mse = mean_squared_error(y_test, y_pred_test)
-train_r2 = r2_score(y_train, y_pred_train)
-test_r2 = r2_score(y_test, y_pred_test)
-train_mae = mean_absolute_error(y_train, y_pred_train)
-test_mae = mean_absolute_error(y_test, y_pred_test)
+print(f"Intercept: {intercept:.4f}")
+print(f"Coefficient x1: {coefficients[0]:.4f} (réel: 2)")
+print(f"Coefficient x2: {coefficients[1]:.4f} (réel: 3)")
 
-print(f"Train MSE: {train_mse:.4f}, R²: {train_r2:.4f}, MAE: {train_mae:.4f}")
-print(f"Test MSE: {test_mse:.4f}, R²: {test_r2:.4f}, MAE: {test_mae:.4f}")
+# 4. PRÉDICTIONS
+print(f"\n=== 4. PRÉDICTIONS ===")
+y_pred_train = X_train @ beta
+y_pred_test = X_test @ beta
 
-# 5. DÉTECTION OVERFITTING
-print(f"\n=== 5. OVERFITTING? ===")
-if train_r2 > test_r2 + 0.05:
-    print(f"⚠️ Possible overfitting! Train R² ({train_r2:.3f}) >> Test R² ({test_r2:.3f})")
+print(f"Prédictions train (5 premiers): {y_pred_train[:5].round(3)}")
+print(f"Réalité train (5 premiers): {y_train[:5].round(3)}")
+
+# 5. MÉTRIQUES D'ERREUR
+print(f"\n=== 5. MÉTRIQUES ===")
+def mse(y_true, y_pred):
+    return np.mean((y_true - y_pred) ** 2)
+
+def r2_score(y_true, y_pred):
+    ss_res = np.sum((y_true - y_pred) ** 2)
+    ss_tot = np.sum((y_true - np.mean(y_true)) ** 2)
+    return 1 - (ss_res / ss_tot)
+
+mse_train = mse(y_train, y_pred_train)
+mse_test = mse(y_test, y_pred_test)
+r2_train = r2_score(y_train, y_pred_train)
+r2_test = r2_score(y_test, y_pred_test)
+
+print(f"Train MSE: {mse_train:.4f}, R²: {r2_train:.4f}")
+print(f"Test MSE: {mse_test:.4f}, R²: {r2_test:.4f}")
+
+# 6. DÉTECTION OVERFITTING
+print(f"\n=== 6. OVERFITTING? ===")
+diff = r2_train - r2_test
+if diff > 0.1:
+    print(f"⚠️ Possible overfitting! Différence R²: {diff:.4f}")
 else:
     print(f"✓ Pas d'overfitting détecté")
-
-# 6. RÉSIDUS
-print(f"\n=== 6. RÉSIDUS ===")
-residuals = y_test - y_pred_test
-print(f"Résidus (test): min={residuals.min():.2f}, max={residuals.max():.2f}")
-print(f"Résidus moyens: {residuals.mean():.4f} (devrait ≈ 0)")
 </textarea>
         </div>
         <div>
@@ -334,66 +352,92 @@ print(f"Résidus moyens: {residuals.mean():.4f} (devrait ≈ 0)")
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox3" spellcheck="false"># CLASSIFICATION - LOGISTIC REGRESSION
+          <textarea id="sandbox3" spellcheck="false"># CLASSIFICATION SIMPLE AVEC NUMPY
 import numpy as np
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (accuracy_score, precision_score, recall_score,
-                            f1_score, confusion_matrix, classification_report)
 
-# 1. CHARGER DONNÉES CLASSIFICATION
-print("=== 1. DONNÉES CLASSIFICATION ===")
-data = load_breast_cancer()
-X = data.data
-y = data.target  # 0: maligne, 1: bénigne
+print("=== 1. DONNÉES DE CLASSIFICATION ===")
+# Créer dataset: classification binaire (classe 0 vs 1)
+np.random.seed(42)
+n = 100
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-print(f"Train: {X_train.shape}, Test: {X_test.shape}")
+# Classe 0: x ~ N(0, 1)
+class0 = np.random.randn(n//2, 2)
+y0 = np.zeros(n//2)
+
+# Classe 1: x ~ N(2, 1)
+class1 = np.random.randn(n//2, 2) + 2
+y1 = np.ones(n//2)
+
+X = np.vstack([class0, class1])
+y = np.hstack([y0, y1])
+
+print(f"Nombre samples: {n}")
 print(f"Classes: {np.unique(y)}")
-print(f"Distribution: {np.bincount(y)}")
+print(f"Distribution: {np.bincount(y.astype(int))}")
 
-# 2. ENTRAÎNER LOGISTIC REGRESSION
-print(f"\n=== 2. ENTRAÎNEMENT ===")
-model = LogisticRegression(max_iter=1000, random_state=42)
-model.fit(X_train, y_train)
-print(f"Coefficients shape: {model.coef_.shape}")
-print(f"Top 3 features importance: {np.argsort(np.abs(model.coef_[0]))[-3:]}")
+# 2. TRAIN/TEST SPLIT
+print(f"\n=== 2. TRAIN/TEST SPLIT ===")
+split = int(n * 0.8)
+idx = np.arange(n)
+np.random.shuffle(idx)
 
-# 3. PRÉDICTIONS & PROBABILITÉS
-print(f"\n=== 3. PRÉDICTIONS ===")
-y_pred = model.predict(X_test)
-y_proba = model.predict_proba(X_test)  # [[prob_class0, prob_class1], ...]
+X_train, X_test = X[idx[:split]], X[idx[split:]]
+y_train, y_test = y[idx[:split]], y[idx[split:]]
 
-print(f"Prédictions (5 premiers): {y_pred[:5]}")
-print(f"Probabilités (5 premiers):")
-for i in range(min(5, len(y_proba))):
-    print(f"  Sample {i}: P(0)={y_proba[i][0]:.3f}, P(1)={y_proba[i][1]:.3f}")
+print(f"Train: {len(X_train)}, Test: {len(X_test)}")
+
+# 3. CLASSIFICATEUR SIMPLE (K-Nearest Neighbors manuel)
+print(f"\n=== 3. CLASSIFICATION KNN (K=3) ===")
+
+def knn_predict(X_train, y_train, X_test, k=3):
+    predictions = []
+    for x_test in X_test:
+        # Distance euclidienne
+        distances = np.sqrt(np.sum((X_train - x_test)**2, axis=1))
+        # K plus proches
+        k_nearest_idx = np.argsort(distances)[:k]
+        k_nearest_labels = y_train[k_nearest_idx]
+        # Vote majoritaire
+        pred = np.bincount(k_nearest_labels.astype(int)).argmax()
+        predictions.append(pred)
+    return np.array(predictions)
+
+y_pred = knn_predict(X_train, y_train, X_test, k=3)
+
+print(f"Prédictions (5 premiers): {y_pred[:5].astype(int)}")
+print(f"Réalité (5 premiers): {y_test[:5].astype(int)}")
 
 # 4. MÉTRIQUES
 print(f"\n=== 4. MÉTRIQUES ===")
-accuracy = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred)
-recall = recall_score(y_test, y_pred)
-f1 = f1_score(y_test, y_pred)
+
+accuracy = np.mean(y_pred == y_test)
+tp = np.sum((y_pred == 1) & (y_test == 1))
+tn = np.sum((y_pred == 0) & (y_test == 0))
+fp = np.sum((y_pred == 1) & (y_test == 0))
+fn = np.sum((y_pred == 0) & (y_test == 1))
+
+precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
 
 print(f"Accuracy: {accuracy:.4f}")
-print(f"Precision: {precision:.4f} (TP / (TP + FP))")
-print(f"Recall: {recall:.4f} (TP / (TP + FN))")
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")
 print(f"F1-Score: {f1:.4f}")
 
 # 5. CONFUSION MATRIX
 print(f"\n=== 5. CONFUSION MATRIX ===")
-cm = confusion_matrix(y_test, y_pred)
-tn, fp, fn, tp = cm.ravel()
 print(f"TP (True Positive): {tp}")
 print(f"TN (True Negative): {tn}")
 print(f"FP (False Positive): {fp}")
 print(f"FN (False Negative): {fn}")
 
-# 6. CLASSIFICATION REPORT
-print(f"\n=== 6. RAPPORT DÉTAILLÉ ===")
-print(classification_report(y_test, y_pred, target_names=['Maligne', 'Bénigne']))
+# 6. RÉSUMÉ
+print(f"\n=== 6. RÉSUMÉ ===")
+correct = tp + tn
+total = len(y_test)
+print(f"Prédictions correctes: {correct}/{total}")
+print(f"Taux de réussite: {accuracy*100:.1f}%")
 </textarea>
         </div>
         <div>
@@ -429,73 +473,99 @@ print(classification_report(y_test, y_pred, target_names=['Maligne', 'Bénigne']
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox4" spellcheck="false"># CLUSTERING - K-MEANS
+          <textarea id="sandbox4" spellcheck="false"># CLUSTERING - K-MEANS SIMPLE AVEC NUMPY
 import numpy as np
-from sklearn.datasets import make_blobs
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score, davies_bouldin_score
 
-# 1. CRÉER DONNÉES POUR CLUSTERING
-print("=== 1. DONNÉES SYNTHÉTIQUES ===")
-X, y_true = make_blobs(n_samples=300, centers=3, n_features=2,
-                       cluster_std=0.6, random_state=42)
-print(f"Data shape: {X.shape}")
-print(f"Centres réels: 3")
+print("=== 1. CRÉER DONNÉES ===")
+np.random.seed(42)
 
-# 2. NORMALISER LES DONNÉES (IMPORTANT!)
+# 3 clusters
+c1 = np.random.randn(30, 2)
+c2 = np.random.randn(30, 2) + np.array([5, 0])
+c3 = np.random.randn(30, 2) + np.array([0, 5])
+X = np.vstack([c1, c2, c3])
+
+print(f"Nombre samples: {len(X)}")
+print(f"Features: 2D points")
+print(f"Clusters réels: 3")
+
+# 2. NORMALISER
 print(f"\n=== 2. NORMALISATION ===")
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-print(f"Mean: {X_scaled.mean(axis=0)}")
-print(f"Std: {X_scaled.std(axis=0)}")
+X_mean = X.mean(axis=0)
+X_std = X.std(axis=0)
+X_scaled = (X - X_mean) / X_std
 
-# 3. APPLIQUER K-MEANS (K=3)
+print(f"Mean: {X_scaled.mean(axis=0).round(3)}")
+print(f"Std: {X_scaled.std(axis=0).round(3)}")
+
+# 3. K-MEANS SIMPLE
 print(f"\n=== 3. K-MEANS (K=3) ===")
-kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
-kmeans.fit(X_scaled)
-labels = kmeans.labels_
-centers = kmeans.cluster_centers_
 
-print(f"Centres (centroids):")
+def kmeans(X, k=3, max_iter=10):
+    n_samples, n_features = X.shape
+
+    # Initialisation aléatoire des centres
+    random_idx = np.random.choice(n_samples, k, replace=False)
+    centers = X[random_idx]
+
+    for iteration in range(max_iter):
+        # Distance euclidienne
+        distances = np.sqrt(((X - centers[:, np.newaxis])**2).sum(axis=2))
+
+        # Assignation aux clusters
+        labels = np.argmin(distances, axis=0)
+
+        # Mise à jour des centres
+        new_centers = np.array([X[labels == i].mean(axis=0) for i in range(k)])
+
+        # Convergence?
+        if np.allclose(centers, new_centers):
+            print(f"Converged at iteration {iteration}")
+            break
+
+        centers = new_centers
+
+    return labels, centers
+
+labels, centers = kmeans(X_scaled, k=3, max_iter=20)
+
+print(f"Centres finaux:")
 for i, c in enumerate(centers):
     print(f"  Cluster {i}: {c}")
 
 print(f"\nTaille clusters: {np.bincount(labels)}")
 
-# 4. MÉTRIQUES DE CLUSTERING
+# 4. INERTIA - Somme distances intra-clusters
 print(f"\n=== 4. MÉTRIQUES ===")
-inertia = kmeans.inertia_
-silhouette = silhouette_score(X_scaled, labels)
-davies_bouldin = davies_bouldin_score(X_scaled, labels)
 
-print(f"Inertia (somme distances): {inertia:.2f}")
-print(f"Silhouette Score (-1 à 1): {silhouette:.4f}")
-print(f"  (>0.5 = bon, >0.3 = acceptable)")
-print(f"Davies-Bouldin Index: {davies_bouldin:.4f}")
-print(f"  (< 1 = bon clustering)")
+inertia = 0
+for i in range(3):
+    cluster_points = X_scaled[labels == i]
+    distances = np.sum((cluster_points - centers[i])**2)
+    inertia += distances
 
-# 5. ELBOW METHOD - TESTER DIFFÉRENTS K
-print(f"\n=== 5. ELBOW METHOD (trouver K optimal) ===")
+print(f"Inertia: {inertia:.2f}")
+print(f"  (Somme distances intra-clusters)")
+
+# 5. TESTE DIFFÉRENTS K
+print(f"\n=== 5. ELBOW METHOD ===")
+
 inertias = []
-silhouettes = []
-K_range = range(2, 8)
-
-for k in K_range:
-    km = KMeans(n_clusters=k, random_state=42, n_init=10)
-    km.fit(X_scaled)
-    inertias.append(km.inertia_)
-    silhouettes.append(silhouette_score(X_scaled, km.labels_))
-    print(f"K={k}: Inertia={km.inertia_:.2f}, Silhouette={silhouettes[-1]:.4f}")
+for k in range(1, 6):
+    l, c = kmeans(X_scaled, k=k, max_iter=10)
+    inert = sum(np.sum((X_scaled[l == i] - c[i])**2) for i in range(k))
+    inertias.append(inert)
+    print(f"K={k}: Inertia={inert:.2f}")
 
 # 6. PRÉDICTIONS
 print(f"\n=== 6. PRÉDICTIONS ===")
-new_point = np.array([[0, 0]])
-pred = kmeans.predict(new_point)
-print(f"Nouveau point prédisit au cluster: {pred[0]}")
 
-distances = kmeans.transform(new_point)
-print(f"Distances aux centres: {distances[0]}")
+new_point = np.array([[0, 0]])
+distances = np.sqrt(((new_point - centers)**2).sum(axis=1))
+pred_cluster = np.argmin(distances)
+
+print(f"Nouveau point assigné au cluster: {pred_cluster}")
+print(f"Distances aux centres: {distances.round(2)}")
 </textarea>
         </div>
         <div>
@@ -531,73 +601,134 @@ print(f"Distances aux centres: {distances[0]}")
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox5" spellcheck="false"># ARBRES DE DÉCISION & FORÊTS ALÉATOIRES
+          <textarea id="sandbox5" spellcheck="false"># ARBRES DE DÉCISION & ENSEMBLES AVEC NUMPY
 import numpy as np
-from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
 
-# 1. CHARGER DONNÉES
-print("=== 1. DONNÉES IRIS ===")
-iris = load_iris()
-X = iris.data
-y = iris.target
+print("=== 1. CRÉER DONNÉES DE CLASSIFICATION ===")
+np.random.seed(42)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Créer un dataset simple à 2 classes
+n = 100
+X_class0 = np.random.randn(n//2, 2)
+X_class1 = np.random.randn(n//2, 2) + np.array([3, 3])
+X = np.vstack([X_class0, X_class1])
+y = np.hstack([np.zeros(n//2), np.ones(n//2)])
+
+# Train/test split
+split = int(n * 0.8)
+X_train, X_test = X[:split], X[split:]
+y_train, y_test = y[:split], y[split:]
+
 print(f"Train: {X_train.shape}, Test: {X_test.shape}")
 
-# 2. DECISION TREE SIMPLE
-print(f"\n=== 2. DECISION TREE ===")
-dt = DecisionTreeClassifier(max_depth=3, random_state=42)
-dt.fit(X_train, y_train)
+# 2. CLASSIFICATEUR SIMPLE: THRESHOLD
+print(f"\n=== 2. DECISION BOUNDARY SIMPLE ===")
 
-dt_pred = dt.predict(X_test)
-dt_acc = accuracy_score(y_test, dt_pred)
-print(f"Accuracy: {dt_acc:.4f}")
+# Trouver le meilleur threshold sur une feature
+feature_idx = 0
+sorted_indices = np.argsort(X_train[:, feature_idx])
+sorted_y = y_train[sorted_indices]
 
-# Feature importance
-print(f"\nFeature Importance (Decision Tree):")
-for name, imp in zip(iris.feature_names, dt.feature_importances_):
-    print(f"  {name}: {imp:.4f}")
+# Trouver threshold optimal
+best_accuracy = 0
+best_threshold = 0
 
-# 3. RANDOM FOREST - Ensemble de trees
-print(f"\n=== 3. RANDOM FOREST ===")
-rf = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42)
-rf.fit(X_train, y_train)
+for x in X_train[:, feature_idx]:
+    y_pred = (X_train[:, feature_idx] > x).astype(int)
+    acc = np.mean(y_pred == y_train)
+    if acc > best_accuracy:
+        best_accuracy = acc
+        best_threshold = x
 
-rf_pred = rf.predict(X_test)
-rf_acc = accuracy_score(y_test, rf_pred)
-print(f"Accuracy: {rf_acc:.4f}")
+print(f"Best threshold: {best_threshold:.2f}")
+print(f"Train accuracy: {best_accuracy:.4f}")
 
-# 4. PROBABILITÉS
-print(f"\n=== 4. PROBABILITÉS ===")
-rf_proba = rf.predict_proba(X_test)
-print(f"Premiers 3 exemples:")
-for i in range(min(3, len(rf_proba))):
-    print(f"  Sample {i}: {rf_proba[i].round(3)}")
+# Prédictions test
+y_pred_test = (X_test[:, feature_idx] > best_threshold).astype(int)
+test_accuracy = np.mean(y_pred_test == y_test)
+print(f"Test accuracy: {test_accuracy:.4f}")
 
-# 5. FEATURE IMPORTANCE - Quel rôle chaque variable?
-print(f"\n=== 5. FEATURE IMPORTANCE (Random Forest) ===")
-importances = rf.feature_importances_
-sorted_idx = np.argsort(importances)[::-1]
+# 3. ENSEMBLE VOTING
+print(f"\n=== 3. ENSEMBLE VOTING ===")
 
-for idx in sorted_idx:
-    print(f"  {iris.feature_names[idx]}: {importances[idx]:.4f}")
+# 3 classificateurs simples avec features différentes
+predictions = []
 
-# 6. COMPARAISON
+for feat_idx in range(2):
+    # Trouver threshold
+    best_acc = 0
+    best_thresh = 0
+    for x in X_train[:, feat_idx]:
+        pred = (X_train[:, feat_idx] > x).astype(int)
+        acc = np.mean(pred == y_train)
+        if acc > best_acc:
+            best_acc = acc
+            best_thresh = x
+
+    # Prédire sur test
+    pred = (X_test[:, feat_idx] > best_thresh).astype(int)
+    predictions.append(pred)
+
+# Vote majoritaire
+ensemble_pred = np.round(np.mean(predictions, axis=0)).astype(int)
+ensemble_accuracy = np.mean(ensemble_pred == y_test)
+
+print(f"Classificateur 1 (feature 0) accuracy: {np.mean(predictions[0] == y_test):.4f}")
+print(f"Classificateur 2 (feature 1) accuracy: {np.mean(predictions[1] == y_test):.4f}")
+print(f"Ensemble (vote) accuracy: {ensemble_accuracy:.4f}")
+
+# 4. IMPORTANCE RELATIVE DES FEATURES
+print(f"\n=== 4. IMPORTANCE FEATURES ===")
+
+importances = []
+for feat in range(2):
+    # Corrélation avec target
+    corr = np.abs(np.corrcoef(X_train[:, feat], y_train)[0, 1])
+    importances.append(corr)
+
+total = sum(importances)
+importances = [i / total for i in importances]
+
+for i, imp in enumerate(importances):
+    print(f"  Feature {i}: {imp:.4f}")
+
+# 5. BOOTSTRAP AGGREGATION (Bagging concept)
+print(f"\n=== 5. BAGGING SIMPLE ===")
+
+n_bags = 5
+bag_predictions = []
+
+for bag_id in range(n_bags):
+    # Random sample with replacement
+    indices = np.random.choice(len(X_train), len(X_train), replace=True)
+    X_bag = X_train[indices]
+    y_bag = y_train[indices]
+
+    # Train simple classifier
+    best_acc, best_thresh = 0, 0
+    for x in X_bag[:, 0]:
+        pred = (X_bag[:, 0] > x).astype(int)
+        acc = np.mean(pred == y_bag)
+        if acc > best_acc:
+            best_acc = acc
+            best_thresh = x
+
+    # Predict
+    pred = (X_test[:, 0] > best_thresh).astype(int)
+    bag_predictions.append(pred)
+
+# Aggregate
+bagging_pred = np.round(np.mean(bag_predictions, axis=0)).astype(int)
+bagging_accuracy = np.mean(bagging_pred == y_test)
+
+print(f"Bagging accuracy: {bagging_accuracy:.4f}")
+
+# 6. RÉSUMÉ
 print(f"\n=== 6. COMPARAISON ===")
-print(f"Decision Tree Accuracy: {dt_acc:.4f}")
-print(f"Random Forest Accuracy: {rf_acc:.4f}")
-print(f"Amélioration: {(rf_acc - dt_acc)*100:.2f}%")
-
-# 7. OUT-OF-BAG SCORE (validation interne)
-print(f"\n=== 7. OUT-OF-BAG SCORE ===")
-rf_oob = RandomForestClassifier(n_estimators=100, oob_score=True, random_state=42)
-rf_oob.fit(X_train, y_train)
-print(f"OOB Score: {rf_oob.oob_score_:.4f}")
-print(f"  (Estimation non-biaisée de la performance)")
+print(f"Simple threshold: {test_accuracy:.4f}")
+print(f"Ensemble voting: {ensemble_accuracy:.4f}")
+print(f"Bagging: {bagging_accuracy:.4f}")
+print(f"✓ Ensembles généralement meilleurs!")
 </textarea>
         </div>
         <div>
@@ -633,89 +764,171 @@ print(f"  (Estimation non-biaisée de la performance)")
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox6" spellcheck="false"># VALIDATION & OPTIMISATION
+          <textarea id="sandbox6" spellcheck="false"># VALIDATION & ÉVALUATION AVEC NUMPY
 import numpy as np
-from sklearn.datasets import load_iris
-from sklearn.model_selection import (cross_val_score, GridSearchCV,
-                                    learning_curve, cross_validate)
-from sklearn.svm import SVC
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
 
-# 1. CHARGER DONNÉES
-print("=== 1. DONNÉES ===")
-iris = load_iris()
-X = iris.data
-y = iris.target
+print("=== 1. CRÉER DONNÉES ===")
+np.random.seed(42)
 
-# 2. CROSS-VALIDATION K-FOLD
-print(f"\n=== 2. K-FOLD CROSS-VALIDATION (k=5) ===")
-model = LogisticRegression(max_iter=1000, random_state=42)
-scores = cross_val_score(model, X, y, cv=5)
+# Dataset classification simple
+n = 200
+X = np.random.randn(n, 2)
+y = (X[:, 0] + X[:, 1] > 0).astype(int)
 
-print(f"Scores (5 folds): {scores.round(4)}")
-print(f"Mean: {scores.mean():.4f} (+/- {scores.std():.4f})")
+print(f"Nombre samples: {n}")
+print(f"Features: 2")
+print(f"Distribution classes: {np.bincount(y)}")
 
-# 3. CROSS-VALIDATE (multiples métriques)
-print(f"\n=== 3. CROSS-VALIDATE (multiples métriques) ===")
-scoring = {'accuracy': 'accuracy', 'f1': 'f1_weighted', 'precision': 'precision_weighted'}
-cv_results = cross_validate(model, X, y, cv=5, scoring=scoring)
+# 2. K-FOLD CROSS-VALIDATION MANUELLE
+print(f"\n=== 2. K-FOLD CROSS-VALIDATION (K=5) ===")
 
-for metric in scoring.keys():
-    scores = cv_results[f'test_{metric}']
-    print(f"{metric}: {scores.mean():.4f} (+/- {scores.std():.4f})")
+def simple_classifier(X_train, y_train, X_test):
+    """Classificateur simple par seuil"""
+    threshold = (X_train[:, 0] + X_train[:, 1]).mean()
+    return ((X_test[:, 0] + X_test[:, 1]) > threshold).astype(int)
 
-# 4. GRIDSEARCHCV - Trouver meilleurs hyperparamètres
-print(f"\n=== 4. GRID SEARCH CV ===")
-param_grid = {
-    'C': [0.1, 1, 10],
-    'max_iter': [100, 200, 500],
-    'solver': ['lbfgs', 'liblinear']
-}
+k = 5
+fold_size = n // k
+scores = []
 
-grid_search = GridSearchCV(
-    LogisticRegression(random_state=42),
-    param_grid,
-    cv=5,
-    scoring='accuracy'
-)
-grid_search.fit(X, y)
+for fold in range(k):
+    # Split train/val
+    val_start = fold * fold_size
+    val_end = val_start + fold_size
 
-print(f"Best parameters: {grid_search.best_params_}")
-print(f"Best CV score: {grid_search.best_score_:.4f}")
+    X_val = X[val_start:val_end]
+    y_val = y[val_start:val_end]
 
-# 5. RÉSULTATS DÉTAILLÉS
-print(f"\n=== 5. TOP 5 CONFIGURATIONS ===")
-results = grid_search.cv_results_
-for i in range(min(5, len(results['params']))):
-    rank = results['rank_test_score'][i]
-    score = results['mean_test_score'][i]
-    params = results['params'][i]
-    print(f"#{rank}: {score:.4f} - {params}")
+    X_tr = np.vstack([X[:val_start], X[val_end:]])
+    y_tr = np.hstack([y[:val_start], y[val_end:]])
 
-# 6. COMPARAISON DE MODÈLES
-print(f"\n=== 6. COMPARAISON DE MODÈLES ===")
-models = {
-    'Logistic Regression': LogisticRegression(max_iter=1000),
-    'SVM': SVC(kernel='rbf'),
-    'Random Forest': RandomForestClassifier(n_estimators=100)
-}
+    # Train & predict
+    y_pred = simple_classifier(X_tr, y_tr, X_val)
 
-for name, model in models.items():
-    scores = cross_val_score(model, X, y, cv=5)
-    print(f"{name}: {scores.mean():.4f} (+/- {scores.std():.4f})")
+    # Score
+    score = np.mean(y_pred == y_val)
+    scores.append(score)
+    print(f"Fold {fold+1}: {score:.4f}")
 
-# 7. LEARNING CURVE (diagnostiquer bias/variance)
-print(f"\n=== 7. LEARNING CURVE ===")
-train_sizes, train_scores, val_scores = learning_curve(
-    LogisticRegression(max_iter=1000),
-    X, y, cv=5,
-    train_sizes=np.linspace(0.1, 1.0, 5)
-)
+print(f"\nMean CV score: {np.mean(scores):.4f} (+/- {np.std(scores):.4f})")
 
-print(f"Training sizes: {train_sizes}")
-print(f"Train scores: {train_scores.mean(axis=1).round(4)}")
-print(f"Val scores: {val_scores.mean(axis=1).round(4)}")
+# 3. STRATIFIED K-FOLD (garder proportions classes)
+print(f"\n=== 3. STRATIFIED K-FOLD ===")
+
+scores_stratified = []
+class_0_idx = np.where(y == 0)[0]
+class_1_idx = np.where(y == 1)[0]
+
+fold_size_0 = len(class_0_idx) // k
+fold_size_1 = len(class_1_idx) // k
+
+for fold in range(k):
+    # Validation set
+    val_idx_0 = class_0_idx[fold*fold_size_0:(fold+1)*fold_size_0]
+    val_idx_1 = class_1_idx[fold*fold_size_1:(fold+1)*fold_size_1]
+    val_idx = np.hstack([val_idx_0, val_idx_1])
+
+    train_idx = np.setdiff1d(np.arange(n), val_idx)
+
+    X_train, X_val = X[train_idx], X[val_idx]
+    y_train, y_val = y[train_idx], y[val_idx]
+
+    y_pred = simple_classifier(X_train, y_train, X_val)
+    score = np.mean(y_pred == y_val)
+    scores_stratified.append(score)
+
+print(f"Stratified CV scores: {[f'{s:.4f}' for s in scores_stratified]}")
+print(f"Mean: {np.mean(scores_stratified):.4f}")
+
+# 4. HYPERPARAMETER TUNING SIMPLE
+print(f"\n=== 4. HYPERPARAMETER TUNING ===")
+
+# Tester différents paramètres
+param_range = [0.0, 0.5, 1.0, 1.5, 2.0]
+best_score = 0
+best_param = 0
+
+for param in param_range:
+    fold_scores = []
+    for fold in range(k):
+        val_start = fold * fold_size
+        val_end = val_start + fold_size
+
+        X_val = X[val_start:val_end]
+        y_val = y[val_start:val_end]
+
+        X_tr = np.vstack([X[:val_start], X[val_end:]])
+        y_tr = np.hstack([y[:val_start], y[val_end:]])
+
+        # Classificateur avec paramètre
+        threshold = (X_tr[:, 0] + X_tr[:, 1]).mean() + param
+        y_pred = ((X_val[:, 0] + X_val[:, 1]) > threshold).astype(int)
+
+        score = np.mean(y_pred == y_val)
+        fold_scores.append(score)
+
+    mean_score = np.mean(fold_scores)
+    print(f"Param={param}: CV score={mean_score:.4f}")
+
+    if mean_score > best_score:
+        best_score = mean_score
+        best_param = param
+
+print(f"\nBest param: {best_param} (score: {best_score:.4f})")
+
+# 5. LEARNING CURVES
+print(f"\n=== 5. LEARNING CURVES ===")
+
+train_sizes = np.linspace(0.1, 1.0, 5)
+train_scores_list = []
+val_scores_list = []
+
+for train_frac in train_sizes:
+    fold_tr_scores = []
+    fold_val_scores = []
+
+    for fold in range(k):
+        val_start = fold * fold_size
+        val_end = val_start + fold_size
+
+        X_val = X[val_start:val_end]
+        y_val = y[val_start:val_end]
+
+        X_all_train = np.vstack([X[:val_start], X[val_end:]])
+        y_all_train = np.hstack([y[:val_start], y[val_end:]])
+
+        # Sample subset
+        n_train = int(len(X_all_train) * train_frac)
+        idx = np.random.choice(len(X_all_train), n_train, replace=False)
+        X_tr = X_all_train[idx]
+        y_tr = y_all_train[idx]
+
+        # Train
+        y_pred_tr = simple_classifier(X_tr, y_tr, X_tr)
+        y_pred_val = simple_classifier(X_tr, y_tr, X_val)
+
+        fold_tr_scores.append(np.mean(y_pred_tr == y_tr))
+        fold_val_scores.append(np.mean(y_pred_val == y_val))
+
+    train_scores_list.append(np.mean(fold_tr_scores))
+    val_scores_list.append(np.mean(fold_val_scores))
+
+print(f"Train sizes: {train_sizes}")
+print(f"Train scores: {[f'{s:.3f}' for s in train_scores_list]}")
+print(f"Val scores: {[f'{s:.3f}' for s in val_scores_list]}")
+
+# 6. DIAGNOSE BIAS/VARIANCE
+print(f"\n=== 6. BIAS/VARIANCE ANALYSIS ===")
+
+gap = np.array(train_scores_list) - np.array(val_scores_list)
+print(f"Train - Val: {[f'{g:.3f}' for g in gap]}")
+
+if gap[-1] > 0.1:
+    print("⚠️ Possible overfitting (large gap)")
+elif train_scores_list[-1] < 0.7:
+    print("⚠️ Possible underfitting (low scores)")
+else:
+    print("✓ Bon équilibre bias/variance")
 </textarea>
         </div>
         <div>
@@ -750,15 +963,20 @@ async function initPyodide() {
         }
         pyodide = await window.loadPyodide();
 
-        // Load built-in packages
+        // Load core packages (lightweight)
         await pyodide.loadPackage(['numpy', 'pandas']);
 
-        // Install scikit-learn via micropip
-        const micropip = await pyodide.pyimport('micropip');
-        await micropip.install(['scikit-learn']);
+        // Try to install scikit-learn but don't fail if it can't
+        try {
+            const micropip = await pyodide.pyimport('micropip');
+            await micropip.install(['scikit-learn']);
+            console.log('✓ scikit-learn installed');
+        } catch (sklearnError) {
+            console.warn('⚠️ scikit-learn unavailable, using numpy/pandas only', sklearnError);
+        }
 
         pyodideReady = true;
-        console.log('✓ Pyodide loaded successfully with ML packages');
+        console.log('✓ Pyodide loaded successfully');
     } catch (e) {
         console.error('Pyodide initialization error:', e);
         pyodideReady = false;
@@ -806,18 +1024,21 @@ async function runCode(sandboxId) {
 
     btn.classList.add('loading');
     btn.textContent = 'Chargement...';
-    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Initialisation Python (1ère fois: 3-5s)...</span></div>';
+    outputEl.innerHTML = '<div style="padding:12px;text-align:center"><div class="loader"></div> <span>Initialisation Python (1ère fois: 30-60s, patientez...)...</span></div>';
 
     try {
-        // Wait for Pyodide to be ready (max 60 seconds)
+        // Wait for Pyodide to be ready (max 3 minutes for first load)
         let attempts = 0;
-        while (!pyodideReady && attempts < 120) {
+        let timeoutSeconds = 0;
+        while (!pyodideReady && attempts < 360) { // 360 * 500ms = 180 seconds
+            timeoutSeconds = Math.floor(attempts * 0.5);
+            outputEl.innerHTML = `<div style="padding:12px;text-align:center"><div class="loader"></div> <span>⏳ Chargement Pyodide... ${timeoutSeconds}s (peut durer jusqu'à 3 min)</span></div>`;
             await new Promise(r => setTimeout(r, 500));
             attempts++;
         }
 
         if (!pyodideReady) {
-            throw new Error('Pyodide ne s\'est pas charge apres 60 secondes. Verifiez votre connexion et rafraichissez la page.');
+            throw new Error('Pyodide n\'a pas pu se charger après 3 minutes. Possibles causes:\n\n1. Connexion internet lente\n2. CDN Pyodide indisponible\n3. Disque dur plein\n\nSolutions:\n- Vérifiez votre connexion internet\n- Vider le cache du navigateur (Ctrl+Shift+Delete)\n- Réessayez après 5 minutes\n- Utilisez un autre navigateur');
         }
 
         // Capture console.log
