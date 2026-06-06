@@ -188,9 +188,15 @@ body:hover #cursor { opacity: 1; }
 /* Row 1 */
 .nav-top {
   display: flex; align-items: center; gap: 12px;
-  padding: 0 32px; height: 62px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 32px; height: 68px;
+  border-bottom: none;
 }
+
+/* Hide unnecessary nav elements */
+#navbar .nav-search { display: none !important; }
+#navbar .nav-row-2 { display: none !important; }
+.nav-item .nav-link-dd { pointer-events: none; opacity: 0; width: 0; overflow: hidden; }
+.nav-dropdown { display: none !important; }
 
 /* Row 2 — category strip */
 .nav-cat {
@@ -313,14 +319,7 @@ body:hover #cursor { opacity: 1; }
 }
 
 .hero-bg-pattern {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(0deg, transparent 24%, rgba(255,255,255,.05) 25%, rgba(255,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.05) 75%, rgba(255,255,255,.05) 76%, transparent 77%, transparent),
-    linear-gradient(90deg, transparent 24%, rgba(255,255,255,.05) 25%, rgba(255,255,255,.05) 26%, transparent 27%, transparent 74%, rgba(255,255,255,.05) 75%, rgba(255,255,255,.05) 76%, transparent 77%, transparent);
-  background-size: 50px 50px;
-  pointer-events: none;
-  opacity: 0.3;
+  display: none;
 }
 
 .hero-container {
@@ -366,13 +365,11 @@ body:hover #cursor { opacity: 1; }
   letter-spacing: -0.02em;
   color: #fff;
   margin: 0;
+  white-space: nowrap;
 }
 
 .hero-highlight {
-  background: linear-gradient(135deg, #FF6B35, #FF8C5C);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1561FF;
 }
 
 .hero-dot {
@@ -428,25 +425,26 @@ body:hover #cursor { opacity: 1; }
 }
 
 .btn-hero-primary {
-  background: linear-gradient(135deg, #FF6B35, #FF8C5C);
+  background: #1561FF;
   color: #fff;
-  box-shadow: 0 8px 24px rgba(255,107,53,.3);
+  box-shadow: 0 8px 24px rgba(21,97,255,.3);
 }
 
 .btn-hero-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(255,107,53,.4);
+  box-shadow: 0 12px 32px rgba(21,97,255,.4);
+  background: #0048CC;
 }
 
 .btn-hero-secondary {
-  background: rgba(255,255,255,.1);
-  border: 1.5px solid rgba(255,255,255,.3);
-  color: #fff;
+  background: #fff;
+  border: 1.5px solid #fff;
+  color: #1561FF;
 }
 
 .btn-hero-secondary:hover {
-  background: rgba(255,255,255,.15);
-  border-color: rgba(255,255,255,.5);
+  background: #f9f9f9;
+  border-color: #f9f9f9;
   transform: translateY(-2px);
 }
 
@@ -579,7 +577,7 @@ body:hover #cursor { opacity: 1; }
 .btn-signup {
   width: 100%;
   padding: 14px 16px;
-  background: linear-gradient(135deg, #FF6B35, #FF8C5C);
+  background: #1561FF;
   border: none;
   border-radius: 12px;
   font-family: var(--fd);
@@ -590,12 +588,13 @@ body:hover #cursor { opacity: 1; }
   color: #fff;
   cursor: pointer;
   transition: all .3s;
-  box-shadow: 0 4px 12px rgba(255,107,53,.2);
+  box-shadow: 0 4px 12px rgba(21,97,255,.2);
 }
 
 .btn-signup:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255,107,53,.3);
+  box-shadow: 0 8px 20px rgba(21,97,255,.3);
+  background: #0048CC;
 }
 
 .signup-notice {
