@@ -350,15 +350,36 @@ body:hover #cursor { opacity: 1; }
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   gap: 60px;
-  align-items: flex-start;
-  padding-top: 20px;
+  align-items: center;
   width: 100%;
+}
+
+@media (max-width: 960px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+    gap: 48px;
+  }
 }
 
 .hero-left-premium {
   display: flex;
   flex-direction: column;
   gap: 0;
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .hero-left-premium {
+    order: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-left-premium {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .hero-eyebrow {
@@ -514,6 +535,20 @@ body:hover #cursor { opacity: 1; }
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+}
+
+@media (max-width: 960px) {
+  .hero-right-premium {
+    order: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-right-premium {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .signup-card {
