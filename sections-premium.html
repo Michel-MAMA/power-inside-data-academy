@@ -1,0 +1,1089 @@
+<!-- ===== PREMIUM SECTIONS SYSTEM =====
+     Réutilisable pour toutes les pages
+     Sections: Parcours, Témoignages, FAQ, RDV
+-->
+
+<style>
+/* ─────────────────────────────────────
+   SECTION TEMPLATES — Premium Design
+   ───────────────────────────────────── */
+
+:root {
+  --coral: #FF6B35;
+  --coral-light: #FF8C5C;
+  --dark-bg: #1a1a2e;
+  --dark-secondary: #16213e;
+}
+
+/* ──── PARCOURS SECTION ──── */
+.section-parcours {
+  background: linear-gradient(135deg, #FF6B35 0%, #FF8C5C 100%);
+  padding: 80px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-parcours::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.03) 35px, rgba(255,255,255,.03) 70px);
+  pointer-events: none;
+}
+
+.section-parcours::after {
+  content: '';
+  position: absolute;
+  bottom: -50%;
+  right: -10%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(255,255,255,.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.parcours-header {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  margin-bottom: 60px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.parcours-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(36px, 4vw, 54px);
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+
+.parcours-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+}
+
+.parcours-cta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.parcours-cta .btn-rdv,
+.parcours-cta .btn-apply {
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-weight: 700;
+  transition: all 0.3s;
+}
+
+.btn-rdv {
+  background: #fff;
+  color: #FF6B35;
+}
+
+.btn-rdv:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+}
+
+.btn-apply {
+  background: #2D3561;
+  color: #fff;
+}
+
+.btn-apply:hover {
+  background: #1a1a2e;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.parcours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.parcours-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all 0.3s;
+  cursor: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.parcours-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+}
+
+.parcours-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.badge-bootcamp {
+  background: rgba(150,130,255,0.15);
+  color: #7B5FFF;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge-partial {
+  background: rgba(255,170,100,0.15);
+  color: #FF7D4A;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.parcours-title-card {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+}
+
+.parcours-subtitle-card {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.parcours-content {
+  flex: 1;
+}
+
+.parcours-content ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.parcours-content li {
+  font-size: 13px;
+  color: #333;
+  padding-left: 24px;
+  position: relative;
+}
+
+.parcours-content li::before {
+  content: '•';
+  position: absolute;
+  left: 8px;
+  color: #FF6B35;
+  font-weight: bold;
+}
+
+.parcours-cta-card {
+  background: #FF6B35;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: center;
+  transition: all 0.3s;
+  cursor: none;
+}
+
+.parcours-cta-card:hover {
+  background: #FF7D4A;
+  transform: translateY(-2px);
+}
+
+/* ──── TESTIMONIALS SECTION ──── */
+.section-testimonials {
+  padding: 80px 40px;
+  background: #f9f9f9;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.testimonials-eyebrow {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #FF6B35;
+  margin-bottom: 16px;
+}
+
+.testimonials-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto 60px;
+}
+
+.testimonial-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s;
+}
+
+.testimonial-card:hover {
+  border-color: #FF6B35;
+  box-shadow: 0 12px 32px rgba(255,107,53,0.15);
+}
+
+.testimonial-header {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35, #FF8C5C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.testimonial-meta {
+  flex: 1;
+}
+
+.testimonial-name {
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 2px;
+}
+
+.testimonial-date {
+  font-size: 12px;
+  color: #999;
+}
+
+.testimonial-stars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.star {
+  color: #FFB800;
+  font-size: 14px;
+}
+
+.testimonial-text {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.testimonial-verified {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #0066ff;
+}
+
+.trustindex-badge {
+  text-align: center;
+  padding: 24px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.trustindex-score {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #111;
+}
+
+.trustindex-label {
+  font-size: 12px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ──── FAQ SECTION ──── */
+.section-faq {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 80px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.faq-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+}
+
+.faq-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.faq-cta {
+  background: #2D3561;
+  color: #fff;
+  padding: 16px 32px;
+  border-radius: 50px;
+  font-weight: 700;
+  display: inline-block;
+  width: fit-content;
+  transition: all 0.3s;
+  cursor: none;
+}
+
+.faq-cta:hover {
+  background: #FF6B35;
+  transform: translateY(-2px);
+}
+
+.faq-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-item {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: none;
+  transition: all 0.3s;
+}
+
+.faq-item:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-weight: 600;
+  color: #fff;
+  font-size: 14px;
+  cursor: none;
+}
+
+.faq-toggle {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF6B35;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.faq-item.open .faq-toggle {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s;
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  line-height: 1.7;
+  margin-top: 0;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+  margin-top: 16px;
+}
+
+/* ──── BOOKING/RDV SECTION ──── */
+.section-booking {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 60px 40px;
+  position: relative;
+}
+
+.booking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.booking-left {
+  color: #fff;
+}
+
+.booking-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 800;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.booking-subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+
+.booking-team {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.booking-avatars {
+  display: flex;
+  margin-right: 12px;
+}
+
+.booking-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #1a1a2e;
+  margin-left: -12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.booking-avatar:first-child {
+  margin-left: 0;
+}
+
+.booking-team-info {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+}
+
+.booking-form {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.booking-form-title {
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.booking-duration {
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+}
+
+.booking-calendar {
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.booking-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.booking-calendar-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.booking-calendar-nav button {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: #fff;
+  cursor: none;
+  transition: all 0.3s;
+}
+
+.booking-calendar-nav button:hover {
+  background: rgba(255,107,53,0.3);
+}
+
+.booking-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.booking-weekday {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+}
+
+.booking-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.booking-day {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  cursor: none;
+  transition: all 0.3s;
+}
+
+.booking-day:hover {
+  background: rgba(255,107,53,0.2);
+  border-color: rgba(255,107,53,0.5);
+  color: #FF6B35;
+}
+
+.booking-day.selected {
+  background: #FF6B35;
+  border-color: #FF6B35;
+  color: #fff;
+  font-weight: 600;
+}
+
+.booking-times {
+  max-height: 200px;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.booking-time {
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  text-align: center;
+  font-size: 13px;
+  cursor: none;
+  transition: all 0.3s;
+}
+
+.booking-time:hover {
+  background: rgba(255,107,53,0.2);
+  color: #FF6B35;
+}
+
+/* ────────────────────────────────
+   RESPONSIVE
+   ──────────────────────────────── */
+
+@media (max-width: 768px) {
+  .parcours-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .parcours-cta {
+    flex-direction: column;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .booking-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .section-parcours,
+  .section-testimonials,
+  .section-faq,
+  .section-booking {
+    padding: 60px 24px;
+  }
+}
+</style>
+
+<!-- ===== HTML TEMPLATES ===== -->
+
+<!-- PARCOURS SECTION TEMPLATE -->
+<section class="section-parcours" id="parcours">
+  <div class="parcours-header">
+    <h2 class="parcours-title">Nos formations en<br><span style="color:#fff">Data & IA</span></h2>
+    <p class="parcours-subtitle">4 parcours certifiants de haut niveau pour maîtriser les technologies de demain</p>
+    <div class="parcours-cta" style="margin-top:32px">
+      <button class="btn-rdv" onclick="openBookingModal()">Prendre rendez-vous</button>
+      <button class="btn-apply">Postuler</button>
+    </div>
+  </div>
+
+  <div class="parcours-grid">
+    <!-- CARD 1: Data Scientist & AI -->
+    <div class="parcours-card">
+      <div class="parcours-badges">
+        <span class="badge-bootcamp">Bootcamp</span>
+        <span class="badge-partial">Temps partiel</span>
+      </div>
+      <h3 class="parcours-title-card">Data Scientist & AI</h3>
+      <p class="parcours-subtitle-card">Certification niveau Bac +5</p>
+      <div class="parcours-content">
+        <ul>
+          <li>Programmation Python avancée</li>
+          <li>Machine learning avancé</li>
+          <li>Deep learning</li>
+          <li>Big Data / Database</li>
+          <li>Systèmes complexes en IA</li>
+          <li>Projet fil rouge en IA</li>
+        </ul>
+      </div>
+      <button class="parcours-cta-card" onclick="scrollToFormation('data-scientist')">Découvrir</button>
+    </div>
+
+    <!-- CARD 2: Data Analyst -->
+    <div class="parcours-card">
+      <div class="parcours-badges">
+        <span class="badge-bootcamp">Bootcamp</span>
+        <span class="badge-partial">Temps partiel</span>
+      </div>
+      <h3 class="parcours-title-card">Data Analyst</h3>
+      <p class="parcours-subtitle-card">Certification niveau Bac +5</p>
+      <div class="parcours-content">
+        <ul>
+          <li>Programmation Python</li>
+          <li>Data base et langage SQL</li>
+          <li>Business Intelligence</li>
+          <li>Datavisualisation avancée</li>
+          <li>Text Mining</li>
+          <li>Machine Learning</li>
+          <li>Projet fil rouge</li>
+        </ul>
+      </div>
+      <button class="parcours-cta-card" onclick="scrollToFormation('data-analyst')">Découvrir</button>
+    </div>
+
+    <!-- CARD 3: Data Engineer -->
+    <div class="parcours-card">
+      <div class="parcours-badges">
+        <span class="badge-bootcamp">Bootcamp</span>
+        <span class="badge-partial">Temps partiel</span>
+      </div>
+      <h3 class="parcours-title-card">Data Engineer</h3>
+      <p class="parcours-subtitle-card">Certification Bac +5</p>
+      <div class="parcours-content">
+        <ul>
+          <li>Programmation Python</li>
+          <li>Base de données (SQL, NoSQL)</li>
+          <li>Big Data (Hadoop, Spark)</li>
+          <li>Git, Github, CI/CD (Jenkins)</li>
+          <li>APIs (Flask, Fast APIs)</li>
+          <li>Airflow, Docker, Kubernetest</li>
+        </ul>
+      </div>
+      <button class="parcours-cta-card" onclick="scrollToFormation('data-engineer')">Découvrir</button>
+    </div>
+
+    <!-- CARD 4: Machine Learning Engineer -->
+    <div class="parcours-card">
+      <div class="parcours-badges">
+        <span class="badge-bootcamp">Bootcamp</span>
+        <span class="badge-partial">Temps partiel</span>
+      </div>
+      <h3 class="parcours-title-card">Machine Learning Engineer</h3>
+      <p class="parcours-subtitle-card">Certification niveau Bac +5</p>
+      <div class="parcours-content">
+        <ul>
+          <li>Programmation Python avancée</li>
+          <li>Datavisualisation</li>
+          <li>Machine Learning</li>
+          <li>Deep Learning</li>
+          <li>MLOPS / LLMOPS</li>
+          <li>Data Product Management</li>
+          <li>Chefferie de projet</li>
+        </ul>
+      </div>
+      <button class="parcours-cta-card" onclick="scrollToFormation('ml-engineer')">Découvrir</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS SECTION TEMPLATE -->
+<section class="section-testimonials" id="testimonials">
+  <div class="testimonials-header">
+    <div class="testimonials-eyebrow">L'AVIS DE NOS ALUMNI</div>
+    <h2 class="testimonials-title">Témoignages</h2>
+  </div>
+
+  <div class="testimonials-grid">
+    <!-- TESTIMONIAL 1 -->
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#FF6B35,#FF8C5C);">A</div>
+        <div class="testimonial-meta">
+          <div class="testimonial-name">Alexandre Sansonnette</div>
+          <div class="testimonial-date">5 Juin 2026</div>
+        </div>
+      </div>
+      <div class="testimonial-stars">
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star" style="opacity:0.3">★</span>
+      </div>
+      <p class="testimonial-text">Ingénieur agricole de formation, reconverti en conseil d'entreprise. J'ai suivi la formation Data Scientist dans une logique de montée en compétences pour un projet de création d'entreprise.</p>
+      <div class="testimonial-verified">✓ Avis vérifié</div>
+    </div>
+
+    <!-- TESTIMONIAL 2 -->
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#4CAF50,#66BB6A);">M</div>
+        <div class="testimonial-meta">
+          <div class="testimonial-name">Moustapha GANO</div>
+          <div class="testimonial-date">4 Juin 2026</div>
+        </div>
+      </div>
+      <div class="testimonial-stars">
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+      </div>
+      <p class="testimonial-text">Formation exceptionnelle. Je suis très satisfait avec une approche pédagogique de qualité qui rend les concepts accessibles et engageants.</p>
+      <div class="testimonial-verified">✓ Avis vérifié</div>
+    </div>
+
+    <!-- TESTIMONIAL 3 -->
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#2196F3,#42A5F5);">R</div>
+        <div class="testimonial-meta">
+          <div class="testimonial-name">Reda KDADRY</div>
+          <div class="testimonial-date">4 Juin 2026</div>
+        </div>
+      </div>
+      <div class="testimonial-stars">
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+      </div>
+      <p class="testimonial-text">J'ai suivi la formation DATA ANALYST chez Liora et c'est l'une des meilleures décisions que j'ai prises. Le contenu est sérieux, les formateurs sont accessibles.</p>
+      <div class="testimonial-verified">✓ Avis vérifié</div>
+    </div>
+
+    <!-- TESTIMONIAL 4 -->
+    <div class="testimonial-card">
+      <div class="testimonial-header">
+        <div class="testimonial-avatar" style="background:linear-gradient(135deg,#FF9800,#FFB74D);">B</div>
+        <div class="testimonial-meta">
+          <div class="testimonial-name">Briere Brice</div>
+          <div class="testimonial-date">4 Juin 2026</div>
+        </div>
+      </div>
+      <div class="testimonial-stars">
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+        <span class="star">★</span>
+      </div>
+      <p class="testimonial-text">Super école : le programme est de qualité, les formateurs sont disponibles, et c'est parfait pour une personne qui souhaite étudier en autonomie.</p>
+      <div class="testimonial-verified">✓ Avis vérifié</div>
+    </div>
+  </div>
+
+  <div class="trustindex-badge">
+    <div class="trustindex-score">4.7/5</div>
+    <div class="trustindex-label">Trustindex rating score, based on 555 reviews</div>
+  </div>
+</section>
+
+<!-- FAQ SECTION TEMPLATE -->
+<section class="section-faq" id="faq">
+  <div class="faq-grid">
+    <div class="faq-left">
+      <h2 class="faq-title">Vous avez des<br>questions ?<br>Nous avons les<br>réponses.</h2>
+      <button class="faq-cta" onclick="openBookingModal()">Prendre rendez-vous</button>
+    </div>
+
+    <div class="faq-items">
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Quels sont les prérequis pour suivre la formation Data Scientist ?</span>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Les prérequis incluent des connaissances de base en mathématiques et statistiques. Une expérience en programmation est un plus mais pas obligatoire. Nous vous proposons un bilan de compétences avant la formation.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Quelle est la reconnaissance du diplôme ?</span>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Nos formations sont certifiantes et reconnues au niveau Bac+5. Les diplômes sont délivrés après évaluation et sont valides auprès des entreprises et organismes de certification internationaux.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Comment financer la formation ?</span>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Nos formations sont éligibles CPF, OPCO et plans de formation entreprise. Nous vous accompagnons dans toutes les démarches de prise en charge et financement.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Quel est l'accompagnement carrière proposé par Liora ?</span>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Nous proposons un accompagnement carrière complet : préparation aux entretiens, aide à la recherche d'emploi, networking avec les entreprises partenaires, et suivi post-formation.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Quelles sont les missions du Data Scientist ?</span>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Un Data Scientist collecte et analyse les données, développe des modèles prédictifs, et aide à la prise de décision stratégique. Il combine statistiques, programmation et connaissance métier.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Quels sont les salaires des Data Scientist ?</span>
+          <div class="faq-toggle">+</div>
+        </div>
+        <div class="faq-answer">Les salaires débutants varient de 35k à 45k€ selon la région et l'entreprise. Avec l'expérience, les salaires peuvent atteindre 60k à 90k€+. Les freelances facturent entre 450€ et 800€ par jour.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING SECTION TEMPLATE -->
+<section class="section-booking" id="booking">
+  <div class="booking-container">
+    <div class="booking-left">
+      <h2 class="booking-title">Discutons de votre<br>projet</h2>
+      <p class="booking-subtitle">Morgane, Benjamin, Yasmine, Manyl ou un autre conseiller répondra à vos questions pour vous recommander la formation la plus adaptée à votre profil.</p>
+      <div class="booking-team">
+        <div class="booking-avatars">
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#FF6B35,#FF8C5C);">M</div>
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#4CAF50,#66BB6A);">B</div>
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#2196F3,#42A5F5);">Y</div>
+          <div class="booking-avatar" style="background:linear-gradient(135deg,#9C27B0,#BA68C8);">A</div>
+        </div>
+        <div class="booking-team-info">Notre équipe de conseillers pédagogiques</div>
+      </div>
+    </div>
+
+    <div class="booking-form">
+      <div class="booking-form-title">Durée du rendez-vous</div>
+      <div class="booking-duration">20 min</div>
+
+      <div style="margin-bottom:20px">
+        <div style="color:#fff;font-size:13px;font-weight:600;margin-bottom:12px;">Quelle heure vous convient le mieux ?</div>
+        <div style="color:rgba(255,255,255,0.7);font-size:12px;margin-bottom:16px;">Affichage des heures pour le <strong>8 juin 2026</strong></div>
+
+        <div style="color:#0099ff;font-size:12px;margin-bottom:16px;display:flex;align-items:center;gap:6px;">
+          <span>▼</span> UTC +02:00 Heure normale d'Europe centrale...
+        </div>
+      </div>
+
+      <div class="booking-calendar">
+        <div class="booking-calendar-header">
+          <span style="font-weight:600;">juin 2026</span>
+          <div class="booking-calendar-nav">
+            <button>‹</button>
+            <button>›</button>
+          </div>
+        </div>
+
+        <div class="booking-weekdays">
+          <div class="booking-weekday">LUN.</div>
+          <div class="booking-weekday">MAR.</div>
+          <div class="booking-weekday">MER.</div>
+          <div class="booking-weekday">JEU.</div>
+          <div class="booking-weekday">VEN.</div>
+          <div class="booking-weekday">SAM.</div>
+          <div class="booking-weekday">DIM.</div>
+        </div>
+
+        <div class="booking-days">
+          <div class="booking-day" style="opacity:0.3">1</div>
+          <div class="booking-day" style="opacity:0.3">2</div>
+          <div class="booking-day" style="opacity:0.3">3</div>
+          <div class="booking-day" style="opacity:0.3">4</div>
+          <div class="booking-day" style="opacity:0.3">5</div>
+          <div class="booking-day" style="opacity:0.3">6</div>
+          <div class="booking-day" style="opacity:0.3">7</div>
+          <div class="booking-day selected">8</div>
+          <div class="booking-day">9</div>
+          <div class="booking-day">10</div>
+          <div class="booking-day">11</div>
+          <div class="booking-day">12</div>
+          <div class="booking-day" style="opacity:0.3">13</div>
+          <div class="booking-day" style="opacity:0.3">14</div>
+          <div class="booking-day">15</div>
+          <div class="booking-day">16</div>
+          <div class="booking-day">17</div>
+          <div class="booking-day">18</div>
+          <div class="booking-day">19</div>
+          <div class="booking-day" style="opacity:0.3">20</div>
+          <div class="booking-day" style="opacity:0.3">21</div>
+          <div class="booking-day">22</div>
+          <div class="booking-day">23</div>
+          <div class="booking-day">24</div>
+          <div class="booking-day">25</div>
+          <div class="booking-day">26</div>
+          <div class="booking-day" style="opacity:0.3">27</div>
+          <div class="booking-day" style="opacity:0.3">28</div>
+          <div class="booking-day">29</div>
+          <div class="booking-day">30</div>
+        </div>
+      </div>
+
+      <div class="booking-times">
+        <div class="booking-time">11:50</div>
+        <div class="booking-time">12:10</div>
+        <div class="booking-time">12:30</div>
+        <div class="booking-time">14:20</div>
+        <div class="booking-time">14:40</div>
+        <div class="booking-time">15:00</div>
+        <div class="booking-time">15:20</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// FAQ Toggle
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.addEventListener('click', function() {
+    this.classList.toggle('open');
+  });
+});
+
+// Booking functions
+function openBookingModal() {
+  document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
+}
+
+function scrollToFormation(type) {
+  alert('Redirect to formation: ' + type);
+  // TODO: Implement proper navigation
+}
+
+// Calendar day selection
+document.querySelectorAll('.booking-day').forEach(day => {
+  day.addEventListener('click', function() {
+    if (!this.style.opacity || this.style.opacity === '1') {
+      document.querySelectorAll('.booking-day').forEach(d => d.classList.remove('selected'));
+      this.classList.add('selected');
+    }
+  });
+});
+
+// Time slot selection
+document.querySelectorAll('.booking-time').forEach(time => {
+  time.addEventListener('click', function() {
+    document.querySelectorAll('.booking-time').forEach(t => t.style.background = '');
+    this.style.background = 'rgba(255,107,53,0.3)';
+    this.style.color = '#FF6B35';
+  });
+});
+</script>
