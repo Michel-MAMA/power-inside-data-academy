@@ -198,6 +198,17 @@ body:hover #cursor { opacity: 1; }
 .nav-item .nav-link-dd { pointer-events: none; opacity: 0; width: 0; overflow: hidden; }
 .nav-dropdown { display: none !important; }
 
+/* Hide visual decorations in hero */
+.premium-hero .orb-glow,
+.premium-hero .orb-particle,
+.premium-hero .orb-drift,
+.premium-hero [class*="orb"],
+.hero-orb,
+#neural-canvas {
+  display: none !important;
+  visibility: hidden !important;
+}
+
 /* Row 2 — category strip */
 .nav-cat {
   display: flex; align-items: center;
@@ -318,6 +329,15 @@ body:hover #cursor { opacity: 1; }
   overflow: hidden;
 }
 
+/* Remove all animations and visual elements */
+.premium-hero * {
+  animation: none !important;
+}
+
+.premium-hero svg {
+  filter: none !important;
+}
+
 .hero-bg-pattern {
   display: none;
 }
@@ -359,7 +379,7 @@ body:hover #cursor { opacity: 1; }
 
 .hero-title-premium {
   font-family: var(--fd);
-  font-size: clamp(42px, 5vw, 64px);
+  font-size: clamp(32px, 3.5vw, 48px);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.02em;
@@ -439,7 +459,7 @@ body:hover #cursor { opacity: 1; }
 .btn-hero-secondary {
   background: #fff;
   border: 1.5px solid #fff;
-  color: #1561FF;
+  color: #000;
 }
 
 .btn-hero-secondary:hover {
