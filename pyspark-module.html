@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>PySpark Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#E25A1C;--blue-light:#F5EFEA;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{padding:32px;background:var(--blue-light);border-radius:12px}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}</style></head><body><nav><div class="nav-inner"><a href="pyspark-index.html">PySpark</a><span id="bc" style="flex:1;font-size:13px"></span><div class="nav-cta"><a href="pyspark-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"><p>Chargement...</p></div></section><script>const D={1:{title:'PySpark Setup & DataFrames',concepts:['Spark: Distributed computing framework','SparkSession: Entry point','RDD: Resilient distributed datasets','DataFrames: Structured data','Schema: Data type definitions','Partitioning: Data distribution'],code:`# PySpark Setup
+from pyspark.sql import SparkSession
+
+print("=== Initialize Spark ===")
+spark = SparkSession.builder \\
+    .appName("MyApp") \\
+    .getOrCreate()
+
+print("\\n=== Create DataFrame ===")
+data = [("Alice", 25), ("Bob", 30)]
+df = spark.createDataFrame(data, ["name", "age"])
+df.show()
+
+print("\\n=== Read Data ===")
+df = spark.read.csv("data.csv", header=True)
+df = spark.read.parquet("data.parquet")
+
+print("\\n=== Schema ===")
+df.printSchema()
+print(f"Columns: {df.columns}")
+print(f"Count: {df.count()}")`},2:{title:'Data Transformations',concepts:['Select: Choose columns','Filter: Row filtering','Map: Transformation','Distinct: Remove duplicates','Union: Combine DataFrames','Explode: Unnest arrays'],code:`# PySpark Transformations
+print("=== SELECT & FILTER ===")
+print("""
+df.select("name", "age").show()
+df.filter(df.age > 25).show()
+df.where("age > 25").show()
+""")
+
+print("\\n=== MAP & DISTINCT ===")
+print("""
+df.map(lambda row: row.name).collect()
+df.select("department").distinct().show()
+""")
+
+print("\\n=== ADD/DROP COLUMNS ===")
+print("""
+df = df.withColumn("salary_usd", df.salary * 1.2)
+df = df.drop("temp_column")
+df = df.withColumnRenamed("old", "new")
+""")
+
+print("\\n=== STRING OPERATIONS ===")
+print("""
+from pyspark.sql.functions import upper, lower, concat
+df = df.withColumn("name_upper", upper(df.name))
+""")`},3:{title:'Aggregations & Joins',concepts:['GroupBy: Group by key','Agg: Aggregation functions','Join: Combine DataFrames','Window Functions: Partition operations','Having: Post-aggregation filter','OrderBy: Sorting'],code:`# PySpark Aggregations
+print("=== GROUPBY & AGGREGATE ===")
+print("""
+from pyspark.sql.functions import sum, avg, count
+
+result = df.groupBy("department") \\
+    .agg(
+        count("*").alias("count"),
+        avg("salary").alias("avg_salary"),
+        sum("bonus").alias("total_bonus")
+    )
+result.show()
+""")
+
+print("\\n=== JOINS ===")
+print("""
+df1.join(df2, on="id", how="inner")
+df1.join(df2, on="id", how="left")
+df1.join(df2, on="id", how="outer")
+""")
+
+print("\\n=== WINDOW FUNCTIONS ===")
+print("""
+from pyspark.sql.functions import row_number, rank
+from pyspark.sql.window import Window
+
+w = Window.partitionBy("dept").orderBy("salary")
+df = df.withColumn("rank", rank().over(w))
+""")`},4:{title:'ML with MLlib',concepts:['MLlib: Machine learning library','Pipeline: ML workflow','Transformers: Feature transformations','Estimators: Model training','Evaluator: Model evaluation','Hyperparameter Tuning: Grid search'],code:`# PySpark MLlib
+print("=== ML Pipeline ===")
+print("""
+from pyspark.ml import Pipeline
+from pyspark.ml.feature import VectorAssembler, StandardScaler
+from pyspark.ml.classification import LogisticRegression
+
+pipeline = Pipeline(stages=[
+    VectorAssembler(inputCols=["age", "income"],
+                    outputCol="features"),
+    StandardScaler(inputCol="features",
+                   outputCol="scaled"),
+    LogisticRegression(featuresCol="scaled")
+])
+
+model = pipeline.fit(train_df)
+predictions = model.transform(test_df)
+""")
+
+print("\\n=== Model Evaluation ===")
+print("""
+from pyspark.ml.evaluation import BinaryClassificationEvaluator
+
+evaluator = BinaryClassificationEvaluator()
+auc = evaluator.evaluate(predictions)
+print(f"AUC: {auc}")
+""")`},5:{title:'Performance Optimization',concepts:['Caching: In-memory storage','Partitioning: Data distribution','Bucketing: Hash-based partitioning','Broadcast: Small table optimization','Lazy Evaluation: Optimization opportunities','Adaptive Query Execution: AQE'],code:`# PySpark Performance Tuning
+print("=== CACHING ===")
+print("""
+df.cache()  # Store in memory
+df.count()  # Trigger cache
+df.unpersist()  # Release cache
+""")
+
+print("\\n=== PARTITIONING ===")
+print("""
+df.repartition(10)  # Increase partitions
+df.coalesce(4)  # Decrease partitions
+df.repartitionByRange("year", "month")
+""")
+
+print("\\n=== BROADCAST ===")
+print("""
+from pyspark.sql.functions import broadcast
+result = df_large.join(broadcast(df_small), on="id")
+""")
+
+print("\\n=== OPTIMIZATION TIPS ===")
+print("1. Avoid shuffle when possible")
+print("2. Use select before join")
+print("3. Partition by join key")
+print("4. Cache RDDs if reused")
+print("5. Monitor execution plan")`}};let m=1;function render(e){document.getElementById('bc').textContent=`/${D[e].title}`;let s='<ul>';D[e].concepts.forEach(c=>s+=`<li>${c}</li>`);document.getElementById('content').innerHTML=`<div class="module"><div style="background:#fff;padding:16px;border-radius:8px"><strong>Concepts:</strong>${s}</ul></div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))">← Précédent</button><span>${m}/5</span><button class="nav-button" onclick="m<5&&(m++,render(m))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:D[e].code,mode:'python',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

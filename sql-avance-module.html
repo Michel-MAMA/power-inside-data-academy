@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>SQL Avancé Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#7C3AED;--blue-light:#F3E8FF;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{padding:32px;background:var(--blue-light);border-radius:12px}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}</style></head><body><nav><div class="nav-inner"><a href="sql-avance-index.html">SQL Avancé</a><span id="bc" style="flex:1"></span><div class="nav-cta"><a href="sql-avance-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"></div></section><script>const D={1:{title:'Advanced Query Techniques',concepts:['Subqueries: Nested queries','Correlated subqueries: Row-by-row','CASE statements: Conditional logic','UNION/INTERSECT: Combine result sets','Derived tables: Inline views','Recursive queries: Hierarchical data'],code:`-- Advanced SQL Queries
+SELECT 'Advanced Techniques' AS topic;
+
+-- Subqueries
+SELECT employee_id, salary
+FROM employees
+WHERE salary > (
+    SELECT AVG(salary) FROM employees
+);
+
+-- Correlated Subquery
+SELECT e1.name, e1.salary
+FROM employees e1
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees e2
+    WHERE e2.department = e1.department
+);
+
+-- CASE Statement
+SELECT
+    employee_id,
+    salary,
+    CASE
+        WHEN salary < 30000 THEN 'Junior'
+        WHEN salary < 60000 THEN 'Mid-level'
+        ELSE 'Senior'
+    END AS level
+FROM employees;
+
+-- UNION (combine + remove duplicates)
+SELECT name FROM employees
+UNION
+SELECT name FROM contractors;
+
+-- UNION ALL (keep duplicates)
+SELECT name FROM employees
+UNION ALL
+SELECT name FROM contractors;`},2:{title:'Window Functions & CTEs',concepts:['OVER() clause: Partition data','ROW_NUMBER(): Sequential numbering','RANK(), DENSE_RANK(): Ranking','LAG/LEAD: Previous/next row','FIRST_VALUE, LAST_VALUE: Extremes','WITH clause: Recursive queries'],code:`-- Window Functions & CTEs
+-- Row Number
+SELECT
+    employee_id,
+    salary,
+    ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num
+FROM employees;
+
+-- RANK vs DENSE_RANK
+SELECT
+    product_id,
+    sales,
+    RANK() OVER (ORDER BY sales DESC) AS rank,
+    DENSE_RANK() OVER (ORDER BY sales DESC) AS dense_rank
+FROM sales;
+
+-- LAG/LEAD (Previous/Next)
+SELECT
+    date,
+    revenue,
+    LAG(revenue) OVER (ORDER BY date) AS prev_day,
+    LEAD(revenue) OVER (ORDER BY date) AS next_day
+FROM daily_revenue;
+
+-- Common Table Expression (CTE)
+WITH monthly_totals AS (
+    SELECT
+        DATE_TRUNC(month, order_date) AS month,
+        SUM(amount) AS total
+    FROM orders
+    GROUP BY DATE_TRUNC(month, order_date)
+)
+SELECT month, total,
+       AVG(total) OVER () AS overall_avg
+FROM monthly_totals;
+
+-- Recursive CTE
+WITH RECURSIVE numbers AS (
+    SELECT 1 AS n
+    UNION ALL
+    SELECT n + 1 FROM numbers WHERE n < 10
+)
+SELECT * FROM numbers;`},3:{title:'Query Optimization',concepts:['Index strategies: B-tree, hash','Explain plans: Execution analysis','Join optimization: Algorithms','Query hints: Force execution plan','Statistics: Cardinality estimation','Partitioning: Data distribution'],code:`-- Query Optimization
+-- EXPLAIN PLAN
+EXPLAIN
+SELECT e.name, d.department_name
+FROM employees e
+JOIN departments d ON e.dept_id = d.id
+WHERE e.salary > 50000;
+
+-- Index Creation
+CREATE INDEX idx_salary ON employees(salary);
+CREATE COMPOSITE INDEX idx_dept_salary
+    ON employees(department_id, salary);
+
+-- Query with Hints
+SELECT /*+ INDEX(employees idx_salary) */
+    name, salary
+FROM employees
+WHERE salary > 50000;
+
+-- Statistics
+ANALYZE TABLE employees;
+
+-- Join Optimization Example
+-- Inefficient
+SELECT * FROM orders o
+WHERE o.customer_id IN (
+    SELECT id FROM customers WHERE country = 'US'
+);
+
+-- Optimized
+SELECT o.* FROM orders o
+INNER JOIN customers c ON o.customer_id = c.id
+WHERE c.country = 'US';
+
+-- Partitioning benefit
+SELECT * FROM sales
+WHERE year = 2024 AND month = 6;
+-- Only reads 2024/06 partition!`},4:{title:'Data Modeling',concepts:['Normalization: Reduce redundancy','Denormalization: Optimize queries','Fact & Dimension tables: Star schema','Slowly Changing Dimensions: SCD types','Grain: Fact table granularity','Surrogate keys: Technical keys'],code:`-- Data Modeling Concepts
+-- Star Schema (Dimensional Model)
+
+-- Fact Table (Events)
+CREATE TABLE fact_sales (
+    sales_id INT PRIMARY KEY,
+    date_id INT,
+    product_id INT,
+    customer_id INT,
+    amount DECIMAL(10,2),
+    quantity INT
+);
+
+-- Dimension Tables (Attributes)
+CREATE TABLE dim_date (
+    date_id INT PRIMARY KEY,
+    date DATE,
+    year INT,
+    month INT,
+    day INT,
+    day_of_week VARCHAR(10)
+);
+
+CREATE TABLE dim_product (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100),
+    category VARCHAR(50),
+    supplier_id INT
+);
+
+CREATE TABLE dim_customer (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    country VARCHAR(50),
+    segment VARCHAR(20)
+);
+
+-- SCD Type 2: Track history
+ALTER TABLE dim_customer ADD COLUMN (
+    effective_date DATE,
+    end_date DATE,
+    is_current BOOLEAN
+);
+
+-- Query across schema
+SELECT
+    d.year,
+    p.category,
+    SUM(f.amount) AS total_sales
+FROM fact_sales f
+JOIN dim_date d ON f.date_id = d.date_id
+JOIN dim_product p ON f.product_id = p.product_id
+GROUP BY d.year, p.category;`}};let m=1;function render(e){document.getElementById('bc').textContent=`/${D[e].title}`;let s='<ul>';D[e].concepts.forEach(c=>s+=`<li>${c}</li>`);document.getElementById('content').innerHTML=`<div class="module"><div style="background:#fff;padding:16px;border-radius:8px"><strong>Concepts:</strong>${s}</ul></div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))">← Précédent</button><span>${m}/4</span><button class="nav-button" onclick="m<4&&(m++,render(m))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:D[e].code,mode:'sql',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

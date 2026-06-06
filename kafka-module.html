@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Kafka Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#1B1B1B;--blue-light:#F5F5F5;--black:#111111;--gray:#666666;--gray-light:#E8E8E8;--max:1160px}body{font-family:'Inter',sans-serif;background:#fff;color:var(--black)}nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--gray-light);padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;height:60px}.nav-breadcrumb{display:flex;align-items:center;gap:12px;flex:1;font-size:13px;color:var(--gray)}.nav-breadcrumb a{color:var(--blue);font-weight:600}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{margin-bottom:48px;padding:32px;background:var(--blue-light);border-radius:12px;border-left:4px solid var(--blue)}.module-title{font-size:20px;font-weight:700}.sandbox-container{display:grid;grid-template-columns:1fr;gap:20px}.editor-container{height:250px;border:1px solid var(--gray-light);border-radius:8px}.CodeMirror{height:100%!important}.concepts-box{background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)}.takeaway-box{background:var(--blue-light);padding:16px;border-radius:8px;margin-top:16px}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}.nav-button:disabled{background:var(--gray-light)}</style></head><body><nav><div class="nav-inner"><a href="kafka-index.html">Kafka</a><div class="nav-breadcrumb"><span id="breadcrumb-title">Module...</span></div><div class="nav-cta"><a href="kafka-index.html">← Catalogue</a></div></div></nav><section class="section"><div class="section-inner" id="module-content"><p>Chargement...</p></div></section><script>const MODULES_DATA={1:{title:'Kafka Architecture & Topics',desc:'Architecture fondamentale',concepts:['Kafka: Distributed event streaming','Brokers: Servers in cluster','Topics: Message channels','Partitions: Parallelism','Replication: Durability','Zookeeper: Coordination'],code:`# Kafka Architecture
+print("=== Kafka Components ===")
+print("Brokers: Store and serve messages")
+print("Topics: Message categories")
+print("Partitions: Parallel partitions")
+print("Replicas: Backup copies")
+print("")
+print("=== Topic Structure ===")
+topics = {"orders": {"p0": [1,2,3], "p1": [4,5,6]}}
+print(topics)`},2:{title:'Producers & Consumers',desc:'Publishing and consuming',concepts:['Producers: Send messages','Consumers: Read messages','Consumer Groups: Parallel processing','Offsets: Position tracking','Acknowledgments: Guarantees','Key-based partitioning: Ordering'],code:`# Kafka Producers & Consumers
+print("=== Producer Example ===")
+print("""
+from kafka import KafkaProducer
+
+producer = KafkaProducer(
+    bootstrap_servers=['localhost:9092']
+)
+producer.send('orders', b'message')
+""")
+
+print("\\n=== Consumer Example ===")
+print("""
+from kafka import KafkaConsumer
+
+consumer = KafkaConsumer(
+    'orders',
+    bootstrap_servers=['localhost:9092'],
+    group_id='group1'
+)
+for msg in consumer:
+    print(msg.value)
+""")`},3:{title:'Streaming Applications',desc:'Real-time processing',concepts:['Kafka Streams: Stream processing','Stateless operations: Map, filter','Stateful: Aggregations, joins','Topology: Processing graph','Windows: Time-based grouping','Interactive Queries: State access'],code:`# Kafka Streams Application
+print("=== Kafka Streams ===")
+print("""
+from kafka import KafkaStreams
+
+builder = StreamsBuilder()
+orders = builder.stream('orders')
+
+processed = orders \\
+    .filter(lambda k,v: v['amount'] > 0) \\
+    .map(lambda k,v: (k, v['amount']*1.1))
+
+processed.to('output')
+
+streams = KafkaStreams(builder.build(), {})
+streams.start()
+""")`},4:{title:'Kafka Ecosystem',desc:'Connect, KSQL, tools',concepts:['Kafka Connect: ETL framework','Source Connectors: Data import','Sink Connectors: Data export','KSQL: SQL on streams','Monitoring: Metrics & alerts','Integration: 100+ connectors'],code:`# Kafka Ecosystem Tools
+print("=== Kafka Connect ===")
+print("Source connectors: MySQL, MongoDB, S3")
+print("Sink connectors: Elasticsearch, S3, DynamoDB")
+print("")
+print("=== KSQL ===")
+print("""
+CREATE STREAM orders (id INT, amount DECIMAL)
+  WITH (kafka_topic='orders', value_format='json');
+
+CREATE TABLE high_value AS
+  SELECT id, amount FROM orders WHERE amount > 1000;
+""")`},5:{title:'Production Deployment',desc:'Deploy and monitor',concepts:['Cluster Management: Brokers, config','Monitoring: JMX metrics','Security: SSL/TLS, SASL','Data Retention: Policies','Scaling: Rebalancing','High Availability: Replication'],code:`# Production Kafka Deployment
+print("=== Broker Configuration ===")
+config = {
+    "broker.id": 1,
+    "num.network.threads": 8,
+    "num.io.threads": 8,
+    "log.retention.hours": 168
+}
+print(config)
+
+print("\\n=== Monitoring ===")
+print("BytesInPerSec: Inbound throughput")
+print("BytesOutPerSec: Outbound throughput")
+print("UnderReplicatedPartitions: Health check")
+print("OfflinePartitionsCount: Availability")`}};let m=1;function render(e){const t=MODULES_DATA[e];document.getElementById('breadcrumb-title').textContent=t.title;let s='<ul>';t.concepts.forEach(e=>s+=`<li>${e}</li>`);s+='</ul>';document.getElementById('module-content').innerHTML=`<div class="module"><h2 class="module-title">${t.title}</h2><p>${t.desc}</p><div class="concepts-box"><strong>Concepts:</strong>${s}</div><div class="editor-container" id="editor-${e}"></div><div class="takeaway-box"><strong>À retenir:</strong><p>${t.takeaway||'Kafka production-grade streaming'}</p></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m),scrollTo(0,0))">← Précédent</button><span>${m}/5</span><button class="nav-button" onclick="m<5&&(m++,render(m),scrollTo(0,0))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`editor-${e}`),{value:t.code,mode:'python',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>MLOps Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#10B981;--blue-light:#ECFDF5;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{margin-bottom:48px;padding:32px;background:var(--blue-light);border-radius:12px;border-left:4px solid var(--blue)}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}.nav-button:disabled{background:#E8E8E8}</style></head><body><nav><div class="nav-inner"><a href="mlops-index.html">MLOps</a><span id="bc" style="flex:1"></span><div class="nav-cta"><a href="mlops-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"><p>Chargement...</p></div></section><script>const D={1:{title:'MLOps Fundamentals',concepts:['MLOps: ML + Operations','Lifecycle: Code → Train → Deploy','Reproducibility: Version everything','Monitoring: Production models','CI/CD: Automated pipelines','Governance: Data & model management'],code:`# MLOps Workflow
+print("=== ML Lifecycle ===")
+print("1. Data Collection & Preparation")
+print("2. Model Training")
+print("3. Model Evaluation")
+print("4. Deployment")
+print("5. Monitoring & Retraining")
+print("")
+print("=== Key Principles ===")
+print("Reproducibility: Same results")
+print("Automation: Minimal manual steps")
+print("Monitoring: Know model health")
+print("Versioning: Track everything")`},2:{title:'Model Development & Versioning',concepts:['DVC: Data Version Control','MLflow: Experiment tracking','Model Registry: Version management','Reproducibility: Parameter tracking','Experiment Comparison: Metrics analysis','Rollback: Restore previous models'],code:`# MLflow Experiment Tracking
+print("""
+import mlflow
+
+with mlflow.start_run():
+    mlflow.log_param("lr", 0.001)
+    mlflow.log_metric("acc", 0.95)
+    mlflow.sklearn.log_model(model, "model")
+
+# Track experiments, compare results
+# Register best model to registry
+""")
+print("\\n=== DVC for Data ===")
+print("dvc init")
+print("dvc add data/")
+print("dvc push/pull (version data)")`},3:{title:'Data Pipeline Management',concepts:['Orchestration: Airflow, Kubeflow','ETL: Data workflows','Data Quality: Validation & testing','Feature Store: Centralized features','Data Lineage: Track transformations','Automation: Scheduled pipelines'],code:`# Airflow Pipeline Example
+print("""
+from airflow import DAG
+from airflow.operators.python import PythonOperator
+
+dag = DAG('ml_pipeline', schedule_interval='@daily')
+
+task1 = PythonOperator(
+    task_id='load_data',
+    python_callable=load_data,
+    dag=dag
+)
+
+task2 = PythonOperator(
+    task_id='train_model',
+    python_callable=train_model,
+    dag=dag
+)
+
+task1 >> task2
+""")
+print("\\n=== Data Quality ===")
+print("Great Expectations: Data testing")
+print("Validation: Drift detection")`},4:{title:'Model Training & Validation',concepts:['Cross-validation: Robust evaluation','Hyperparameter Tuning: Optimization','A/B Testing: Production validation','Metrics: Precision, Recall, F1','Baselines: Compare to baselines','Benchmarking: Industry standards'],code:`# Model Training Pipeline
+print("""
+from sklearn.model_selection import cross_val_score
+from optuna import create_study
+
+def objective(trial):
+    params = {
+        'lr': trial.suggest_float('lr', 1e-5, 1e-1),
+        'batch_size': trial.suggest_int('batch_size', 16, 128)
+    }
+    model = train(params)
+    return evaluate(model)
+
+study = create_study()
+study.optimize(objective, n_trials=100)
+""")
+print("\\n=== A/B Testing ===")
+print("Champion vs Candidate")
+print("Measure impact on users")
+print("Statistical significance")`},5:{title:'Deployment & Monitoring',concepts:['Model Serving: REST API, gRPC','Containerization: Docker','Scaling: Load balancing','Monitoring: Latency, accuracy drift','Alerting: Automated alerts','Logging: Request/response tracking'],code:`# Model Deployment
+print("""
+from fastapi import FastAPI
+from mlflow.pyfunc import load_model
+
+model = load_model("models/mymodel")
+app = FastAPI()
+
+@app.post("/predict")
+def predict(input_data):
+    return model.predict(input_data)
+""")
+print("\\n=== Monitoring Metrics ===")
+print("Prediction Latency: Target < 100ms")
+print("Model Accuracy: Detect drift")
+print("Data Distribution: Input shift")
+print("System Health: CPU, memory")
+print("\\n=== Alerting ===")
+print("Email/Slack on anomalies")
+print("Auto-rollback on failures")`},6:{title:'Production Management',concepts:['Rollout Strategy: Canary, blue-green','Versioning: Model versions','Rollback: Quick recovery','Cost Optimization: Resource usage','Documentation: Model cards','Compliance: Audit trails'],code:`# Production Management Strategy
+print("=== Deployment Strategies ===")
+print("Canary: 5% → 25% → 100%")
+print("Blue-Green: Switch between versions")
+print("Rolling: Gradual replacement")
+print("")
+print("=== Model Cards ===")
+print("Version, accuracy, data, use cases")
+print("Limitations, bias analysis")
+print("Documentation = compliance")
+print("")
+print("=== Cost Optimization ===")
+print("Batch inference for efficiency")
+print("Model compression techniques")
+print("Resource-right-sizing")`}};let m=1;function render(e){const t=D[e];document.getElementById('bc').textContent=`/${t.title}`;let s='<ul>';t.concepts.forEach(c=>s+=`<li>${c}</li>`);s+='</ul>';document.getElementById('content').innerHTML=`<div class="module"><h2>${t.title}</h2><div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px"><strong>Concepts:</strong>${s}</div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))" ${m===1?'disabled':''}>← Précédent</button><span>${m}/6</span><button class="nav-button" onclick="m<6&&(m++,render(m))" ${m===6?'disabled':''}>Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:t.code,mode:'python',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

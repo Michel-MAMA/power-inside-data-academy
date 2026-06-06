@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>LLM Fine-tuning Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#8B5CF6;--blue-light:#F3E8FF;--black:#111111;--gray:#666666;--gray-light:#E8E8E8;--max:1160px}body{font-family:'Inter',sans-serif;background:#fff;color:var(--black)}nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--gray-light);padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;height:60px}.nav-breadcrumb{display:flex;align-items:center;gap:12px;flex:1;font-size:13px;color:var(--gray)}.nav-breadcrumb a{color:var(--blue);font-weight:600}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{margin-bottom:48px;padding:32px;background:var(--blue-light);border-radius:12px;border-left:4px solid var(--blue)}.module-title{font-size:20px;font-weight:700}.concepts-box{background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)}.editor-container{height:250px;border:1px solid var(--gray-light);border-radius:8px;overflow:hidden}.CodeMirror{height:100%!important}.takeaway-box{background:var(--blue-light);padding:16px;border-radius:8px;margin-top:16px}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}.nav-button:disabled{background:var(--gray-light);cursor:not-allowed}</style></head><body><nav><div class="nav-inner"><a href="llm-finetuning-index.html">LLM Fine-tuning</a><span id="breadcrumb-title"></span><div class="nav-cta"><a href="llm-finetuning-index.html">← Retour</a></div></div></nav><section class="section"><div class="section-inner" id="module-content"><p>Chargement...</p></div></section><script>const MODULES_DATA={1:{title:'LLM Fundamentals & Transformers',desc:'Fondamentaux des modèles de langage',concepts:['Transformers: Architecture révolutionnaire','Attention Mechanism: Relation entre tokens','Tokens: Unités de texte','Embeddings: Représentation vectorielle','Pre-training: Apprentissage sur corpus','Fine-tuning: Adaptation pour tâche spécifique'],code:`# LLM Fundamentals
+print("=== Transformer Architecture ===")
+print("Encoder: Process input sequence")
+print("Decoder: Generate output sequence")
+print("Attention: Weight relationships")
+print("")
+print("=== Model Sizes ===")
+models = {
+    "Tiny": "110M params",
+    "Small": "350M params",
+    "Base": "110M-340M params",
+    "Large": "700M-1.3B params",
+    "XLarge": "2.6B+ params"
+}
+for size, params in models.items():
+    print(f"  {size}: {params}")
+print("\\n=== Pre-trained Models ===")
+print("BERT, GPT, RoBERTa, T5, LLaMA...")`},2:{title:'Fine-tuning Techniques',desc:'Méthodes d\'adaptation de modèles',concepts:['Full Fine-tuning: Entraîner tous les paramètres','LoRA: Low-Rank Adaptation','QLoRA: Quantized LoRA','Parameter Efficient: Minimiser mémoire','Instruction Tuning: Aligner sur instructions','RLHF: Reinforcement Learning from Human Feedback'],code:`# Fine-tuning Techniques
+print("=== Full Fine-tuning ===")
+print("Coût: Nécessite GPU 40GB+")
+print("Temps: Heures/jours")
+print("Avantage: Meilleure performance")
+print("")
+print("=== LoRA (Low-Rank Adaptation) ===")
+print("""
+W_new = W_original + A @ B
+A: d x r matrix
+B: r x d matrix
+r << d (rank << dimension)
+
+Paramètres: 0.01% vs 100%
+Temps: Minutes/heures
+GPU: 12-16GB sufficient
+""")
+print("\\n=== QLoRA ===")
+print("Quantize 4-bit + LoRA")
+print("Encore plus économe: 6GB GPU possible")`},3:{title:'Fine-tuning Llama 2 & Mistral',desc:'Entraîner Llama 2 et Mistral',concepts:['Llama 2: Meta open-source model','Mistral: French-optimized LLM','Dataset Preparation: Formatting data','Training Config: Learning rate, epochs','Evaluation: Metrics & benchmarks','Deployment: VLLM, llama.cpp for inference'],code:`# Fine-tuning Llama 2 with LoRA
+print("""
+from peft import LoraConfig, get_peft_model
+from transformers import AutoModelForCausalLM
+
+model = AutoModelForCausalLM.from_pretrained("meta-llama/Llama-2-7b-hf")
+
+lora_config = LoraConfig(
+    r=8,
+    lora_alpha=16,
+    target_modules=["q_proj", "v_proj"],
+    lora_dropout=0.05
+)
+
+model = get_peft_model(model, lora_config)
+
+# Training
+from transformers import Trainer
+trainer = Trainer(
+    model=model,
+    train_dataset=train_data,
+    args=TrainingArguments(...)
+)
+trainer.train()
+""")
+print("\\n=== Evaluation ===")
+print("BLEU, ROUGE: Text similarity")
+print("Perplexity: Language model quality")
+print("Custom: Task-specific metrics")`},4:{title:'Evaluation & Optimization',desc:'Évaluer et optimiser les modèles',concepts:['Metrics: BLEU, ROUGE, Perplexity','Benchmarks: MMLU, HellaSwag','Human Evaluation: Quality assessment','Quantization: Reduce model size','Pruning: Remove unused weights','Distillation: Smaller model copy'],code:`# Model Evaluation & Optimization
+print("=== Evaluation Metrics ===")
+print("BLEU: Precision vs reference")
+print("ROUGE: Recall-oriented metrics")
+print("F1: Balanced score")
+print("Perplexity: Lower = better")
+print("")
+print("=== Benchmarks ===")
+print("MMLU: 57k multiple choice")
+print("HellaSwag: Common sense reasoning")
+print("TruthfulQA: Factuality check")
+print("")
+print("=== Quantization ===")
+print("FP32 → FP16: 2x smaller")
+print("FP32 → INT8: 4x smaller")
+print("FP32 → INT4: 8x smaller")`},5:{title:'Deployment & Inference',desc:'Déployer modèles fine-tuned',concepts:['Inference Optimization: Fast generation','vLLM: Vector LLM for inference','llama.cpp: CPU inference','Hugging Face: Model hosting','API Server: FastAPI deployment','Monitoring: Performance & costs'],code:`# LLM Deployment & Inference
+print("=== vLLM Inference ===")
+print("""
+from vllm import LLM, SamplingParams
+
+llm = LLM(model="meta-llama/Llama-2-7b-hf")
+sampling_params = SamplingParams(
+    temperature=0.7,
+    top_p=0.9
+)
+
+outputs = llm.generate(
+    ["Hello, I am"],
+    sampling_params
+)
+""")
+print("\\n=== FastAPI Server ===")
+print("""
+from fastapi import FastAPI
+app = FastAPI()
+
+@app.post("/generate")
+def generate(prompt: str):
+    output = model.generate(prompt)
+    return {"output": output}
+""")
+print("\\n=== Performance Tips ===")
+print("Batching: Process multiple requests")
+print("Caching: Store KV cache")
+print("Tensor Parallelism: Multi-GPU")`}};let m=1;const max=5;function render(e){const t=MODULES_DATA[e];document.getElementById('breadcrumb-title').textContent=`/${t.title}`;let s='<ul>';t.concepts.forEach(e=>s+=`<li>${e}</li>`);s+='</ul>';document.getElementById('module-content').innerHTML=`<div class="module"><h2>${t.title}</h2><div class="concepts-box"><strong>Concepts:</strong>${s}</div><div class="editor-container" id="ed${e}"></div><div class="takeaway-box"><strong>À retenir:</strong><p>${t.takeaway||"Fine-tuning = adaptation puissante"}</p></div><div class="module-nav"><button class="nav-button" onclick="render(${e-1})" ${e===1?'disabled':''}>← Précédent</button><span>${e}/${max}</span><button class="nav-button" onclick="render(${e+1})" ${e===max?'disabled':''}>Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:t.code,mode:'python',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

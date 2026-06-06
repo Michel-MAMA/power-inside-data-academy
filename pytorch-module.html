@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>PyTorch Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#EE4C2C;--blue-light:#FDE9E6;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{padding:32px;background:var(--blue-light);border-radius:12px}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}</style></head><body><nav><div class="nav-inner"><a href="pytorch-index.html">PyTorch</a><span id="bc" style="flex:1;font-size:13px"></span><div class="nav-cta"><a href="pytorch-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"><p>Chargement...</p></div></section><script>const D={1:{title:'PyTorch Fundamentals',concepts:['PyTorch: Deep learning framework','Tensors: Multidimensional arrays','Autograd: Automatic differentiation','GPU Support: CUDA acceleration','Dynamic Graphs: Define-by-run','PyTorch Lightning: High-level abstraction'],code:`# PyTorch Fundamentals
+import torch
+import torch.nn as nn
+
+print("=== Tensors ===")
+x = torch.tensor([1, 2, 3])
+y = torch.zeros(3, 3)
+z = torch.randn(2, 2)
+print(f"Tensor shape: {x.shape}")
+
+print("\\n=== Autograd ===")
+x = torch.tensor([2.0], requires_grad=True)
+y = x ** 2
+y.backward()
+print(f"Gradient: {x.grad}")
+
+print("\\n=== Device ===")
+if torch.cuda.is_available():
+    x = x.cuda()
+    print("GPU available")
+else:
+    print("CPU only")`},2:{title:'Neural Networks & Layers',concepts:['nn.Module: Base class','Layers: Linear, Conv, RNN','Activation Functions: ReLU, Sigmoid','Batch Normalization: Training stability','Dropout: Regularization','Forward Pass: Data flow'],code:`# Neural Network Architecture
+import torch.nn as nn
+
+print("=== Building Network ===")
+print("""
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(784, 256)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(256, 10)
+
+    def forward(self, x):
+        x = x.view(-1, 784)
+        x = self.relu(self.fc1(x))
+        return self.fc2(x)
+
+model = SimpleNet()
+""")
+print("\\n=== Common Layers ===")
+print("Linear: Fully connected")
+print("Conv2d: 2D convolution")
+print("LSTM: Recurrent network")
+print("Embedding: Word embeddings")
+print("BatchNorm: Normalize activations")`},3:{title:'Training & Optimization',concepts:['Loss Functions: MSE, CrossEntropy','Optimizers: SGD, Adam, AdamW','Learning Rate: Scheduling & warmup','Backpropagation: Gradient computation','Training Loop: Epoch iteration','Validation: Monitor generalization'],code:`# Training Loop
+import torch.optim as optim
+
+print("""
+model = SimpleNet()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=1e-3)
+
+for epoch in range(10):
+    for batch_x, batch_y in train_loader:
+        # Forward pass
+        outputs = model(batch_x)
+        loss = criterion(outputs, batch_y)
+
+        # Backward pass
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+    # Validation
+    with torch.no_grad():
+        val_loss = evaluate(model, val_loader)
+    print(f"Epoch {epoch}: {val_loss:.4f}")
+""")
+print("\\n=== Learning Rate Scheduling ===")
+print("StepLR: Reduce every N epochs")
+print("CosineAnnealingLR: Cosine schedule")
+print("Warmup: Gradual increase")`},4:{title:'CNNs for Computer Vision',concepts:['Conv2d: 2D convolutions','Pooling: MaxPool, AvgPool','ResNet: Residual networks','Transfer Learning: Pre-trained models','Data Augmentation: Image transforms','Vision Models: YOLO, MobileNet'],code:`# CNN for Image Classification
+print("""
+class ResNet50(nn.Module):
+    # Pre-trained model
+
+model = torch.hub.load('pytorch/vision:v0.10.0',
+                       'resnet50', pretrained=True)
+
+# Fine-tuning
+for param in model.parameters():
+    param.requires_grad = False
+
+model.fc = nn.Linear(2048, 10)  # New head
+
+# Data augmentation
+from torchvision import transforms
+
+transform = transforms.Compose([
+    transforms.RandomCrop(32, padding=4),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))
+])
+""")
+print("\\n=== Pre-trained Models ===")
+print("ImageNet: General classification")
+print("COCO: Object detection")
+print("Segmentation: Semantic masks")`},5:{title:'RNNs & Transformers',concepts:['LSTM: Long short-term memory','GRU: Gated recurrent unit','Sequence-to-sequence: Encoder-decoder','Transformers: Attention mechanism','BERT: Bidirectional encoder','GPT: Generative pre-training'],code:`# RNN & Transformers
+print("=== LSTM for Sequences ===")
+print("""
+class LSTMClassifier(nn.Module):
+    def __init__(self, vocab_size, embed_dim, hidden_dim):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.lstm = nn.LSTM(embed_dim, hidden_dim, batch_first=True)
+        self.fc = nn.Linear(hidden_dim, 1)
+
+    def forward(self, x):
+        x = self.embedding(x)
+        lstm_out, _ = self.lstm(x)
+        x = lstm_out[:, -1, :]
+        return self.fc(x)
+""")
+print("\\n=== Transformer ===")
+print("from transformers import BertModel")
+print("model = BertModel.from_pretrained('bert-base-uncased')")
+print("Great for NLP tasks!")`},6:{title:'Deployment & Inference',concepts:['TorchScript: Serialize models','ONNX: Cross-framework format','Model Quantization: Reduce size','Pruning: Remove weights','TorchServe: Production server','Mobile: TorchMobile on devices'],code:`# Model Deployment
+print("=== TorchScript ===")
+print("""
+model = SimpleNet()
+scripted = torch.jit.script(model)
+scripted.save('model.pt')
+
+# Load and infer
+loaded = torch.jit.load('model.pt')
+output = loaded(input_tensor)
+""")
+print("\\n=== ONNX Export ===")
+print("""
+torch.onnx.export(model, dummy_input, 'model.onnx')
+""")
+print("\\n=== Quantization ===")
+print("INT8: 4x smaller, faster")
+print("Post-training quantization")
+print("Quantization-aware training")
+print("\\n=== TorchServe ===")
+print("REST API server")
+print("Batch inference")
+print("A/B testing support")`}};let m=1;function render(e){document.getElementById('bc').textContent=`/${D[e].title}`;let s='<ul>';D[e].concepts.forEach(c=>s+=`<li>${c}</li>`);document.getElementById('content').innerHTML=`<div class="module"><div style="background:#fff;padding:16px;border-radius:8px"><strong>Concepts:</strong>${s}</ul></div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))">← Précédent</button><span>${m}/6</span><button class="nav-button" onclick="m<6&&(m++,render(m))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:D[e].code,mode:'python',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

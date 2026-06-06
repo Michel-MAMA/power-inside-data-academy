@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>GCP Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:#fff;color:#111;font-family:'Inter',sans-serif;overflow-x:hidden}:root{--blue:#EA4335;--blue-light:#FBE7E5;--black:#111111;--gray:#666666;--gray-mid:#999999;--gray-light:#E8E8E8;--green:#00D68F;--red:#FF4757;--radius:6px;--ease:cubic-bezier(0.22,1,0.36,1);--max:1160px}body{background:var(--bg);color:var(--black);font-family:'Inter',sans-serif}a{color:var(--blue);text-decoration:none}nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--gray-light);padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;height:60px}.nav-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:var(--black);flex-shrink:0}.nav-logo span{color:var(--blue)}.nav-breadcrumb{display:flex;align-items:center;gap:12px;flex:1;font-size:13px;color:var(--gray)}.nav-breadcrumb a{color:var(--blue);font-weight:600}.nav-cta{display:flex;gap:10px;margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none}.hero{padding:40px 24px;background:linear-gradient(135deg,var(--blue-light),#fff);text-align:center}.hero-inner{max-width:var(--max);margin:0 auto}.hero h1{font-size:clamp(28px,3vw,42px);font-weight:800;margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif}.hero p{font-size:15px;color:var(--gray);max-width:700px;margin:0 auto;line-height:1.6}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{margin-bottom:48px;padding:32px;background:var(--blue-light);border-radius:12px;border-left:4px solid var(--blue)}.module-title{font-size:20px;font-weight:700;color:var(--black);margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif}.module-desc{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px}.sandbox-container{display:grid;grid-template-columns:1fr;gap:20px;margin-bottom:24px}.sandbox-editor{display:flex;flex-direction:column;gap:8px}.sandbox-label{font-size:12px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.05em}.editor-container{height:250px;border:1px solid var(--gray-light);border-radius:8px;overflow:hidden}.CodeMirror{height:100%!important;font-family:'Courier New',monospace!important;font-size:13px!important}.concepts-box{background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)}.concepts-box strong{display:block;margin-bottom:12px}.concepts-box ul{margin-left:20px;margin-top:8px}.concepts-box li{margin-bottom:6px}.takeaway-box{background:var(--blue-light);padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)}.takeaway-box strong{display:block;margin-bottom:8px}.takeaway-box p{margin-top:8px;font-size:14px;line-height:1.6}.module-nav{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:40px;padding-top:24px;border-top:1px solid var(--gray-light)}.nav-button{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;font-size:14px}.nav-button:hover:not(:disabled){background:#D33425;transform:translateY(-2px)}.nav-button:disabled{background:var(--gray-light);color:var(--gray-mid);cursor:not-allowed}.nav-progress{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-mid);font-weight:600}.progress-bar{width:100px;height:4px;background:var(--gray-light);border-radius:2px;overflow:hidden}.progress-fill{height:100%;background:var(--blue);border-radius:2px}footer{padding:40px 24px;background:var(--gray-light);text-align:center;border-top:1px solid #ddd}footer p{font-size:13px;color:var(--gray)}footer a{color:var(--blue);font-weight:600}@media(max-width:768px){nav{padding:0 16px}.nav-inner{gap:12px}.nav-breadcrumb{display:none}.section{padding:40px 16px}.module{padding:20px}.module-nav{flex-wrap:wrap}.nav-progress{width:100%;order:-1}}</style></head><body><nav><div class="nav-inner"><a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 96 96" fill="none"><circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/><circle cx="48" cy="14" r="4.5" fill="#EA4335" opacity=".9"/></svg><div style="display:flex;flex-direction:column;gap:2px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1">Power Inside Data</span><span style="font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);line-height:1">Academy</span></div></a><div class="nav-breadcrumb"><a href="gcp-index.html">GCP</a><span>/</span><span id="breadcrumb-title">Module...</span></div><div class="nav-cta"><a href="gcp-index.html">← Catalogue</a></div></div></nav><section class="hero"><div class="hero-inner"><h1 id="module-title">Chargement...</h1><p id="module-desc">Merci de patienter</p></div></section><section class="section"><div class="section-inner" id="module-content"><p style="text-align:center;color:var(--gray);">Chargement...</p></div></section><footer><p>Power Inside Data Academy — Google Cloud Platform</p><p><a href="gcp-index.html">Retour</a> | <a href="index.html">Accueil</a></p></footer><script>const MODULES_DATA={1:{title:'GCP Services Overview',desc:'Services et architecture Google Cloud Platform',concepts:['GCP: Cloud infrastructure & analytics platform','Compute: VM, Kubernetes, Serverless','Storage: Cloud Storage, Cloud SQL, BigQuery','Networking: VPC, Cloud Load Balancer, CDN','Pricing: On-demand, Commitments, Free tier','Console: Web UI pour gérer ressources'],code:`# GCP Services Overview
+print("=== GCP Compute Services ===")
+compute = {
+    'Compute Engine': 'VMs (IaaS)',
+    'Kubernetes Engine': 'Managed K8s',
+    'App Engine': 'PaaS for web apps',
+    'Cloud Functions': 'Serverless functions',
+    'Cloud Run': 'Containerized apps'
+}
+for svc, desc in compute.items():
+    print(f"  {svc}: {desc}")
+
+print("\\n=== GCP Storage ===")
+print("Cloud Storage: Object storage (S3 equivalent)")
+print("Cloud SQL: Managed MySQL/PostgreSQL")
+print("Firestore: NoSQL database")
+print("BigQuery: Data warehouse")
+
+print("\\n=== Pricing Model ===")
+print("Pay-as-you-go default")
+print("Commitment discounts: 25-70% savings")
+print("Free tier: $300 credit, always free services")`},2:{title:'BigQuery Fundamentals',desc:'Data warehouse et requêtes analytiques',concepts:['BigQuery: Serverless data warehouse','Datasets: Organization logique','Tables: Standard, External, Snapshots','Queries: SQL analytics at scale','Partitioning: Optimize query cost','Clustering: Optimize performance'],code:`# BigQuery Fundamentals
+print("=== BigQuery Architecture ===")
+print("""
+BigQuery = Distributed SQL database
+No infrastructure to manage
+Pay only for queried data
+
+Pricing: $6.25/TB queried (US)
+""")
+
+print("\\n=== BigQuery SQL Example ===")
+print("""
+SELECT
+    order_date,
+    COUNT(*) as order_count,
+    SUM(amount) as total_revenue
+FROM `project.dataset.orders`
+WHERE order_date >= '2024-01-01'
+GROUP BY order_date
+ORDER BY total_revenue DESC
+LIMIT 10;
+""")
+
+print("\\n=== Optimization Strategies ===")
+print("1. Partitioning: By date/range")
+print("2. Clustering: Frequently filtered columns")
+print("3. Projection: SELECT only needed columns")
+print("4. Materialized Views: Cache results")
+
+print("\\n=== Loading Data ===")
+print("Cloud Storage → BigQuery")
+print("Streaming Inserts: Real-time")
+print("Batch Load: Jobs")
+print("Third-party: Fivetran, Stitch")`},3:{title:'Data Pipelines avec Dataflow',desc:'ETL avec Apache Beam et Dataflow',concepts:['Dataflow: Managed Apache Beam service','Pipelines: ETL workflows','Transformations: Map, Filter, GroupBy','Streaming: Real-time data processing','Autoscaling: Dynamic resource allocation','Monitoring: Job status et metrics'],code:`# Dataflow & Apache Beam
+print("=== Apache Beam Model ===")
+print("""
+Pipeline = Collection transformations
+Sources → Transform → Sinks
+
+Example:
+  Read CSV
+  → Filter (valid records)
+  → Aggregate (sum by category)
+  → Write to BigQuery
+""")
+
+print("\\n=== Dataflow Job Types ===")
+print("Batch: Finite input (file processing)")
+print("Streaming: Unbounded input (kafka, pubsub)")
+
+print("\\n=== Python Beam Pipeline ===")
+print("""
+import apache_beam as beam
+
+with beam.Pipeline() as p:
+    (p | 'Read' >> beam.io.ReadFromText('input.txt')
+       | 'Filter' >> beam.Filter(lambda x: int(x) > 10)
+       | 'Write' >> beam.io.WriteToText('output.txt'))
+""")
+
+print("\\n=== Pub/Sub Integration ===")
+print("Dataflow subscribes to Pub/Sub topics")
+print("Real-time processing of events")
+print("Exactly-once semantics for reliability")`},4:{title:'Machine Learning Models',desc:'Vertex AI et AutoML',concepts:['Vertex AI: Managed ML platform','AutoML: Automated model training','Custom training: Bring your own code','Model Registry: Version & governance','Endpoints: Deploy models','Explainability: Understand predictions'],code:`# Vertex AI & ML dans GCP
+print("=== Vertex AI Services ===")
+services = {
+    'AutoML': 'Zero-code model training',
+    'Custom Training': 'Code + infrastructure',
+    'BigQuery ML': 'SQL-based ML',
+    'Workbench': 'Notebooks (JupyterLab)',
+    'Model Registry': 'Versioning & deployment'
+}
+for svc, desc in services.items():
+    print(f"  {svc}: {desc}")
+
+print("\\n=== BigQuery ML Example ===")
+print("""
+CREATE OR REPLACE MODEL `project.dataset.linear_model`
+OPTIONS(
+    model_type='linear_reg',
+    input_label_cols=['price']
+) AS
+SELECT
+    square_feet,
+    bedrooms,
+    price
+FROM `project.dataset.real_estate`;
+""")
+
+print("\\n=== Model Deployment ===")
+print("Create Endpoint")
+print("Deploy Model Version")
+print("Create Prediction Service")
+print("Integration with applications")`},5:{title:'Certification Exam Prep',desc:'Préparation Google Cloud Certification',concepts:['Exam Types: Associate Cloud Engineer, Data Engineer','Services Coverage: 50+ services covered','Hands-on: GCP Console practice','Study Resources: Courses, practice exams','Time Management: 2 hours 50 minutes','Passing Score: ~70% (varies by exam)'],code:`# GCP Certification Prep
+print("=== Cloud Data Engineer Exam ===")
+print("""
+Topics:
+1. Data Pipelines (Dataflow, Pub/Sub)
+2. BigQuery Analytics
+3. Machine Learning (Vertex AI)
+4. Data Security & Compliance
+5. Monitoring & Optimization
+""")
+
+print("\\n=== Key Services to Know ===")
+services = [
+    'BigQuery: Analytics & warehousing',
+    'Dataflow: ETL pipelines',
+    'Pub/Sub: Messaging service',
+    'Cloud Storage: Object storage',
+    'Firestore: NoSQL database',
+    'Cloud SQL: Relational databases',
+    'Vertex AI: ML platform'
+]
+for svc in services:
+    print(f"  ✓ {svc}")
+
+print("\\n=== Study Strategy ===")
+print("1. Review each service documentation")
+print("2. Hands-on labs in GCP console")
+print("3. Practice exams (80%+ target)")
+print("4. Focus on: BigQuery + Dataflow")
+print("5. Understand trade-offs & best practices")`}};let currentModule=1;const maxModules=Object.keys(MODULES_DATA).length;function renderModule(e){const t=MODULES_DATA[e];t&&(document.getElementById("module-title").textContent=t.title,document.getElementById("module-desc").textContent=t.desc,document.getElementById("breadcrumb-title").textContent=t.title,let s="<ul>";t.concepts.forEach((e=>{s+=`<li>${e}</li>`})),s+="</ul>";const l=`<div class="module"><h2 class="module-title">${t.title}</h2><p class="module-desc">${t.desc}</p><div class="concepts-box"><strong>Concepts Clés:</strong>${s}</div><div class="sandbox-container"><div class="sandbox-editor"><label class="sandbox-label">Code Example</label><div class="editor-container" id="editor-${e}"></div></div></div><div class="takeaway-box"><strong>À retenir:</strong><p>${t.takeaway}</p></div><div class="module-nav"><button class="nav-button prev" onclick="previousModule()" ${1===currentModule?"disabled":""}>← Précédent</button><div class="nav-progress"><span id="progress-text">Module ${currentModule}/${maxModules}</span><div class="progress-bar"><div class="progress-fill" style="width:${currentModule/maxModules*100}%"></div></div></div><button class="nav-button next" onclick="nextModule()" ${currentModule===maxModules?"disabled":""}>Suivant →</button></div></div>`;document.getElementById("module-content").innerHTML=l,initializeEditor(e,t.code))}function initializeEditor(e,t){setTimeout((()=>{CodeMirror(document.getElementById(`editor-${e}`),{value:t,mode:"python",theme:"material-darker",readOnly:!0,lineNumbers:!0,lineWrapping:!0,viewportMargin:1/0})}),100)}function nextModule(){currentModule<maxModules&&(currentModule++,renderModule(currentModule),window.scrollTo(0,0))}function previousModule(){currentModule>1&&(currentModule--,renderModule(currentModule),window.scrollTo(0,0))}renderModule(1);</script></body></html>

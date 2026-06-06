@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>Snowflake Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#29B6F6;--blue-light:#E0F7FF;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{padding:32px;background:var(--blue-light);border-radius:12px}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}</style></head><body><nav><div class="nav-inner"><a href="snowflake-index.html">Snowflake</a><span id="bc" style="flex:1"></span><div class="nav-cta"><a href="snowflake-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"></div></section><script>const D={1:{title:'Snowflake Architecture',concepts:['Snowflake: Cloud data warehouse','Compute & Storage: Separation','Warehouse: Virtual compute cluster','Database: Schemas & objects','Shares: Data sharing','Clustering: Column store optimization'],code:`-- Snowflake Architecture & Setup
+SELECT 'Snowflake Architecture' AS topic;
+
+-- Warehouse Management
+CREATE WAREHOUSE compute_wh
+  WITH WAREHOUSE_SIZE = 'MEDIUM'
+  AUTO_SUSPEND = 600
+  AUTO_RESUME = TRUE;
+
+USE WAREHOUSE compute_wh;
+
+-- Create Database & Schema
+CREATE DATABASE analytics;
+CREATE SCHEMA analytics.staging;
+
+-- Account Information
+SELECT CURRENT_ACCOUNT() AS account,
+       CURRENT_REGION() AS region,
+       CURRENT_WAREHOUSE() AS warehouse;
+
+-- Query History
+SELECT query_id, user_name, execution_time
+FROM snowflake.account_usage.query_history
+LIMIT 10;`},2:{title:'Data Loading & Warehousing',concepts:['COPY command: Bulk loading','Staged files: Internal/external storage','File formats: CSV, Parquet, JSON','COPY INTO: Automatic transformations','Snowpipe: Continuous loading','Data validation: Row counts, schemas'],code:`-- Data Loading into Snowflake
+-- Prepare Stage
+CREATE OR REPLACE STAGE my_stage
+  URL = 's3://my-bucket/data/';
+
+-- Load from S3
+COPY INTO analytics.staging.customers
+FROM @my_stage/customers.csv
+FILE_FORMAT = (TYPE = CSV FIELD_DELIMITER = ',')
+ON_ERROR = 'SKIP_FILE';
+
+-- Validate Load
+SELECT COUNT(*) AS loaded_rows FROM analytics.staging.customers;
+
+-- Snowpipe for Continuous Load
+CREATE OR REPLACE PIPE customer_pipe AS
+COPY INTO customers
+FROM @my_stage/customers/
+FILE_FORMAT = (TYPE = CSV);
+
+-- Get pipe status
+SELECT system$pipe_status('customer_pipe');
+
+-- Transform during load
+COPY INTO processed_data (id, name, amount)
+SELECT $1, UPPER($2), $3 * 1.1
+FROM @my_stage/sales.csv;`},3:{title:'SQL & Queries',concepts:['Standard SQL: ANSI-SQL compliant','Time Series: Date functions','Window Functions: Analytics','CTEs: Recursive queries','JSON: Semi-structured data','Full-text Search: Fuzzy matching'],code:`-- Snowflake SQL & Advanced Queries
+SELECT CURRENT_TIMESTAMP() AS now;
+
+-- Window Functions
+SELECT
+    employee_id,
+    salary,
+    AVG(salary) OVER (PARTITION BY department) AS dept_avg,
+    RANK() OVER (ORDER BY salary DESC) AS salary_rank
+FROM employees;
+
+-- CTEs (Common Table Expressions)
+WITH monthly_sales AS (
+    SELECT
+        DATE_TRUNC(month, order_date) AS month,
+        SUM(amount) AS total
+    FROM orders
+    GROUP BY month
+)
+SELECT month, total,
+       LAG(total) OVER (ORDER BY month) AS prev_month
+FROM monthly_sales;
+
+-- JSON Queries
+SELECT
+    order_id,
+    json_data['customer_name']::STRING AS customer,
+    json_data['items'][0]['price']::FLOAT AS first_item_price
+FROM orders_json;
+
+-- Time Series
+SELECT
+    DATE_TRUNC(day, created_at) AS day,
+    COUNT(*) AS events,
+    COUNT(*) / 1440.0 AS events_per_minute
+FROM events
+WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'
+GROUP BY day;`},4:{title:'Performance Optimization',concepts:['Clustering: Column statistics','Partitioning: Data distribution','Statistics: Query optimization','Caching: Result caching','Query profiles: Execution analysis','Cost optimization: Reserved capacity'],code:`-- Performance Optimization
+-- Analyze Query Performance
+EXPLAIN SELECT * FROM sales WHERE date = '2024-01-01';
+
+-- Query History & Performance
+SELECT
+    query_id,
+    query_text,
+    execution_time / 1000 AS seconds,
+    rows_produced,
+    warehouse_size
+FROM TABLE(information_schema.query_history())
+ORDER BY execution_time DESC
+LIMIT 10;
+
+-- Clustering Key
+ALTER TABLE sales
+  CLUSTER BY (region, date);
+
+-- View Clustering Info
+SELECT * FROM TABLE(
+    CLUSTERING_INFORMATION(
+        schema_name = 'analytics',
+        table_name = 'sales'
+    )
+);
+
+-- Result Caching
+SELECT COUNT(*) FROM large_table;
+-- 2nd same query: cached, instant!
+
+-- Statistics
+SELECT
+    table_name,
+    column_name,
+    stats_generation_type
+FROM information_schema.column_statistics
+LIMIT 5;`},5:{title:'Security & Governance',concepts:['Row Access Policies: Restrict rows','Column Masking: Hide sensitive data','Role-based Access: RBAC','Data Classification: PII tagging','Audit logging: Track access','Compliance: SOC2, HIPAA'],code:`-- Security & Governance
+-- Create Roles
+CREATE ROLE analyst_role;
+CREATE ROLE admin_role;
+
+-- Grant Permissions
+GRANT SELECT ON SCHEMA analytics.* TO ROLE analyst_role;
+GRANT ALL ON SCHEMA analytics.* TO ROLE admin_role;
+
+-- Row Access Policy
+CREATE OR REPLACE ROW ACCESS POLICY sales_policy
+    GRANT (SELECT)
+    ON (region)
+    TO ('analyst')
+    USING (region = 'US');
+
+-- Column Masking
+CREATE OR REPLACE MASKING POLICY ssn_mask AS (val STRING) RETURNS STRING ->
+    CASE
+        WHEN CURRENT_ROLE() = 'admin_role' THEN val
+        ELSE 'XXX-XX-' || SUBSTR(val, -4)
+    END;
+
+ALTER TABLE customers MODIFY COLUMN ssn SET MASKING POLICY ssn_mask;
+
+-- Audit Access
+SELECT
+    user_name,
+    query_id,
+    query_text,
+    execution_time
+FROM snowflake.account_usage.query_history
+WHERE query_start_time >= CURRENT_DATE - 7
+ORDER BY query_start_time DESC;`},6:{title:'Snowflake for Data Science',concepts:['Python Integration: UDFs','Snowpark: DataFrames in Python','ML Functions: Linear regression','Time series Forecasting: ARIMA','Feature engineering: SQL functions','Model Registry: Store trained models'],code:`-- Snowflake for Data Science
+-- Python UDF
+CREATE OR REPLACE FUNCTION
+    predict_churn(customer_id INT)
+RETURNS STRING
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.8'
+HANDLER = 'predict_churn_impl'
+AS
+$$
+def predict_churn_impl(customer_id):
+    # Load model and make prediction
+    return "high_risk"
+$$;
+
+-- Snowpark DataFrame API
+SELECT * FROM customers
+WHERE age > 25
+  AND lifetime_value > 1000;
+
+-- Time Series Forecasting
+CREATE OR REPLACE TABLE forecast AS
+SELECT
+    DATE_TRUNC(month, created_at) AS month,
+    SUM(amount) AS sales
+FROM orders
+GROUP BY month
+ORDER BY month;
+
+-- Regression
+SELECT
+    REGR_SLOPE(sales, month_num) AS trend,
+    REGR_INTERCEPT(sales, month_num) AS intercept
+FROM forecast;`}};let m=1;function render(e){document.getElementById('bc').textContent=`/${D[e].title}`;let s='<ul>';D[e].concepts.forEach(c=>s+=`<li>${c}</li>`);document.getElementById('content').innerHTML=`<div class="module"><div style="background:#fff;padding:16px;border-radius:8px"><strong>Concepts:</strong>${s}</ul></div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))">← Précédent</button><span>${m}/6</span><button class="nav-button" onclick="m<6&&(m++,render(m))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:D[e].code,mode:'sql',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

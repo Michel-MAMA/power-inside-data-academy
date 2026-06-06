@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>Scala Avancé Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#DC143C;--blue-light:#FFE8E8;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{padding:32px;background:var(--blue-light);border-radius:12px}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}</style></head><body><nav><div class="nav-inner"><a href="scala-avance-index.html">Scala Avancé</a><span id="bc" style="flex:1"></span><div class="nav-cta"><a href="scala-avance-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"></div></section><script>const D={1:{title:'Scala Fundamentals',concepts:['Scala: Functional + OOP','JVM: Java Virtual Machine','Immutability: val vs var','Pattern Matching: Powerful matching','Type System: Strong typing','REPL: Interactive shell'],code:`// Scala Fundamentals
+println("=== Variables ===")
+val x = 10  // Immutable
+var y = 20  // Mutable
+println(s"x = $x, y = $y")
+
+println("\\n=== Functions ===")
+def add(a: Int, b: Int): Int = a + b
+println(add(5, 3))
+
+def greet(name: String = "World") = s"Hello, $name"
+println(greet())
+println(greet("Scala"))
+
+println("\\n=== Collections ===")
+val list = List(1, 2, 3, 4)
+val map = Map("a" -> 1, "b" -> 2)
+println(list.map(_ * 2))
+
+println("\\n=== Pattern Matching ===")
+val msg = list match {
+    case List(1, _*) => "Starts with 1"
+    case _ => "Other"
+}
+println(msg)`},2:{title:'Functional Programming',concepts:['Higher-order Functions: Functions as values','Map, Filter, Reduce: Functional operations','Immutability: No side effects','Closures: Capture variables','Composition: Combine functions','Recursion: Tail optimization'],code:`// Functional Programming in Scala
+println("=== Map, Filter, Reduce ===")
+val numbers = List(1, 2, 3, 4, 5)
+
+val doubled = numbers.map(_ * 2)
+println(s"Doubled: $doubled")
+
+val evens = numbers.filter(_ % 2 == 0)
+println(s"Evens: $evens")
+
+val sum = numbers.reduce(_ + _)
+println(s"Sum: $sum")
+
+println("\\n=== Higher-order Functions ===")
+def applyFunction(f: Int => Int, x: Int) = f(x)
+val result = applyFunction(n => n * n, 5)
+println(s"Square of 5: $result")
+
+println("\\n=== Composition ===")
+val addTwo = (x: Int) => x + 2
+val multiplyThree = (x: Int) => x * 3
+val composed = (x: Int) => multiplyThree(addTwo(x))
+println(composed(5))  // (5+2)*3 = 21`},3:{title:'Collections & Implicits',concepts:['Seq, List, Vector, Array: Ordered','Set, Map: Key-value, unique','Option: Some/None','For comprehensions: Functional loops','Implicit parameters: Type class pattern','Implicit conversions: Auto-conversion'],code:`// Collections & Implicits
+println("=== Collections ===")
+val seq = Seq(1, 2, 3)
+val list = List(1, 2, 3)
+val vector = Vector(1, 2, 3)
+val set = Set(1, 2, 2, 3)  // Unique: {1,2,3}
+
+println(s"List head: ${list.head}")
+println(s"List tail: ${list.tail}")
+
+println("\\n=== Option ===")
+val opt: Option[Int] = Some(42)
+opt match {
+    case Some(v) => println(s"Value: $v")
+    case None => println("No value")
+}
+
+println("\\n=== For Comprehensions ===")
+val result = for {
+    x <- List(1, 2, 3)
+    y <- List(10, 20)
+} yield x + y
+println(result)
+
+println("\\n=== Implicit Conversions ===")
+implicit def stringToInt(s: String) = s.length
+val x: Int = "hello"
+println(x)  // 5`},4:{title:'Spark with Scala',concepts:['SparkContext: Spark entry point','RDD: Resilient Distributed Dataset','DataFrame: Structured data','Transformations: map, filter, reduceByKey','Actions: collect, count, save','SQL on Spark: SparkSQL'],code:`// Spark with Scala
+println("=== SparkContext ===")
+println("""
+val sc = new SparkContext("local", "Spark App")
+val rdd = sc.parallelize(List(1,2,3,4,5))
+""")
+
+println("\\n=== RDD Operations ===")
+println("""
+val rdd = sc.textFile("data.txt")
+val counts = rdd
+    .flatMap(_.split(" "))
+    .map((_, 1))
+    .reduceByKey(_ + _)
+counts.saveAsTextFile("output")
+""")
+
+println("\\n=== Spark SQL ===")
+println("""
+val spark = SparkSession.builder.appName("app").getOrCreate()
+val df = spark.read.csv("data.csv", header=true)
+df.filter("age > 25").show()
+""")
+
+println("\\n=== Dataframe Operations ===")
+println("""
+df.select("name", "age")
+df.groupBy("department").agg(avg("salary"))
+df.join(df2, Seq("id"))
+""")`}};let m=1;function render(e){document.getElementById('bc').textContent=`/${D[e].title}`;let s='<ul>';D[e].concepts.forEach(c=>s+=`<li>${c}</li>`);document.getElementById('content').innerHTML=`<div class="module"><div style="background:#fff;padding:16px;border-radius:8px"><strong>Concepts:</strong>${s}</ul></div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))">← Précédent</button><span>${m}/4</span><button class="nav-button" onclick="m<4&&(m++,render(m))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:D[e].code,mode:'text/x-scala',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><title>Power Automate Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}:root{--blue:#00A4EF;--blue-light:#E5F7FF;--max:1160px}body{font-family:Inter,sans-serif;background:#fff}nav{position:sticky;top:0;background:#fff;border-bottom:1px solid #E8E8E8;padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;gap:40px;height:60px}.nav-cta{margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;border:none}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{padding:32px;background:var(--blue-light);border-radius:12px;border-left:4px solid var(--blue)}.editor-container{height:250px;border:1px solid #E8E8E8;border-radius:8px;overflow:hidden}.CodeMirror{height:100%!important}.module-nav{display:flex;justify-content:space-between;margin-top:40px}.nav-button{padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}</style></head><body><nav><div class="nav-inner"><a href="powerautomate-index.html">Power Automate</a><span id="bc" style="flex:1;font-size:13px"></span><div class="nav-cta"><a href="powerautomate-index.html">← Retour</a></div></div></nav><section class="section"><div id="content"><p>Chargement...</p></div></section><script>const D={1:{title:'Power Automate Fundamentals',concepts:['Power Automate: Workflow automation platform','Cloud Flows: Automated, instant, scheduled','Low-code/No-code: Visual designer','Connectors: 400+ integrations','Triggers: When flows start','Actions: What flows do'],code:`# Power Automate Fundamentals
+print("=== Flow Types ===")
+print("Cloud: Web-based automation")
+print("  Automated: When event occurs")
+print("  Instant: Button triggered")
+print("  Scheduled: Recurring execution")
+print("")
+print("=== Connectors ===")
+print("Microsoft 365: Teams, Outlook, SharePoint")
+print("Cloud: Slack, Salesforce, Dynamics")
+print("On-premises: Via gateways")
+print("\\n=== Building Blocks ===")
+print("Trigger → Actions → Condition → Loop")`},2:{title:'Cloud Flows & Connectors',concepts:['Cloud Flows: Automation types','Connectors: Integration points','Actions: Operations','Conditions: Branching logic','Loops: Repeat actions','Error Handling: Graceful failure'],code:`# Power Automate Cloud Flows
+print("=== Automated Flow Example ===")
+print("""
+Trigger: When file created in SharePoint
+  ↓
+Action: Send approval email
+  ↓
+Condition: If approved
+  ↓
+Action: Copy file to archive
+""")
+print("\\n=== Popular Connectors ===")
+print("Office 365: Mail, Calendar, Teams")
+print("SharePoint: Sites, Lists, Libraries")
+print("Dynamics 365: CRM data")
+print("SQL: Database operations")
+print("\\n=== Advanced ===")
+print("Parallel branches")
+print("Timeout handling")
+print("Retry policies")`},3:{title:'RPA & Desktop Flows',concepts:['Desktop Flows: RPA automation','Record and Playback: UI automation','Selectors: Element targeting','Variables: Data storage','Error Recovery: Handle failures','Legacy Apps: Automate old systems'],code:`# Robotic Process Automation
+print("=== Desktop Flow Capabilities ===")
+print("Automate legacy applications")
+print("Web apps: Browser automation")
+print("Desktop: Mouse, keyboard")
+print("OCR: Read text from screen")
+print("")
+print("=== Example RPA Flow ===")
+print("""
+1. Launch legacy desktop app
+2. Input order number
+3. Extract order details via OCR
+4. Update cloud database
+5. Close application
+""")
+print("\\n=== Selectors ===")
+print("Find UI elements")
+print("XPath, CSS, attributes")
+print("Wait for element")`},4:{title:'Power Platform Integration',concepts:['Power Apps: Citizen development','Power BI: Analytics integration','Dataverse: Common data platform','Canvas Apps: Custom apps','Model-driven Apps: Data-centric','Unified Platform: Connected ecosystem'],code:`# Power Platform Integration
+print("=== Power Apps + Automate ===")
+print("""
+Canvas App Flow:
+  Button Click
+    ↓
+  Trigger Power Automate
+    ↓
+  Update Dataverse
+    ↓
+  Refresh App Data
+""")
+print("\\n=== Dataverse ===")
+print("Central data hub")
+print("Shared by all Power Platform apps")
+print("Security, compliance")
+print("\\n=== Use Cases ===")
+print("App triggers workflow")
+print("Workflow updates data")
+print("BI analyzes results")`},5:{title:'Advanced Automation Patterns',concepts:['Async Processing: Background jobs','Queues: Message-based patterns','Approval Workflows: Multi-step processes','Bulk Operations: Process large data','Monitoring: Flow analytics','Troubleshooting: Debug flows'],code:`# Advanced Automation Patterns
+print("=== Approval Workflow ===")
+print("""
+1. User submits request
+2. Send approval email
+3. Wait for response
+4. If approved: Process
+   Else: Notify rejection
+5. Log result to database
+""")
+print("\\n=== Bulk Operations ===")
+print("Apply to each: Loop on collections")
+print("Parallel processing: Multiple branches")
+print("Delay actions: Pacing")
+print("")
+print("=== Monitoring ===")
+print("Flow analytics dashboard")
+print("Run history inspection")
+print("Performance metrics")
+print("Error tracking")`}};let m=1;function render(e){const t=D[e];document.getElementById('bc').textContent=`/${t.title}`;let s='<ul>';t.concepts.forEach(c=>s+=`<li>${c}</li>`);document.getElementById('content').innerHTML=`<div class="module"><h2>${t.title}</h2><div style="background:#fff;padding:16px;border-radius:8px"><strong>Concepts:</strong>${s}</ul></div><div class="editor-container" id="ed${e}"></div><div class="module-nav"><button class="nav-button" onclick="m>1&&(m--,render(m))">← Précédent</button><span>${m}/5</span><button class="nav-button" onclick="m<5&&(m++,render(m))">Suivant →</button></div></div>`;setTimeout(()=>{CodeMirror(document.getElementById(`ed${e}`),{value:t.code,mode:'python',theme:'material-darker',readOnly:!0,lineNumbers:!0,viewportMargin:1/0})},100)}render(1);</script></body></html>

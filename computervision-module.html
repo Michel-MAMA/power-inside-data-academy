@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer Vision Module | Power Inside Data Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: #111; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    :root {
+      --blue: #FF6B35;
+      --blue-light: #FFE8DD;
+      --black: #111111;
+      --gray: #666666;
+      --gray-mid: #999999;
+      --gray-light: #E8E8E8;
+      --green: #00D68F;
+      --red: #FF4757;
+      --radius: 6px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --max: 1160px;
+    }
+
+    body { background: var(--bg); color: var(--black); font-family: 'Inter', sans-serif; }
+    a { color: var(--blue); text-decoration: none; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--gray-light); padding: 0 24px; }
+    .nav-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; gap: 40px; height: 60px; }
+    .nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: var(--black); flex-shrink: 0; }
+    .nav-logo span { color: var(--blue); }
+    .nav-breadcrumb { display: flex; align-items: center; gap: 12px; flex: 1; font-size: 13px; color: var(--gray); }
+    .nav-breadcrumb a { color: var(--blue); font-weight: 600; }
+    .nav-cta { display: flex; gap: 10px; margin-left: auto; }
+    .nav-cta a { padding: 8px 18px; background: var(--blue); color: #fff; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+    .nav-cta a:hover { opacity: 0.9; }
+
+    .hero { padding: 40px 24px; background: linear-gradient(135deg, var(--blue-light), #fff); text-align: center; }
+    .hero-inner { max-width: var(--max); margin: 0 auto; }
+    .hero h1 { font-size: clamp(28px, 3vw, 42px); font-weight: 800; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .hero p { font-size: 15px; color: var(--gray); max-width: 700px; margin: 0 auto; line-height: 1.6; }
+
+    .section { padding: 60px 24px; }
+    .section-inner { max-width: var(--max); margin: 0 auto; }
+
+    .module { margin-bottom: 48px; padding: 32px; background: var(--blue-light); border-radius: 12px; border-left: 4px solid var(--blue); }
+    .module-title { font-size: 20px; font-weight: 700; color: var(--black); margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .module-desc { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+
+    .sandbox-container { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 24px; }
+
+    .sandbox-editor { display: flex; flex-direction: column; gap: 8px; }
+    .sandbox-label { font-size: 12px; font-weight: 600; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 0.05em; }
+    .editor-container { height: 250px; border: 1px solid var(--gray-light); border-radius: 8px; overflow: hidden; }
+    .CodeMirror { height: 100% !important; font-family: 'Courier New', monospace !important; font-size: 13px !important; }
+    .CodeMirror-gutters { background: #1e1e1e !important; }
+
+    .concepts-box { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--blue); }
+    .concepts-box strong { display: block; margin-bottom: 12px; }
+    .concepts-box ul { margin-left: 20px; margin-top: 8px; }
+    .concepts-box li { margin-bottom: 6px; }
+
+    .takeaway-box { background: var(--blue-light); padding: 16px; border-radius: 8px; margin-top: 16px; border-left: 4px solid var(--blue); }
+    .takeaway-box strong { display: block; margin-bottom: 8px; }
+    .takeaway-box p { margin-top: 8px; font-size: 14px; line-height: 1.6; }
+
+    .module-nav { display: flex; gap: 12px; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--gray-light); }
+    .nav-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; font-size: 14px; }
+    .nav-button:hover:not(:disabled) { background: #E55A2B; transform: translateY(-2px); }
+    .nav-button:disabled { background: var(--gray-light); color: var(--gray-mid); cursor: not-allowed; }
+    .nav-progress { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray-mid); font-weight: 600; }
+    .progress-bar { width: 100px; height: 4px; background: var(--gray-light); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--blue); border-radius: 2px; }
+
+    footer { padding: 40px 24px; background: var(--gray-light); text-align: center; border-top: 1px solid #ddd; }
+    footer p { font-size: 13px; color: var(--gray); }
+    footer a { color: var(--blue); font-weight: 600; }
+
+    .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(0, 0, 0, 0.1); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media(max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-inner { gap: 12px; }
+      .nav-breadcrumb { display: none; }
+      .section { padding: 40px 16px; }
+      .module { padding: 20px; }
+      .module-nav { flex-wrap: wrap; }
+      .nav-progress { width: 100%; order: -1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0">
+      <svg width="24" height="24" viewBox="0 0 96 96" fill="none"><circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/><circle cx="48" cy="14" r="4.5" fill="#FF6B35" opacity=".9"/><circle cx="76" cy="30" r="3.5" fill="#FF6B35" opacity=".75"/><circle cx="76" cy="66" r="4.5" fill="#FF6B35" opacity=".85"/><circle cx="48" cy="82" r="3.5" fill="#FF6B35" opacity=".68"/><circle cx="20" cy="66" r="4.5" fill="#FF6B35" opacity=".8"/><circle cx="20" cy="30" r="3.5" fill="#FF6B35" opacity=".7"/><line x1="48" y1="18" x2="48" y2="41" stroke="#FF6B35" stroke-width=".8" opacity=".5"/><line x1="73" y1="32" x2="53" y2="45" stroke="#FF6B35" stroke-width=".8" opacity=".5"/><line x1="73" y1="64" x2="53" y2="51" stroke="#FF6B35" stroke-width=".8" opacity=".5"/><line x1="48" y1="78" x2="48" y2="55" stroke="#FF6B35" stroke-width=".8" opacity=".5"/><line x1="23" y1="64" x2="43" y2="51" stroke="#FF6B35" stroke-width=".8" opacity=".5"/><line x1="23" y1="32" x2="43" y2="45" stroke="#FF6B35" stroke-width=".8" opacity=".5"/><circle cx="48" cy="48" r="9" fill="rgba(255,107,53,0.14)"/><circle cx="48" cy="48" r="5.5" fill="#FF6B35"/><circle cx="48" cy="48" r="2.5" fill="white" opacity=".9"/></svg>
+      <div style="display:flex;flex-direction:column;gap:2px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800">
+        <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1">Power Inside Data</span>
+        <span style="font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);line-height:1">Academy</span>
+      </div>
+    </a>
+    <div class="nav-breadcrumb">
+      <a href="computervision-index.html">Computer Vision</a>
+      <span>/</span>
+      <span id="breadcrumb-title">Module Chargement...</span>
+    </div>
+    <div class="nav-cta">
+      <a href="computervision-index.html">← Catalogue</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1 id="module-title">Chargement du module...</h1>
+    <p id="module-desc">Merci de patienter</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner" id="module-content">
+    <p style="text-align: center; color: var(--gray);">Chargement du contenu...</p>
+  </div>
+</section>
+
+<footer>
+  <p>Power Inside Data Academy — Maîtrisez Computer Vision</p>
+  <p><a href="computervision-index.html">Retour au catalogue</a> | <a href="index.html">Accueil</a></p>
+</footer>
+
+<script>
+const MODULES_DATA = {
+  1: {
+    title: 'Introduction à YOLO & Object Detection',
+    desc: 'Fondamentaux de la détection d\'objets et architecture YOLO',
+    concepts: [
+      'Object Detection: Détecter et localiser objets dans images',
+      'Bounding Boxes: Rectangles (x, y, width, height, confidence)',
+      'YOLO (You Only Look Once): Détection en single-pass',
+      'Avantages YOLO: Vitesse, précision, temps réel',
+      'Comparaison: YOLO vs R-CNN vs SSD',
+      'Cas d\'usage: Surveillance, robotique, autonome',
+      'Métriques: Precision, Recall, mAP, IoU'
+    ],
+    code: `# Introduction à YOLO pour Object Detection
+# Détection d'objets en temps réel
+
+import cv2
+import numpy as np
+from urllib.request import urlopen
+
+# Architecture YOLO: Single-pass detection
+print("=== YOLO Architecture ===")
+print("Input: Image (640x640)")
+print("Output: Bounding boxes + Classes + Confidence")
+print("Speed: 30-60 FPS sur GPU")
+print("Accuracy: High mAP across datasets")
+
+# Concepts fondamentaux
+print("\\n=== Concepts Clés ===")
+print("1. Grid-based detection: Image divisée en grille")
+print("2. Bounding box: (x_center, y_center, width, height)")
+print("3. Confidence score: Probabilité objet présent")
+print("4. Class probability: Probabilité de chaque classe")
+
+# Exemple de résultat YOLO
+results = {
+    'detections': [
+        {'class': 'person', 'confidence': 0.95, 'bbox': (100, 50, 80, 200)},
+        {'class': 'car', 'confidence': 0.87, 'bbox': (300, 150, 150, 100)},
+        {'class': 'dog', 'confidence': 0.92, 'bbox': (200, 300, 60, 120)}
+    ]
+}
+
+print("\\n=== Exemple de Détections ===")
+for det in results['detections']:
+    print(f"{det['class']}: {det['confidence']:.1%} confidence at {det['bbox']}")
+
+# Métriques de performance
+print("\\n=== Métriques Évaluation ===")
+print("Precision: TP / (TP + FP) - Précision des détections")
+print("Recall: TP / (TP + FN) - Couverture des objets")
+print("mAP: Mean Average Precision - Métrique globale")
+print("IoU: Intersection over Union - Qualité bounding box")`,
+    takeaway: 'YOLO révolution object detection: vitesse + précision. Single-pass = temps réel possible. Comprendre IoU et mAP essentiels pour évaluer modèles. YOLO8 = version actuelle à utiliser!'
+  },
+
+  2: {
+    title: 'YOLOv5 & v8 Implementation',
+    desc: 'Implémentation pratique de YOLOv5 et YOLOv8',
+    concepts: [
+      'YOLOv5: Architecture optimisée, 5 tailles (nano à xlarge)',
+      'YOLOv8: Version moderne, meilleure précision',
+      'Transfer Learning: Fine-tuning modèles pré-entraînés',
+      'Utilisation des modèles pré-entraînés',
+      'Configuration custom dataset',
+      'Inference sur images, vidéos et webcam'
+    ],
+    code: `# YOLOv5 & YOLOv8 Implementation
+# Détection d'objets avec modèles pré-entraînés
+
+print("=== YOLOv5 vs YOLOv8 ===")
+print("YOLOv5: 5 tailles (Nano, Small, Medium, Large, XLarge)")
+print("YOLOv8: Meilleure architecture, API simplifiée")
+print("")
+
+# Architecture YOLOv8
+print("YOLOv8 Structure:")
+print("1. Backbone: CSPDarknet pour feature extraction")
+print("2. Neck: PANet pour multi-scale features")
+print("3. Head: Décoder predictions (boxes, classes)")
+
+# Modèles disponibles
+models_info = {
+    'nano': {'params': '3.2M', 'speed': '1.4ms', 'mAP': 50.4},
+    'small': {'params': '11.2M', 'speed': '2.6ms', 'mAP': 56.8},
+    'medium': {'params': '25.9M', 'speed': '4.2ms', 'mAP': 61.0},
+    'large': {'params': '43.7M', 'speed': '7.1ms', 'mAP': 64.2},
+    'xlarge': {'params': '68.2M', 'speed': '10.7ms', 'mAP': 65.9}
+}
+
+print("\\n=== Modèles YOLOv8 ===")
+for size, specs in models_info.items():
+    print(f"{size:8} | Params: {specs['params']:8} | Speed: {specs['speed']} | mAP: {specs['mAP']}")
+
+# Pseudo-code inference
+print("\\n=== Processus Inference ===")
+print("""
+from ultralytics import YOLO
+
+# Charger modèle pré-entraîné
+model = YOLO('yolov8m.pt')
+
+# Détection sur image
+results = model.predict('image.jpg', conf=0.5)
+
+# Résultats
+for result in results:
+    for box in result.boxes:
+        print(f"Class: {box.cls}, Conf: {box.conf}")
+""")
+
+print("\\n=== Transfer Learning ===")
+print("1. Charger modèle pré-entraîné COCO")
+print("2. Fine-tune sur custom dataset")
+print("3. Évaluation sur validation set")
+print("4. Deploy modèle optimisé")`,
+    takeaway: 'YOLOv8 moderne et rapide. Nano pour edge, Large pour haute précision. Transfer learning essentiellement gratuit! Ultralytics API très simple. Speed vs Accuracy trade-off à ajuster.'
+  },
+
+  3: {
+    title: 'Preprocessing & Data Augmentation',
+    desc: 'Préparation données et augmentation pour robustesse',
+    concepts: [
+      'Image Resizing: Normaliser à 640x640 pour YOLO',
+      'Normalization: Adapter valeurs pixel (0-1 ou -1 à 1)',
+      'Data Augmentation: Rotation, flip, brightness, etc.',
+      'Mosaic Augmentation: Combiner 4 images',
+      'Augmentation temporelle: Pour vidéos',
+      'Gestion classes déséquilibrées'
+    ],
+    code: `# Preprocessing & Data Augmentation pour Object Detection
+
+import cv2
+import numpy as np
+
+print("=== Preprocessing Pipeline ===")
+
+# 1. Image Resizing
+print("\\n1. IMAGE RESIZING")
+print("YOLO standard: 640x640 pixels")
+print("Letterbox: Préserver aspect ratio avec padding gris")
+print("Stretch: Étirer pour remplir exactement 640x640")
+
+# Exemple resizing
+img_size = 640
+print(f"\\nTransformation → {img_size}x{img_size}")
+
+# 2. Normalization
+print("\\n2. NORMALIZATION")
+print("Pixel values: 0-255 → 0-1 ou -1 à 1")
+print("Formula: normalized = pixel / 255.0")
+
+# 3. Data Augmentation
+augmentations = {
+    'Horizontal Flip': 'Retourner image horizontalement (50%)',
+    'Vertical Flip': 'Retourner image verticalement (10%)',
+    'Rotation': 'Rotation ±15 degrés',
+    'Scale': 'Zoom 0.8x à 1.2x',
+    'Brightness': 'Ajuster ±30% luminosité',
+    'Contrast': 'Ajuster ±30% contraste',
+    'Saturation': 'Ajuster ±30% couleur',
+    'Hue': 'Rotation ±0.1 teinte'
+}
+
+print("\\n3. DATA AUGMENTATION TECHNIQUES")
+for aug, desc in augmentations.items():
+    print(f"  • {aug}: {desc}")
+
+# 4. Mosaic Augmentation
+print("\\n4. MOSAIC AUGMENTATION")
+print("Combiner 4 images aléatoires dans une seule")
+print("Avantage: Augmente diversité, meilleure généralisation")
+print("Ratio: 4 images → 1 mosaïque")
+
+# 5. Augmentation config YOLO
+augmentation_config = {
+    'mosaic': 1.0,  # Mosaic aug probability
+    'mixup': 0.1,   # Mixup probability
+    'copy_paste': 0.1,  # Copy-paste probability
+    'degrees': 10.0,    # Rotation degrees
+    'translate': 0.1,   # Translation fraction
+    'scale': 0.5,       # Scale factor
+    'flipud': 0.5,      # Flip up-down
+    'fliplr': 0.5,      # Flip left-right
+    'hsv_h': 0.015,     # HSV hue
+    'hsv_s': 0.7,       # HSV saturation
+    'hsv_v': 0.4        # HSV value
+}
+
+print("\\n5. YOLO AUGMENTATION CONFIG")
+for key, val in augmentation_config.items():
+    print(f"  {key}: {val}")`,
+    takeaway: 'Augmentation = données infinies, meilleure robustesse. Mosaic unique à YOLO très efficace. Adapter augmentation selon cas (extérieur, lighting conditions). Train set ≠ Test set!'
+  },
+
+  4: {
+    title: 'Real-time Detection Pipeline',
+    desc: 'Pipeline complet pour détection temps réel',
+    concepts: [
+      'Vidéo Processing: Lire frame par frame',
+      'Real-time Inference: Optimisation latence',
+      'Post-processing: NMS, filtrage confiance',
+      'Tracking multi-objets: Maintenir IDs',
+      'Performance Monitoring: FPS, latence',
+      'Déploiement edge devices'
+    ],
+    code: `# Real-time Detection Pipeline avec YOLO
+
+import cv2
+import time
+from collections import defaultdict
+
+print("=== Real-time Detection Pipeline ===")
+
+# 1. Video Processing Structure
+print("\\n1. PIPELINE ARCHITECTURE")
+pipeline = """
+Capture Frame
+    ↓
+Preprocess (640x640)
+    ↓
+Inference (YOLO)
+    ↓
+Post-processing (NMS)
+    ↓
+Tracking
+    ↓
+Visualization
+    ↓
+Display Frame
+"""
+print(pipeline)
+
+# 2. Performance Metrics
+print("\\n2. PERFORMANCE TRACKING")
+metrics = {
+    'capture_time': 0,
+    'inference_time': 0,
+    'postprocess_time': 0,
+    'total_time': 0,
+    'fps': 0
+}
+print("Métrique clés: FPS, latence inference, utilisation GPU")
+
+# 3. Non-Maximum Suppression (NMS)
+print("\\n3. NON-MAXIMUM SUPPRESSION")
+print("""
+Objectif: Éliminer boîtes dupliquées
+Processus:
+  1. Trier par confidence
+  2. Garder boîte avec plus haute confiance
+  3. Supprimer boîtes chevauchantes (IoU > seuil)
+  4. Répéter pour restants
+""")
+
+# 4. Tracking multi-objets
+print("\\n4. MULTI-OBJECT TRACKING")
+print("""
+Technique: Centroid Tracking
+  1. Calculer centroid chaque détection
+  2. Comparer avec centroids frame précédent
+  3. Matcher via distance Euclidienne
+  4. Maintenir ID persistant
+""")
+
+# 5. Pseudo-code pipeline
+print("\\n5. PSEUDO-CODE PIPELINE")
+print("""
+cap = cv2.VideoCapture('video.mp4')
+model = YOLO('yolov8m.pt')
+tracker = CentroidTracker()
+
+while True:
+    ret, frame = cap.read()
+
+    # Inference
+    results = model(frame, conf=0.5)
+
+    # Extraction détections
+    detections = results[0].boxes.data
+
+    # Tracking
+    tracked_objects = tracker.update(detections)
+
+    # Affichage
+    for obj_id, bbox in tracked_objects:
+        cv2.rectangle(frame, bbox, (0, 255, 0), 2)
+        cv2.putText(frame, f'ID:{obj_id}', ...)
+
+    cv2.imshow('Detection', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'): break
+""")`,
+    takeaway: 'Real-time = balance speed vs accuracy. NMS crucial pour qualité. Tracking = maintenir continuité. Mesurer FPS toujours. GPU essentiels pour vitesse. Edge = quantization + pruning!'
+  },
+
+  5: {
+    title: 'Deployment & Optimization',
+    desc: 'Déploiement et optimisation pour production',
+    concepts: [
+      'Model Quantization: INT8, FP16 réduction taille',
+      'Pruning: Supprimer poids non-essentiels',
+      'Knowledge Distillation: Compresser via modèle maître',
+      'Export Formats: ONNX, TensorRT, CoreML',
+      'Edge Deployment: Raspberry Pi, Jetson, Edge TPU',
+      'API Server: FastAPI, ONNX Runtime'
+    ],
+    code: `# Deployment & Optimization pour Object Detection
+
+print("=== Optimization & Deployment ===")
+
+# 1. Model Quantization
+print("\\n1. MODEL QUANTIZATION")
+quantization_methods = {
+    'FP32': 'Float 32-bit (original, ~3GB model)',
+    'FP16': 'Float 16-bit (50% taille, minimal loss)',
+    'INT8': 'Integer 8-bit (75% reduction)',
+    'INT4': 'Integer 4-bit (90% reduction, plus loss)'
+}
+
+print("Quantization Trade-offs:")
+for method, desc in quantization_methods.items():
+    print(f"  {method}: {desc}")
+
+# 2. Export Format Choices
+print("\\n2. EXPORT FORMATS")
+export_formats = {
+    'PyTorch': {'file': '.pt', 'use': 'Training/Fine-tuning'},
+    'ONNX': {'file': '.onnx', 'use': 'Cross-platform inference'},
+    'TensorRT': {'file': '.engine', 'use': 'Nvidia GPU (fastest)'},
+    'CoreML': {'file': '.mlmodel', 'use': 'Apple devices'},
+    'TFLite': {'file': '.tflite', 'use': 'Mobile/Edge'},
+    'OpenVINO': {'file': '.bin', 'use': 'Intel hardware'}
+}
+
+print("Format Overview:")
+for fmt, info in export_formats.items():
+    print(f"  {fmt}: {info['file']} → {info['use']}")
+
+# 3. Pseudo-code Export
+print("\\n3. EXPORT EXAMPLE")
+print("""
+from ultralytics import YOLO
+
+model = YOLO('yolov8m.pt')
+
+# Export to different formats
+model.export(format='onnx', imgsz=640)      # ONNX
+model.export(format='tflite', imgsz=640)    # Mobile
+model.export(format='engine', imgsz=640)    # TensorRT
+""")
+
+# 4. Deployment targets
+print("\\n4. DEPLOYMENT TARGETS")
+targets = {
+    'Server': 'TensorRT/ONNX on GPU cluster',
+    'Edge': 'INT8 quantized ONNX',
+    'Mobile': 'TFLite on iOS/Android',
+    'Raspberry Pi': 'TFLite INT8',
+    'Jetson': 'TensorRT FP16',
+    'Browser': 'ONNX.js ou TensorFlow.js'
+}
+
+for target, config in targets.items():
+    print(f"  {target}: {config}")
+
+# 5. Performance Comparison
+print("\\n5. PERFORMANCE COMPARISON")
+print("""
+Model Size Comparison:
+  FP32: 100% (baseline) - ~150MB
+  FP16: 50% - ~75MB
+  INT8: 25% - ~37MB
+
+Latency Impact (Nvidia T4):
+  FP32: 10ms baseline
+  FP16: 6ms (1.67x faster)
+  INT8: 3ms (3.33x faster)
+""")`,
+    takeaway: 'Quantization = compression sans loss majeur. ONNX = meilleur cross-platform. TensorRT = fastest sur Nvidia. Toujours mesurer trade-off accuracy vs latency. Target hardware détermine choix export!'
+  }
+};
+
+// Module navigation logic
+let currentModule = 1;
+const maxModules = Object.keys(MODULES_DATA).length;
+
+function renderModule(moduleNum) {
+  const data = MODULES_DATA[moduleNum];
+  if (!data) return;
+
+  document.getElementById('module-title').textContent = data.title;
+  document.getElementById('module-desc').textContent = data.desc;
+  document.getElementById('breadcrumb-title').textContent = data.title;
+
+  let conceptsHtml = '<ul>';
+  data.concepts.forEach(concept => {
+    conceptsHtml += `<li>${concept}</li>`;
+  });
+  conceptsHtml += '</ul>';
+
+  const content = `
+    <div class="module">
+      <h2 class="module-title">${data.title}</h2>
+      <p class="module-desc">${data.desc}</p>
+
+      <div class="concepts-box">
+        <strong>Concepts Clés:</strong>
+        ${conceptsHtml}
+      </div>
+
+      <div class="sandbox-container">
+        <div class="sandbox-editor">
+          <label class="sandbox-label">Code Example</label>
+          <div class="editor-container" id="editor-${moduleNum}"></div>
+        </div>
+      </div>
+
+      <div class="takeaway-box">
+        <strong>À retenir:</strong>
+        <p>${data.takeaway}</p>
+      </div>
+
+      <div class="module-nav">
+        <button class="nav-button prev" onclick="previousModule()" ${currentModule === 1 ? 'disabled' : ''}>
+          ← Précédent
+        </button>
+        <div class="nav-progress">
+          <span id="progress-text">Module ${currentModule}/${maxModules}</span>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${(currentModule/maxModules)*100}%"></div>
+          </div>
+        </div>
+        <button class="nav-button next" onclick="nextModule()" ${currentModule === maxModules ? 'disabled' : ''}>
+          Suivant →
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('module-content').innerHTML = content;
+  initializeEditor(moduleNum, data.code);
+}
+
+function initializeEditor(moduleNum, code) {
+  setTimeout(() => {
+    const editor = CodeMirror(document.getElementById(`editor-${moduleNum}`), {
+      value: code,
+      mode: 'python',
+      theme: 'material-darker',
+      readOnly: true,
+      lineNumbers: true,
+      lineWrapping: true,
+      viewportMargin: Infinity
+    });
+  }, 100);
+}
+
+function nextModule() {
+  if (currentModule < maxModules) {
+    currentModule++;
+    renderModule(currentModule);
+    window.scrollTo(0, 0);
+  }
+}
+
+function previousModule() {
+  if (currentModule > 1) {
+    currentModule--;
+    renderModule(currentModule);
+    window.scrollTo(0, 0);
+  }
+}
+
+// Initialize
+renderModule(1);
+</script>
+
+</body>
+</html>

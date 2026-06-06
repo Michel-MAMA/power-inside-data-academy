@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Docker & K8s Module | PIDA</title><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script><style>*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background:#fff;color:#111;font-family:'Inter',sans-serif;overflow-x:hidden}:root{--blue:#FF8C42;--blue-light:#FFE8DD;--black:#111111;--gray:#666666;--gray-mid:#999999;--gray-light:#E8E8E8;--green:#00D68F;--red:#FF4757;--radius:6px;--ease:cubic-bezier(0.22,1,0.36,1);--max:1160px}body{background:var(--bg);color:var(--black);font-family:'Inter',sans-serif}a{color:var(--blue);text-decoration:none}nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--gray-light);padding:0 24px}.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;height:60px}.nav-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:var(--black);flex-shrink:0}.nav-logo span{color:var(--blue)}.nav-breadcrumb{display:flex;align-items:center;gap:12px;flex:1;font-size:13px;color:var(--gray)}.nav-breadcrumb a{color:var(--blue);font-weight:600}.nav-cta{display:flex;gap:10px;margin-left:auto}.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none}.hero{padding:40px 24px;background:linear-gradient(135deg,var(--blue-light),#fff);text-align:center}.hero-inner{max-width:var(--max);margin:0 auto}.hero h1{font-size:clamp(28px,3vw,42px);font-weight:800;margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif}.hero p{font-size:15px;color:var(--gray);max-width:700px;margin:0 auto;line-height:1.6}.section{padding:60px 24px}.section-inner{max-width:var(--max);margin:0 auto}.module{margin-bottom:48px;padding:32px;background:var(--blue-light);border-radius:12px;border-left:4px solid var(--blue)}.module-title{font-size:20px;font-weight:700;color:var(--black);margin-bottom:12px;font-family:'Plus Jakarta Sans',sans-serif}.module-desc{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px}.sandbox-container{display:grid;grid-template-columns:1fr;gap:20px;margin-bottom:24px}.sandbox-editor{display:flex;flex-direction:column;gap:8px}.sandbox-label{font-size:12px;font-weight:600;color:var(--gray-mid);text-transform:uppercase;letter-spacing:0.05em}.editor-container{height:250px;border:1px solid var(--gray-light);border-radius:8px;overflow:hidden}.CodeMirror{height:100%!important;font-family:'Courier New',monospace!important;font-size:13px!important}.concepts-box{background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)}.concepts-box strong{display:block;margin-bottom:12px}.concepts-box ul{margin-left:20px;margin-top:8px}.concepts-box li{margin-bottom:6px}.takeaway-box{background:var(--blue-light);padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)}.takeaway-box strong{display:block;margin-bottom:8px}.takeaway-box p{margin-top:8px;font-size:14px;line-height:1.6}.module-nav{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:40px;padding-top:24px;border-top:1px solid var(--gray-light)}.nav-button{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all 0.3s;text-decoration:none;font-size:14px}.nav-button:hover:not(:disabled){background:#E67E36;transform:translateY(-2px)}.nav-button:disabled{background:var(--gray-light);color:var(--gray-mid);cursor:not-allowed}.nav-progress{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-mid);font-weight:600}.progress-bar{width:100px;height:4px;background:var(--gray-light);border-radius:2px;overflow:hidden}.progress-fill{height:100%;background:var(--blue);border-radius:2px}footer{padding:40px 24px;background:var(--gray-light);text-align:center;border-top:1px solid #ddd}footer p{font-size:13px;color:var(--gray)}footer a{color:var(--blue);font-weight:600}@media(max-width:768px){nav{padding:0 16px}.nav-inner{gap:12px}.nav-breadcrumb{display:none}.section{padding:40px 16px}.module{padding:20px}.module-nav{flex-wrap:wrap}.nav-progress{width:100%;order:-1}}</style></head><body><nav><div class="nav-inner"><a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;flex-shrink:0"><svg width="24" height="24" viewBox="0 0 96 96" fill="none"><circle cx="48" cy="48" r="40" stroke="rgba(0,155,249,0.15)" stroke-width="1"/><circle cx="48" cy="14" r="4.5" fill="#FF8C42" opacity=".9"/></svg><div style="display:flex;flex-direction:column;gap:2px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:800"><span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;line-height:1">Power Inside Data</span><span style="font-size:8px;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);line-height:1">Academy</span></div></a><div class="nav-breadcrumb"><a href="docker-kubernetes-index.html">Docker & K8s</a><span>/</span><span id="breadcrumb-title">Module...</span></div><div class="nav-cta"><a href="docker-kubernetes-index.html">← Catalogue</a></div></div></nav><section class="hero"><div class="hero-inner"><h1 id="module-title">Chargement...</h1><p id="module-desc">Merci de patienter</p></div></section><section class="section"><div class="section-inner" id="module-content"><p style="text-align:center;color:var(--gray);">Chargement...</p></div></section><footer><p>Power Inside Data Academy — Docker & Kubernetes</p><p><a href="docker-kubernetes-index.html">Retour</a> | <a href="index.html">Accueil</a></p></footer><script>const MODULES_DATA={1:{title:'Docker Fundamentals & Images',desc:'Conteneurisation et gestion images Docker',concepts:['Docker: Conteneurisation légère vs machines virtuelles','Images: Templates réutilisables pour applications','Containers: Instances isolées avec ressources allouées','Dockerfile: Instructions pour builder images','Registries: Docker Hub, ECR pour stocker images','Best practices: Multi-stage builds, optimization layer']code:`# Docker Fundamentals
+print("=== Conteneurisation ===")
+print("VM: Full OS + kernel = 1GB+")
+print("Container: Shared kernel = 10-100MB")
+print("")
+print("=== Docker Architecture ===")
+print("""
+Dockerfile → Image (template)
+Image → Container (instance)
+
+Dockerfile example:
+FROM python:3.9
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+""")
+print("\\n=== Image Optimization ===")
+print("✓ Use specific base image tags")
+print("✓ Multi-stage builds (reduce size)")
+print("✓ Minimal images (alpine, distroless)")
+print("✓ .dockerignore (exclude files)")`},2:{title:'Docker Compose & Networking',desc:'Orchestration multi-conteneurs et réseau',concepts:['Docker Compose: Définir multi-container apps','YAML configuration: Services, volumes, networks','Container networking: Bridge, host, overlay','Service discovery: DNS par service','Health checks: Monitoring conteneurs','Scaling: Replicas et load balancing'],code:`# Docker Compose Setup
+print("=== Docker Compose Structure ===")
+print("""
+services:
+  web:
+    image: myapp:latest
+    ports:
+      - "8080:3000"
+    environment:
+      DB_HOST: postgres
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql
+volumes:
+  postgres_data:
+""")
+print("\\n=== Networking ===")
+print("Bridge: Default, isolated network")
+print("Host: Share host network")
+print("Overlay: Multi-host networks (Swarm/K8s)")
+print("\\n=== Health Checks ===")
+print("healthcheck: {test, interval, timeout, retries}")`},3:{title:'Kubernetes Basics & Clusters',desc:'Fondamentaux orchestration containers',concepts:['Kubernetes: Orchestration containers production','Cluster: Master + Worker nodes','Pods: Unité minimale (1+ containers)','Namespaces: Isolation logique','ConfigMaps: Configurer apps','Secrets: Stocker données sensibles'],code:`# Kubernetes Basics
+print("=== K8s Architecture ===")
+print("""
+Control Plane (Master):
+  - API Server: Interface REST
+  - Scheduler: Placer pods
+  - Controller Manager: État désiré
+  - etcd: State store
+
+Worker Nodes:
+  - kubelet: Exécute pods
+  - Container runtime: Docker/containerd
+  - kube-proxy: Networking
+""")
+print("\\n=== Pod Definition ===")
+print("""
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  containers:
+  - name: app
+    image: myapp:latest
+    ports:
+    - containerPort: 8080
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+""")
+print("\\n=== Namespaces ===")
+print("kubectl create namespace production")
+print("kubectl get pods -n production")`},4:{title:'Deployments & Services',desc:'Déployer et exposer applications',concepts:['Deployments: Gérer replicas pods','ReplicaSets: Garantir nombre replicas','Services: Exposer pods interne/externe','Ingress: HTTP/HTTPS routing','Load Balancing: Distribution traffic','Rolling updates: Sans-downtime deployments'],code:`# K8s Deployments & Services
+print("=== Deployment Manifest ===")
+print("""
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: app
+        image: myapp:v1.0
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+""")
+print("\\n=== Service & Ingress ===")
+print("""
+Service: ClusterIP (internal), NodePort, LoadBalancer
+Ingress: Layer 7 routing
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: my-app
+  ports:
+  - port: 80
+    targetPort: 8080
+""")
+print("\\n=== Rolling Updates ===")
+print("Deployment handles: Pod replacement gradually")`},5:{title:'Monitoring & Scaling',desc:'Observabilité et auto-scaling',concepts:['Metrics Server: Collecte metrics CPU/memory','Prometheus: Monitoring time-series database','Horizontal Pod Autoscaling: Scale based metrics','Vertical Pod Autoscaling: Ajuster resources','Logging: Centralize logs ELK/Splunk','Alerting: Notifications anomalies'],code:`# K8s Monitoring & Scaling
+print("=== HPA (Horizontal Pod Autoscaler) ===")
+print("""
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+""")
+print("\\n=== Monitoring Stack ===")
+print("Prometheus: Metrics collection")
+print("Grafana: Visualization")
+print("Alerts: CPU > 80%, Memory > 90%, Pod restarts")
+print("\\n=== Logging ===")
+print("kubectl logs deployment/my-app")
+print("Centralized: ELK, Splunk, Datadog")`}};let currentModule=1;const maxModules=Object.keys(MODULES_DATA).length;function renderModule(e){const t=MODULES_DATA[e];t&&(document.getElementById("module-title").textContent=t.title,document.getElementById("module-desc").textContent=t.desc,document.getElementById("breadcrumb-title").textContent=t.title,let s="<ul>";t.concepts.forEach((e=>{s+=`<li>${e}</li>`})),s+="</ul>";const l=`<div class="module"><h2 class="module-title">${t.title}</h2><p class="module-desc">${t.desc}</p><div class="concepts-box"><strong>Concepts Clés:</strong>${s}</div><div class="sandbox-container"><div class="sandbox-editor"><label class="sandbox-label">Code Example</label><div class="editor-container" id="editor-${e}"></div></div></div><div class="takeaway-box"><strong>À retenir:</strong><p>${t.takeaway}</p></div><div class="module-nav"><button class="nav-button prev" onclick="previousModule()" ${1===currentModule?"disabled":""}>← Précédent</button><div class="nav-progress"><span id="progress-text">Module ${currentModule}/${maxModules}</span><div class="progress-bar"><div class="progress-fill" style="width:${currentModule/maxModules*100}%"></div></div></div><button class="nav-button next" onclick="nextModule()" ${currentModule===maxModules?"disabled":""}>Suivant →</button></div></div>`;document.getElementById("module-content").innerHTML=l,initializeEditor(e,t.code))}function initializeEditor(e,t){setTimeout((()=>{CodeMirror(document.getElementById(`editor-${e}`),{value:t,mode:"python",theme:"material-darker",readOnly:!0,lineNumbers:!0,lineWrapping:!0,viewportMargin:1/0})}),100)}function nextModule(){currentModule<maxModules&&(currentModule++,renderModule(currentModule),window.scrollTo(0,0))}function previousModule(){currentModule>1&&(currentModule--,renderModule(currentModule),window.scrollTo(0,0))}renderModule(1);</script></body></html>
