@@ -150,26 +150,52 @@ footer a{color:var(--blue);font-weight:600}
     <!-- MODULE 1 -->
     <div class="module">
       <div class="module-title">Module 1: Compréhension & Gestion des Données</div>
-      <div class="module-desc">Explorez les fondamentaux avancés: listes, dictionnaires, tuples, sets et les méthodes associées.</div>
+      <div class="module-desc">Explorez les fondamentaux avancés: listes, dictionnaires, tuples, sets avec compréhensions et opérations avancées.</div>
+
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>List Comprehensions:</strong> Créer des listes de manière concise: <code>[x**2 for x in range(5)]</code></li>
+          <li><strong>Dict Comprehensions:</strong> Créer des dictionnaires: <code>{x: x**2 for x in range(5)}</code></li>
+          <li><strong>Set Operations:</strong> Union (|), Intersection (&), Différence (-)</li>
+          <li><strong>Performance:</strong> Compréhensions = plus rapide que boucles</li>
+        </ul>
+      </div>
 
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox1" spellcheck="false"># Manipulation avancée de données
-data = [1, 2, 3, 4, 5]
-squares = [x**2 for x in data]
-print(f"Nombres: {data}")
-print(f"Carrés: {squares}")
+          <textarea id="sandbox1" spellcheck="false"># 1. LIST COMPREHENSIONS - Créer des listes efficacement
+nombres = [1, 2, 3, 4, 5]
+carrés = [x**2 for x in nombres]
+pairs = [x for x in nombres if x % 2 == 0]
 
-# Dictionnaire avec compréhension
-dict_comp = {x: x**2 for x in range(5)}
-print(f"Dict: {dict_comp}")
+print("=== LIST COMPREHENSIONS ===")
+print(f"Nombres originaux: {nombres}")
+print(f"Carrés: {carrés}")
+print(f"Nombres pairs: {pairs}")
 
-# Set et opérations
-set1 = {1, 2, 3, 4}
-set2 = {3, 4, 5, 6}
-print(f"Union: {set1 | set2}")
-print(f"Intersection: {set1 & set2}")
+# 2. DICT COMPREHENSIONS - Créer des dictionnaires
+dict_carre = {x: x**2 for x in range(1, 6)}
+print(f"\n=== DICT COMPREHENSIONS ===")
+print(f"Carrés (dict): {dict_carre}")
+
+# 3. SET OPERATIONS - Union, Intersection, Différence
+set_a = {1, 2, 3, 4}
+set_b = {3, 4, 5, 6}
+
+print(f"\n=== SET OPERATIONS ===")
+print(f"Set A: {set_a}")
+print(f"Set B: {set_b}")
+print(f"Union (A ∪ B): {set_a | set_b}")
+print(f"Intersection (A ∩ B): {set_a & set_b}")
+print(f"Différence (A - B): {set_a - set_b}")
+
+# 4. CAS PRATIQUE: Filtrer et transformer
+mots = ['python', 'java', 'rust', 'go', 'javascript']
+mots_longs = {mot.upper(): len(mot) for mot in mots if len(mot) > 3}
+print(f"\n=== CAS PRATIQUE ===")
+print(f"Mots > 3 caractères (uppercase): {mots_longs}")
 </textarea>
         </div>
         <div>
@@ -178,6 +204,11 @@ print(f"Intersection: {set1 & set2}")
           <button class="btn-run" onclick="runCode('sandbox1')">Exécuter</button>
         </div>
       </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">Les compréhensions sont non seulement plus lisibles mais aussi 2-3x plus rapides que les boucles traditionnelles. Utilisez-les pour filtrer et transformer les collections!</p>
+      </div>
     </div>
 
     <!-- MODULE 2 -->
@@ -185,30 +216,70 @@ print(f"Intersection: {set1 & set2}")
       <div class="module-title">Module 2: Programmation Fonctionnelle</div>
       <div class="module-desc">Lambda, Map, Filter, Reduce et programmation déclarative.</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>Fonctions Lambda:</strong> Fonctions anonymes: <code>lambda x: x * 2</code></li>
+          <li><strong>Map:</strong> Applique une fonction à chaque élément: <code>map(func, liste)</code></li>
+          <li><strong>Filter:</strong> Sélectionne les éléments matching une condition: <code>filter(func, liste)</code></li>
+          <li><strong>Reduce:</strong> Agrège les éléments: <code>reduce(func, liste)</code></li>
+          <li><strong>Avantage:</strong> Code plus déclaratif et lisible</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox2" spellcheck="false"># Programmation Fonctionnelle
-from functools import reduce
-
+          <textarea id="sandbox2" spellcheck="false"># 1. LAMBDA - Fonctions anonymes concises
 nombres = [1, 2, 3, 4, 5]
+carre = lambda x: x ** 2
+print("=== LAMBDA FUNCTIONS ===")
+print(f"Carré de 5: {carre(5)}")
 
-# Map: appliquer une fonction
+# 2. MAP - Appliquer une fonction à chaque élément
+print(f"\n=== MAP: Transformation ===")
 doubles = list(map(lambda x: x * 2, nombres))
+print(f"Nombres originaux: {nombres}")
 print(f"Doublés: {doubles}")
 
-# Filter: sélectionner
+# Map avec fonction nommée
+def multiplier_par_3(x):
+    return x * 3
+triples = list(map(multiplier_par_3, nombres))
+print(f"Triplés: {triples}")
+
+# 3. FILTER - Sélectionner les éléments
+print(f"\n=== FILTER: Sélection ===")
 pairs = list(filter(lambda x: x % 2 == 0, nombres))
+impairs = list(filter(lambda x: x % 2 != 0, nombres))
 print(f"Nombres pairs: {pairs}")
+print(f"Nombres impairs: {impairs}")
 
-# Reduce: agréger
+# Filter avec condition personnalisée
+grands_nombres = list(filter(lambda x: x > 2, nombres))
+print(f"Nombres > 2: {grands_nombres}")
+
+# 4. REDUCE - Agréger/Combiner les éléments
+from functools import reduce
+print(f"\n=== REDUCE: Agrégation ===")
 somme = reduce(lambda a, b: a + b, nombres)
+produit = reduce(lambda a, b: a * b, nombres)
 print(f"Somme: {somme}")
+print(f"Produit: {produit}")
 
-# Sorted avec clé personnalisée
-mots = ["python", "java", "c"]
-tries = sorted(mots, key=len, reverse=True)
-print(f"Mots (par longueur): {tries}")
+# 5. SORTED avec clé personnalisée
+print(f"\n=== SORTED: Tri avancé ===")
+mots = ["python", "java", "rust", "javascript", "c"]
+tries_longueur = sorted(mots, key=len)
+tries_alphabetique = sorted(mots)
+print(f"Mots (par longueur): {tries_longueur}")
+print(f"Mots (alphabétique): {tries_alphabetique}")
+
+# 6. CAS PRATIQUE: Chaîner les opérations
+print(f"\n=== CAS PRATIQUE: Chaînage ===")
+donnees = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+resultat = list(map(lambda x: x ** 2, filter(lambda x: x % 2 == 0, donnees)))
+print(f"Carrés des nombres pairs: {resultat}")
 </textarea>
         </div>
         <div>
@@ -217,6 +288,11 @@ print(f"Mots (par longueur): {tries}")
           <button class="btn-run" onclick="runCode('sandbox2')">Exécuter</button>
         </div>
       </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">La programmation fonctionnelle permet d'écrire du code plus lisible et déclaratif. Map, Filter, Reduce sont les trois pilliers. Pensez à utiliser les compréhensions (plus Pythonic) quand c'est possible!</p>
+      </div>
     </div>
 
     <!-- MODULE 3 -->
@@ -224,11 +300,25 @@ print(f"Mots (par longueur): {tries}")
       <div class="module-title">Module 3: Programmation Orientée Objet Avancée</div>
       <div class="module-desc">Héritage, polymorphisme, encapsulation et décorateurs.</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>Héritage:</strong> Créer une classe enfant qui hérite d'une classe parent</li>
+          <li><strong>Polymorphisme:</strong> Surcharger les méthodes dans les classes enfants</li>
+          <li><strong>Encapsulation:</strong> Contrôler l'accès aux attributs (public, protected, private)</li>
+          <li><strong>@property:</strong> Créer des attributs avec getters/setters</li>
+          <li><strong>super():</strong> Appeler les méthodes de la classe parent</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox3" spellcheck="false"># POO Avancée avec Héritage et Polymorphisme
+          <textarea id="sandbox3" spellcheck="false"># 1. HÉRITAGE - Classes parent et enfants
+print("=== 1. HÉRITAGE ===")
+
 class Animal:
+    """Classe parent (superclasse)"""
     def __init__(self, nom, age):
         self.nom = nom
         self.age = age
@@ -236,7 +326,13 @@ class Animal:
     def parler(self):
         return f"{self.nom} fait du bruit"
 
+    def vieillir(self):
+        self.age += 1
+        return f"{self.nom} a maintenant {self.age} ans"
+
+# Classes enfants
 class Chien(Animal):
+    """Surcharge la méthode parler()"""
     def parler(self):
         return f"{self.nom} aboie: Ouaf! Ouaf!"
 
@@ -244,13 +340,55 @@ class Chat(Animal):
     def parler(self):
         return f"{self.nom} miaule: Miaou!"
 
-# Polymorphisme
-animaux = [Chien("Rex", 3), Chat("Minou", 2), Animal("Chose", 1)]
+# 2. POLYMORPHISME - Même interface, comportements différents
+print("\n=== 2. POLYMORPHISME ===")
+animaux = [Chien("Rex", 3), Chat("Minou", 2), Animal("Creature", 1)]
 for animal in animaux:
     print(animal.parler())
 
-# Vérification du type
-print(f"\nRex est un Chien? {isinstance(animaux[0], Chien)}")
+# 3. ENCAPSULATION - Attributs privés/protégés
+print(f"\n=== 3. ENCAPSULATION ===")
+class Compte:
+    def __init__(self, solde_initial):
+        self._solde = solde_initial  # Privé (convention: _)
+
+    @property
+    def solde(self):
+        """Getter: accès contrôlé"""
+        return f"${self._solde:.2f}"
+
+    def deposer(self, montant):
+        if montant > 0:
+            self._solde += montant
+            return f"Dépôt de ${montant}: nouveau solde = ${self._solde}"
+        return "Montant invalide"
+
+compte = Compte(1000)
+print(compte.solde)
+print(compte.deposer(500))
+
+# 4. super() - Appeler la méthode parent
+print(f"\n=== 4. super() ===")
+class Vehicule:
+    def __init__(self, marque, model):
+        self.marque = marque
+        self.model = model
+
+class Voiture(Vehicule):
+    def __init__(self, marque, model, couleur):
+        super().__init__(marque, model)
+        self.couleur = couleur
+
+    def description(self):
+        return f"{self.marque} {self.model} - Couleur: {self.couleur}"
+
+voiture = Voiture("Peugeot", "308", "bleu")
+print(voiture.description())
+
+# 5. isinstance() et issubclass()
+print(f"\n=== 5. Vérification de type ===")
+print(f"Rex est un Chien? {isinstance(animaux[0], Chien)}")
+print(f"Chien est une sous-classe d'Animal? {issubclass(Chien, Animal)}")
 </textarea>
         </div>
         <div>
@@ -259,6 +397,11 @@ print(f"\nRex est un Chien? {isinstance(animaux[0], Chien)}")
           <button class="btn-run" onclick="runCode('sandbox3')">Exécuter</button>
         </div>
       </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">L'héritage permet de créer des hiérarchies de classes. Le polymorphisme (surcharge de méthodes) permet à chaque classe d'avoir son comportement. L'encapsulation (avec _ et @property) sécurise l'accès aux données. Utilisez super() pour accéder aux méthodes parentes!</p>
+      </div>
     </div>
 
     <!-- MODULE 4 -->
@@ -266,33 +409,106 @@ print(f"\nRex est un Chien? {isinstance(animaux[0], Chien)}")
       <div class="module-title">Module 4: Gestion des Erreurs & Exceptions</div>
       <div class="module-desc">Try-Except, Finally, Custom Exceptions et gestion robuste.</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>Try-Except:</strong> Attraper et gérer les erreurs</li>
+          <li><strong>Exceptions personnalisées:</strong> Créer vos propres erreurs avec <code>class MonErreur(Exception)</code></li>
+          <li><strong>Finally:</strong> Code exécuté même si erreur (nettoyage)</li>
+          <li><strong>Raise:</strong> Lever une exception pour le code appelant</li>
+          <li><strong>Else:</strong> Bloc exécuté si pas d'erreur</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox4" spellcheck="false"># Gestion avancée des erreurs
-class ValidationError(Exception):
-    pass
+          <textarea id="sandbox4" spellcheck="false"># 1. TRY-EXCEPT - Gérer les erreurs
+print("=== 1. TRY-EXCEPT ===")
 
-def diviser_securise(a, b):
+try:
+    resultat = 10 / 2
+    print(f"10 / 2 = {resultat}")
+except ZeroDivisionError:
+    print("Erreur: Division par zéro impossible")
+
+# 2. MULTIPLE EXCEPTIONS - Attraper différentes erreurs
+print(f"\n=== 2. MULTIPLE EXCEPTIONS ===")
+
+def convertir_nombre(valeur):
     try:
-        if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
-            raise ValidationError("Les arguments doivent être des nombres")
-        if b == 0:
-            raise ZeroDivisionError("Division par zéro impossible")
-        resultat = a / b
-        return resultat
-    except ZeroDivisionError as e:
-        return f"Erreur: {e}"
-    except ValidationError as e:
-        return f"Validation échouée: {e}"
+        return int(valeur)
+    except ValueError:
+        return f"Erreur: '{valeur}' ne peut pas être converti en nombre"
+    except TypeError:
+        return f"Erreur: Type non supporté"
     except Exception as e:
         return f"Erreur inconnue: {e}"
-    finally:
-        print("Opération terminou")
 
-print(divider_securise(10, 2))
-print(diviser_securise(10, 0))
-print(diviser_securise("10", 2))
+print(convertir_nombre("42"))
+print(convertir_nombre("abc"))
+print(convertir_nombre(None))
+
+# 3. EXCEPTIONS PERSONNALISÉES
+print(f"\n=== 3. EXCEPTIONS PERSONNALISÉES ===")
+
+class AgeInvalideError(Exception):
+    """Exception levée si l'âge est invalide"""
+    pass
+
+def valider_age(age):
+    if age < 0 or age > 150:
+        raise AgeInvalideError(f"L'âge {age} est invalide (0-150)")
+    return f"Âge valide: {age} ans"
+
+try:
+    print(valider_age(25))
+    print(valider_age(-5))
+except AgeInvalideError as e:
+    print(f"Validation échouée: {e}")
+
+# 4. TRY-EXCEPT-ELSE-FINALLY
+print(f"\n=== 4. TRY-EXCEPT-ELSE-FINALLY ===")
+
+def division_securisee(a, b):
+    try:
+        if not isinstance(a, (int, float)):
+            raise TypeError("Le dividende doit être un nombre")
+        if b == 0:
+            raise ZeroDivisionError("Division par zéro")
+        resultat = a / b
+    except ZeroDivisionError as e:
+        print(f"Erreur division: {e}")
+    except TypeError as e:
+        print(f"Erreur type: {e}")
+    else:
+        # Exécuté seulement si pas d'erreur
+        print(f"Succès: {a} / {b} = {resultat}")
+    finally:
+        # Toujours exécuté (nettoyage)
+        print("Opération terminée\n")
+
+division_securisee(10, 2)
+division_securisee(10, 0)
+division_securisee("10", 2)
+
+# 5. CAS PRATIQUE: Fichier (simulation)
+print("=== 5. CAS PRATIQUE ===")
+
+def traiter_donnees(donnees):
+    try:
+        nombres = [int(x) for x in donnees.split(",")]
+        moyenne = sum(nombres) / len(nombres)
+        return f"Moyenne: {moyenne:.2f}"
+    except ValueError:
+        return "Erreur: Veuillez entrer des nombres séparés par des virgules"
+    except ZeroDivisionError:
+        return "Erreur: Liste vide"
+    finally:
+        print("Traitement terminé")
+
+print(traiter_donnees("10,20,30"))
+print(traiter_donnees("10,abc,30"))
 </textarea>
         </div>
         <div>
@@ -301,6 +517,11 @@ print(diviser_securise("10", 2))
           <button class="btn-run" onclick="runCode('sandbox4')">Exécuter</button>
         </div>
       </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">Toujours utiliser try-except pour les opérations risquées (division, conversion, fichiers). Créez des exceptions personnalisées pour votre domaine. N'oubliez pas le finally pour nettoyer les ressources. Une bonne gestion d'erreurs rend le code robuste!</p>
+      </div>
     </div>
 
     <!-- MODULE 5 -->
@@ -308,10 +529,39 @@ print(diviser_securise("10", 2))
       <div class="module-title">Module 5: Décorateurs & Métaprogrammation</div>
       <div class="module-desc">Créez des décorateurs pour modifier le comportement des fonctions.</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>Décorateur:</strong> Fonction qui modifie une autre fonction: <code>@mon_decorateur</code></li>
+          <li><strong>Wrapper:</strong> Fonction interne qui enveloppe la fonction originale</li>
+          <li><strong>*args, **kwargs:</strong> Accepter n'importe quels arguments</li>
+          <li><strong>Stacking:</strong> Appliquer plusieurs décorateurs: <code>@deco1 @deco2</code></li>
+          <li><strong>Cas d'usage:</strong> Logging, timing, validation, caching</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox5" spellcheck="false"># Décorateurs
+          <textarea id="sandbox5" spellcheck="false"># 1. DÉCORATEUR SIMPLE - Template de base
+print("=== 1. DÉCORATEUR SIMPLE ===")
+
+def mon_decorateur(func):
+    def wrapper(*args, **kwargs):
+        print(f"→ Avant l'exécution de {func.__name__}")
+        resultat = func(*args, **kwargs)
+        print(f"← Après l'exécution de {func.__name__}")
+        return resultat
+    return wrapper
+
+@mon_decorateur
+def dire_bonjour(nom):
+    return f"Bonjour, {nom}!"
+
+print(dire_bonjour("Alice"))
+
+# 2. DÉCORATEUR DE TIMING - Mesurer la performance
+print(f"\n=== 2. DÉCORATEUR DE TIMING ===")
 import time
 
 def chronometrer(func):
@@ -319,25 +569,96 @@ def chronometrer(func):
         debut = time.time()
         resultat = func(*args, **kwargs)
         duree = time.time() - debut
-        print(f"{func.__name__} a pris {duree:.4f}s")
+        print(f"⏱️ {func.__name__} a pris {duree:.6f}s")
         return resultat
     return wrapper
 
-def log_appels(func):
-    def wrapper(*args, **kwargs):
-        print(f"Appel de {func.__name__}({args}, {kwargs})")
-        return func(*args, **kwargs)
-    return wrapper
-
-@log_appels
 @chronometrer
 def calculer_factorielle(n):
     if n <= 1:
         return 1
     return n * calculer_factorielle(n - 1)
 
-# Test
-print(f"Résultat: {calculer_factorielle(5)}")
+resultat = calculer_factorielle(5)
+print(f"5! = {resultat}")
+
+# 3. DÉCORATEUR DE LOGGING - Enregistrer les appels
+print(f"\n=== 3. DÉCORATEUR DE LOGGING ===")
+
+def log_appels(func):
+    def wrapper(*args, **kwargs):
+        print(f"📝 Appel: {func.__name__}({args}, {kwargs})")
+        resultat = func(*args, **kwargs)
+        print(f"✓ Retour: {resultat}")
+        return resultat
+    return wrapper
+
+@log_appels
+def additionner(a, b):
+    return a + b
+
+additionner(5, 3)
+
+# 4. DÉCORATEUR AVEC PARAMÈTRES
+print(f"\n=== 4. DÉCORATEUR AVEC PARAMÈTRES ===")
+
+def repeter_n_fois(n):
+    def decorateur(func):
+        def wrapper(*args, **kwargs):
+            for i in range(n):
+                resultat = func(*args, **kwargs)
+            return resultat
+        return wrapper
+    return decorateur
+
+@repeter_n_fois(3)
+def crier(message):
+    print(f"  🔊 {message}")
+    return message
+
+crier("Hola!")
+
+# 5. STACKING - PLUSIEURS DÉCORATEURS
+print(f"\n=== 5. STACKING (Plusieurs décorateurs) ===")
+
+def trace_entree(func):
+    def wrapper(*args, **kwargs):
+        print(f"[ENTREE] {func.__name__}")
+        return func(*args, **kwargs)
+    return wrapper
+
+def trace_sortie(func):
+    def wrapper(*args, **kwargs):
+        resultat = func(*args, **kwargs)
+        print(f"[SORTIE] {func.__name__}")
+        return resultat
+    return wrapper
+
+@trace_entree
+@trace_sortie
+def saluer(nom):
+    print(f"  Salut {nom}")
+    return f"Reponse pour {nom}"
+
+saluer("Bob")
+
+# 6. CAS PRATIQUE: Décorateur de validation
+print(f"\n=== 6. CAS PRATIQUE: Validation ===")
+
+def valider_positif(func):
+    def wrapper(n):
+        if n < 0:
+            print(f"⚠️ Erreur: {n} doit être positif!")
+            return None
+        return func(n)
+    return wrapper
+
+@valider_positif
+def racine_carree(n):
+    return n ** 0.5
+
+print(f"√16 = {racine_carree(16)}")
+print(f"√-4 = {racine_carree(-4)}")
 </textarea>
         </div>
         <div>
@@ -346,6 +667,11 @@ print(f"Résultat: {calculer_factorielle(5)}")
           <button class="btn-run" onclick="runCode('sandbox5')">Exécuter</button>
         </div>
       </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">Les décorateurs sont une forme de métaprogrammation puissante. Ils permettent d'ajouter des fonctionnalités à des fonctions existantes sans les modifier. Pattern: decorateur → wrapper → *args, **kwargs. Cas d'usage: timing, logging, validation, caching, authentification.</p>
+      </div>
     </div>
 
     <!-- MODULE 6 -->
@@ -353,32 +679,129 @@ print(f"Résultat: {calculer_factorielle(5)}")
       <div class="module-title">Module 6: Traitement & Analyse de Données</div>
       <div class="module-desc">Manipulation de données avec approche fonctionnelle et statistiques.</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>Statistiques:</strong> mean, median, stdev, variance, mode</li>
+          <li><strong>Compréhensions:</strong> Transformer et filtrer les données efficacement</li>
+          <li><strong>Groupement:</strong> Organiser les données par catégories</li>
+          <li><strong>Tri avancé:</strong> Trier par clés personnalisées</li>
+          <li><strong>Agrégation:</strong> Combiner et résumer les données</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Code Python</div>
-          <textarea id="sandbox6" spellcheck="false"># Analyse de données
+          <textarea id="sandbox6" spellcheck="false"># 1. STATISTIQUES DESCRIPTIVES
+print("=== 1. STATISTIQUES DESCRIPTIVES ===")
 import statistics
 
 donnees = [10, 20, 15, 30, 25, 40, 35, 45, 50]
+print(f"Données: {donnees}")
 
-# Statistiques
 moyenne = statistics.mean(donnees)
 mediane = statistics.median(donnees)
 variance = statistics.variance(donnees)
+ecart_type = statistics.stdev(donnees)
 
-print(f"Moyenne: {moyenne}")
+print(f"Moyenne (mean): {moyenne:.2f}")
 print(f"Médiane: {mediane}")
 print(f"Variance: {variance:.2f}")
+print(f"Écart-type (stdev): {ecart_type:.2f}")
 
-# Transformation et filtrage
-donnees_transformees = [x * 1.1 for x in donnees if x > 20]
-print(f"\nDonnées > 20 (+10%): {donnees_transformees}")
+# 2. TRANSFORMATION ET FILTRAGE
+print(f"\n=== 2. TRANSFORMATION & FILTRAGE ===")
 
-# Groupement
-pairs_impairs = {'pairs': [x for x in donnees if x % 2 == 0],
-                 'impairs': [x for x in donnees if x % 2 != 0]}
+# Filtrer les données > 20
+donnees_filtrees = [x for x in donnees if x > 20]
+print(f"Données > 20: {donnees_filtrees}")
+
+# Transformer: augmenter de 10%
+donnees_augmentees = [x * 1.1 for x in donnees]
+print(f"Données +10%: {[round(x, 1) for x in donnees_augmentees]}")
+
+# Combiner: filtrer ET transformer
+donnees_combo = [x * 1.1 for x in donnees if x > 20]
+print(f"Données > 20, +10%: {[round(x, 1) for x in donnees_combo]}")
+
+# 3. GROUPEMENT
+print(f"\n=== 3. GROUPEMENT ===")
+
+pairs_impairs = {
+    'pairs': [x for x in donnees if x % 2 == 0],
+    'impairs': [x for x in donnees if x % 2 != 0]
+}
 print(f"Pairs: {pairs_impairs['pairs']}")
 print(f"Impairs: {pairs_impairs['impairs']}")
+
+# Grouper par plage
+def categoriser(x):
+    if x < 20:
+        return "bas"
+    elif x < 40:
+        return "moyen"
+    else:
+        return "haut"
+
+categories = {}
+for x in donnees:
+    cat = categoriser(x)
+    if cat not in categories:
+        categories[cat] = []
+    categories[cat].append(x)
+
+print(f"Par catégorie: {categories}")
+
+# 4. TRI AVANCÉ
+print(f"\n=== 4. TRI AVANCÉ ===")
+
+donnees_triees = sorted(donnees)
+donnees_triees_desc = sorted(donnees, reverse=True)
+donnees_par_longueur = sorted(donnees, key=lambda x: abs(30 - x))  # Proche de 30
+
+print(f"Trié (croissant): {donnees_triees}")
+print(f"Trié (décroissant): {donnees_triees_desc}")
+print(f"Trié (distance à 30): {donnees_par_longueur}")
+
+# 5. AGRÉGATION
+print(f"\n=== 5. AGRÉGATION ===")
+
+from functools import reduce
+
+somme = reduce(lambda a, b: a + b, donnees)
+produit = reduce(lambda a, b: a * b, donnees)
+max_val = max(donnees)
+min_val = min(donnees)
+etendue = max_val - min_val
+
+print(f"Somme: {somme}")
+print(f"Produit: {produit:.0e}")
+print(f"Max: {max_val}")
+print(f"Min: {min_val}")
+print(f"Étendue: {etendue}")
+
+# 6. CAS PRATIQUE: Analyse de ventes
+print(f"\n=== 6. CAS PRATIQUE: Ventes ===")
+
+ventes = [
+    {'nom': 'Alice', 'montant': 150},
+    {'nom': 'Bob', 'montant': 320},
+    {'nom': 'Charlie', 'montant': 200},
+    {'nom': 'Diana', 'montant': 180},
+    {'nom': 'Eve', 'montant': 400}
+]
+
+# Total des ventes
+total = sum(v['montant'] for v in ventes)
+moyenne_vente = statistics.mean([v['montant'] for v in ventes])
+
+# Vendeurs avec ventes > moyenne
+top_vendeurs = [v['nom'] for v in ventes if v['montant'] > moyenne_vente]
+
+print(f"Total ventes: ${total}")
+print(f"Moyenne: ${moyenne_vente:.2f}")
+print(f"Top vendeurs: {', '.join(top_vendeurs)}")
 </textarea>
         </div>
         <div>
@@ -386,6 +809,11 @@ print(f"Impairs: {pairs_impairs['impairs']}")
           <div class="sandbox-output" id="output6">Cliquez sur "Exécuter"...</div>
           <button class="btn-run" onclick="runCode('sandbox6')">Exécuter</button>
         </div>
+      </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">Python est excellent pour l'analyse de données! Maîtrisez: statistiques (mean, median, stdev), compréhensions pour transformer, groupement par catégories, tri avec clés personnalisées, et agrégation. Ces outils sont la base pour travailler avec pandas et numpy!</p>
       </div>
     </div>
 

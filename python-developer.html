@@ -312,27 +312,62 @@ nav{
             <span style="color:#999;font-size:12px">Éditeur Python</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox1" spellcheck="false"># Variables et types de données
+            <textarea class="code-editor" id="sandbox1" spellcheck="false"># 1. TYPES PRIMITIFS
+print("=== TYPES PRIMITIFS ===")
 nom = "Alice"
 age = 30
 salaire = 45000.50
 actif = True
 
-print(f"Nom: {nom}")
-print(f"Age: {age}")
-print(f"Type d'age: {type(age)}")
-print(f"Salaire: {salaire}")
-print(f"Actif: {actif}")
+print(f"Nom: {nom} | Type: {type(nom)}")
+print(f"Âge: {age} | Type: {type(age)}")
+print(f"Salaire: {salaire} | Type: {type(salaire)}")
+print(f"Actif: {actif} | Type: {type(actif)}")
 
-# Listes
+# 2. OPÉRATIONS SUR LES NOMBRES
+print(f"\n=== OPÉRATIONS ===")
+a, b = 10, 3
+print(f"Addition: {a} + {b} = {a + b}")
+print(f"Multiplication: {a} * {b} = {a * b}")
+print(f"Division: {a} / {b} = {a / b:.2f}")
+print(f"Division entière: {a} // {b} = {a // b}")
+print(f"Modulo: {a} % {b} = {a % b}")
+
+# 3. CHAÎNES DE CARACTÈRES
+print(f"\n=== CHAÎNES ===")
+prenom = "Jean"
+nom_complet = f"{prenom} Dupont"
+print(f"Complet: {nom_complet}")
+print(f"Longueur: {len(nom_complet)}")
+print(f"Majuscules: {nom_complet.upper()}")
+
+# 4. LISTES (Collections ordonnées)
+print(f"\n=== LISTES ===")
 nombres = [1, 2, 3, 4, 5]
-print(f"Nombres: {nombres}")
-print(f"Premier: {nombres[0]}")
+print(f"Liste: {nombres}")
+print(f"Premier: {nombres[0]}, Dernier: {nombres[-1]}")
+print(f"Sous-liste [1:3]: {nombres[1:3]}")
+nombres.append(6)
+print(f"Après append(6): {nombres}")
 
-# Dictionnaires
+# 5. DICTIONNAIRES (Clé-Valeur)
+print(f"\n=== DICTIONNAIRES ===")
 personne = {"nom": "Bob", "age": 25, "ville": "Paris"}
 print(f"Personne: {personne}")
-print(f"Ville: {personne['ville']}")
+print(f"Nom: {personne['nom']}, Âge: {personne['age']}")
+personne['metier'] = 'Développeur'
+print(f"Après ajout: {personne}")
+for cle, valeur in personne.items():
+    print(f"  {cle}: {valeur}")
+
+# 6. CONVERSIONS DE TYPES
+print(f"\n=== CONVERSIONS ===")
+num_str = "42"
+num_int = int(num_str)
+print(f"Chaîne '{num_str}' -> Entier {num_int}")
+print(f"Entier 42 -> Chaîne '{str(42)}'")
+print(f"Entier 1 -> Booléen {bool(1)}")
+print(f"Entier 0 -> Booléen {bool(0)}")
 </textarea>
           </div>
         </div>
@@ -381,7 +416,8 @@ print(f"Ville: {personne['ville']}")
             <span style="color:#999;font-size:12px">Éditeur Python</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox2" spellcheck="false"># Conditions
+            <textarea class="code-editor" id="sandbox2" spellcheck="false"># 1. CONDITIONS (if/elif/else)
+print("=== CONDITIONS ===")
 age = 20
 if age >= 18:
     print(f"L'âge {age} est majeur")
@@ -390,23 +426,53 @@ elif age >= 13:
 else:
     print("C'est un enfant")
 
-# Boucle for
-print("\nBoucle for:")
+# Conditions combinées avec and/or
+score = 75
+if score >= 50 and score < 80:
+    print(f"Score {score}: Moyen")
+
+# Opérateurs de comparaison
+x = 5
+print(f"\n=== COMPARAISONS ===")
+print(f"x = {x}")
+print(f"x > 3: {x > 3}")
+print(f"x == 5: {x == 5}")
+print(f"x != 10: {x != 10}")
+print(f"x >= 5: {x >= 5}")
+
+# 2. BOUCLE FOR - Sur une plage
+print(f"\n=== BOUCLE FOR (range) ===")
 for i in range(1, 6):
-    print(f"Itération {i}")
+    print(f"  i = {i}")
 
-# Boucle sur une liste
-fruits = ["pomme", "banane", "cerise"]
-print("\nFruits:")
+# Boucle FOR - Sur une liste
+print(f"\n=== BOUCLE FOR (liste) ===")
+fruits = ["pomme", "banane", "cerise", "datte"]
 for fruit in fruits:
-    print(f"- {fruit}")
+    print(f"  - {fruit}")
 
-# Boucle while
-print("\nBoucle while:")
+# Boucle FOR - Avec enumerate
+print(f"\n=== BOUCLE FOR (enumerate) ===")
+for index, fruit in enumerate(fruits):
+    print(f"  {index}: {fruit}")
+
+# 3. BOUCLE WHILE - Répéter tant que condition vraie
+print(f"\n=== BOUCLE WHILE ===")
 compte = 0
 while compte < 3:
-    print(f"Compte: {compte}")
+    print(f"  Compte: {compte}")
     compte += 1
+
+# 4. BREAK et CONTINUE
+print(f"\n=== BREAK et CONTINUE ===")
+for i in range(1, 6):
+    if i == 3:
+        print(f"  {i} -> SKIP (continue)")
+        continue  # Passe à l'itération suivante
+    if i == 5:
+        print(f"  {i} -> ARRÊT (break)")
+        break  # Sortir de la boucle
+    print(f"  {i}")
 </textarea>
           </div>
         </div>
@@ -456,7 +522,9 @@ while compte < 3:
             <span style="color:#999;font-size:12px">Éditeur Python</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox3" spellcheck="false"># Fonction simple
+            <textarea class="code-editor" id="sandbox3" spellcheck="false"># 1. FONCTION SIMPLE
+print("=== 1. FONCTION SIMPLE ===")
+
 def saluer(nom):
     """Salue une personne"""
     return f"Bonjour, {nom}!"
@@ -464,15 +532,20 @@ def saluer(nom):
 print(saluer("Alice"))
 print(saluer("Bob"))
 
-# Fonction avec valeur par défaut
+# 2. PARAMÈTRES PAR DÉFAUT
+print(f"\n=== 2. PARAMÈTRES PAR DÉFAUT ===")
+
 def calculer_prix(montant, taxe=0.20):
     """Calcule le prix TTC"""
     return montant * (1 + taxe)
 
-print(f"Prix HT: 100€, TTC: {calculer_prix(100)}€")
-print(f"Prix HT: 100€, TTC (0% taxe): {calculer_prix(100, 0)}€")
+print(f"Prix HT: 100€, TTC (20%): {calculer_prix(100):.2f}€")
+print(f"Prix HT: 100€, TTC (0%): {calculer_prix(100, 0):.2f}€")
+print(f"Prix HT: 100€, TTC (5.5%): {calculer_prix(100, 0.055):.2f}€")
 
-# Fonction avec plusieurs retours
+# 3. PLUSIEURS RETOURS
+print(f"\n=== 3. PLUSIEURS RETOURS ===")
+
 def diviser(a, b):
     """Divise a par b et retourne quotient et reste"""
     return a // b, a % b
@@ -480,7 +553,9 @@ def diviser(a, b):
 quotient, reste = diviser(17, 5)
 print(f"17 / 5 = {quotient} reste {reste}")
 
-# Fonction avec *args
+# 4. *ARGS - NOMBRE VARIABLE D'ARGUMENTS
+print(f"\n=== 4. *args (arguments variables) ===")
+
 def somme(*nombres):
     """Somme tous les arguments"""
     total = 0
@@ -490,6 +565,28 @@ def somme(*nombres):
 
 print(f"Somme(1,2,3) = {somme(1, 2, 3)}")
 print(f"Somme(10,20,30,40) = {somme(10, 20, 30, 40)}")
+
+# 5. **KWARGS - ARGUMENTS NOMMÉS
+print(f"\n=== 5. **kwargs (arguments nommés) ===")
+
+def creer_profile(**infos):
+    """Crée un profil avec les infos données"""
+    for cle, valeur in infos.items():
+        print(f"  {cle}: {valeur}")
+
+print("Profil 1:")
+creer_profile(nom="Alice", age=30, ville="Paris")
+print("Profil 2:")
+creer_profile(nom="Bob", email="bob@example.com")
+
+# 6. COMBINAISON: Args + Kwargs
+print(f"\n=== 6. Combinaison (*args, **kwargs) ===")
+
+def afficher(*args, **kwargs):
+    print(f"Arguments positionnels: {args}")
+    print(f"Arguments nommés: {kwargs}")
+
+afficher(1, 2, 3, nom="Alice", age=25)
 </textarea>
           </div>
         </div>
@@ -539,13 +636,15 @@ print(f"Somme(10,20,30,40) = {somme(10, 20, 30, 40)}")
             <span style="color:#999;font-size:12px">Éditeur Python</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox4" spellcheck="false"># Définir une classe
+            <textarea class="code-editor" id="sandbox4" spellcheck="false"># 1. CLASSE SIMPLE
+print("=== 1. CLASSE SIMPLE ===")
+
 class Personne:
     """Classe représentant une personne"""
 
     def __init__(self, nom, age):
-        """Constructeur"""
-        self.nom = nom
+        """Constructeur - initialise l'objet"""
+        self.nom = nom  # Attribut
         self.age = age
 
     def se_presenter(self):
@@ -561,16 +660,24 @@ bob = Personne("Bob", 16)
 
 print(alice.se_presenter())
 print(f"Alice est majeure: {alice.est_majeur()}")
-
 print(bob.se_presenter())
 print(f"Bob est majeur: {bob.est_majeur()}")
 
-# Héritage
+# 2. ATTRIBUTS ET MÉTHODES
+print(f"\n=== 2. ACCÉDER AUX ATTRIBUTS ===")
+print(f"Nom d'Alice: {alice.nom}")
+print(f"Âge d'Alice: {alice.age}")
+alice.age = 31  # Modifier un attribut
+print(f"Nouvel âge d'Alice: {alice.age}")
+
+# 3. HÉRITAGE
+print(f"\n=== 3. HÉRITAGE ===")
+
 class Employe(Personne):
     """Classe qui hérite de Personne"""
 
     def __init__(self, nom, age, metier):
-        super().__init__(nom, age)
+        super().__init__(nom, age)  # Appel du constructeur parent
         self.metier = metier
 
     def se_presenter(self):
@@ -580,6 +687,24 @@ class Employe(Personne):
 
 employe = Employe("Charlie", 28, "Développeur")
 print(employe.se_presenter())
+print(f"Emploi: {employe.metier}")
+
+# 4. PLUSIEURS INSTANCES
+print(f"\n=== 4. PLUSIEURS INSTANCES ===")
+employes = [
+    Employe("Diana", 35, "Manager"),
+    Employe("Eve", 26, "Data Scientist"),
+    Employe("Frank", 32, "Architecte")
+]
+
+for emp in employes:
+    print(f"  {emp.se_presenter()}")
+
+# 5. VÉRIFIER LE TYPE
+print(f"\n=== 5. VÉRIFICATIONS ===")
+print(f"employe est Employe? {isinstance(employe, Employe)}")
+print(f"employe est Personne? {isinstance(employe, Personne)}")
+print(f"alice est Employe? {isinstance(alice, Employe)}")
 </textarea>
           </div>
         </div>

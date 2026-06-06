@@ -306,8 +306,38 @@ nav{
             <span style="color:#999;font-size:12px">Éditeur SQL</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox1" spellcheck="false">-- Voir tous les employés
+            <textarea class="code-editor" id="sandbox1" spellcheck="false">-- 1. SELECT simple - Toutes les colonnes
 SELECT * FROM employes;
+
+-- 2. SELECT colonnes spécifiques
+SELECT nom, salaire, departement FROM employes;
+
+-- 3. WHERE - Condition simple
+-- Employés avec salaire > 50000
+SELECT nom, salaire, departement
+FROM employes
+WHERE salaire > 50000;
+
+-- 4. WHERE avec AND - Conditions multiples
+-- IT avec salaire > 45000
+SELECT nom, departement, salaire
+FROM employes
+WHERE departement = 'IT' AND salaire > 45000;
+
+-- 5. WHERE avec IN - Valeurs dans liste
+-- Employés en IT ou Finance
+SELECT nom, departement
+FROM employes
+WHERE departement IN ('IT', 'Finance');
+
+-- 6. WHERE avec LIKE - Recherche texte
+-- Noms commençant par 'J'
+SELECT nom FROM employes WHERE nom LIKE 'J%';
+
+-- 7. WHERE avec BETWEEN
+SELECT nom, salaire
+FROM employes
+WHERE salaire BETWEEN 40000 AND 60000;
 </textarea>
           </div>
         </div>
@@ -353,13 +383,35 @@ SELECT * FROM employes;
             <span style="color:#999;font-size:12px">Éditeur SQL</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox2" spellcheck="false">-- Employés avec leur département
+            <textarea class="code-editor" id="sandbox2" spellcheck="false">-- 1. INNER JOIN - Employés avec département
 SELECT
     e.nom,
     e.salaire,
     d.nom AS departement
 FROM employes e
 INNER JOIN departements d ON e.dept_id = d.id;
+
+-- 2. LEFT JOIN - Tous les employés, même sans département
+SELECT
+    e.nom,
+    e.salaire,
+    COALESCE(d.nom, 'N/A') AS departement
+FROM employes e
+LEFT JOIN departements d ON e.dept_id = d.id;
+
+-- 3. JOIN avec WHERE - Filtrer après jointure
+SELECT
+    e.nom,
+    e.salaire,
+    d.nom AS departement
+FROM employes e
+INNER JOIN departements d ON e.dept_id = d.id
+WHERE e.salaire > 50000;
+
+-- 4. JOIN sur alias - Utiliser alias pour clarifier
+SELECT e.nom, e.salaire, d.nom
+FROM employes AS e
+INNER JOIN departements AS d ON e.dept_id = d.id;
 </textarea>
           </div>
         </div>
@@ -406,15 +458,47 @@ INNER JOIN departements d ON e.dept_id = d.id;
             <span style="color:#999;font-size:12px">Éditeur SQL</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox3" spellcheck="false">-- Nombre d'employés par département
+            <textarea class="code-editor" id="sandbox3" spellcheck="false">-- 1. COUNT - Compter les employés
+SELECT COUNT(*) AS total_employes FROM employes;
+
+-- 2. COUNT par département
+SELECT departement, COUNT(*) AS nb
+FROM employes
+GROUP BY departement;
+
+-- 3. SUM et AVG - Totaux et moyennes
 SELECT
-    d.nom AS departement,
-    COUNT(e.id) AS nb_employes,
-    AVG(e.salaire) AS salaire_moyen
-FROM departements d
-LEFT JOIN employes e ON d.id = e.dept_id
-GROUP BY d.id, d.nom
-ORDER BY nb_employes DESC;
+    departement,
+    COUNT(*) AS nb_employes,
+    SUM(salaire) AS masse_salariale,
+    AVG(salaire) AS salaire_moyen
+FROM employes
+GROUP BY departement;
+
+-- 4. MIN et MAX
+SELECT
+    departement,
+    MIN(salaire) AS min_salaire,
+    MAX(salaire) AS max_salaire,
+    COUNT(*) AS effectif
+FROM employes
+GROUP BY departement;
+
+-- 5. ROUND - Arrondir les décimales
+SELECT
+    departement,
+    ROUND(AVG(salaire), 2) AS salaire_moyen_arrondi
+FROM employes
+GROUP BY departement;
+
+-- 6. HAVING - Filtrer les groupes (2+ employés)
+SELECT
+    departement,
+    COUNT(*) AS effectif,
+    ROUND(AVG(salaire), 2) AS moy
+FROM employes
+GROUP BY departement
+HAVING COUNT(*) >= 2;
 </textarea>
           </div>
         </div>
@@ -462,21 +546,244 @@ ORDER BY nb_employes DESC;
             <span style="color:#999;font-size:12px">Éditeur SQL</span>
           </div>
           <div class="editor-wrapper">
-            <textarea class="code-editor" id="sandbox4" spellcheck="false">-- Top 3 des employés les mieux payés
+            <textarea class="code-editor" id="sandbox4" spellcheck="false">-- 1. ORDER BY ASC - Tri croissant
+SELECT nom, salaire
+FROM employes
+ORDER BY salaire ASC;
+
+-- 2. ORDER BY DESC - Tri décroissant
+SELECT nom, salaire
+FROM employes
+ORDER BY salaire DESC;
+
+-- 3. LIMIT - Premières N lignes
+-- Top 5 des mieux payés
+SELECT nom, salaire
+FROM employes
+ORDER BY salaire DESC
+LIMIT 5;
+
+-- 4. LIMIT + OFFSET - Pagination
+-- Lignes 3-5
+SELECT nom, salaire
+FROM employes
+ORDER BY nom
+LIMIT 3 OFFSET 2;
+
+-- 5. Multiple ORDER BY - Trier par plusieurs colonnes
+SELECT nom, departement, salaire
+FROM employes
+ORDER BY departement ASC, salaire DESC;
+
+-- 6. Combinaison: JOIN + ORDER + LIMIT
 SELECT
-    nom,
-    salaire,
+    e.nom,
+    e.salaire,
     d.nom AS departement
 FROM employes e
 LEFT JOIN departements d ON e.dept_id = d.id
-ORDER BY salaire DESC
-LIMIT 3;
+ORDER BY e.salaire DESC
+LIMIT 10;
 </textarea>
           </div>
         </div>
         <div class="sandbox-output">
           <div class="output-header">📤 Résultat</div>
           <div class="output-content" id="output4" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 5: DISTINCT & EXPRESSIONS ─── -->
+<section class="section">
+  <div class="section-inner">
+    <h2 class="section-title">Module 5 · DISTINCT, Alias et Expressions</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>DISTINCT — Valeurs uniques</h3>
+        <p><code>DISTINCT</code> élimine les doublons du résultat :</p>
+        <p><code>SELECT DISTINCT departement FROM employes;</code></p>
+
+        <h3 style="margin-top:20px">Alias AS — Renommer les colonnes</h3>
+        <p>Renommer une colonne ou expression dans les résultats :</p>
+        <p><code>SELECT nom AS employee_name, salaire AS monthly_pay FROM employes;</code></p>
+
+        <h3 style="margin-top:20px">Expressions et Calculs</h3>
+        <p>Créer de nouvelles colonnes calculées :</p>
+        <ul>
+          <li><code>salaire * 12 AS salaire_annuel</code> — Multiplication</li>
+          <li><code>salaire / 12 AS salaire_mensuel</code> — Division</li>
+          <li><code>UPPER(nom) AS nom_majuscule</code> — Fonctions de texte</li>
+          <li><code>LENGTH(nom) AS longueur_nom</code> — Longueur de texte</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — DISTINCT et Alias
+        <button class="btn-run" onclick="runSQL('sandbox5')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur SQL</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox5" spellcheck="false">-- 1. DISTINCT - Valeurs uniques
+SELECT DISTINCT departement FROM employes;
+
+-- 2. COUNT avec DISTINCT
+SELECT COUNT(DISTINCT departement) AS nb_departements
+FROM employes;
+
+-- 3. Alias AS - Renommer colonnes
+SELECT
+    nom AS nom_employe,
+    salaire AS salaire_actuel,
+    departement AS dept
+FROM employes;
+
+-- 4. Alias pour expressions calculées
+SELECT
+    nom,
+    salaire,
+    salaire * 12 AS salaire_annuel,
+    ROUND(salaire / 30, 2) AS salaire_par_jour
+FROM employes;
+
+-- 5. Fonctions de texte
+SELECT
+    nom,
+    UPPER(nom) AS nom_majuscule,
+    LOWER(departement) AS departement_minuscule,
+    LENGTH(nom) AS longueur_nom
+FROM employes;
+
+-- 6. CONCAT - Combiner colonnes (si supporté)
+SELECT
+    nom,
+    departement,
+    ROUND(AVG(salaire), 0) AS salaire
+FROM employes
+GROUP BY nom, departement;
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output5" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MODULE 6: CASE & FONCTIONS ─── -->
+<section class="section" style="background:#f9f9f9">
+  <div class="section-inner">
+    <h2 class="section-title">Module 6 · CASE, Conditions et Fonctions Avancées</h2>
+
+    <div class="lesson-grid">
+      <div class="lesson-content">
+        <h3>CASE — Conditions dans SELECT</h3>
+        <p>Créer des résultats conditionnels :</p>
+        <p><code>CASE WHEN condition THEN valeur ELSE valeur_defaut END</code></p>
+
+        <h3 style="margin-top:20px">Exemples d'utilisation</h3>
+        <ul>
+          <li>Catégoriser par salaire : Junior/Senior</li>
+          <li>Affecter des bonus selon le département</li>
+          <li>Transformer les valeurs NULL</li>
+          <li>Créer des flags (1/0) pour analyse</li>
+        </ul>
+
+        <h3 style="margin-top:20px">Fonctions courantes</h3>
+        <ul>
+          <li><code>COALESCE(colonne, 'valeur_par_defaut')</code> — Remplacer NULL</li>
+          <li><code>IFNULL(colonne, 0)</code> — Alternative COALESCE</li>
+          <li><code>ROUND(nombre, decimales)</code> — Arrondir</li>
+          <li><code>SUBSTR(texte, debut, longueur)</code> — Extraire partie de texte</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sandbox-wrap">
+      <div class="sandbox-header">
+        ✏️ Try it yourself — CASE et Fonctions
+        <button class="btn-run" onclick="runSQL('sandbox6')">Exécuter (Run)</button>
+      </div>
+      <div class="sandbox-body">
+        <div class="sandbox-editor">
+          <div class="editor-controls">
+            <span style="color:#999;font-size:12px">Éditeur SQL</span>
+          </div>
+          <div class="editor-wrapper">
+            <textarea class="code-editor" id="sandbox6" spellcheck="false">-- 1. CASE SIMPLE - Catégoriser par salaire
+SELECT
+    nom,
+    salaire,
+    CASE
+        WHEN salaire >= 60000 THEN 'Senior'
+        WHEN salaire >= 45000 THEN 'Intermédiaire'
+        ELSE 'Junior'
+    END AS niveau
+FROM employes;
+
+-- 2. CASE dans GROUP BY
+SELECT
+    CASE
+        WHEN salaire >= 60000 THEN 'Senior'
+        WHEN salaire >= 45000 THEN 'Intermédiaire'
+        ELSE 'Junior'
+    END AS niveau,
+    COUNT(*) AS effectif,
+    ROUND(AVG(salaire), 0) AS salaire_moyen
+FROM employes
+GROUP BY niveau;
+
+-- 3. COALESCE - Remplacer NULL
+SELECT
+    nom,
+    COALESCE(departement, 'Non assigné') AS departement
+FROM employes;
+
+-- 4. CASE avec NULL
+SELECT
+    nom,
+    salaire,
+    CASE
+        WHEN salaire IS NULL THEN 'Pas de salaire'
+        WHEN salaire > 50000 THEN 'Bien payé'
+        ELSE 'Moins payé'
+    END AS statut
+FROM employes;
+
+-- 5. Combinaison: CASE + JOIN + GROUP BY
+SELECT
+    CASE WHEN salaire > 50000 THEN 'Haut' ELSE 'Bas' END AS categorie,
+    COUNT(*) AS nb,
+    ROUND(AVG(salaire), 0) AS moy
+FROM employes
+GROUP BY categorie;
+
+-- 6. SUBSTR - Extraire initiale du nom
+SELECT
+    SUBSTR(nom, 1, 1) AS initiale,
+    COUNT(*) AS nb_employes
+FROM employes
+GROUP BY initiale;
+</textarea>
+          </div>
+        </div>
+        <div class="sandbox-output">
+          <div class="output-header">📤 Résultat</div>
+          <div class="output-content" id="output6" class="output-empty">Cliquez sur "Exécuter" pour voir le résultat...</div>
         </div>
       </div>
     </div>

@@ -148,20 +148,72 @@ footer p{font-size:13px;color:var(--gray)}
       <div class="module-title">Module 1: SELECT Avancé & Filtrage</div>
       <div class="module-desc">SELECT, WHERE, LIKE, IN, BETWEEN et conditions complexes</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>WHERE:</strong> Filtrer les lignes selon une condition</li>
+          <li><strong>LIKE:</strong> Recherche par motif (%, _)</li>
+          <li><strong>IN:</strong> Vérifier si valeur est dans une liste</li>
+          <li><strong>BETWEEN:</strong> Vérifier si valeur est dans une plage</li>
+          <li><strong>AND/OR:</strong> Combiner plusieurs conditions</li>
+          <li><strong>ORDER BY:</strong> Trier les résultats (ASC ou DESC)</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Requête SQL</div>
-          <textarea id="sandbox1" spellcheck="false">-- Sélectionnez les employés dont le salaire est entre 40000 et 60000
+          <textarea id="sandbox1" spellcheck="false">-- 1. BASIC SELECT - Sélectionner des colonnes
+SELECT nom, departement, salaire
+FROM employes
+LIMIT 3;
+
+-- 2. WHERE - Filtrer par condition
+-- Employés avec salaire > 50000
+SELECT nom, departement, salaire
+FROM employes
+WHERE salaire > 50000
+ORDER BY salaire DESC;
+
+-- 3. BETWEEN - Plage de valeurs
+-- Salaires entre 40000 et 60000
 SELECT nom, departement, salaire
 FROM employes
 WHERE salaire BETWEEN 40000 AND 60000
-ORDER BY salaire DESC;</textarea>
+ORDER BY salaire DESC;
+
+-- 4. IN - Valeurs dans une liste
+-- Employés en IT ou Finance
+SELECT nom, departement, salaire
+FROM employes
+WHERE departement IN ('IT', 'Finance')
+ORDER BY nom;
+
+-- 5. LIKE - Recherche par motif
+-- Noms commençant par 'A'
+SELECT nom, departement
+FROM employes
+WHERE nom LIKE 'A%'
+ORDER BY nom;
+
+-- 6. AND/OR - Conditions combinées
+-- IT avec salaire > 45000 OU Finance avec salaire > 55000
+SELECT nom, departement, salaire
+FROM employes
+WHERE (departement = 'IT' AND salaire > 45000)
+   OR (departement = 'Finance' AND salaire > 55000)
+ORDER BY departement, salaire DESC;</textarea>
         </div>
         <div>
           <div class="sandbox-label">📤 Résultat</div>
           <div class="sandbox-output" id="output1">Cliquez sur "Exécuter"...</div>
           <button class="btn-run" onclick="runSQL('sandbox1')">Exécuter</button>
         </div>
+      </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">WHERE est l'outil clé pour filtrer les données. Combinaisons: BETWEEN pour plages, IN pour listes, LIKE pour motifs. Utilisez AND/OR pour conditions complexes. ORDER BY organise les résultats (ASC par défaut).</p>
       </div>
     </div>
 
@@ -170,10 +222,33 @@ ORDER BY salaire DESC;</textarea>
       <div class="module-title">Module 2: Jointures Avancées</div>
       <div class="module-desc">INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN et jointures multiples</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>INNER JOIN:</strong> Seulement les lignes correspondantes (intersection)</li>
+          <li><strong>LEFT JOIN:</strong> Toutes les lignes à gauche + correspondances</li>
+          <li><strong>RIGHT JOIN:</strong> Toutes les lignes à droite + correspondances</li>
+          <li><strong>FULL OUTER JOIN:</strong> Toutes les lignes des deux tables</li>
+          <li><strong>ON clause:</strong> Condition pour matcher les tables</li>
+          <li><strong>Aliasing:</strong> Raccourcir les noms (e.nom = employes.nom)</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Requête SQL</div>
-          <textarea id="sandbox2" spellcheck="false">-- Joignez employés et départements avec conditions
+          <textarea id="sandbox2" spellcheck="false">-- 1. INNER JOIN - Intersection
+-- Employés avec infos département (inclut les deux tables)
+SELECT
+    e.nom AS employe,
+    d.nom_dept AS departement,
+    e.salaire
+FROM employes e
+INNER JOIN departements d ON e.dept_id = d.id
+ORDER BY e.salaire DESC;
+
+-- 2. LEFT JOIN - Tous de la gauche
+-- Employés + infos département si existe
 SELECT
     e.nom AS employe,
     d.nom_dept AS departement,
@@ -181,13 +256,38 @@ SELECT
 FROM employes e
 LEFT JOIN departements d ON e.dept_id = d.id
 WHERE e.salaire > 40000
-ORDER BY e.salaire DESC;</textarea>
+ORDER BY e.salaire DESC;
+
+-- 3. JOINTURE MULTIPLE - Trois tables
+-- Employés avec département et lieu
+SELECT
+    e.nom,
+    d.nom_dept,
+    e.salaire,
+    COUNT(*) OVER (PARTITION BY d.nom_dept) AS effectif
+FROM employes e
+LEFT JOIN departements d ON e.dept_id = d.id
+ORDER BY d.nom_dept, e.nom;
+
+-- 4. AUTO-JOIN - Joindre une table avec elle-même
+-- Trouver managers et employés
+SELECT
+    emp.nom AS employe,
+    CASE WHEN mgr.nom IS NULL THEN 'Manager' ELSE mgr.nom END AS manager
+FROM employes emp
+LEFT JOIN employes mgr ON emp.manager_id = mgr.id
+ORDER BY emp.nom;</textarea>
         </div>
         <div>
           <div class="sandbox-label">📤 Résultat</div>
           <div class="sandbox-output" id="output2">Cliquez sur "Exécuter"...</div>
           <button class="btn-run" onclick="runSQL('sandbox2')">Exécuter</button>
         </div>
+      </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">Les jointures combinent des données de plusieurs tables. INNER JOIN = strictement les deux. LEFT/RIGHT = tout d'un côté + correspondances. Utilisez des alias (e, d) pour clarifier. ON clause = condition pour matcher.</p>
       </div>
     </div>
 
@@ -196,28 +296,79 @@ ORDER BY e.salaire DESC;</textarea>
       <div class="module-title">Module 3: GROUP BY & Agrégations</div>
       <div class="module-desc">COUNT, SUM, AVG, MIN, MAX, GROUP BY, HAVING et statistiques</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>COUNT(*):</strong> Compte les lignes</li>
+          <li><strong>SUM:</strong> Somme des valeurs</li>
+          <li><strong>AVG:</strong> Moyenne</li>
+          <li><strong>MIN/MAX:</strong> Minimum et maximum</li>
+          <li><strong>GROUP BY:</strong> Regrouper les résultats par colonne</li>
+          <li><strong>HAVING:</strong> Filtrer les groupes (comme WHERE pour GROUP BY)</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Requête SQL</div>
-          <textarea id="sandbox3" spellcheck="false">-- Statistiques par département
+          <textarea id="sandbox3" spellcheck="false">-- 1. COUNT - Compter les lignes
+-- Nombre total d'employés
+SELECT COUNT(*) AS total_employes
+FROM employes;
+
+-- 2. SUM, AVG, MIN, MAX - Statistiques
+-- Salaires (total, moyenne, min, max)
 SELECT
-    d.nom_dept,
+    COUNT(*) AS nb,
+    SUM(salaire) AS total,
+    ROUND(AVG(salaire), 2) AS moyenne,
+    MIN(salaire) AS minimum,
+    MAX(salaire) AS maximum
+FROM employes;
+
+-- 3. GROUP BY - Regrouper et agréger
+-- Statistiques par département
+SELECT
+    departement,
     COUNT(*) AS nb_employes,
-    ROUND(AVG(e.salaire), 2) AS salaire_moyen,
-    MIN(e.salaire) AS salaire_min,
-    MAX(e.salaire) AS salaire_max,
-    SUM(e.salaire) AS masse_salariale
-FROM employes e
-JOIN departements d ON e.dept_id = d.id
-GROUP BY d.nom_dept
-HAVING COUNT(*) >= 2
-ORDER BY masse_salariale DESC;</textarea>
+    ROUND(AVG(salaire), 2) AS salaire_moyen,
+    MIN(salaire) AS min,
+    MAX(salaire) AS max,
+    SUM(salaire) AS masse_salariale
+FROM employes
+GROUP BY departement
+ORDER BY masse_salariale DESC;
+
+-- 4. HAVING - Filtrer les groupes
+-- Départements avec 2+ employés et salaire moyen > 50000
+SELECT
+    departement,
+    COUNT(*) AS nb_employes,
+    ROUND(AVG(salaire), 2) AS salaire_moyen
+FROM employes
+GROUP BY departement
+HAVING COUNT(*) >= 2 AND AVG(salaire) > 50000
+ORDER BY salaire_moyen DESC;
+
+-- 5. ROUND - Arrondir les décimales
+-- Exemple: 2 décimales
+SELECT
+    departement,
+    ROUND(AVG(salaire), 2) AS moy_2_decimales,
+    ROUND(AVG(salaire), 0) AS moy_0_decimales
+FROM employes
+GROUP BY departement;</textarea>
         </div>
         <div>
           <div class="sandbox-label">📤 Résultat</div>
           <div class="sandbox-output" id="output3">Cliquez sur "Exécuter"...</div>
           <button class="btn-run" onclick="runSQL('sandbox3')">Exécuter</button>
         </div>
+      </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">GROUP BY agrège les données par catégories. Combinaison classique: GROUP BY + COUNT/SUM/AVG/MIN/MAX. HAVING = WHERE pour les groupes. Toujours inclure les colonnes non-agrégées dans GROUP BY!</p>
       </div>
     </div>
 
@@ -226,31 +377,96 @@ ORDER BY masse_salariale DESC;</textarea>
       <div class="module-title">Module 4: Sous-requêtes & CTE (Common Table Expressions)</div>
       <div class="module-desc">WITH, sous-requêtes, requêtes imbriquées et requêtes récursives</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>CTE (WITH):</strong> Common Table Expressions - requête nommée réutilisable</li>
+          <li><strong>Sous-requête:</strong> Requête imbriquée dans SELECT/WHERE/FROM</li>
+          <li><strong>Avantage CTE:</strong> Plus lisible que sous-requêtes imbriquées</li>
+          <li><strong>Récursif:</strong> Hiérarchies (organigrammes, arbres)</li>
+          <li><strong>Readabilité:</strong> Diviser requête complexe en étapes logiques</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Requête SQL</div>
-          <textarea id="sandbox4" spellcheck="false">-- CTE (WITH clause) pour clarifier la logique
+          <textarea id="sandbox4" spellcheck="false">-- 1. CTE SIMPLE - WITH clause
+-- Calculer salaire moyen par département, puis afficher l'écart
 WITH salaire_moyen_dept AS (
     SELECT
-        dept_id,
+        departement,
         ROUND(AVG(salaire), 2) AS salaire_moyen
     FROM employes
-    GROUP BY dept_id
+    GROUP BY departement
 )
 SELECT
     e.nom,
+    e.departement,
     e.salaire,
     smd.salaire_moyen,
-    ROUND(e.salaire - smd.salaire_moyen, 2) AS ecart
+    ROUND(e.salaire - smd.salaire_moyen, 2) AS ecart_a_la_moyenne
 FROM employes e
-JOIN salaire_moyen_dept smd ON e.dept_id = smd.dept_id
-ORDER BY ecart DESC;</textarea>
+JOIN salaire_moyen_dept smd ON e.departement = smd.departement
+ORDER BY e.departement, ecart_a_la_moyenne DESC;
+
+-- 2. MULTIPLE CTE - Plusieurs CTEs
+-- CTE 1: Salaires moyens
+-- CTE 2: Effectifs
+-- JOIN sur les deux
+WITH avg_salaire AS (
+    SELECT departement, ROUND(AVG(salaire), 2) AS avg_sal
+    FROM employes
+    GROUP BY departement
+),
+effectifs AS (
+    SELECT departement, COUNT(*) AS effectif
+    FROM employes
+    GROUP BY departement
+)
+SELECT
+    a.departement,
+    e.effectif,
+    a.avg_sal
+FROM avg_salaire a
+JOIN effectifs e ON a.departement = e.departement
+ORDER BY a.avg_sal DESC;
+
+-- 3. SOUS-REQUÊTE dans WHERE
+-- Employés au-dessus de la moyenne générale
+SELECT
+    nom,
+    departement,
+    salaire
+FROM employes
+WHERE salaire > (SELECT AVG(salaire) FROM employes)
+ORDER BY salaire DESC;
+
+-- 4. SOUS-REQUÊTE dans FROM
+-- Obtenir des statistiques sur les salaires
+SELECT
+    dept_name,
+    avg_sal,
+    ROUND(avg_sal, 0) AS rounded
+FROM (
+    SELECT
+        departement AS dept_name,
+        AVG(salaire) AS avg_sal
+    FROM employes
+    GROUP BY departement
+) AS dept_stats
+ORDER BY avg_sal DESC;</textarea>
         </div>
         <div>
           <div class="sandbox-label">📤 Résultat</div>
           <div class="sandbox-output" id="output4">Cliquez sur "Exécuter"...</div>
           <button class="btn-run" onclick="runSQL('sandbox4')">Exécuter</button>
         </div>
+      </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">CTE (WITH) rend les requêtes complexes lisibles. Divisez en étapes logiques. Sous-requête utile pour filtrer (WHERE) ou transformer (FROM). Pattern: CTE calculée une fois, réutilisée. Pour hiérarchies: utilisez WITH RECURSIVE.</p>
       </div>
     </div>
 
@@ -259,26 +475,85 @@ ORDER BY ecart DESC;</textarea>
       <div class="module-title">Module 5: Window Functions (Fenêtres)</div>
       <div class="module-desc">ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD et analyses temporelles</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>Window Functions:</strong> Opérations sur partitions de données</li>
+          <li><strong>PARTITION BY:</strong> Diviser fenêtre par catégories</li>
+          <li><strong>ORDER BY:</strong> Trier dans la fenêtre</li>
+          <li><strong>ROW_NUMBER:</strong> Numérotation séquentielle (1,2,3...)</li>
+          <li><strong>RANK/DENSE_RANK:</strong> Classement avec ou sans lacunes</li>
+          <li><strong>SUM/AVG OVER:</strong> Agrégations sans grouper les lignes</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Requête SQL</div>
-          <textarea id="sandbox5" spellcheck="false">-- Classement des salaires par département
+          <textarea id="sandbox5" spellcheck="false">-- 1. ROW_NUMBER - Numérotation
+-- Classement des salaires par département
 SELECT
     nom,
     departement,
     salaire,
-    ROW_NUMBER() OVER (PARTITION BY departement ORDER BY salaire DESC) AS rang,
-    RANK() OVER (PARTITION BY departement ORDER BY salaire DESC) AS rang_avec_ex,
-    SUM(salaire) OVER (PARTITION BY departement) AS total_dept,
-    ROUND(AVG(salaire) OVER (PARTITION BY departement), 2) AS moy_dept
+    ROW_NUMBER() OVER (PARTITION BY departement ORDER BY salaire DESC) AS rang
 FROM employes
-ORDER BY departement, rang;</textarea>
+ORDER BY departement, rang;
+
+-- 2. RANK vs DENSE_RANK
+-- RANK laisse des lacunes (1, 2, 2, 4)
+-- DENSE_RANK sans lacunes (1, 2, 2, 3)
+SELECT
+    nom,
+    departement,
+    salaire,
+    RANK() OVER (PARTITION BY departement ORDER BY salaire DESC) AS rank_method,
+    DENSE_RANK() OVER (PARTITION BY departement ORDER BY salaire DESC) AS dense_rank
+FROM employes
+ORDER BY departement, rank_method;
+
+-- 3. WINDOW FUNCTIONS avec agrégation
+-- Chaque ligne + totaux/moyennes du département
+SELECT
+    nom,
+    departement,
+    salaire,
+    SUM(salaire) OVER (PARTITION BY departement) AS total_dept,
+    ROUND(AVG(salaire) OVER (PARTITION BY departement), 2) AS moy_dept,
+    COUNT(*) OVER (PARTITION BY departement) AS effectif_dept
+FROM employes
+ORDER BY departement, salaire DESC;
+
+-- 4. LAG et LEAD - Valeurs précédente/suivante
+-- Comparer avec salaire précédent dans le classement
+SELECT
+    nom,
+    salaire,
+    LAG(salaire) OVER (ORDER BY salaire DESC) AS salaire_precedent,
+    LEAD(salaire) OVER (ORDER BY salaire DESC) AS salaire_suivant,
+    ROUND(salaire - LAG(salaire) OVER (ORDER BY salaire DESC), 2) AS difference_precedent
+FROM employes
+ORDER BY salaire DESC;
+
+-- 5. PERCENT_RANK - Rang percentile
+-- Position relative du salaire (0 à 1)
+SELECT
+    nom,
+    salaire,
+    ROUND(PERCENT_RANK() OVER (ORDER BY salaire) * 100, 1) AS percentile
+FROM employes
+ORDER BY salaire DESC;</textarea>
         </div>
         <div>
           <div class="sandbox-label">📤 Résultat</div>
           <div class="sandbox-output" id="output5">Cliquez sur "Exécuter"...</div>
           <button class="btn-run" onclick="runSQL('sandbox5')">Exécuter</button>
         </div>
+      </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">Window Functions = agrégations sans grouper. PARTITION BY divise en "fenêtres". ROW_NUMBER pour classement, RANK pour positions avec ex-aequo. LAG/LEAD pour comparaisons temporelles. Très puissant pour analyses comparatives!</p>
       </div>
     </div>
 
@@ -287,25 +562,87 @@ ORDER BY departement, rang;</textarea>
       <div class="module-title">Module 6: Union, Except, Intersect & Optimisation</div>
       <div class="module-desc">Opérations d'ensemble, performances et best practices SQL</div>
 
+      <div style="background:#fff;padding:16px;border-radius:8px;margin-bottom:20px;border-left:4px solid var(--blue)">
+        <strong>📚 Concepts clés:</strong>
+        <ul style="margin-left:20px;margin-top:8px">
+          <li><strong>UNION:</strong> Combine 2 requêtes, supprime les doublons</li>
+          <li><strong>UNION ALL:</strong> Combine sans enlever les doublons (plus rapide)</li>
+          <li><strong>INTERSECT:</strong> Lignes présentes dans les 2 requêtes</li>
+          <li><strong>EXCEPT:</strong> Lignes de la 1ère qui ne sont pas dans la 2e</li>
+          <li><strong>Performance:</strong> Filtrer avant UNION, indexer les colonnes clés</li>
+          <li><strong>Best Practices:</strong> Colonnes mêmes types, lisibilité, commentaires</li>
+        </ul>
+      </div>
+
       <div class="sandbox-container">
         <div class="sandbox-editor">
           <div class="sandbox-label">📝 Requête SQL</div>
-          <textarea id="sandbox6" spellcheck="false">-- Combiner résultats avec UNION
-SELECT nom, 'Employé' AS type, departement, salaire
+          <textarea id="sandbox6" spellcheck="false">-- 1. UNION - Combiner et dédupliquer
+-- Combiner employés et départements
+SELECT nom, 'Employé' AS type, departement AS groupe
 FROM employes
 WHERE salaire > 45000
 
 UNION
 
-SELECT nom_dept, 'Département' AS type, NULL, NULL
+SELECT nom_dept AS nom, 'Département' AS type, nom_dept
 FROM departements
-ORDER BY type, nom;</textarea>
+ORDER BY type, nom;
+
+-- 2. UNION ALL - Combiner sans dédupliquer (plus rapide)
+-- Toutes les lignes, y compris doublons
+SELECT nom, departement, salaire
+FROM employes
+
+UNION ALL
+
+SELECT nom, departement, salaire
+FROM employes_archive
+ORDER BY nom;
+
+-- 3. INTERSECT - Éléments présents dans les deux
+-- Départements avec au moins 2 employés ayant salaire > 50000
+SELECT departement
+FROM employes
+WHERE salaire > 50000
+GROUP BY departement
+HAVING COUNT(*) >= 2
+
+INTERSECT
+
+SELECT departement
+FROM employes
+WHERE salaire > 45000
+GROUP BY departement;
+
+-- 4. EXCEPT - A sauf B
+-- Départements dans employes mais pas en archive
+SELECT DISTINCT departement
+FROM employes
+
+EXCEPT
+
+SELECT DISTINCT departement
+FROM employes_archive;
+
+-- 5. CAS PRATIQUE: Migration de données
+-- Trouver les nouvelles entrées
+SELECT id, nom, email FROM employes_new
+
+EXCEPT
+
+SELECT id, nom, email FROM employes_old;</textarea>
         </div>
         <div>
           <div class="sandbox-label">📤 Résultat</div>
           <div class="sandbox-output" id="output6">Cliquez sur "Exécuter"...</div>
           <button class="btn-run" onclick="runSQL('sandbox6')">Exécuter</button>
         </div>
+      </div>
+
+      <div style="background:#e6f7ff;padding:16px;border-radius:8px;margin-top:16px;border-left:4px solid var(--blue)">
+        <strong>💡 À Retenir:</strong>
+        <p style="margin-top:8px">UNION combine résultats et déduplique (coûteux). UNION ALL plus rapide. INTERSECT/EXCEPT pour opérations d'ensemble. Toujours utiliser UNION ALL si dédupli pas nécessaire. Filtrer dans les sous-requêtes avant UNION pour performance. Cohérence des types!</p>
       </div>
     </div>
 
