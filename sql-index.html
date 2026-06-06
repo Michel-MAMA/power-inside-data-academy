@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL — Formations Interactives | Power Inside Data Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #111111; overflow-x: hidden; }
+
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --primary-light: #f3e8ff;
+      --accent: #0066ff;
+      --bg-light: #f5f7fb;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666666;
+      --text-light: #999999;
+      --border: #e5e7eb;
+      --white: #ffffff;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      padding: 0 40px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .nav-logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    .nav-cta {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s var(--ease);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary-light);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      margin-top: 70px;
+      min-height: calc(100vh - 70px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      background: linear-gradient(135deg, var(--primary-light) 0%, rgba(0, 102, 255, 0.05) 100%);
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero-title {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    /* ─── CONTAINER ─── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 20px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: 42px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-primary);
+    }
+
+    .section-desc {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ─── MODULES GRID ─── */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-top: 60px;
+    }
+
+    .module-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s var(--ease);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .module-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-8px);
+      box-shadow: 0 16px 48px rgba(124, 58, 237, 0.15);
+    }
+
+    .module-icon {
+      font-size: 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+    }
+
+    .module-number {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .module-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .module-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .module-level {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 600;
+      padding: 6px 12px;
+      background: var(--primary-light);
+      border-radius: 6px;
+      width: fit-content;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg-light);
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero-title { font-size: 36px; }
+      .section-title { font-size: 28px; }
+      .container { padding: 60px 20px; }
+      .modules-grid { grid-template-columns: 1fr; }
+      nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon">PIDA</div>
+    <span>Power Inside</span>
+  </a>
+  <div class="nav-cta">
+    <a href="index.html" class="btn-nav btn-secondary">Retour</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-content">
+    <h1 class="hero-title">🗄️ SQL Maîtrisé</h1>
+    <p class="hero-subtitle">12 modules interactifs pour maîtriser SQL du débutant à l'expert. Des requêtes basiques aux jointures complexes, agrégations et window functions.</p>
+  </div>
+</section>
+
+<!-- ─── MODULES ─── -->
+<div class="container">
+  <div class="section-header">
+    <h2 class="section-title">Les 12 Modules SQL</h2>
+    <p class="section-desc">Explorez SQL avec explications, requêtes et exécution interactive</p>
+  </div>
+
+  <div class="modules-grid">
+    <!-- ADVANCED: M1-M6 -->
+    <!-- M1 -->
+    <a href="sql-module.html?m=1" class="module-card">
+      <div class="module-icon">🔍</div>
+      <div class="module-number">Module 1 / 12</div>
+      <div class="module-title">SELECT Avancé & Filtrage</div>
+      <div class="module-desc">WHERE, LIKE, IN, BETWEEN et conditions complexes</div>
+      <div class="module-level">Avancé</div>
+    </a>
+
+    <!-- M2 -->
+    <a href="sql-module.html?m=2" class="module-card">
+      <div class="module-icon">🔗</div>
+      <div class="module-number">Module 2 / 12</div>
+      <div class="module-title">Jointures Avancées</div>
+      <div class="module-desc">INNER, LEFT, RIGHT, FULL OUTER JOIN et multiples</div>
+      <div class="module-level">Avancé</div>
+    </a>
+
+    <!-- M3 -->
+    <a href="sql-module.html?m=3" class="module-card">
+      <div class="module-icon">📊</div>
+      <div class="module-number">Module 3 / 12</div>
+      <div class="module-title">GROUP BY & Agrégations</div>
+      <div class="module-desc">COUNT, SUM, AVG, MIN, MAX, HAVING et statistiques</div>
+      <div class="module-level">Avancé</div>
+    </a>
+
+    <!-- M4 -->
+    <a href="sql-module.html?m=4" class="module-card">
+      <div class="module-icon">📝</div>
+      <div class="module-number">Module 4 / 12</div>
+      <div class="module-title">Sous-requêtes & CTE</div>
+      <div class="module-desc">WITH, sous-requêtes imbriquées et CTE récursives</div>
+      <div class="module-level">Avancé</div>
+    </a>
+
+    <!-- M5 -->
+    <a href="sql-module.html?m=5" class="module-card">
+      <div class="module-icon">🪟</div>
+      <div class="module-number">Module 5 / 12</div>
+      <div class="module-title">Window Functions</div>
+      <div class="module-desc">ROW_NUMBER, RANK, LAG, LEAD et analyses temporelles</div>
+      <div class="module-level">Avancé</div>
+    </a>
+
+    <!-- M6 -->
+    <a href="sql-module.html?m=6" class="module-card">
+      <div class="module-icon">∪∩</div>
+      <div class="module-number">Module 6 / 12</div>
+      <div class="module-title">UNION & EXCEPT</div>
+      <div class="module-desc">Combiner et comparer ensembles de résultats</div>
+      <div class="module-level">Avancé</div>
+    </a>
+
+    <!-- FUNDAMENTALS: M7-M12 -->
+    <!-- M7 -->
+    <a href="sql-module.html?m=7" class="module-card">
+      <div class="module-icon">✏️</div>
+      <div class="module-number">Module 7 / 12</div>
+      <div class="module-title">INSERT, UPDATE, DELETE</div>
+      <div class="module-desc">Ajouter, modifier et supprimer données</div>
+      <div class="module-level">Fondamentaux</div>
+    </a>
+
+    <!-- M8 -->
+    <a href="sql-module.html?m=8" class="module-card">
+      <div class="module-icon">🎯</div>
+      <div class="module-number">Module 8 / 12</div>
+      <div class="module-title">DISTINCT & Expressions</div>
+      <div class="module-desc">Valeurs uniques, calculs et alias</div>
+      <div class="module-level">Fondamentaux</div>
+    </a>
+
+    <!-- M9 -->
+    <a href="sql-module.html?m=9" class="module-card">
+      <div class="module-icon">❓</div>
+      <div class="module-number">Module 9 / 12</div>
+      <div class="module-title">CASE & Fonctions</div>
+      <div class="module-desc">CASE expressions, COALESCE et fonctions scalaires</div>
+      <div class="module-level">Fondamentaux</div>
+    </a>
+
+    <!-- M10 -->
+    <a href="sql-module.html?m=10" class="module-card">
+      <div class="module-icon">🧮</div>
+      <div class="module-number">Module 10 / 12</div>
+      <div class="module-title">Agrégations & GROUP BY</div>
+      <div class="module-desc">Compter, sommer, moyennes et regrouper données</div>
+      <div class="module-level">Fondamentaux</div>
+    </a>
+
+    <!-- M11 -->
+    <a href="sql-module.html?m=11" class="module-card">
+      <div class="module-icon">🏷️</div>
+      <div class="module-number">Module 11 / 12</div>
+      <div class="module-title">Alias & AS</div>
+      <div class="module-desc">Renommer colonnes et tables, raccourcis</div>
+      <div class="module-level">Fondamentaux</div>
+    </a>
+
+    <!-- M12 -->
+    <a href="sql-module.html?m=12" class="module-card">
+      <div class="module-icon">📑</div>
+      <div class="module-number">Module 12 / 12</div>
+      <div class="module-title">SELECT & Ordre</div>
+      <div class="module-desc">SELECT basique, WHERE, ORDER BY et LIMIT</div>
+      <div class="module-level">Fondamentaux</div>
+    </a>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <p>Power Inside Data Academy — Maîtrisez SQL</p>
+  <p><a href="machine-learning-index.html">Machine Learning</a> | <a href="python-index.html">Python</a> | <a href="index.html">Accueil</a></p>
+</footer>
+
+</body>
+</html>

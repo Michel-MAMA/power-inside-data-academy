@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Module | Power Inside Data Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pyodide@0.23.4/pyodide.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: #111; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    :root {
+      --blue: #1561FF;
+      --blue-light: #EEF3FF;
+      --black: #111111;
+      --gray: #666666;
+      --gray-mid: #999999;
+      --gray-light: #E8E8E8;
+      --green: #00D68F;
+      --red: #FF4757;
+      --radius: 6px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --max: 1160px;
+    }
+
+    body { background: var(--bg); color: var(--black); font-family: 'Inter', sans-serif; }
+    a { color: var(--blue); text-decoration: none; }
+
+    nav { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid var(--gray-light); padding: 0 24px; }
+    .nav-inner { max-width: var(--max); margin: 0 auto; display: flex; align-items: center; gap: 40px; height: 60px; }
+    .nav-logo { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: var(--black); flex-shrink: 0; }
+    .nav-logo span { color: var(--blue); }
+    .nav-breadcrumb { display: flex; align-items: center; gap: 12px; flex: 1; font-size: 13px; color: var(--gray); }
+    .nav-breadcrumb a { color: var(--blue); font-weight: 600; }
+    .nav-cta { display: flex; gap: 10px; margin-left: auto; }
+    .nav-cta a { padding: 8px 18px; background: var(--blue); color: #fff; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; }
+    .nav-cta a:hover { opacity: 0.9; }
+
+    .hero { padding: 40px 24px; background: linear-gradient(135deg, var(--blue-light), #fff); text-align: center; }
+    .hero-inner { max-width: var(--max); margin: 0 auto; }
+    .hero h1 { font-size: clamp(28px, 3vw, 42px); font-weight: 800; margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .hero p { font-size: 15px; color: var(--gray); max-width: 700px; margin: 0 auto; line-height: 1.6; }
+
+    .section { padding: 60px 24px; }
+    .section-inner { max-width: var(--max); margin: 0 auto; }
+
+    .module { margin-bottom: 48px; padding: 32px; background: var(--blue-light); border-radius: 12px; border-left: 4px solid var(--blue); }
+    .module-title { font-size: 20px; font-weight: 700; color: var(--black); margin-bottom: 12px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .module-desc { color: var(--gray); font-size: 14px; line-height: 1.7; margin-bottom: 24px; }
+
+    .sandbox-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+    @media(max-width: 900px) { .sandbox-container { grid-template-columns: 1fr; } }
+
+    .sandbox-editor { display: flex; flex-direction: column; gap: 8px; }
+    .sandbox-label { font-size: 12px; font-weight: 600; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 0.05em; }
+    .editor-container { height: 300px; border: 1px solid var(--gray-light); border-radius: 8px; overflow: hidden; }
+    .CodeMirror { height: 100% !important; font-family: 'Courier New', monospace !important; font-size: 13px !important; }
+    .CodeMirror-gutters { background: #1e1e1e !important; }
+
+    .btn-run { padding: 10px 20px; background: var(--blue); color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-run:hover { background: #0048CC; transform: translateY(-2px); }
+    .btn-run.loading { opacity: 0.6; cursor: wait; }
+
+    .sandbox-output { padding: 16px; background: #f5f5f5; border-radius: 8px; border: 1px solid var(--gray-light); min-height: 100px; font-family: 'Courier New', monospace; font-size: 12px; white-space: pre-wrap; word-break: break-word; overflow-y: auto; max-height: 400px; }
+    .sandbox-output.success { color: var(--green); background: #f0fff4; border-color: var(--green); }
+    .sandbox-output.error { color: var(--red); background: #fff5f5; border-color: var(--red); }
+
+    .concepts-box { background: #fff; padding: 16px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--blue); }
+    .concepts-box strong { display: block; margin-bottom: 12px; }
+    .concepts-box ul { margin-left: 20px; margin-top: 8px; }
+    .concepts-box li { margin-bottom: 6px; }
+
+    .takeaway-box { background: #e6f7ff; padding: 16px; border-radius: 8px; margin-top: 16px; border-left: 4px solid var(--blue); }
+    .takeaway-box strong { display: block; margin-bottom: 8px; }
+    .takeaway-box p { margin-top: 8px; font-size: 14px; line-height: 1.6; }
+
+    .module-nav { display: flex; gap: 12px; justify-content: space-between; align-items: center; margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--gray-light); }
+    .nav-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: var(--blue); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; text-decoration: none; font-size: 14px; }
+    .nav-button:hover:not(:disabled) { background: #0048CC; transform: translateY(-2px); }
+    .nav-button:disabled { background: var(--gray-light); color: var(--gray-mid); cursor: not-allowed; }
+    .nav-button.prev { flex-direction: row-reverse; }
+    .nav-progress { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray-mid); font-weight: 600; }
+    .progress-bar { width: 100px; height: 4px; background: var(--gray-light); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--blue); border-radius: 2px; }
+
+    footer { padding: 40px 24px; background: var(--gray-light); text-align: center; border-top: 1px solid #ddd; }
+    footer p { font-size: 13px; color: var(--gray); }
+    footer a { color: var(--blue); font-weight: 600; }
+
+    .loader { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(0, 0, 0, 0.1); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media(max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-inner { gap: 12px; }
+      .nav-breadcrumb { display: none; }
+      .section { padding: 40px 16px; }
+      .module { padding: 20px; }
+      .module-nav { flex-wrap: wrap; }
+      .nav-progress { width: 100%; order: -1; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Power <span>Inside</span></div>
+    <div class="nav-breadcrumb">
+      <a href="python-index.html">Python</a>
+      <span>/</span>
+      <span id="breadcrumb-title">Module Chargement...</span>
+    </div>
+    <div class="nav-cta">
+      <a href="python-index.html">← Catalogue</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1 id="module-title">Chargement du module...</h1>
+    <p id="module-desc">Merci de patienter</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner" id="module-content">
+    <p style="text-align: center; color: var(--gray);">Chargement du contenu...</p>
+  </div>
+</section>
+
+<footer>
+  <p>Power Inside Data Academy — Maîtrisez Python</p>
+  <p><a href="python-index.html">Retour au catalogue</a> | <a href="index.html">Accueil</a></p>
+</footer>
+
+<script>
+// Module content - All 10 modules
+const MODULES_DATA = {
+  1: {
+    title: 'Compréhension & Gestion des Données',
+    desc: 'Collections, compréhensions, sets et opérations avancées',
+    concepts: [
+      'List Comprehensions pour créer des listes efficacement',
+      'Dict Comprehensions pour dictionnaires',
+      'Set Operations: Union (|), Intersection (&), Différence (-)',
+      'Performance: Compréhensions plus rapides que boucles',
+      'Filtrage et transformation de collections',
+      'Cas d\'usage pratiques avec données'
+    ],
+    code: `# 1. LIST COMPREHENSIONS - Créer des listes efficacement
+nombres = [1, 2, 3, 4, 5]
+carrés = [x**2 for x in nombres]
+pairs = [x for x in nombres if x % 2 == 0]
+
+print("=== LIST COMPREHENSIONS ===")
+print(f"Nombres originaux: {nombres}")
+print(f"Carrés: {carrés}")
+print(f"Nombres pairs: {pairs}")
+
+# 2. DICT COMPREHENSIONS - Créer des dictionnaires
+dict_carre = {x: x**2 for x in range(1, 6)}
+print(f"\\n=== DICT COMPREHENSIONS ===")
+print(f"Carrés (dict): {dict_carre}")
+
+# 3. SET OPERATIONS - Union, Intersection, Différence
+set_a = {1, 2, 3, 4}
+set_b = {3, 4, 5, 6}
+
+print(f"\\n=== SET OPERATIONS ===")
+print(f"Set A: {set_a}")
+print(f"Set B: {set_b}")
+print(f"Union (A ∪ B): {set_a | set_b}")
+print(f"Intersection (A ∩ B): {set_a & set_b}")
+print(f"Différence (A - B): {set_a - set_b}")
+
+# 4. CAS PRATIQUE: Filtrer et transformer
+mots = ['python', 'java', 'rust', 'go', 'javascript']
+mots_longs = {mot.upper(): len(mot) for mot in mots if len(mot) > 3}
+print(f"\\n=== CAS PRATIQUE ===")
+print(f"Mots > 3 caractères (uppercase): {mots_longs}")`,
+    takeaway: 'Les compréhensions sont plus lisibles ET 2-3x plus rapides que boucles. Map/Filter/Set operations essentiels. Toujours considérer compréhensions d\'abord pour filtrer/transformer!'
+  },
+
+  2: {
+    title: 'Programmation Fonctionnelle',
+    desc: 'Lambda, Map, Filter, Reduce et style déclaratif',
+    concepts: [
+      'Fonctions Lambda: Fonctions anonymes concises',
+      'Map: Appliquer fonction à chaque élément',
+      'Filter: Sélectionner éléments matching condition',
+      'Reduce: Agréger/combiner éléments',
+      'Style déclaratif vs impératif',
+      'Chaîner opérations fonctionnelles'
+    ],
+    code: `# 1. LAMBDA - Fonctions anonymes concises
+nombres = [1, 2, 3, 4, 5]
+carre = lambda x: x ** 2
+print("=== LAMBDA FUNCTIONS ===")
+print(f"Carré de 5: {carre(5)}")
+
+# 2. MAP - Appliquer une fonction à chaque élément
+print(f"\\n=== MAP: Transformation ===")
+doubles = list(map(lambda x: x * 2, nombres))
+print(f"Nombres originaux: {nombres}")
+print(f"Doublés: {doubles}")
+
+# Map avec fonction nommée
+def multiplier_par_3(x):
+    return x * 3
+triples = list(map(multiplier_par_3, nombres))
+print(f"Triplés: {triples}")
+
+# 3. FILTER - Sélectionner les éléments
+print(f"\\n=== FILTER: Sélection ===")
+pairs = list(filter(lambda x: x % 2 == 0, nombres))
+impairs = list(filter(lambda x: x % 2 != 0, nombres))
+print(f"Nombres pairs: {pairs}")
+print(f"Nombres impairs: {impairs}")
+
+# Filter avec condition personnalisée
+grands_nombres = list(filter(lambda x: x > 2, nombres))
+print(f"Nombres > 2: {grands_nombres}")
+
+# 4. REDUCE - Agréger/Combiner les éléments
+from functools import reduce
+print(f"\\n=== REDUCE: Agrégation ===")
+somme = reduce(lambda a, b: a + b, nombres)
+produit = reduce(lambda a, b: a * b, nombres)
+print(f"Somme: {somme}")
+print(f"Produit: {produit}")
+
+# 5. SORTED avec clé personnalisée
+print(f"\\n=== SORTED: Tri avancé ===")
+mots = ["python", "java", "rust", "javascript", "c"]
+tries_longueur = sorted(mots, key=len)
+print(f"Mots (par longueur): {tries_longueur}")
+
+# 6. CAS PRATIQUE: Chaîner les opérations
+print(f"\\n=== CAS PRATIQUE: Chaînage ===")
+donnees = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+resultat = list(map(lambda x: x ** 2, filter(lambda x: x % 2 == 0, donnees)))
+print(f"Carrés des nombres pairs: {resultat}")`,
+    takeaway: 'Map/Filter/Reduce = pilliers programmation fonctionnelle. Lambda utile pour callbacks court. Mais compréhensions souvent plus Pythonic! Always remember: déclaratif > impératif pour lisibilité.'
+  },
+
+  3: {
+    title: 'Programmation Orientée Objet Avancée',
+    desc: 'Héritage, polymorphisme, encapsulation et décorateurs',
+    concepts: [
+      'Héritage: Créer classe enfant héritant classe parent',
+      'Polymorphisme: Surcharger méthodes dans enfants',
+      'Encapsulation: Contrôler accès (public, protected, private)',
+      '@property: Créer attributs avec getters/setters',
+      'super(): Appeler méthodes de classe parent',
+      'isinstance() et issubclass() pour vérifier types'
+    ],
+    code: `# 1. HÉRITAGE - Classes parent et enfants
+print("=== 1. HÉRITAGE ===")
+
+class Animal:
+    def __init__(self, nom, age):
+        self.nom = nom
+        self.age = age
+
+    def parler(self):
+        return f"{self.nom} fait du bruit"
+
+    def vieillir(self):
+        self.age += 1
+        return f"{self.nom} a maintenant {self.age} ans"
+
+class Chien(Animal):
+    def parler(self):
+        return f"{self.nom} aboie: Ouaf! Ouaf!"
+
+class Chat(Animal):
+    def parler(self):
+        return f"{self.nom} miaule: Miaou!"
+
+# 2. POLYMORPHISME - Même interface, comportements différents
+print("\\n=== 2. POLYMORPHISME ===")
+animaux = [Chien("Rex", 3), Chat("Minou", 2), Animal("Creature", 1)]
+for animal in animaux:
+    print(animal.parler())
+
+# 3. ENCAPSULATION - Attributs privés/protégés
+print(f"\\n=== 3. ENCAPSULATION ===")
+class Compte:
+    def __init__(self, solde_initial):
+        self._solde = solde_initial  # Privé (convention: _)
+
+    @property
+    def solde(self):
+        return f"\\${self._solde:.2f}"
+
+    def deposer(self, montant):
+        if montant > 0:
+            self._solde += montant
+            return f"Dépôt de \\${montant}: nouveau solde = \\${self._solde}"
+        return "Montant invalide"
+
+compte = Compte(1000)
+print(compte.solde)
+print(compte.deposer(500))
+
+# 4. super() - Appeler la méthode parent
+print(f"\\n=== 4. super() ===")
+class Vehicule:
+    def __init__(self, marque, model):
+        self.marque = marque
+        self.model = model
+
+class Voiture(Vehicule):
+    def __init__(self, marque, model, couleur):
+        super().__init__(marque, model)
+        self.couleur = couleur
+
+    def description(self):
+        return f"{self.marque} {self.model} - Couleur: {self.couleur}"
+
+voiture = Voiture("Peugeot", "308", "bleu")
+print(voiture.description())
+
+# 5. isinstance() et issubclass()
+print(f"\\n=== 5. Vérification de type ===")
+print(f"Rex est un Chien? {isinstance(animaux[0], Chien)}")
+print(f"Chien est une sous-classe d'Animal? {issubclass(Chien, Animal)}")`,
+    takeaway: 'Héritage = réutiliser code, créer hiérarchies. Polymorphisme = chaque classe son comportement. Encapsulation = sécuriser accès données. super() = clé pour multilevel inheritance. SOLID principles essentiels!'
+  },
+
+  4: {
+    title: 'Gestion des Erreurs & Exceptions',
+    desc: 'Try-Except, Finally, exceptions personnalisées et robustesse',
+    concepts: [
+      'Try-Except: Attraper et gérer les erreurs',
+      'Exceptions personnalisées: Créer vos propres erreurs',
+      'Finally: Code exécuté même si erreur (nettoyage)',
+      'Raise: Lever exception pour code appelant',
+      'Else: Bloc exécuté si pas d\'erreur',
+      'Context Managers: with statement pour cleanup'
+    ],
+    code: `# 1. TRY-EXCEPT - Gérer les erreurs
+print("=== 1. TRY-EXCEPT ===")
+
+try:
+    resultat = 10 / 2
+    print(f"10 / 2 = {resultat}")
+except ZeroDivisionError:
+    print("Erreur: Division par zéro impossible")
+
+# 2. MULTIPLE EXCEPTIONS - Attraper différentes erreurs
+print(f"\\n=== 2. MULTIPLE EXCEPTIONS ===")
+
+def convertir_nombre(valeur):
+    try:
+        return int(valeur)
+    except ValueError:
+        return f"Erreur: '{valeur}' ne peut pas être converti"
+    except TypeError:
+        return f"Erreur: Type non supporté"
+    except Exception as e:
+        return f"Erreur inconnue: {e}"
+
+print(convertir_nombre("42"))
+print(convertir_nombre("abc"))
+
+# 3. EXCEPTIONS PERSONNALISÉES
+print(f"\\n=== 3. EXCEPTIONS PERSONNALISÉES ===")
+
+class AgeInvalideError(Exception):
+    pass
+
+def valider_age(age):
+    if age < 0 or age > 150:
+        raise AgeInvalideError(f"L'âge {age} est invalide (0-150)")
+    return f"Âge valide: {age} ans"
+
+try:
+    print(valider_age(25))
+    print(valider_age(-5))
+except AgeInvalideError as e:
+    print(f"Validation échouée: {e}")
+
+# 4. TRY-EXCEPT-ELSE-FINALLY
+print(f"\\n=== 4. TRY-EXCEPT-ELSE-FINALLY ===")
+
+def division_securisee(a, b):
+    try:
+        if not isinstance(a, (int, float)):
+            raise TypeError("Le dividende doit être un nombre")
+        if b == 0:
+            raise ZeroDivisionError("Division par zéro")
+        resultat = a / b
+    except ZeroDivisionError as e:
+        print(f"Erreur division: {e}")
+    except TypeError as e:
+        print(f"Erreur type: {e}")
+    else:
+        print(f"Succès: {a} / {b} = {resultat}")
+    finally:
+        print("Opération terminée\\n")
+
+division_securisee(10, 2)
+division_securisee(10, 0)`,
+    takeaway: 'Erreurs = partie normale du code! Try-Except crucial. Toujours nettoyer ressources (finally). Créer exceptions personnalisées pour logique métier. Context managers (@contextmanager) pour cleanup élégant.'
+  },
+
+  5: {
+    title: 'Décorateurs & Métaprogrammation',
+    desc: 'Décorateurs, décorateurs paramétrés et introspection',
+    concepts: [
+      'Décorateurs: Fonctions qui modifient d\'autres fonctions',
+      'Syntax @decorator: Syntaxe sucre pour décoration',
+      'Décorateurs paramétrés: Décorateurs avec paramètres',
+      'Introspection: Examiner objets à runtime',
+      'functools.wraps: Préserver métadonnées fonction',
+      'Cas d\'usage: logging, timing, authentication'
+    ],
+    code: `# 1. DÉCORATEURS SIMPLES
+print("=== 1. DÉCORATEURS SIMPLES ===")
+
+def mon_decorateur(func):
+    def wrapper(*args, **kwargs):
+        print(f"Avant appel de {func.__name__}")
+        resultat = func(*args, **kwargs)
+        print(f"Après appel de {func.__name__}")
+        return resultat
+    return wrapper
+
+@mon_decorateur
+def saluer(nom):
+    print(f"Bonjour {nom}!")
+    return f"Salutation à {nom}"
+
+saluer("Alice")
+
+# 2. DÉCORATEURS PARAMÉTRÉS
+print(f"\\n=== 2. DÉCORATEURS PARAMÉTRÉS ===")
+
+def repeteur(n):
+    def decorateur(func):
+        def wrapper(*args, **kwargs):
+            for i in range(n):
+                print(f"Itération {i+1}:")
+                func(*args, **kwargs)
+        return wrapper
+    return decorateur
+
+@repeteur(3)
+def crier(message):
+    print(f"  {message}!")
+
+crier("HELLO")
+
+# 3. TIMING DECORATOR
+print(f"\\n=== 3. TIMING DECORATOR ===")
+
+import time
+
+def timer(func):
+    def wrapper(*args, **kwargs):
+        debut = time.time()
+        resultat = func(*args, **kwargs)
+        fin = time.time()
+        print(f"{func.__name__} pris {fin-debut:.4f}s")
+        return resultat
+    return wrapper
+
+@timer
+def operation_lente():
+    time.sleep(0.1)
+    return "Done"
+
+operation_lente()
+
+# 4. INTROSPECTION
+print(f"\\n=== 4. INTROSPECTION ===")
+
+def fonction_test(a, b, c=10):
+    """Fonction de test"""
+    return a + b + c
+
+print(f"Nom: {fonction_test.__name__}")
+print(f"Doc: {fonction_test.__doc__}")
+print(f"Module: {fonction_test.__module__}")
+
+# 5. functools.wraps
+print(f"\\n=== 5. functools.wraps ===")
+
+from functools import wraps
+
+def decorateur_preserve(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+    return wrapper
+
+@decorateur_preserve
+def fonction_importante(x):
+    """Fonction très importante"""
+    return x * 2
+
+print(f"Nom: {fonction_importante.__name__}")
+print(f"Doc: {fonction_importante.__doc__}")`,
+    takeaway: 'Décorateurs = pattern puissant pour DRY. @wraps essential pour préserver métadonnées. Use cases: logging, timing, validation, caching. Compréhension = clé pour frameworks modernes (Flask, Django)!'
+  },
+
+  6: {
+    title: 'Traitement & Analyse de Données',
+    desc: 'Pandas, NumPy, agrégations et transformations',
+    concepts: [
+      'NumPy: Arrays multidimensionnels optimisés',
+      'Pandas: DataFrames pour données tabulaires',
+      'Opérations vectorisées: Plus rapides que boucles',
+      'Groupby: Agrégations par catégories',
+      'Merge/Join: Combiner DataFrames',
+      'Nettoyage: Gérer nulls, doublons, types'
+    ],
+    code: `import numpy as np
+
+# 1. CRÉER DONNÉES
+print("=== 1. CRÉER DONNÉES ===")
+np.random.seed(42)
+n = 10
+
+surface = np.random.uniform(50, 200, n)
+prix = 3000 * surface + 50000 + np.random.normal(0, 30000, n)
+
+print(f"Nombre de données: {n}")
+print(f"Surface: min={surface.min():.0f}, max={surface.max():.0f}")
+print(f"Prix: min={prix.min():.0f}, max={prix.max():.0f}")
+
+# 2. STATISTIQUES NUMPY
+print(f"\\n=== 2. STATISTIQUES NUMPY ===")
+print(f"Moyenne surface: {surface.mean():.1f}")
+print(f"Écart-type prix: {prix.std():.0f}")
+print(f"Corrélation: {np.corrcoef(surface, prix)[0,1]:.4f}")
+
+# 3. OPÉRATIONS VECTORISÉES
+print(f"\\n=== 3. OPÉRATIONS VECTORISÉES ===")
+prix_ttc = prix * 1.20
+prix_reduit = prix * 0.9
+
+print(f"Prix original (5 premiers): {prix[:5].round(0)}")
+print(f"Prix TTC (5 premiers): {prix_ttc[:5].round(0)}")
+print(f"Prix réduit (5 premiers): {prix_reduit[:5].round(0)}")
+
+# 4. FILTRAGE
+print(f"\\n=== 4. FILTRAGE ===")
+mask = surface > 100
+grande_surface = surface[mask]
+prix_grande = prix[mask]
+
+print(f"Nombre appartements > 100m²: {len(grande_surface)}")
+print(f"Prix moyen (> 100m²): {prix_grande.mean():.0f}€")
+
+# 5. RESHAPING
+print(f"\\n=== 5. RESHAPING ===")
+X = np.column_stack([surface, prix])
+print(f"Shape (2 colonnes): {X.shape}")
+print(f"Première ligne: {X[0]}")`,
+    takeaway: 'NumPy = performance, Pandas = flexibilité. Vectorisation >> boucles Python. Groupby/Merge = SQL-like operations. Toujours vérifier: shape, dtypes, nulls, doublons avant analyse!'
+  },
+
+  7: {
+    title: 'Fondamentaux Python',
+    desc: 'Types, variables, opérateurs et concepts de base',
+    concepts: [
+      'Types primitifs: int, float, str, bool',
+      'Variables: Typage dynamique Python',
+      'Opérateurs: Arithmétiques, comparaison, logiques',
+      'Conversions de type: int(), str(), float()',
+      'Strings: Interpolation, méthodes (upper, lower, split)',
+      'Listes et Dictionnaires: Collections essentielles'
+    ],
+    code: `# 1. TYPES PRIMITIFS
+print("=== TYPES PRIMITIFS ===")
+nom = "Alice"
+age = 30
+salaire = 45000.50
+actif = True
+
+print(f"Nom: {nom} | Type: {type(nom)}")
+print(f"Âge: {age} | Type: {type(age)}")
+print(f"Salaire: {salaire} | Type: {type(salaire)}")
+print(f"Actif: {actif} | Type: {type(actif)}")
+
+# 2. OPÉRATIONS SUR LES NOMBRES
+print(f"\\n=== OPÉRATIONS ===")
+a, b = 10, 3
+print(f"Addition: {a} + {b} = {a + b}")
+print(f"Multiplication: {a} * {b} = {a * b}")
+print(f"Division: {a} / {b} = {a / b:.2f}")
+print(f"Division entière: {a} // {b} = {a // b}")
+print(f"Modulo: {a} % {b} = {a % b}")
+
+# 3. CHAÎNES DE CARACTÈRES
+print(f"\\n=== CHAÎNES ===")
+prenom = "Jean"
+nom_complet = f"{prenom} Dupont"
+print(f"Complet: {nom_complet}")
+print(f"Longueur: {len(nom_complet)}")
+print(f"Majuscules: {nom_complet.upper()}")
+
+# 4. LISTES (Collections ordonnées)
+print(f"\\n=== LISTES ===")
+nombres = [1, 2, 3, 4, 5]
+print(f"Liste: {nombres}")
+print(f"Premier: {nombres[0]}, Dernier: {nombres[-1]}")
+print(f"Sous-liste [1:3]: {nombres[1:3]}")
+nombres.append(6)
+print(f"Après append(6): {nombres}")
+
+# 5. DICTIONNAIRES (Clé-Valeur)
+print(f"\\n=== DICTIONNAIRES ===")
+personne = {"nom": "Bob", "age": 25, "ville": "Paris"}
+print(f"Personne: {personne}")
+print(f"Nom: {personne['nom']}, Âge: {personne['age']}")
+personne['metier'] = 'Développeur'
+print(f"Après ajout: {personne}")
+
+# 6. CONVERSIONS DE TYPES
+print(f"\\n=== CONVERSIONS ===")
+num_str = "42"
+num_int = int(num_str)
+print(f"Chaîne '{num_str}' -> Entier {num_int}")
+print(f"Entier 42 -> Chaîne '{str(42)}'")
+print(f"Entier 1 -> Booléen {bool(1)}")`,
+    takeaway: 'Types = fondation Python. Typage dynamique = flexibilité mais toujours check types! F-strings pour interpolation moderne. Listes/dicts partout. Slicing [start:end:step] puissant!'
+  },
+
+  8: {
+    title: 'Contrôle de Flux et Boucles',
+    desc: 'If-Elif-Else, for, while, break et continue',
+    concepts: [
+      'Conditions: if, elif, else pour décisions',
+      'Comparaisons: ==, !=, >, <, >=, <=',
+      'Opérateurs logiques: and, or, not',
+      'Boucle for: Itérer sur éléments',
+      'Boucle while: Répéter tant que condition vraie',
+      'break/continue: Contrôler boucles'
+    ],
+    code: `# 1. CONDITIONS (if/elif/else)
+print("=== CONDITIONS ===")
+age = 20
+if age >= 18:
+    print(f"L'âge {age} est majeur")
+elif age >= 13:
+    print("C'est un adolescent")
+else:
+    print("C'est un enfant")
+
+# Conditions combinées avec and/or
+score = 75
+if score >= 50 and score < 80:
+    print(f"Score {score}: Moyen")
+
+# Opérateurs de comparaison
+x = 5
+print(f"\\n=== COMPARAISONS ===")
+print(f"x = {x}")
+print(f"x > 3: {x > 3}")
+print(f"x == 5: {x == 5}")
+print(f"x != 10: {x != 10}")
+print(f"x >= 5: {x >= 5}")
+
+# 2. BOUCLE FOR - Sur une plage
+print(f"\\n=== BOUCLE FOR (range) ===")
+for i in range(1, 6):
+    print(f"  i = {i}")
+
+# Boucle FOR - Sur une liste
+print(f"\\n=== BOUCLE FOR (liste) ===")
+fruits = ["pomme", "banane", "cerise", "datte"]
+for fruit in fruits:
+    print(f"  - {fruit}")
+
+# Boucle FOR - Avec enumerate
+print(f"\\n=== BOUCLE FOR (enumerate) ===")
+for index, fruit in enumerate(fruits):
+    print(f"  {index}: {fruit}")
+
+# 3. BOUCLE WHILE - Répéter tant que condition vraie
+print(f"\\n=== BOUCLE WHILE ===")
+compte = 0
+while compte < 3:
+    print(f"  Compte: {compte}")
+    compte += 1
+
+# 4. BREAK et CONTINUE
+print(f"\\n=== BREAK et CONTINUE ===")
+for i in range(1, 6):
+    if i == 3:
+        print(f"  {i} -> SKIP (continue)")
+        continue
+    if i == 5:
+        print(f"  {i} -> ARRÊT (break)")
+        break
+    print(f"  {i}")`,
+    takeaway: 'Conditions = base de toute logique. Always use elif (pas if chaîné). Boucle for > while généralement. enumerate() pour index+valeur. break/continue sparingly!'
+  },
+
+  9: {
+    title: 'Fonctions et Modules',
+    desc: 'Définir fonctions, paramètres, retours et imports',
+    concepts: [
+      'Définir fonctions: def nom(params):',
+      'Paramètres: positionnels, nommés, *args, **kwargs',
+      'Valeurs par défaut: def func(a, b=10):',
+      'Retours: return, multiples retours, None',
+      'Docstrings: Documentation intégrée',
+      'Modules et imports: Réutiliser code'
+    ],
+    code: `# 1. FONCTION SIMPLE
+print("=== 1. FONCTION SIMPLE ===")
+
+def additionner(a, b):
+    return a + b
+
+resultat = additionner(5, 3)
+print(f"5 + 3 = {resultat}")
+
+# 2. PARAMÈTRES PAR DÉFAUT
+print(f"\\n=== 2. PARAMÈTRES PAR DÉFAUT ===")
+
+def saluer(nom, message="Bonjour"):
+    return f"{message}, {nom}!"
+
+print(saluer("Alice"))
+print(saluer("Bob", "Bonsoir"))
+
+# 3. *ARGS - Nombre variable d'arguments
+print(f"\\n=== 3. *ARGS ===")
+
+def somme(*nombres):
+    total = 0
+    for n in nombres:
+        total += n
+    return total
+
+print(f"somme(1, 2, 3): {somme(1, 2, 3)}")
+print(f"somme(1, 2, 3, 4, 5): {somme(1, 2, 3, 4, 5)}")
+
+# 4. **KWARGS - Dictionnaire d'arguments nommés
+print(f"\\n=== 4. **KWARGS ===")
+
+def creer_personne(**kwargs):
+    return kwargs
+
+personne = creer_personne(nom="Alice", age=30, ville="Paris")
+print(f"Personne: {personne}")
+
+# 5. RETOURS MULTIPLES
+print(f"\\n=== 5. RETOURS MULTIPLES ===")
+
+def diviser(a, b):
+    if b == 0:
+        return None, "Erreur: division par zéro"
+    return a / b, "Succès"
+
+quotient, message = diviser(10, 2)
+print(f"Résultat: {quotient}, Message: {message}")
+
+# 6. DOCSTRINGS
+print(f"\\n=== 6. DOCSTRINGS ===")
+
+def multiplier(a, b):
+    """Multiplie deux nombres.
+
+    Args:
+        a: Premier nombre
+        b: Deuxième nombre
+
+    Returns:
+        Le produit a * b
+    """
+    return a * b
+
+print(multiplier.__doc__)
+print(f"2 * 3 = {multiplier(2, 3)}")`,
+    takeaway: 'Fonctions = réutilisabilité + clarté. *args pour listes variables, **kwargs pour dictionnaire. Docstrings obligatoires! Lambda OK pour callbacks court. Modules essentiels pour DRY!'
+  },
+
+  10: {
+    title: 'Programmation Orientée Objet',
+    desc: 'Classes, objets, instances et méthodes de base',
+    concepts: [
+      'Classes: Blueprints pour objets',
+      '__init__: Constructeur, initialiser instances',
+      'Attributs: Variables de l\'instance',
+      'Méthodes: Fonctions de la classe',
+      'self: Référence à l\'instance',
+      'Instances: Créer et utiliser objets'
+    ],
+    code: `# 1. CRÉER UNE CLASSE
+print("=== 1. CRÉER UNE CLASSE ===")
+
+class Personne:
+    def __init__(self, nom, age):
+        self.nom = nom
+        self.age = age
+
+    def presentation(self):
+        return f"Je suis {self.nom} et j'ai {self.age} ans"
+
+    def vieillir(self):
+        self.age += 1
+        return f"{self.nom} a maintenant {self.age} ans"
+
+# 2. CRÉER INSTANCES
+print("\\n=== 2. CRÉER INSTANCES ===")
+alice = Personne("Alice", 30)
+bob = Personne("Bob", 25)
+
+print(alice.presentation())
+print(bob.presentation())
+
+# 3. MODIFIER ATTRIBUTS
+print(f"\\n=== 3. MODIFIER ATTRIBUTS ===")
+print(f"Age d'Alice: {alice.age}")
+alice.age = 31
+print(f"Age d'Alice après modification: {alice.age}")
+
+# 4. APPELER MÉTHODES
+print(f"\\n=== 4. APPELER MÉTHODES ===")
+print(alice.vieillir())
+print(alice.vieillir())
+
+# 5. CLASSE AVEC PLUS DE LOGIQUE
+print(f"\\n=== 5. CLASSE AVEC LOGIQUE ===")
+
+class Compte:
+    def __init__(self, titulaire, solde=0):
+        self.titulaire = titulaire
+        self._solde = solde
+
+    def deposer(self, montant):
+        if montant > 0:
+            self._solde += montant
+            return f"Dépôt de {montant}€. Nouveau solde: {self._solde}€"
+        return "Montant invalide"
+
+    def retirer(self, montant):
+        if montant > self._solde:
+            return "Solde insuffisant"
+        self._solde -= montant
+        return f"Retrait de {montant}€. Nouveau solde: {self._solde}€"
+
+    def afficher_solde(self):
+        return f"Solde de {self.titulaire}: {self._solde}€"
+
+compte = Compte("Alice", 1000)
+print(compte.afficher_solde())
+print(compte.deposer(500))
+print(compte.retirer(200))
+print(compte.afficher_solde())
+
+# 6. PLUSIEURS INSTANCES
+print(f"\\n=== 6. PLUSIEURS INSTANCES ===")
+compte2 = Compte("Bob", 500)
+print(compte.afficher_solde())
+print(compte2.afficher_solde())`,
+    takeaway: 'Classes = modèle pour organiser code. __init__ = initialisation critique. self = référence objet. Attributs vs méthodes: attributs=données, méthodes=comportement. Encapsulation via conventions (_private).'
+  }
+};
+
+// Get module from URL
+const urlParams = new URLSearchParams(window.location.search);
+const moduleId = parseInt(urlParams.get('m')) || 1;
+const MAX_MODULES = 10;
+
+if (!MODULES_DATA[moduleId]) {
+  document.getElementById('module-content').innerHTML = '<p style="color: red;">Module non trouvé</p>';
+} else {
+  const module = MODULES_DATA[moduleId];
+
+  // Update breadcrumb
+  document.getElementById('breadcrumb-title').textContent = `Module ${moduleId}`;
+
+  // Update hero
+  document.getElementById('module-title').textContent = module.title;
+  document.getElementById('module-desc').textContent = module.desc;
+
+  // Generate content
+  let html = `<div class="module">
+    <div class="module-title">Module ${moduleId}: ${module.title}</div>
+    <div class="module-desc">${module.desc}</div>
+
+    <div class="concepts-box">
+      <strong>📚 Concepts clés:</strong>
+      <ul>`;
+
+  module.concepts.forEach(concept => {
+    html += `<li>${concept}</li>`;
+  });
+
+  html += `</ul></div>
+
+    <div class="sandbox-container">
+      <div class="sandbox-editor">
+        <div class="sandbox-label">📝 Code Python</div>
+        <textarea id="editor-code" spellcheck="false">${module.code}</textarea>
+      </div>
+      <div>
+        <div class="sandbox-label">📤 Résultat</div>
+        <div class="sandbox-output" id="output">Cliquez sur "Exécuter"...</div>
+        <button class="btn-run" id="btn-run" onclick="runCode()">Exécuter</button>
+      </div>
+    </div>
+
+    <div class="takeaway-box">
+      <strong>💡 À Retenir:</strong>
+      <p>${module.takeaway}</p>
+    </div>
+  </div>`;
+
+  document.getElementById('module-content').innerHTML = html;
+
+  // Navigation
+  const navHtml = `<div class="module-nav">
+    <button class="nav-button prev" onclick="goModule(${moduleId - 1})" ${moduleId === 1 ? 'disabled' : ''}>
+      ← Précédent
+    </button>
+    <div class="nav-progress">
+      <span>Module ${moduleId}/${MAX_MODULES}</span>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${(moduleId / MAX_MODULES) * 100}%"></div>
+      </div>
+    </div>
+    <button class="nav-button" onclick="goModule(${moduleId + 1})" ${moduleId === MAX_MODULES ? 'disabled' : ''}>
+      Suivant →
+    </button>
+  </div>`;
+
+  document.getElementById('module-content').innerHTML += navHtml;
+}
+
+function goModule(id) {
+  if (id >= 1 && id <= MAX_MODULES) {
+    window.location.href = `python-module.html?m=${id}`;
+  }
+}
+
+// Pyodide setup
+let pyodide;
+async function runCode() {
+  const btn = document.getElementById('btn-run');
+  const output = document.getElementById('output');
+  const code = document.getElementById('editor-code').value;
+
+  btn.classList.add('loading');
+  output.textContent = 'Exécution...';
+
+  try {
+    if (!pyodide) {
+      pyodide = await loadPyodide();
+    }
+
+    // Capture stdout
+    let result = '';
+    pyodide.globals.set('_output', '');
+
+    pyodide.runPython(`
+import sys
+from io import StringIO
+old_stdout = sys.stdout
+sys.stdout = StringIO()
+`);
+
+    pyodide.runPython(code);
+
+    result = pyodide.runPython(`sys.stdout.getvalue()`);
+
+    output.textContent = result || '(pas de résultat)';
+    output.classList.add('success');
+  } catch (error) {
+    output.textContent = `Erreur: ${error.message}`;
+    output.classList.add('error');
+  } finally {
+    btn.classList.remove('loading');
+  }
+}
+</script>
+
+</body>
+</html>
