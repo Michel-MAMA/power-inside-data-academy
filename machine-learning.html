@@ -97,6 +97,16 @@ footer{padding:40px 24px;background:var(--gray-light);text-align:center;border-t
 footer p{font-size:13px;color:var(--gray)}
 footer a{color:var(--blue);font-weight:600}
 
+/* ─── MODULE NAVIGATION ─── */
+.module-nav{display:flex;gap:12px;justify-content:space-between;align-items:center;margin-top:40px;padding-top:24px;border-top:1px solid var(--gray-light)}
+.nav-button{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;background:var(--blue);color:#fff;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all .3s;text-decoration:none}
+.nav-button:hover{background:#0048CC;transform:translateY(-2px);box-shadow:0 8px 16px rgba(21,97,255,.3)}
+.nav-button:disabled{background:var(--gray-light);color:var(--gray-mid);cursor:not-allowed;transform:none}
+.nav-button.prev{flex-direction:row-reverse}
+.nav-progress{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray-mid);font-weight:600}
+.progress-bar{width:100px;height:4px;background:var(--gray-light);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--blue);border-radius:2px;transition:width .3s}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   nav{padding:0 16px}
@@ -106,6 +116,8 @@ footer a{color:var(--blue);font-weight:600}
   .section{padding:40px 16px}
   .module{padding:20px}
   textarea{height:250px}
+  .module-nav{flex-wrap:wrap}
+  .nav-progress{width:100%;order:-1}
 }
 </style>
 </head>
@@ -951,6 +963,99 @@ else:
   <p>Power Inside Data Academy — Maîtrisez le Machine Learning</p>
   <p><a href="index.html">Retour à l'accueil</a> | <a href="contact.html">Contact</a></p>
 </footer>
+
+<script>
+// Module navigation system
+const MODULES = [
+  { id: 1, title: 'Fondamentaux du Machine Learning', elem: null },
+  { id: 2, title: 'Régression Linéaire & Prédiction', elem: null },
+  { id: 3, title: 'Classification & Logistic Regression', elem: null },
+  { id: 4, title: 'Apprentissage Non-Supervisé & Clustering', elem: null },
+  { id: 5, title: 'Arbres de Décision & Forêts Aléatoires', elem: null },
+  { id: 6, title: 'Validation & Optimisation des Modèles', elem: null }
+];
+
+function initModuleNavigation() {
+  // Récupérer les modules
+  const modules = document.querySelectorAll('.module');
+  modules.forEach((elem, idx) => {
+    if (MODULES[idx]) {
+      MODULES[idx].elem = elem;
+    }
+  });
+
+  // Ajouter navigation après chaque module
+  modules.forEach((module, idx) => {
+    const nav = createModuleNav(idx);
+    module.appendChild(nav);
+  });
+
+  // Ajouter event listeners
+  document.querySelectorAll('.nav-button').forEach(btn => {
+    btn.addEventListener('click', handleNavigation);
+  });
+}
+
+function createModuleNav(moduleIdx) {
+  const container = document.createElement('div');
+  container.className = 'module-nav';
+
+  const currentModule = moduleIdx + 1;
+  const totalModules = MODULES.length;
+  const progressPercent = (currentModule / totalModules) * 100;
+
+  let html = '';
+
+  // Bouton Previous
+  if (moduleIdx > 0) {
+    html += `<button class="nav-button prev" data-target="${moduleIdx - 1}">
+              ← Précédent
+            </button>`;
+  } else {
+    html += `<button class="nav-button prev" disabled>← Précédent</button>`;
+  }
+
+  // Progress indicator
+  html += `<div class="nav-progress">
+            <span>${currentModule}/${totalModules}</span>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${progressPercent}%"></div>
+            </div>
+          </div>`;
+
+  // Bouton Next
+  if (moduleIdx < totalModules - 1) {
+    html += `<button class="nav-button" data-target="${moduleIdx + 1}">
+              Suivant →
+            </button>`;
+  } else {
+    html += `<button class="nav-button" disabled>Fin du cours ✓</button>`;
+  }
+
+  container.innerHTML = html;
+  return container;
+}
+
+function handleNavigation(e) {
+  const targetIdx = parseInt(e.target.dataset.target);
+  if (isNaN(targetIdx)) return;
+
+  const targetModule = MODULES[targetIdx];
+  if (!targetModule || !targetModule.elem) return;
+
+  // Smooth scroll
+  targetModule.elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Highlight effect
+  targetModule.elem.style.backgroundColor = '#fff9e6';
+  setTimeout(() => {
+    targetModule.elem.style.backgroundColor = 'var(--blue-light)';
+  }, 2000);
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', initModuleNavigation);
+</script>
 
 <script>
 let pyodide = null;
