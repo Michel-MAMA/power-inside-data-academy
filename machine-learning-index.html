@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Learning — Cours Interactif | Power Inside Data Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:#fff;color:#111;font-family:'Inter',sans-serif;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+img{display:block;max-width:100%}
+
+/* ─── VARIABLES ─── */
+:root{
+  --blue:#1561FF;
+  --blue-light:#EEF3FF;
+  --black:#111111;
+  --gray:#666666;
+  --gray-mid:#999999;
+  --gray-light:#E8E8E8;
+  --bg:#FFFFFF;
+  --radius:6px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --max:1160px;
+}
+
+/* ─── NAV ─── */
+nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--gray-light);padding:0 24px}
+.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;gap:40px;height:60px}
+.nav-logo{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:22px;color:var(--black);flex-shrink:0}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:20px;flex:1}
+.nav-links a{color:var(--gray);font-size:14px;font-weight:500;padding:6px 12px;border-radius:4px;transition:all .2s}
+.nav-links a:hover{color:var(--blue);background:var(--blue-light)}
+.nav-cta{display:flex;gap:10px;margin-left:auto}
+.nav-cta a{padding:8px 18px;background:var(--blue);color:#fff;border-radius:6px;font-size:13px;font-weight:600}
+.nav-cta a:hover{opacity:.9}
+
+/* ─── HERO ─── */
+.hero{padding:60px 24px;background:linear-gradient(135deg,var(--blue-light),#fff);text-align:center}
+.hero-inner{max-width:var(--max);margin:0 auto}
+.hero h1{font-size:clamp(32px,4vw,56px);font-weight:800;margin-bottom:16px;font-family:'Plus Jakarta Sans',sans-serif}
+.hero p{font-size:16px;color:var(--gray);max-width:700px;margin:0 auto 32px;line-height:1.7}
+.hero-meta{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;font-size:14px}
+.meta-badge{display:inline-block;padding:4px 12px;background:var(--blue);color:#fff;border-radius:20px;font-size:11px;font-weight:600}
+
+/* ─── SECTION ─── */
+.section{padding:60px 24px}
+.section-inner{max-width:var(--max);margin:0 auto}
+.section h2{font-size:clamp(24px,3vw,38px);font-weight:800;margin-bottom:32px;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* ─── MODULES GRID ─── */
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:20px}
+
+.module-card{
+  background:var(--blue-light);
+  border-radius:12px;
+  padding:24px;
+  border:2px solid transparent;
+  transition:all .3s var(--ease);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.module-card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:var(--blue);
+}
+
+.module-card:hover{
+  transform:translateY(-8px);
+  border-color:var(--blue);
+  box-shadow:0 16px 32px rgba(21,97,255,.15);
+}
+
+.module-card h3{
+  font-size:18px;
+  font-weight:700;
+  color:var(--black);
+  margin-bottom:12px;
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+
+.module-card p{
+  font-size:14px;
+  color:var(--gray);
+  line-height:1.6;
+  margin-bottom:16px;
+}
+
+.module-number{
+  display:inline-block;
+  background:var(--blue);
+  color:#fff;
+  padding:4px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+  margin-bottom:12px;
+}
+
+.module-card a{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:var(--blue);
+  font-weight:600;
+  transition:gap .2s;
+}
+
+.module-card a:hover{
+  gap:12px;
+}
+
+/* ─── FOOTER ─── */
+footer{padding:40px 24px;background:var(--gray-light);text-align:center;border-top:1px solid #ddd}
+footer p{font-size:13px;color:var(--gray)}
+footer a{color:var(--blue);font-weight:600}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  nav{padding:0 16px}
+  .nav-inner{gap:12px}
+  .nav-links{display:none}
+  .section{padding:40px 16px}
+  .modules-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Power <span>Inside</span></div>
+    <div class="nav-links">
+      <a href="index.html">Accueil</a>
+      <a href="power_inside_data_academy_catalogue.html">Formations</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="nav-cta">
+      <a href="index.html">← Retour</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1>🤖 Machine Learning</h1>
+    <p>Maîtrisez le Machine Learning avec 6 modules progressifs et interactifs</p>
+    <div class="hero-meta">
+      <div class="meta-item">⏱️ 6 modules</div>
+      <div class="meta-item">🎯 Prédictif & Analytique</div>
+      <div class="meta-item"><span class="meta-badge">Interactif</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- MODULES -->
+<section class="section">
+  <div class="section-inner">
+    <h2>Choisissez un module</h2>
+
+    <div class="modules-grid">
+      <!-- Module 1 -->
+      <div class="module-card">
+        <div class="module-number">Module 1/6</div>
+        <h3>Fondamentaux du Machine Learning</h3>
+        <p>Types d'apprentissage, données, features, modèles et évaluation</p>
+        <a href="machine-learning-module.html?m=1">Démarrer → </a>
+      </div>
+
+      <!-- Module 2 -->
+      <div class="module-card">
+        <div class="module-number">Module 2/6</div>
+        <h3>Régression Linéaire & Prédiction</h3>
+        <p>Régression simple/multiple, coefficients, R² et résidus</p>
+        <a href="machine-learning-module.html?m=2">Démarrer → </a>
+      </div>
+
+      <!-- Module 3 -->
+      <div class="module-card">
+        <div class="module-number">Module 3/6</div>
+        <h3>Classification & Logistic Regression</h3>
+        <p>Classification binaire/multiclasse, probabilités et seuils</p>
+        <a href="machine-learning-module.html?m=3">Démarrer → </a>
+      </div>
+
+      <!-- Module 4 -->
+      <div class="module-card">
+        <div class="module-number">Module 4/6</div>
+        <h3>Apprentissage Non-Supervisé & Clustering</h3>
+        <p>K-Means, hiérarchique, clustering et détection de patterns</p>
+        <a href="machine-learning-module.html?m=4">Démarrer → </a>
+      </div>
+
+      <!-- Module 5 -->
+      <div class="module-card">
+        <div class="module-number">Module 5/6</div>
+        <h3>Arbres de Décision & Forêts Aléatoires</h3>
+        <p>Decision Trees, Random Forests, feature importance et ensemble learning</p>
+        <a href="machine-learning-module.html?m=5">Démarrer → </a>
+      </div>
+
+      <!-- Module 6 -->
+      <div class="module-card">
+        <div class="module-number">Module 6/6</div>
+        <h3>Validation & Optimisation des Modèles</h3>
+        <p>Cross-validation, hyperparamètres, GridSearchCV et sélection de modèle</p>
+        <a href="machine-learning-module.html?m=6">Démarrer → </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Power Inside Data Academy — Maîtrisez le Machine Learning</p>
+  <p><a href="index.html">Retour à l'accueil</a> | <a href="contact.html">Contact</a></p>
+</footer>
+
+</body>
+</html>
