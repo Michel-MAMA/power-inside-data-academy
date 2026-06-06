@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Scala Avancé — Cours Interactif | Power Inside Data Academy</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material-darker.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+
 <style>
 /* ─── RESET ─── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -59,6 +64,9 @@ nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid va
 .module-desc{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px}
 
 /* ─── CODE BOX ─── */
+.editor-container{height:300px;border:1px solid var(--red-accent);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.CodeMirror{height:100% !important;font-family:'Courier New',monospace !important;font-size:13px !important}
+.CodeMirror-gutters{background:#1e1e1e !important}
 .code-box{background:#1e1e1e;padding:20px;border-radius:8px;margin-bottom:16px;overflow-x:auto;border:1px solid var(--gray-light)}
 .code-box code{color:#d4d4d4;font-family:'Courier New',monospace;font-size:13px;line-height:1.6;display:block}
 .code-box .keyword{color:#569cd6;font-weight:bold}
