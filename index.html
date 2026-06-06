@@ -850,9 +850,10 @@ body:hover #cursor { opacity: 1; }
    =========================== */
 .partners-wrap {
   padding: 40px 0;
-  border-top: 1px solid var(--border);
+  border-top: none;
   border-bottom: 1px solid var(--border);
   overflow: hidden;
+  background: linear-gradient(135deg, #0d1b2a 0%, #1a1f35 50%, #0f1419 100%);
 }
 .partners-track {
   display: flex; gap: 56px; align-items: center;
@@ -863,10 +864,10 @@ body:hover #cursor { opacity: 1; }
 .partner-item {
   font-family: var(--fd); font-size: 11px; font-weight: 700;
   letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--w35); white-space: nowrap;
+  color: rgba(255,255,255,0.45); white-space: nowrap;
   transition: color .3s;
 }
-.partner-item:hover { color: var(--w60); }
+.partner-item:hover { color: rgba(255,255,255,0.75); }
 
 /* ===========================
    STATS
