@@ -703,6 +703,64 @@ create table if not exists public.quiz_responses (
 );
 
 -- ----------------------------------------------------------------------------
+-- Migration douce : si ces tables existaient déjà dans une version antérieure,
+-- on ajoute les colonnes manquantes (référencées par triggers/policies/index).
+-- ----------------------------------------------------------------------------
+alter table public.quizzes add column if not exists formation_id uuid references public.formations(id) on delete cascade;
+alter table public.quizzes add column if not exists module_id uuid references public.modules(id) on delete cascade;
+alter table public.quizzes add column if not exists lesson_id uuid references public.lessons(id) on delete cascade;
+alter table public.quizzes add column if not exists title text;
+alter table public.quizzes add column if not exists description text;
+alter table public.quizzes add column if not exists passing_score_pct int default 70;
+alter table public.quizzes add column if not exists max_attempts int default 3;
+alter table public.quizzes add column if not exists time_limit_min int;
+alter table public.quizzes add column if not exists shuffle_questions boolean default true;
+alter table public.quizzes add column if not exists shuffle_answers boolean default true;
+alter table public.quizzes add column if not exists show_correct_after boolean default true;
+alter table public.quizzes add column if not exists is_required_for_certificate boolean default false;
+alter table public.quizzes add column if not exists is_published boolean default false;
+alter table public.quizzes add column if not exists created_at timestamptz default now();
+alter table public.quizzes add column if not exists updated_at timestamptz default now();
+
+alter table public.questions add column if not exists quiz_id uuid references public.quizzes(id) on delete cascade;
+alter table public.questions add column if not exists question_text text;
+alter table public.questions add column if not exists question_type text default 'single_choice';
+alter table public.questions add column if not exists explanation text;
+alter table public.questions add column if not exists points int default 1;
+alter table public.questions add column if not exists order_index int default 0;
+alter table public.questions add column if not exists image_url text;
+alter table public.questions add column if not exists code_snippet text;
+alter table public.questions add column if not exists is_active boolean default true;
+alter table public.questions add column if not exists created_at timestamptz default now();
+
+alter table public.question_answers add column if not exists question_id uuid references public.questions(id) on delete cascade;
+alter table public.question_answers add column if not exists answer_text text;
+alter table public.question_answers add column if not exists is_correct boolean default false;
+alter table public.question_answers add column if not exists order_index int default 0;
+alter table public.question_answers add column if not exists created_at timestamptz default now();
+
+alter table public.quiz_attempts add column if not exists quiz_id uuid references public.quizzes(id) on delete cascade;
+alter table public.quiz_attempts add column if not exists user_id uuid references public.profiles(id) on delete cascade;
+alter table public.quiz_attempts add column if not exists enrollment_id uuid references public.enrollments(id) on delete set null;
+alter table public.quiz_attempts add column if not exists attempt_number int default 1;
+alter table public.quiz_attempts add column if not exists started_at timestamptz default now();
+alter table public.quiz_attempts add column if not exists submitted_at timestamptz;
+alter table public.quiz_attempts add column if not exists score_points int default 0;
+alter table public.quiz_attempts add column if not exists max_points int default 0;
+alter table public.quiz_attempts add column if not exists score_pct numeric(5,2) default 0;
+alter table public.quiz_attempts add column if not exists passed boolean default false;
+alter table public.quiz_attempts add column if not exists time_spent_sec int;
+alter table public.quiz_attempts add column if not exists status text default 'in_progress';
+
+alter table public.quiz_responses add column if not exists attempt_id uuid references public.quiz_attempts(id) on delete cascade;
+alter table public.quiz_responses add column if not exists question_id uuid references public.questions(id) on delete cascade;
+alter table public.quiz_responses add column if not exists answer_ids uuid[];
+alter table public.quiz_responses add column if not exists answer_text text;
+alter table public.quiz_responses add column if not exists is_correct boolean default false;
+alter table public.quiz_responses add column if not exists points_earned int default 0;
+alter table public.quiz_responses add column if not exists answered_at timestamptz default now();
+
+-- ----------------------------------------------------------------------------
 -- 2.6 Limitation du nombre de tentatives + numérotation automatique
 -- ----------------------------------------------------------------------------
 create or replace function public.fn_check_quiz_attempt_limit()
@@ -933,6 +991,48 @@ create table if not exists public.certificate_events (
   details        jsonb not null default '{}'::jsonb,
   created_at     timestamptz not null default now()
 );
+
+-- ----------------------------------------------------------------------------
+-- Migration douce : colonnes manquantes si tables pré-existantes
+-- ----------------------------------------------------------------------------
+alter table public.certificate_templates add column if not exists code text;
+alter table public.certificate_templates add column if not exists name text;
+alter table public.certificate_templates add column if not exists description text;
+alter table public.certificate_templates add column if not exists background_url text;
+alter table public.certificate_templates add column if not exists logo_url text;
+alter table public.certificate_templates add column if not exists signature_url text;
+alter table public.certificate_templates add column if not exists signature_name text;
+alter table public.certificate_templates add column if not exists signature_title text;
+alter table public.certificate_templates add column if not exists body_template text;
+alter table public.certificate_templates add column if not exists validity_months int;
+alter table public.certificate_templates add column if not exists is_default boolean default false;
+alter table public.certificate_templates add column if not exists is_active boolean default true;
+alter table public.certificate_templates add column if not exists created_at timestamptz default now();
+create unique index if not exists uq_certificate_templates_code on public.certificate_templates(code);
+
+alter table public.certificates add column if not exists certificate_code text;
+alter table public.certificates add column if not exists user_id uuid references public.profiles(id) on delete cascade;
+alter table public.certificates add column if not exists formation_id uuid references public.formations(id) on delete set null;
+alter table public.certificates add column if not exists parcours_id uuid references public.parcours(id) on delete set null;
+alter table public.certificates add column if not exists enrollment_id uuid references public.enrollments(id) on delete set null;
+alter table public.certificates add column if not exists template_id uuid references public.certificate_templates(id) on delete set null;
+alter table public.certificates add column if not exists student_name text;
+alter table public.certificates add column if not exists formation_title text;
+alter table public.certificates add column if not exists final_score_pct numeric(5,2);
+alter table public.certificates add column if not exists pdf_url text;
+alter table public.certificates add column if not exists issued_at timestamptz default now();
+alter table public.certificates add column if not exists expires_at timestamptz;
+alter table public.certificates add column if not exists status text default 'issued';
+alter table public.certificates add column if not exists revoked_at timestamptz;
+alter table public.certificates add column if not exists revoked_reason text;
+alter table public.certificates add column if not exists metadata jsonb default '{}'::jsonb;
+create unique index if not exists uq_certificates_code on public.certificates(certificate_code);
+
+alter table public.certificate_events add column if not exists certificate_id uuid references public.certificates(id) on delete cascade;
+alter table public.certificate_events add column if not exists event_type text;
+alter table public.certificate_events add column if not exists actor_id uuid references public.profiles(id) on delete set null;
+alter table public.certificate_events add column if not exists details jsonb default '{}'::jsonb;
+alter table public.certificate_events add column if not exists created_at timestamptz default now();
 
 -- ----------------------------------------------------------------------------
 -- 3.4 Génération du code de certificat : PIDA-YYYY-XXXXXXXX
@@ -1234,6 +1334,87 @@ create table if not exists public.payments (
   check (amount = amount_gross - discount_amount)
 );
 
+-- ----------------------------------------------------------------------------
+-- Migration douce : colonnes manquantes si tables pré-existantes
+-- ----------------------------------------------------------------------------
+alter table public.payment_providers add column if not exists code text;
+alter table public.payment_providers add column if not exists name text;
+alter table public.payment_providers add column if not exists description text;
+alter table public.payment_providers add column if not exists provider_type text default 'card';
+alter table public.payment_providers add column if not exists supported_currencies text[] default array['EUR'];
+alter table public.payment_providers add column if not exists supported_countries text[] default array['FR'];
+alter table public.payment_providers add column if not exists fee_pct numeric(5,2) default 0;
+alter table public.payment_providers add column if not exists fee_fixed numeric(10,2) default 0;
+alter table public.payment_providers add column if not exists config jsonb default '{}'::jsonb;
+alter table public.payment_providers add column if not exists webhook_path text;
+alter table public.payment_providers add column if not exists is_active boolean default false;
+alter table public.payment_providers add column if not exists order_rank int default 0;
+alter table public.payment_providers add column if not exists created_at timestamptz default now();
+alter table public.payment_providers add column if not exists updated_at timestamptz default now();
+create unique index if not exists uq_payment_providers_code on public.payment_providers(code);
+
+alter table public.payment_methods add column if not exists user_id uuid references public.profiles(id) on delete cascade;
+alter table public.payment_methods add column if not exists provider_id uuid references public.payment_providers(id) on delete cascade;
+alter table public.payment_methods add column if not exists method_type text default 'card';
+alter table public.payment_methods add column if not exists provider_method_id text;
+alter table public.payment_methods add column if not exists display_label text;
+alter table public.payment_methods add column if not exists card_brand text;
+alter table public.payment_methods add column if not exists card_last4 text;
+alter table public.payment_methods add column if not exists card_exp_month int;
+alter table public.payment_methods add column if not exists card_exp_year int;
+alter table public.payment_methods add column if not exists phone_number_masked text;
+alter table public.payment_methods add column if not exists is_default boolean default false;
+alter table public.payment_methods add column if not exists is_active boolean default true;
+alter table public.payment_methods add column if not exists created_at timestamptz default now();
+
+alter table public.promo_codes add column if not exists code text;
+alter table public.promo_codes add column if not exists description text;
+alter table public.promo_codes add column if not exists discount_type text default 'percentage';
+alter table public.promo_codes add column if not exists discount_value numeric(10,2);
+alter table public.promo_codes add column if not exists currency text default 'EUR';
+alter table public.promo_codes add column if not exists max_redemptions int;
+alter table public.promo_codes add column if not exists redemptions_count int default 0;
+alter table public.promo_codes add column if not exists max_per_user int default 1;
+alter table public.promo_codes add column if not exists min_amount numeric(10,2);
+alter table public.promo_codes add column if not exists formation_id uuid references public.formations(id) on delete cascade;
+alter table public.promo_codes add column if not exists starts_at timestamptz;
+alter table public.promo_codes add column if not exists expires_at timestamptz;
+alter table public.promo_codes add column if not exists is_active boolean default true;
+alter table public.promo_codes add column if not exists created_by uuid references public.profiles(id) on delete set null;
+alter table public.promo_codes add column if not exists created_at timestamptz default now();
+create unique index if not exists uq_promo_codes_code on public.promo_codes(code);
+
+alter table public.promo_code_redemptions add column if not exists promo_code_id uuid references public.promo_codes(id) on delete cascade;
+alter table public.promo_code_redemptions add column if not exists user_id uuid references public.profiles(id) on delete cascade;
+alter table public.promo_code_redemptions add column if not exists payment_id uuid;
+alter table public.promo_code_redemptions add column if not exists amount_saved numeric(10,2) default 0;
+alter table public.promo_code_redemptions add column if not exists redeemed_at timestamptz default now();
+
+alter table public.payments add column if not exists user_id uuid references public.profiles(id) on delete restrict;
+alter table public.payments add column if not exists formation_id uuid references public.formations(id) on delete set null;
+alter table public.payments add column if not exists parcours_id uuid references public.parcours(id) on delete set null;
+alter table public.payments add column if not exists enrollment_id uuid references public.enrollments(id) on delete set null;
+alter table public.payments add column if not exists subscription_id uuid;
+alter table public.payments add column if not exists provider_id uuid references public.payment_providers(id) on delete restrict;
+alter table public.payments add column if not exists payment_method_id uuid references public.payment_methods(id) on delete set null;
+alter table public.payments add column if not exists promo_code_id uuid references public.promo_codes(id) on delete set null;
+alter table public.payments add column if not exists amount_gross numeric(12,2);
+alter table public.payments add column if not exists discount_amount numeric(12,2) default 0;
+alter table public.payments add column if not exists amount numeric(12,2);
+alter table public.payments add column if not exists fee_amount numeric(12,2) default 0;
+alter table public.payments add column if not exists currency text default 'EUR';
+alter table public.payments add column if not exists status text default 'pending';
+alter table public.payments add column if not exists provider_payment_id text;
+alter table public.payments add column if not exists provider_session_id text;
+alter table public.payments add column if not exists provider_reference text;
+alter table public.payments add column if not exists phone_number text;
+alter table public.payments add column if not exists failure_code text;
+alter table public.payments add column if not exists failure_message text;
+alter table public.payments add column if not exists paid_at timestamptz;
+alter table public.payments add column if not exists metadata jsonb default '{}'::jsonb;
+alter table public.payments add column if not exists created_at timestamptz default now();
+alter table public.payments add column if not exists updated_at timestamptz default now();
+
 create unique index if not exists uq_payments_provider_payment
   on public.payments (provider_id, provider_payment_id)
   where provider_payment_id is not null;
@@ -1258,6 +1439,15 @@ create table if not exists public.payment_status_history (
   actor_id    uuid references public.profiles(id) on delete set null,
   created_at  timestamptz not null default now()
 );
+
+-- Migration douce : payment_status_history
+alter table public.payment_status_history add column if not exists payment_id uuid references public.payments(id) on delete cascade;
+alter table public.payment_status_history add column if not exists from_status text;
+alter table public.payment_status_history add column if not exists to_status text;
+alter table public.payment_status_history add column if not exists reason text;
+alter table public.payment_status_history add column if not exists actor text default 'system';
+alter table public.payment_status_history add column if not exists actor_id uuid references public.profiles(id) on delete set null;
+alter table public.payment_status_history add column if not exists created_at timestamptz default now();
 
 create or replace function public.fn_track_payment_status()
 returns trigger
@@ -1304,6 +1494,19 @@ create table if not exists public.refunds (
   processed_at       timestamptz,
   created_at         timestamptz not null default now()
 );
+
+-- Migration douce : refunds
+alter table public.refunds add column if not exists payment_id uuid references public.payments(id) on delete restrict;
+alter table public.refunds add column if not exists amount numeric(12,2);
+alter table public.refunds add column if not exists currency text default 'EUR';
+alter table public.refunds add column if not exists reason text default 'requested_by_customer';
+alter table public.refunds add column if not exists reason_details text;
+alter table public.refunds add column if not exists status text default 'pending';
+alter table public.refunds add column if not exists provider_refund_id text;
+alter table public.refunds add column if not exists requested_by uuid references public.profiles(id) on delete set null;
+alter table public.refunds add column if not exists approved_by uuid references public.profiles(id) on delete set null;
+alter table public.refunds add column if not exists processed_at timestamptz;
+alter table public.refunds add column if not exists created_at timestamptz default now();
 
 -- Validation : le total remboursé ne peut dépasser le montant payé
 create or replace function public.fn_validate_refund()
@@ -1390,6 +1593,23 @@ create table if not exists public.subscriptions (
   updated_at               timestamptz not null default now()
 );
 
+-- Migration douce : subscriptions
+alter table public.subscriptions add column if not exists user_id uuid references public.profiles(id) on delete cascade;
+alter table public.subscriptions add column if not exists provider_id uuid references public.payment_providers(id) on delete set null;
+alter table public.subscriptions add column if not exists plan text;
+alter table public.subscriptions add column if not exists status text default 'active';
+alter table public.subscriptions add column if not exists provider_subscription_id text;
+alter table public.subscriptions add column if not exists amount numeric(12,2);
+alter table public.subscriptions add column if not exists currency text default 'EUR';
+alter table public.subscriptions add column if not exists billing_interval text default 'month';
+alter table public.subscriptions add column if not exists current_period_start timestamptz;
+alter table public.subscriptions add column if not exists current_period_end timestamptz;
+alter table public.subscriptions add column if not exists trial_ends_at timestamptz;
+alter table public.subscriptions add column if not exists cancel_at_period_end boolean default false;
+alter table public.subscriptions add column if not exists cancelled_at timestamptz;
+alter table public.subscriptions add column if not exists created_at timestamptz default now();
+alter table public.subscriptions add column if not exists updated_at timestamptz default now();
+
 -- FK croisée payments → subscriptions
 alter table public.payments drop constraint if exists fk_payments_subscription;
 alter table public.payments
@@ -1458,6 +1678,31 @@ create table if not exists public.invoices (
   paid_at         timestamptz,
   created_at      timestamptz not null default now()
 );
+
+-- Migration douce : invoices
+alter table public.invoices add column if not exists invoice_number text;
+alter table public.invoices add column if not exists payment_id uuid references public.payments(id) on delete set null;
+alter table public.invoices add column if not exists subscription_id uuid references public.subscriptions(id) on delete set null;
+alter table public.invoices add column if not exists user_id uuid references public.profiles(id) on delete restrict;
+alter table public.invoices add column if not exists billing_name text;
+alter table public.invoices add column if not exists billing_email text;
+alter table public.invoices add column if not exists billing_address text;
+alter table public.invoices add column if not exists billing_country text;
+alter table public.invoices add column if not exists billing_company text;
+alter table public.invoices add column if not exists billing_vat text;
+alter table public.invoices add column if not exists description text;
+alter table public.invoices add column if not exists amount_ht numeric(12,2);
+alter table public.invoices add column if not exists tax_rate_pct numeric(5,2) default 0;
+alter table public.invoices add column if not exists tax_amount numeric(12,2) default 0;
+alter table public.invoices add column if not exists amount_ttc numeric(12,2);
+alter table public.invoices add column if not exists currency text default 'EUR';
+alter table public.invoices add column if not exists status text default 'issued';
+alter table public.invoices add column if not exists pdf_url text;
+alter table public.invoices add column if not exists issued_at timestamptz default now();
+alter table public.invoices add column if not exists due_at timestamptz;
+alter table public.invoices add column if not exists paid_at timestamptz;
+alter table public.invoices add column if not exists created_at timestamptz default now();
+create unique index if not exists uq_invoices_number on public.invoices(invoice_number);
 
 -- Génération du numéro de facture : PIDA-INV-YYYY-000123
 create or replace function public.fn_generate_invoice_number()
@@ -1675,6 +1920,20 @@ create table if not exists public.payment_webhooks (
   received_at     timestamptz not null default now()
 );
 
+-- Migration douce : payment_webhooks
+alter table public.payment_webhooks add column if not exists provider_id uuid references public.payment_providers(id) on delete set null;
+alter table public.payment_webhooks add column if not exists provider_code text;
+alter table public.payment_webhooks add column if not exists event_id text;
+alter table public.payment_webhooks add column if not exists event_type text;
+alter table public.payment_webhooks add column if not exists payload jsonb;
+alter table public.payment_webhooks add column if not exists signature text;
+alter table public.payment_webhooks add column if not exists signature_valid boolean;
+alter table public.payment_webhooks add column if not exists payment_id uuid references public.payments(id) on delete set null;
+alter table public.payment_webhooks add column if not exists status text default 'received';
+alter table public.payment_webhooks add column if not exists error_message text;
+alter table public.payment_webhooks add column if not exists processed_at timestamptz;
+alter table public.payment_webhooks add column if not exists received_at timestamptz default now();
+
 create unique index if not exists uq_payment_webhooks_event
   on public.payment_webhooks (provider_code, event_id)
   where event_id is not null;
@@ -1726,6 +1985,37 @@ create table if not exists public.analytics_daily (
   currency               text not null default 'EUR',
   updated_at             timestamptz not null default now()
 );
+
+-- ----------------------------------------------------------------------------
+-- Migration douce : colonnes manquantes si tables pré-existantes
+-- ----------------------------------------------------------------------------
+alter table public.learning_analytics add column if not exists user_id uuid references public.profiles(id) on delete cascade;
+alter table public.learning_analytics add column if not exists formation_id uuid references public.formations(id) on delete cascade;
+alter table public.learning_analytics add column if not exists module_id uuid references public.modules(id) on delete cascade;
+alter table public.learning_analytics add column if not exists lesson_id uuid references public.lessons(id) on delete cascade;
+alter table public.learning_analytics add column if not exists enrollment_id uuid references public.enrollments(id) on delete cascade;
+alter table public.learning_analytics add column if not exists event_type text;
+alter table public.learning_analytics add column if not exists time_spent_sec int default 0;
+alter table public.learning_analytics add column if not exists progress_pct int;
+alter table public.learning_analytics add column if not exists device text;
+alter table public.learning_analytics add column if not exists metadata jsonb default '{}'::jsonb;
+alter table public.learning_analytics add column if not exists created_at timestamptz default now();
+
+alter table public.analytics_daily add column if not exists day date;
+alter table public.analytics_daily add column if not exists new_users int default 0;
+alter table public.analytics_daily add column if not exists active_users int default 0;
+alter table public.analytics_daily add column if not exists new_enrollments int default 0;
+alter table public.analytics_daily add column if not exists completed_enrollments int default 0;
+alter table public.analytics_daily add column if not exists total_learning_minutes int default 0;
+alter table public.analytics_daily add column if not exists quiz_attempts int default 0;
+alter table public.analytics_daily add column if not exists quiz_passed int default 0;
+alter table public.analytics_daily add column if not exists certificates_issued int default 0;
+alter table public.analytics_daily add column if not exists payments_count int default 0;
+alter table public.analytics_daily add column if not exists revenue numeric(14,2) default 0;
+alter table public.analytics_daily add column if not exists refunds_amount numeric(14,2) default 0;
+alter table public.analytics_daily add column if not exists currency text default 'EUR';
+alter table public.analytics_daily add column if not exists updated_at timestamptz default now();
+create unique index if not exists uq_analytics_daily_day on public.analytics_daily(day);
 
 -- ----------------------------------------------------------------------------
 -- 5.3 update_analytics() : upsert d'un compteur du jour
@@ -1932,6 +2222,29 @@ create table if not exists public.admin_users (
   unique (user_id, role_id)
 );
 
+-- ----------------------------------------------------------------------------
+-- Migration douce : colonnes manquantes si tables pré-existantes
+-- ----------------------------------------------------------------------------
+alter table public.admin_roles add column if not exists code text;
+alter table public.admin_roles add column if not exists name text;
+alter table public.admin_roles add column if not exists description text;
+alter table public.admin_roles add column if not exists is_system boolean default false;
+alter table public.admin_roles add column if not exists created_at timestamptz default now();
+create unique index if not exists uq_admin_roles_code on public.admin_roles(code);
+
+alter table public.admin_permissions add column if not exists code text;
+alter table public.admin_permissions add column if not exists name text;
+alter table public.admin_permissions add column if not exists category text default 'general';
+alter table public.admin_permissions add column if not exists created_at timestamptz default now();
+create unique index if not exists uq_admin_permissions_code on public.admin_permissions(code);
+
+alter table public.admin_users add column if not exists user_id uuid references public.profiles(id) on delete cascade;
+alter table public.admin_users add column if not exists role_id uuid references public.admin_roles(id) on delete cascade;
+alter table public.admin_users add column if not exists granted_by uuid references public.profiles(id) on delete set null;
+alter table public.admin_users add column if not exists is_active boolean default true;
+alter table public.admin_users add column if not exists notes text;
+alter table public.admin_users add column if not exists created_at timestamptz default now();
+
 
 -- ============================================================================
 --  MODULE 7 — AUDIT
@@ -1951,6 +2264,18 @@ create table if not exists public.audit_logs (
   user_agent  text,
   created_at  timestamptz not null default now()
 );
+
+-- Migration douce : audit_logs
+alter table public.audit_logs add column if not exists user_id uuid;
+alter table public.audit_logs add column if not exists user_email text;
+alter table public.audit_logs add column if not exists action text;
+alter table public.audit_logs add column if not exists entity_type text;
+alter table public.audit_logs add column if not exists entity_id uuid;
+alter table public.audit_logs add column if not exists old_data jsonb;
+alter table public.audit_logs add column if not exists new_data jsonb;
+alter table public.audit_logs add column if not exists ip_address inet;
+alter table public.audit_logs add column if not exists user_agent text;
+alter table public.audit_logs add column if not exists created_at timestamptz default now();
 
 -- Fonction générique d'audit attachable à n'importe quelle table
 create or replace function public.fn_audit_trigger()
