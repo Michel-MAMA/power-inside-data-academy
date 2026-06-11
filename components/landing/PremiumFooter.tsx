@@ -3,17 +3,19 @@ import {
   ArrowRight,
   BookOpen,
   Briefcase,
-  Github,
-  Linkedin,
   Mail,
   MapPin,
   Phone,
   Star,
-  Twitter,
   Users,
-  Youtube,
 } from 'lucide-react';
 import { LogoMark } from '@/components/landing/Logo';
+import {
+  GithubIcon,
+  LinkedinIcon,
+  XTwitterIcon,
+  YoutubeIcon,
+} from '@/components/landing/BrandIcons';
 
 const STATS = [
   { icon: Users, value: '+500', label: 'apprenants formés' },
@@ -37,20 +39,17 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
   {
     title: 'Ressources',
     links: [
-      { label: 'Blog', href: '/blog' },
-      { label: 'Études de cas', href: '/etudes-de-cas' },
-      { label: 'Documentation', href: '/docs' },
       { label: 'FAQ', href: '/#faq' },
-      { label: 'Certification', href: '/certification' },
       { label: 'Financement CPF', href: '/financement' },
+      { label: 'Vérifier un certificat', href: '/verification-certificat' },
+      { label: 'Mon espace apprenant', href: '/dashboard' },
+      { label: 'Tarifs', href: '/#tarifs' },
     ],
   },
   {
     title: 'Entreprise',
     links: [
       { label: 'À propos', href: '/a-propos' },
-      { label: 'Équipe', href: '/equipe' },
-      { label: 'Partenaires', href: '/partenaires' },
       { label: 'Contact', href: '/contact' },
       { label: 'Mentions légales', href: '/mentions-legales' },
       { label: 'CGU', href: '/cgu' },
@@ -60,10 +59,10 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
 ];
 
 const SOCIALS = [
-  { icon: Linkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/company/power-inside-data' },
-  { icon: Github, label: 'GitHub', href: 'https://github.com/Michel-MAMA' },
-  { icon: Youtube, label: 'YouTube', href: 'https://www.youtube.com/@powerinsidedata' },
-  { icon: Twitter, label: 'X / Twitter', href: 'https://x.com/powerinsidedata' },
+  { icon: LinkedinIcon, label: 'LinkedIn', href: 'https://www.linkedin.com/company/power-inside-data' },
+  { icon: GithubIcon, label: 'GitHub', href: 'https://github.com/Michel-MAMA' },
+  { icon: YoutubeIcon, label: 'YouTube', href: 'https://www.youtube.com/@powerinsidedata' },
+  { icon: XTwitterIcon, label: 'X / Twitter', href: 'https://x.com/powerinsidedata' },
 ];
 
 export default function PremiumFooter() {
@@ -199,7 +198,7 @@ export default function PremiumFooter() {
                       aria-label={s.label}
                       className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white/55 backdrop-blur transition duration-300 hover:-translate-y-0.5 hover:border-blue-500/50 hover:bg-blue-500/15 hover:text-white hover:shadow-lg hover:shadow-blue-600/25"
                     >
-                      <Icon size={17} strokeWidth={1.9} />
+                      <Icon size={17} />
                     </a>
                   );
                 })}
