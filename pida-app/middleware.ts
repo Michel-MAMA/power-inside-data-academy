@@ -1,13 +1,26 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+/**
+ * Fail-safe : une erreur ici ne doit JAMAIS rendre le site indisponible
+ * (MIDDLEWARE_INVOCATION_FAILED). Env manquante ou erreur Supabase →
+ * la requête passe ; les pages protégées re-vérifient l'auth côté serveur.
+ */
 export async function middleware(request: NextRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error(
+      "[middleware] NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY manquantes — configurez-les dans Vercel."
+    );
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
+  try {
+    const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -22,26 +35,31 @@ export async function middleware(request: NextRequest) {
           );
         },
       },
+    });
+
+    // Rafraîchit la session si expirée
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    // Routes protégées — redirige vers /login si non connecté
+    const protectedPaths = ["/dashboard", "/mon-profil", "/mes-formations"];
+    const isProtected = protectedPaths.some((p) =>
+      request.nextUrl.pathname.startsWith(p)
+    );
+
+    if (isProtected && !user) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      url.searchParams.set("auth", "login");
+      return NextResponse.redirect(url);
     }
-  );
 
-  // Rafraîchit la session si expirée
-  const { data: { user } } = await supabase.auth.getUser();
-
-  // Routes protégées — redirige vers /login si non connecté
-  const protectedPaths = ["/dashboard", "/mon-profil", "/mes-formations"];
-  const isProtected = protectedPaths.some((p) =>
-    request.nextUrl.pathname.startsWith(p)
-  );
-
-  if (isProtected && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
-    url.searchParams.set("auth", "login");
-    return NextResponse.redirect(url);
+    return supabaseResponse;
+  } catch (error) {
+    console.error("[middleware] erreur non bloquante :", error);
+    return NextResponse.next({ request });
   }
-
-  return supabaseResponse;
 }
 
 export const config = {

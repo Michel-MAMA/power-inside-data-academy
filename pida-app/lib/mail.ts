@@ -1,7 +1,15 @@
 import { Resend } from "resend";
 import type { ContactFormData } from "@/types";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialisation paresseuse : ne crashe pas au build si la clé est absente.
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("RESEND_API_KEY manquante : email non envoyé.");
+  }
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 const FROM_EMAIL = "Power Inside Data Academy <no-reply@powerinsidedata.com>";
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "contact@powerinsidedata.com";
@@ -17,10 +25,10 @@ export async function sendContactEmail(data: ContactFormData): Promise<void> {
     autre: "Autre demande",
   };
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM_EMAIL,
     to: TO_EMAIL,
-    replyTo: data.email,
+    reply_to: data.email,
     subject: `[PIDA] ${subjectLabels[data.sujet]} — ${data.prenom} ${data.nom}`,
     html: `
       <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; background: #0C0D0F; color: #fff; border-radius: 12px; overflow: hidden;">
