@@ -1,13 +1,13 @@
 -- ============================================================
---  POWER INSIDE DATA ACADEMY — Schéma Supabase complet
+--  PIDA MARKETPLACE — Schéma Supabase complet
 --  Colle ce fichier dans Supabase → SQL Editor → Run
 -- ============================================================
 
 -- Extensions
-create extension if not exists "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ============================================================
---  1. DOMAINES
+--  Tables principales
 -- ============================================================
 create table if not exists domains (
   id          uuid primary key default uuid_generate_v4(),
@@ -371,6 +371,20 @@ alter table reviews            enable row level security;
 alter table notifications      enable row level security;
 alter table contacts           enable row level security;
 
+-- Drop existing policies if they exist
+drop policy if exists "profil_select" on profiles;
+drop policy if exists "profil_insert" on profiles;
+drop policy if exists "profil_update" on profiles;
+drop policy if exists "enroll_select" on enrollments;
+drop policy if exists "enroll_insert" on enrollments;
+drop policy if exists "modules_progress" on enrollment_modules;
+drop policy if exists "reviews_public_read" on reviews;
+drop policy if exists "reviews_own_write" on reviews;
+drop policy if exists "reviews_own_update" on reviews;
+drop policy if exists "notif_select" on notifications;
+drop policy if exists "notif_update" on notifications;
+drop policy if exists "contact_insert" on contacts;
+
 -- Profiles : chaque user voit/modifie uniquement son profil
 create policy "profil_select" on profiles for select using (auth.uid() = id);
 create policy "profil_insert" on profiles for insert with check (auth.uid() = id);
@@ -490,6 +504,12 @@ on conflict do nothing;
 insert into storage.buckets (id, name, public) values ('avatars', 'avatars', true)
 on conflict (id) do nothing;
 
+-- Drop existing storage policies if they exist
+drop policy if exists "avatar_upload" on storage.objects;
+drop policy if exists "avatar_read" on storage.objects;
+drop policy if exists "avatar_update" on storage.objects;
+drop policy if exists "avatar_delete" on storage.objects;
+
 -- Politique : tout utilisateur connecté peut uploader son avatar
 create policy "avatar_upload" on storage.objects
   for insert with check (
@@ -526,3 +546,391 @@ insert into partners (name, category, order_rank, is_active) values
   ('Docker',          'devops',11, true),
   ('GitHub',          'devops',12, true)
 on conflict do nothing;
+
+-- ============================================================
+--  24. INTERACTIVE CODING LAB — Laboratoires interactifs
+-- ============================================================
+
+-- 24a. CODING LABS (Métadonnées des laboratoires)
+create table if not exists coding_labs (
+  id                uuid primary key default uuid_generate_v4(),
+  lesson_id         uuid not null references lessons(id) on delete cascade,
+  title             text not null,
+  description       text,
+  language          text not null,           -- 'python', 'sql', 'pyspark', 'scala', 'javascript', 'bash'
+  difficulty        text default 'beginner', -- 'beginner', 'intermediate', 'advanced'
+  estimated_time_min int,                    -- Temps estimé en minutes
+  sandbox_type      text default 'local',    -- 'local' (Pyodide), 'docker' (sandbox), 'spark' (cluster)
+  is_published      boolean default false,
+  created_at        timestamptz default now(),
+  updated_at        timestamptz default now()
+);
+
+-- 24b. LAB DATASETS (Jeux de données pédagogiques)
+create table if not exists lab_datasets (
+  id            uuid primary key default uuid_generate_v4(),
+  coding_lab_id uuid not null references coding_labs(id) on delete cascade,
+  name          text not null,              -- 'customers', 'sales', 'products'
+  data_type     text not null,              -- 'csv', 'json', 'parquet', 'sql_table'
+  data_url      text,                       -- URL publique ou chemin stockage
+  data_content  jsonb,                      -- Pour petits datasets JSON
+  schema_info   jsonb,                      -- {columns: [{name, type, example}, ...]}
+  row_count     int,
+  created_at    timestamptz default now()
+);
+
+-- 24c. CODE SNIPPETS (Fragments de code initial/solution)
+create table if not exists lab_code_snippets (
+  id            uuid primary key default uuid_generate_v4(),
+  coding_lab_id uuid not null references coding_labs(id) on delete cascade,
+  snippet_type  text not null,              -- 'starter', 'solution', 'hint'
+  code          text not null,
+  explanation   text,                       -- Explication pour hints/solutions
+  order_index   int default 0,
+  created_at    timestamptz default now()
+);
+
+-- 24d. TEST CASES (Cas de test pour validation automatique)
+create table if not exists lab_test_cases (
+  id            uuid primary key default uuid_generate_v4(),
+  coding_lab_id uuid not null references coding_labs(id) on delete cascade,
+  test_name     text not null,              -- 'test_output_shape', 'test_null_handling'
+  test_code     text not null,              -- Code de test en même langage
+  expected_output text,                     -- Sortie attendue (JSON ou text)
+  test_type     text default 'assertion',   -- 'assertion', 'output_comparison', 'performance'
+  timeout_sec   int default 30,
+  weight        int default 1,              -- Poids pour la note (1-10)
+  error_message text,                       -- Message d'erreur personnalisé
+  hint          text,                       -- Indice si test échoue
+  order_index   int default 0,
+  created_at    timestamptz default now()
+);
+
+-- 24e. LAB EXERCISES (Énoncés des exercices)
+create table if not exists lab_exercises (
+  id              uuid primary key default uuid_generate_v4(),
+  coding_lab_id   uuid not null references coding_labs(id) on delete cascade,
+  title           text not null,
+  description     text not null,            -- Énoncé structuré
+  problem         text not null,            -- Problème à résoudre
+  instructions    text,                     -- Instructions étape par étape
+  expected_result text,                     -- Format attendu (description)
+  output_format   text default 'dataframe', -- 'dataframe', 'table', 'value', 'plot'
+  created_at      timestamptz default now()
+);
+
+-- 24f. LAB SUBMISSIONS (Soumissions des apprenants)
+create table if not exists lab_submissions (
+  id               uuid primary key default uuid_generate_v4(),
+  coding_lab_id    uuid not null references coding_labs(id) on delete cascade,
+  user_id          uuid not null references profiles(id) on delete cascade,
+  code             text not null,
+  language         text not null,
+  submission_count int default 1,
+  status           text default 'pending',  -- 'pending', 'running', 'success', 'error', 'timeout'
+  started_at       timestamptz,
+  completed_at     timestamptz,
+  execution_time_ms int,
+  created_at       timestamptz default now(),
+  unique(coding_lab_id, user_id)
+);
+
+-- 24g. LAB RESULTS (Résultats d'exécution et tests)
+create table if not exists lab_results (
+  id                    uuid primary key default uuid_generate_v4(),
+  submission_id         uuid not null references lab_submissions(id) on delete cascade,
+  test_case_id          uuid references lab_test_cases(id) on delete cascade,
+  status                text not null,      -- 'passed', 'failed', 'error', 'timeout'
+  actual_output         text,               -- Sortie réelle
+  expected_output       text,               -- Sortie attendue
+  error_message         text,               -- Message d'erreur technique
+  error_type            text,               -- 'syntax_error', 'runtime_error', 'assertion_error'
+  stderr                text,               -- Logs d'erreur
+  stdout                text,               -- Logs de sortie
+  execution_time_ms     int,
+  passed_tests_count    int default 0,
+  total_tests_count     int default 0,
+  success_rate_pct      int default 0,      -- 0-100
+  score                 int default 0,      -- 0-100
+  feedback              text,               -- Feedback pédagogique
+  created_at            timestamptz default now()
+);
+
+-- 24h. LAB FEEDBACK (Historique feedback pour apprenant)
+create table if not exists lab_feedback (
+  id              uuid primary key default uuid_generate_v4(),
+  submission_id   uuid not null references lab_submissions(id) on delete cascade,
+  feedback_type   text not null,            -- 'error_help', 'suggestion', 'hint', 'praise'
+  message         text not null,
+  is_ai_generated boolean default false,
+  created_at      timestamptz default now()
+);
+
+-- ============================================================
+--  RLS — Interactive Coding Lab
+-- ============================================================
+
+alter table coding_labs        enable row level security;
+alter table lab_datasets       enable row level security;
+alter table lab_code_snippets  enable row level security;
+alter table lab_test_cases     enable row level security;
+alter table lab_exercises      enable row level security;
+alter table lab_submissions    enable row level security;
+alter table lab_results        enable row level security;
+alter table lab_feedback       enable row level security;
+
+-- Drop existing lab policies
+drop policy if exists "labs_read" on coding_labs;
+drop policy if exists "datasets_read" on lab_datasets;
+drop policy if exists "snippets_read" on lab_code_snippets;
+drop policy if exists "tests_read" on lab_test_cases;
+drop policy if exists "exercises_read" on lab_exercises;
+drop policy if exists "submissions_own" on lab_submissions;
+drop policy if exists "results_own" on lab_results;
+drop policy if exists "feedback_own" on lab_feedback;
+
+-- Coding Labs: lecture publique
+create policy "labs_read" on coding_labs for select using (is_published = true);
+
+-- Datasets: lecture publique (associés aux labs publiés)
+create policy "datasets_read" on lab_datasets for select using (
+  exists (select 1 from coding_labs where id = coding_lab_id and is_published = true)
+);
+
+-- Code Snippets: starter visible, solution/hint cachés sauf après submission
+create policy "snippets_read" on lab_code_snippets for select using (
+  snippet_type = 'starter' or (
+    exists (
+      select 1 from coding_labs cl
+      join lab_submissions ls on ls.coding_lab_id = cl.id
+      where cl.id = coding_lab_id and ls.user_id = auth.uid() and ls.status = 'success'
+    )
+  )
+);
+
+-- Test Cases: lecture interdite (cached côté backend)
+-- Aucune politique = personne ne peut lire directement
+
+-- Exercises: lecture publique
+create policy "exercises_read" on lab_exercises for select using (
+  exists (select 1 from coding_labs where id = coding_lab_id and is_published = true)
+);
+
+-- Submissions: chaque user voit/crée ses propres submissions
+create policy "submissions_own" on lab_submissions for all using (auth.uid() = user_id);
+
+-- Results: chaque user voit ses résultats
+create policy "results_own" on lab_results for select using (
+  exists (
+    select 1 from lab_submissions
+    where id = submission_id and user_id = auth.uid()
+  )
+);
+
+-- Feedback: chaque user voit ses feedbacks
+create policy "feedback_own" on lab_feedback for select using (
+  exists (
+    select 1 from lab_submissions
+    where id = submission_id and user_id = auth.uid()
+  )
+);
+
+-- ============================================================
+--  SEED DATA — Example Coding Labs
+-- ============================================================
+
+-- ============================================================
+--  SEED DATA — Example Coding Labs with Tests
+-- ============================================================
+
+-- Python Lab 1: Variables & Types (Local Execution)
+insert into coding_labs (lesson_id, title, description, language, difficulty, sandbox_type, is_published) 
+values 
+  (null, 'Python Basics - Variables & Types', 'Apprenez les variables et types de données en Python', 'python', 'beginner', 'local', true);
+
+-- SQL Lab 1: SELECT & WHERE (Docker SQLite)
+insert into coding_labs (lesson_id, title, description, language, difficulty, sandbox_type, is_published)
+values
+  (null, 'SQL Queries - SELECT & WHERE', 'Maîtrisez les requêtes SELECT et les clauses WHERE', 'sql', 'beginner', 'docker', true);
+
+-- PySpark Lab 1: DataFrames (Spark Cluster)
+insert into coding_labs (lesson_id, title, description, language, difficulty, sandbox_type, is_published)
+values
+  (null, 'PySpark DataFrames - groupBy & agg', 'Traitez les données distribuées avec PySpark', 'pyspark', 'intermediate', 'spark', true);
+
+-- Scala Lab 1: Collections (Docker)
+insert into coding_labs (lesson_id, title, description, language, difficulty, sandbox_type, is_published)
+values
+  (null, 'Scala Collections - Map & Filter', 'Explorez les collections fonctionnelles Scala', 'scala', 'intermediate', 'docker', true);
+
+-- ============================================================
+--  SEED: Python Lab Code Snippets
+-- ============================================================
+
+insert into lab_code_snippets (coding_lab_id, snippet_type, code, explanation) 
+select 
+  id, 'starter', 
+  E'nom = "Alice"\nage = 30\nsalaire = 45000.50\nactif = True\n\nprint(f"Nom: {nom}")\nprint(f"Age: {age}")\nprint(f"Type d''age: {type(age)}")',
+  'Déclarez des variables et utilisez f-strings pour afficher les résultats'
+from coding_labs where language = 'python' and title like '%Variables%' limit 1;
+
+insert into lab_code_snippets (coding_lab_id, snippet_type, code, explanation)
+select
+  id, 'solution',
+  E'nom = "Alice"\nage = 30\nsalaire = 45000.50\nactif = True\n\nprint(f"Nom: {nom}")\nprint(f"Age: {age}")\nprint(f"Type d''age: {type(age)}")\nprint(f"Salaire: {salaire}")\nprint(f"Actif: {actif}")\n\nnombres = [1, 2, 3, 4, 5]\nprint(f"Nombres: {nombres}")\nprint(f"Premier: {nombres[0]}")\n\npersonne = {"nom": "Bob", "age": 25, "ville": "Paris"}\nprint(f"Personne: {personne}")\nprint(f"Ville: {personne[''ville'']}")',
+  'Solution complète avec listes et dictionnaires'
+from coding_labs where language = 'python' and title like '%Variables%' limit 1;
+
+-- ============================================================
+--  SEED: Python Lab Test Cases
+-- ============================================================
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_variable_nom',
+  E'assert nom == "Alice", "nom devrait être Alice"',
+  'pass',
+  'La variable nom doit être assignée à "Alice"',
+  2, 1
+from coding_labs where language = 'python' and title like '%Variables%' limit 1;
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_age_type',
+  E'assert isinstance(age, int), "age doit être un entier"',
+  'pass',
+  'age doit être de type int, pas float',
+  2, 2
+from coding_labs where language = 'python' and title like '%Variables%' limit 1;
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_liste_length',
+  E'assert len(nombres) == 5, "la liste doit avoir 5 éléments"',
+  'pass',
+  'Créez une liste nombres avec 5 éléments',
+  1, 3
+from coding_labs where language = 'python' and title like '%Variables%' limit 1;
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_dict_access',
+  E'assert personne["ville"] == "Paris", "la clé ville doit retourner Paris"',
+  'pass',
+  'Utilisez les clés correctes pour accéder au dictionnaire',
+  1, 4
+from coding_labs where language = 'python' and title like '%Variables%' limit 1;
+
+-- ============================================================
+--  SEED: SQL Lab Code Snippets
+-- ============================================================
+
+insert into lab_code_snippets (coding_lab_id, snippet_type, code, explanation)
+select
+  id, 'starter',
+  E'SELECT * FROM employes;',
+  'Récupérez toutes les colonnes de la table employes'
+from coding_labs where language = 'sql' and title like '%SELECT%' limit 1;
+
+insert into lab_code_snippets (coding_lab_id, snippet_type, code, explanation)
+select
+  id, 'solution',
+  E'SELECT nom, salaire, departement\nFROM employes\nWHERE salaire > 40000\nORDER BY salaire DESC;',
+  'Filtrez et triez les employés par salaire'
+from coding_labs where language = 'sql' and title like '%SELECT%' limit 1;
+
+-- ============================================================
+--  SEED: SQL Lab Test Cases
+-- ============================================================
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_select_all',
+  E'SELECT COUNT(*) as cnt FROM employes;',
+  '8',
+  'Votre requête doit retourner 8 employés',
+  2, 1
+from coding_labs where language = 'sql' and title like '%SELECT%' limit 1;
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_where_clause',
+  E'SELECT COUNT(*) as cnt FROM employes WHERE salaire > 40000;',
+  '4',
+  'Il y a 4 employés avec salaire > 40000',
+  2, 2
+from coding_labs where language = 'sql' and title like '%SELECT%' limit 1;
+
+-- ============================================================
+--  SEED: PySpark Lab Code Snippets
+-- ============================================================
+
+insert into lab_code_snippets (coding_lab_id, snippet_type, code, explanation)
+select
+  id, 'starter',
+  E'from pyspark.sql import SparkSession\n\nspark = SparkSession.builder \\\n    .appName("MyApp") \\\n    .getOrCreate()\n\ndata = [("Alice", 25), ("Bob", 30)]\ncolumns = ["nom", "age"]\ndf = spark.createDataFrame(data, columns)\n\ndf.printSchema()\ndf.show()',
+  'Créez une session Spark et un DataFrame simple'
+from coding_labs where language = 'pyspark' and title like '%groupBy%' limit 1;
+
+insert into lab_code_snippets (coding_lab_id, snippet_type, code, explanation)
+select
+  id, 'solution',
+  E'from pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, avg, count\n\nspark = SparkSession.builder \\\n    .appName("GroupByExample") \\\n    .getOrCreate()\n\ndata = [\n    ("Alice", "IT", 60000),\n    ("Bob", "IT", 55000),\n    ("Charlie", "HR", 50000),\n]\ndf = spark.createDataFrame(data, ["nom", "dept", "salaire"])\n\ndf.groupBy("dept").agg(\n    count("*").alias("count"),\n    avg("salaire").alias("avg_salary")\n).show()',
+  'Groupez par département et calculez statistiques'
+from coding_labs where language = 'pyspark' and title like '%groupBy%' limit 1;
+
+-- ============================================================
+--  SEED: PySpark Lab Test Cases
+-- ============================================================
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_dataframe_created',
+  E'assert df is not None\nassert df.count() > 0',
+  'pass',
+  'Vous devez créer un DataFrame non vide',
+  2, 1
+from coding_labs where language = 'pyspark' and title like '%groupBy%' limit 1;
+
+insert into lab_test_cases (coding_lab_id, test_name, test_code, expected_output, error_message, weight, order_index)
+select
+  id, 'test_groupby_result',
+  E'result = df.groupBy("dept").count()\nassert result.count() == 2, "Devrait avoir 2 groupes"',
+  'pass',
+  'Le groupBy doit retourner 2 départements',
+  3, 2
+from coding_labs where language = 'pyspark' and title like '%groupBy%' limit 1;
+
+-- ============================================================
+--  SEED: Lab Exercises (Énoncés)
+-- ============================================================
+
+insert into lab_exercises (coding_lab_id, title, description, problem, expected_result, output_format)
+select
+  id, 
+  'Variables Python',
+  'Pratiquez la création et l''utilisation de variables',
+  E'Créez une variable nom = "Alice", age = 30, salaire = 45000.50.\nAffichezles avec des f-strings.\nCréez une liste nombres = [1,2,3,4,5] et un dictionnaire.',
+  'Le code affiche correctement toutes les variables',
+  'value'
+from coding_labs where language = 'python' and title like '%Variables%' limit 1;
+
+insert into lab_exercises (coding_lab_id, title, description, problem, expected_result, output_format)
+select
+  id,
+  'SELECT WHERE',
+  'Récupérez les employés selon critères',
+  'Écrivez une requête SQL qui sélectionne les employés avec salaire > 40000 et les trie par salaire DESC.',
+  'Retourne 4 lignes triées correctement',
+  'table'
+from coding_labs where language = 'sql' and title like '%SELECT%' limit 1;
+
+insert into lab_exercises (coding_lab_id, title, description, problem, expected_result, output_format)
+select
+  id,
+  'GroupBy & Agregation',
+  'Groupez les données et calculez des statistiques',
+  E'Créez un DataFrame avec (nom, dept, salaire).\nGroupez par dept et calculez le count et avg(salaire).',
+  'Retourne 2 lignes (2 départements) avec statistiques',
+  'dataframe'
+from coding_labs where language = 'pyspark' and title like '%groupBy%' limit 1;

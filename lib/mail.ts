@@ -1,4 +1,4 @@
-import type { ContactFormValues } from "@/types";
+import type { ContactFormValues } from "@/lib/validations";
 
 const DEFAULT_SENDER = process.env.EMAIL_FROM ?? "hello@pida.app";
 const DEFAULT_RECIPIENT = process.env.EMAIL_TO ?? process.env.SMTP_USER ?? "hello@pida.app";

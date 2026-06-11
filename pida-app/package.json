@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "15.5.7",
+    "next": "15.5.19",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "framer-motion": "^11.3.0",
@@ -32,6 +32,6 @@
     "postcss": "^8",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
-    "eslint-config-next": "15.5.7"
+    "eslint-config-next": "15.5.19"
   }
 }
