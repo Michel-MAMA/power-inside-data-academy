@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/validations";
 import { sendContactEmail } from "@/lib/mail";
-import { insertContact } from "@/lib/supabase/queries";
+import { insertContact } from "@/lib/services/contactService";
 
 export async function POST(req: Request) {
   try {

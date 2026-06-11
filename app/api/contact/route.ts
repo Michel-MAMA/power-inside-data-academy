@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { contactSchema } from "@/lib/validations";
 import { sendContactEmail } from "@/lib/mail";
+import { insertContact } from "@/lib/services/contactService";
 
 export async function POST(req: Request) {
     const body = await req.json();
@@ -11,7 +12,16 @@ export async function POST(req: Request) {
     }
 
     try {
-        await sendContactEmail(result.data);
+        // 1. Persistance Supabase (table contacts — visible dans l'admin)
+        await insertContact(result.data);
+
+        // 2. Notification email (non bloquante : le message est déjà en base)
+        try {
+            await sendContactEmail(result.data);
+        } catch (mailError) {
+            console.error("[contact] email non envoyé :", mailError);
+        }
+
         return NextResponse.json({ success: true });
     } catch (error) {
         return NextResponse.json({ success: false, error: error instanceof Error ? error.message : "Erreur serveur" }, { status: 500 });

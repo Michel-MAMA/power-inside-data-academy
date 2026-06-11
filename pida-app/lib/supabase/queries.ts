@@ -148,17 +148,6 @@ export async function getUserEnrollments(userId: string) {
   return data;
 }
 
-// ── Envoyer un message contact ─────────────────────────────────────────────
-
-export async function insertContact(payload: {
-  prenom: string;
-  nom: string;
-  email: string;
-  telephone?: string;
-  sujet?: string;
-  message: string;
-}) {
-  const supabase = await createClient();
-  const { error } = await supabase.from("contacts").insert(payload);
-  if (error) throw error;
-}
+// ── Contact ──
+// insertContact a été déplacé vers lib/services/contactService.ts
+// (logique métier dans lib/services ; lib/supabase = configuration uniquement).
